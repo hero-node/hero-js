@@ -1,7 +1,3 @@
-var ui;
-
-window.ui = ui;
-
 window.ui2Data = {};
 
 var w = window;
@@ -11,8 +7,9 @@ var _outObjects;
 
 w.API = {
     outObjects: function () {
+        var str = '';
+
         if (_outObjects) {
-            var str = '';
 
             if (typeof (_outObjects) === 'string') {
                 str = _outObjects;
@@ -26,55 +23,58 @@ w.API = {
         }
     },
     out: function (data) {
-        if (_deviceType == 'IOS') {
+        var nativeObject, iframe;
+
+        if (_deviceType === 'IOS') {
             _outObjects = data;
-            var nativeObject = 'hero://' +
-                'ready';
-            var iframe = document.createElement('iframe');
+            nativeObject = 'hero://' + 'ready';
+
+            iframe = document.createElement('iframe');
 
             iframe.setAttribute('src', nativeObject);
             document.documentElement.appendChild(iframe);
             iframe.parentNode.removeChild(iframe);
             iframe = null;
-        } else if (_deviceType == 'IOS8') {
+
+        } else if (_deviceType === 'IOS8') {
             window.webkit.messageHandlers.native.postMessage(data);
-        } else if (_deviceType == 'ANDROID') {
+        } else if (_deviceType === 'ANDROID') {
             if (typeof (data) === 'object') {
                 data = JSON.stringify(data);
             }
             window.native.on(data);
         } else {
-            API.page.on(data);
+            window.API.page.on(data);
         }
-    }, in: function (data) {
+    },
+    in: function (data) {
         if (typeof (data) === 'string') {
             data = JSON.parse(data);
         }
-        if (data.http) {} else {
-            if (data.name && data.value) {
-                ui2Data['_' + data.name] = data.value;
-            }
-            API.special_logic(data);
+
+        if (data.name && data.value) {
+            window.ui2Data['_' + data.name] = data.value;
         }
+        window.API.special_logic(data);
     },
     deviceType: function () {
         return _deviceType;
     },
     setDeviceType: function (deviceType) {
         _deviceType = deviceType;
-        if (ui !== 'blank') {
-            API.out({ ui: ui });
+        if (window.ui !== 'blank') {
+            window.API.out({ ui: window.ui });
         }
         if (_deviceType === 'IOS') {
-            API.boot(_initData);
+            window.API.boot(_initData);
         } else if (_deviceType === 'ANDROID') {
-            API.boot(_initData);
+            window.API.boot(_initData);
         } else {
-            if (ui && ui.views) {
-                API.ui2Data(ui.views);
+            if (window.ui && window.ui.views) {
+                window.API.ui2Data(window.ui.views);
             }
             setTimeout(function () {
-                API.boot(_initData);
+                window.API.boot(_initData);
             }, 500);
         }
     },
@@ -86,7 +86,9 @@ w.API = {
         _initData = _initData || {};
         var params = (window.location.search.split('?')[1] || '').split('&');
 
-        for (var param in params) {
+        var param, paramParts;
+
+        for (param in params) {
             if (params.hasOwnProperty(param)) {
                 paramParts = params[param].split('=');
                 _initData[paramParts[0]] = decodeURIComponent(paramParts[1] || '');
@@ -95,17 +97,19 @@ w.API = {
         return _initData;
     },
     ui2Data: function (observeUI) {
+        var i;
+
         if (observeUI instanceof Array) {
-            for (var i = 0; i < observeUI.length; i++) {
-                API.ui2Data(observeUI[i]);
+            for (i = 0; i < observeUI.length; i++) {
+                window.API.ui2Data(observeUI[i]);
             }
         } else if (observeUI.subViews) {
-            API.ui2Data(observeUI.subViews);
+            window.API.ui2Data(observeUI.subViews);
         }
         if (observeUI.name) {
-            ui2Data['_' + observeUI.name] = '';
-            ui2Data.__defineSetter__(observeUI.name, function (v) {
-                ui2Data['_' + observeUI.name] = v;
+            window.ui2Data['_' + observeUI.name] = '';
+            window.ui2Data.__defineSetter__(observeUI.name, function (v) {
+                window.ui2Data['_' + observeUI.name] = v;
                 var data = {
                     name: observeUI.name
                 };
@@ -113,18 +117,46 @@ w.API = {
                 if (typeof v == 'string') {
                     data.text = v;
                 } else {
-                    API.merge(data, v);
+                    window.API.merge(data, v);
                 }
-                API.out({ datas: data });
+                window.API.out({ datas: data });
             });
-            ui2Data.__defineGetter__(observeUI.name, function () {
-                return ui2Data['_' + observeUI.name];
+            window.ui2Data.__defineGetter__(observeUI.name, function () {
+                return window.ui2Data['_' + observeUI.name];
             });
 
         }
     },
     getDeviceType: function () {
         return _deviceType;
-    }
+    },
+    contain: function (objs, obj) {
+        var i = objs.length;
 
+        while (i--) {
+            if (objs[i] === obj) {
+                return true;
+            }
+        }
+        return false;
+    },
+    merge: function (o1, o2) {
+        var key;
+
+        // eslint-disable-next-line
+        for (key in o2) {
+            o1[key] = o2[key];
+        }
+        return o1;
+    },
+    remove: function (arr, value) {
+        if (!arr) {
+            return;
+        }
+        var a = arr.indexOf(value);
+
+        if (a >= 0) {
+            arr.splice(a, 1);
+        }
+    }
 };
