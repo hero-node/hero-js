@@ -149,15 +149,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           const spawn = require('child_process').spawn;
           service.pid = spawn('node', [service.file]);
           service.status = 'RUNNING';
-          service.pid.on('close', (code) => {
+          service.pid.on('close', function(code){
             service.status = 'CLOSED';
             that.refresh();
           });
-          service.pid.stderr.on('data', (data) => {
+          service.pid.stderr.on('data', function(data){
             service.status = 'FAIL';
             that.refresh();
           });
-          service.pid.stdout.on('data', (data) => {
+          service.pid.stdout.on('data', function(data){
             service.status = 'RUNNING';
             var p = document.createElement('p');
             p.innerHTML = data;
@@ -201,4 +201,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       }
     })
 </script>
-
