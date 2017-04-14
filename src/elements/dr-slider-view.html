@@ -84,6 +84,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       };
       if (json.values) {
         var values = json.values;
+        if (this.json && (this.json.values != values)) {
+          this.json.values = values;
+        };
         if (values.length > 2) {
           this.$.slider.step = 1.0/(values.length-1)+'';
           for (var i = 0; i < values.length; i++) {

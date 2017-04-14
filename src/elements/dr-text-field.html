@@ -53,7 +53,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <template>
     <div id='heroContent'>
     <paper-input label="{{placeHolder}}" type="{{type}}" id='input' value='{{text}}' color='{{color}}'></paper-input>
-    <input id = 'native' on-blur='onblur' on-focus='onfocus'></input>
+    <input id = 'native' on-blur='onblur' on-focus='onfocus' on-change='onchange' on-keyup='onchange'></input>
     </div>
   </template>
 </dom-module>
@@ -99,6 +99,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       }
     },
     ready:function(){
+    },
+    onchange:function(){
+      if (this.json.style == 'drlender') {
+        this.$.heroContent.style.border = "1px solid #"+this.json.tintColor;
+      };
+      if (this.json.textFieldDidEditing) {
+        this.json.textFieldDidEditing.value = this.$.native.value;
+        this.json.textFieldDidEditing.name = this.getName();
+        this.controller.on(this.json.textFieldDidEditing)
+      };
     },
     onfocus:function(){
       if (this.json.style == 'drlender') {

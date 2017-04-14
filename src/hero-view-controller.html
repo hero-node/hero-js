@@ -141,10 +141,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }else{
             heroContent.style.backgroundColor='#ffffff';
           }
+          this.viewWillAppear();
           if (this.view !== 'blank') {
             API.out({ui:this.view});
           };
-          this.viewWillAppear();
+          if (this.initData.test) {
+            var js = document.createElement('script');
+            js.src = host+'/test/js/test.js';
+            document.head.appendChild(js);
+          };
           if (localStorage.phone) {
             var js = document.createElement('script');
             js.src = path+'/js/log.js';
@@ -206,7 +211,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }
           return;
         };
-        if (json.ui) {
+        if (json.appearance) {
+            APP.setNav({nav:json.appearance});
+        }else if (json.ui) {
           while (this.heroContent.lastChild) {
              this.heroContent.removeChild(this.heroContent.lastChild);
           }
@@ -225,9 +232,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               console.log(viewObject.class||viewObject.res);
             }
           }
-        };
-        if (json.appearance) {
-            APP.setNav({nav:json.appearance});
         }else if (json.ui_fragment) {
             for(var num in json.ui_fragment){
                 var view = json.ui_fragment[num];
@@ -347,3 +351,4 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       }
     };
 </script>
+

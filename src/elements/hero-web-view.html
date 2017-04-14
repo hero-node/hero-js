@@ -43,8 +43,7 @@ HeroWebViewBehavior = {
       this.$.iframe.hidden = false;
       this.url = json.url;
     }else if (json.innerHtml) {
-      this.$.div.hidden = false;
-      this.$.div.innerHTML = json.innerHtml;
+      this.$.heroContent.innerHTML = json.innerHtml;
     }else if(json.in){
       this.$.iframe.contentWindow.API.in(json.in);
     }else if(json.out){
@@ -71,7 +70,7 @@ HeroWebViewBehavior = {
     div{
       display: block;
       position: absolute;
-      overflow: hidden;
+      overflow: scroll;
       margin: 0px;
       padding: 0px;
       width: 100%;

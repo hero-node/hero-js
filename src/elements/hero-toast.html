@@ -40,11 +40,26 @@ HeroToastBehavior = {
       this.text = json.text;
       this.$.toast.show();
     };
+    if (json.frame) {
+      this.$.toast.classList.add('fit-bottom');
+      this.$.toast.fitInto = this.$.heroContent;
+    };
+    if (json.corrnerRadius) {
+      var style = document.createElement('style');
+      style.innerHTML = '.paper-toast-hero{border-radius: ! '+json.corrnerRadius+'px'+'}'
+      this.$.toast.appendChild(style);
+      this.$.toast.classList.add('paper-toast-hero');
+    };
   }
 }
 </script>
 <dom-module id="hero-toast">
     <style type="text/css">
+    div{
+      display: inline-block;
+      position: absolute;
+      overflow: hidden;
+    }
     </style>
   <template>
     <div id='heroContent'></div>
