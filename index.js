@@ -387,7 +387,7 @@ window.ui2Data = {};
         deviceType: function ()        {
             return _deviceType;
         },
-        setDeviceType: function (deviceType)        {
+        setDeviceType: function (deviceType)  {
             _deviceType = deviceType;
             if (ui === undefined) {
                 ui = err_ui;
