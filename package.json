@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf build && polymer build"
+    "build": "rm -rf dist && webpack"
   },
   "devDependencies": {
+    "webpack": "1.14.0"
   },
   "author": "",
   "license": "ISC"
