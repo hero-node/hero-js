@@ -1,5 +1,6 @@
 var API = window.API = {};
 var _outObjects = '';
+var _currentPage = null;
 
 window.ui = {};
 window.ui2Data = {};
@@ -93,9 +94,9 @@ function onMessage(data) {
     Object.keys(API.__messageList).forEach(function (event) {
         if (data.type === event) {
             API.__messageList[event].forEach(function (callback) {
-                API.__beforeMessage.call(null);
-                callback.call(null, data);
-                API.__afterMessage.call(null);
+                API.__beforeMessage.call(_currentPage);
+                callback.call(_currentPage, data);
+                API.__afterMessage.call(_currentPage);
             });
         }
     });
@@ -209,41 +210,10 @@ function setState(status) {
     });
 }
 
-defineProp(API, '__heroConfig', {});
-defineProp(API, '__boot', loop);
-defineProp(API, '__viewWillDisppear', loop);
-defineProp(API, '__viewWillAppear', loop);
 
-defineProp(API, '__beforeMessage', loop);
-defineProp(API, '__afterMessage', loop);
+function bootstrap(pageComponent) {
+    _currentPage = pageComponent;
 
-defineReadOnlyProp(API, '__messageList', {});
-
-definePublicFreezeProp(API, 'out', sendMessage);
-definePublicFreezeProp(API, 'outObjects', outObjects);
-definePublicFreezeProp(API, 'setState', setState);
-definePublicFreezeProp(API, 'updateView', view2Data);
-definePublicFreezeProp(API, 'boot', API.__boot);
-definePublicFreezeProp(API, 'resetUI', resetUI);
-definePublicFreezeProp(API, 'setState', setState);
-definePublicFreezeProp(API, 'getState', getState);
-definePublicFreezeProp(API, 'getUI', getUI);
-definePublicFreezeProp(API, 'in', onMessage);
-
-(function getDeviceType() {
-    var ua = navigator.userAgent.toLowerCase();
-
-    if (ua.indexOf('hero-ios') !== -1) {
-        _deviceType = 'IOS';
-    } else if (ua.indexOf('hero-android') !== -1) {
-        _deviceType = 'ANDROID';
-    } else if (ua.indexOf('micromessenger') !== -1) {
-        _deviceType = 'WECHAT';
-    }
-
-})();
-
-(function bootstrap() {
     if (window.ui !== 'blank') {
         sendMessage({ ui: window.ui });
     }
@@ -257,7 +227,41 @@ definePublicFreezeProp(API, 'in', onMessage);
     setTimeout(function () {
         API.__boot();
     }, isRunInApp ? 0 : 500);
+}
 
+defineProp(API, '__heroConfig', {});
+defineProp(API, '__boot', loop);
+defineProp(API, '__viewWillDisppear', loop);
+defineProp(API, '__viewWillAppear', loop);
+
+defineProp(API, '__beforeMessage', loop);
+defineProp(API, '__afterMessage', loop);
+
+defineReadOnlyProp(API, '__messageList', {});
+
+definePublicFreezeProp(API, 'out', sendMessage);
+definePublicFreezeProp(API, 'outObjects', outObjects);
+definePublicFreezeProp(API, 'setState', setState);
+definePublicFreezeProp(API, 'bootstrap', bootstrap);
+definePublicFreezeProp(API, 'updateView', view2Data);
+definePublicFreezeProp(API, 'boot', API.__boot);
+definePublicFreezeProp(API, 'resetUI', resetUI);
+definePublicFreezeProp(API, 'setState', setState);
+definePublicFreezeProp(API, 'getState', getState);
+definePublicFreezeProp(API, 'getUI', getUI);
+definePublicFreezeProp(API, 'in', onMessage);
+
+
+(function getDeviceType() {
+    var ua = navigator.userAgent.toLowerCase();
+
+    if (ua.indexOf('hero-ios') !== -1) {
+        _deviceType = 'IOS';
+    } else if (ua.indexOf('hero-android') !== -1) {
+        _deviceType = 'ANDROID';
+    } else if (ua.indexOf('micromessenger') !== -1) {
+        _deviceType = 'WECHAT';
+    }
 })();
 
 module.exports = {
