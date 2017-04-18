@@ -154,8 +154,17 @@ function defineReadOnlyProp(obj, name, value) {
     });
 }
 
+
+function resetUI(ui) {
+    window.ui = ui;
+}
+
 function Component(config) {
     return function (Target) {
+        if (config && config.view) {
+            defineProp(Target, '__defaultViews', config.view);
+            resetUI(config.view);
+        }
         _currentPage = new Target();
         if (config && typeof config === 'object') {
             defineReadOnlyProp(API, '__heroConfig', config);
@@ -199,10 +208,6 @@ function Message(expressions) {
         API.__messageList[expressions].push(target[name]);
         return descriptor;
     };
-}
-
-function resetUI(ui) {
-    window.ui = ui;
 }
 
 function getUI() {
