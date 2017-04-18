@@ -82,6 +82,17 @@ function outObjects() {
     return messages;
 }
 
+// eslint-disable-next-line
+function __executeExpression(expression, data, page) {
+    // eslint-disable-next-line
+    return (function (expression, __data, __page, window, API) {
+        // eslint-disable-next-line
+        var value = eval('expression');
+        // eslint-disable-next-line
+        value = eval(value);
+        return value;
+    })(expression, data, page, null, null);
+}
 
 function onMessage(data) {
     if (typeof (data) === 'string') {
@@ -92,9 +103,11 @@ function onMessage(data) {
         window.ui2Data['_' + data.name] = data.value;
     }
     API.__beforeMessage.call(_currentPage, data);
-    Object.keys(API.__messageList).forEach(function (event) {
-        if (data.type === event) {
-            API.__messageList[event].forEach(function (callback) {
+    Object.keys(API.__messageList).forEach(function (expressions) {
+        var matchCondition = __executeExpression(expressions, data, _currentPage);
+
+        if (matchCondition) {
+            API.__messageList[expressions].forEach(function (callback) {
                 callback.call(_currentPage, data);
             });
         }
@@ -178,12 +191,12 @@ function Boot(target, name, descriptor) {
 }
 
 
-function Message(eventType) {
-    if (!API.__messageList[eventType]) {
-        API.__messageList[eventType] = [];
+function Message(expressions) {
+    if (!API.__messageList[expressions]) {
+        API.__messageList[expressions] = [];
     }
     return function (target, name, descriptor) {
-        API.__messageList[eventType].push(target[name]);
+        API.__messageList[expressions].push(target[name]);
         return descriptor;
     };
 }
@@ -229,10 +242,20 @@ function bootstrap() {
     // }, isRunInApp ? 0 : 500);
 }
 
+function __viewWillDisppearCallback() {
+    API.__viewWillDisppear.call(_currentPage);
+}
+function __viewWillAppearCallback() {
+    API.__viewWillDisppear.call(_currentPage);
+}
+
 defineProp(API, '__heroConfig', {});
 defineProp(API, '__boot', loop);
 defineProp(API, '__viewWillDisppear', loop);
 defineProp(API, '__viewWillAppear', loop);
+
+definePublicFreezeProp(API, '__viewWillDisppearCallback', __viewWillDisppearCallback);
+definePublicFreezeProp(API, '__viewWillAppearCallback', __viewWillAppearCallback);
 
 defineProp(API, '__beforeMessage', loop);
 defineProp(API, '__afterMessage', loop);

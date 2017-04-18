@@ -167,6 +167,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         this.controller.boot(this.initData);
       },
       viewWillAppear:function(){
+        API.__viewWillAppearCallback && API.__viewWillAppearCallback();
         this.getInitData();
         if (this.view && this.view.nav) {
           if (this.view.tintColor) {
@@ -181,7 +182,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
       },
       viewWillDisappear:function(){
-
+        API.__viewWillDisppearCallback && API.__viewWillDisppearCallback();
       },
       setWebUrl:function(url){
         if (!API) {
