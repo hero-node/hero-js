@@ -294,5 +294,5 @@ module.exports = {
     ViewWillDisappear: ViewWillDisappear,
     BeforeMessage: beforeMessage,
     AfterMessage: afterMessage,
-    API: API
+    Hero: API
 };
