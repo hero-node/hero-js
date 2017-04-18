@@ -84,22 +84,22 @@ function outObjects() {
 
 
 function onMessage(data) {
-    if (typeof data === 'string') {
+    if (typeof (data) === 'string') {
         data = JSON.parse(data);
     }
 
     if (data.name && data.value) {
         window.ui2Data['_' + data.name] = data.value;
     }
+    API.__beforeMessage.call(_currentPage, data);
     Object.keys(API.__messageList).forEach(function (event) {
         if (data.type === event) {
             API.__messageList[event].forEach(function (callback) {
-                API.__beforeMessage.call(_currentPage);
                 callback.call(_currentPage, data);
-                API.__afterMessage.call(_currentPage);
             });
         }
     });
+    API.__afterMessage.call(_currentPage, data);
 }
 
 function beforeMessage(target, name, descriptor) {
@@ -142,13 +142,14 @@ function defineReadOnlyProp(obj, name, value) {
 }
 
 function Component(config) {
-    return function (target) {
+    return function (Target) {
+        _currentPage = new Target();
         if (config && typeof config === 'object') {
             defineReadOnlyProp(API, '__heroConfig', config);
         } else {
             console.warn('Invalid Parameters: Parameters in @Component should be Object');
         }
-        return target;
+        return Target;
     };
 }
 
@@ -211,8 +212,7 @@ function setState(status) {
 }
 
 
-function bootstrap(pageComponent) {
-    _currentPage = pageComponent;
+function bootstrap() {
 
     if (window.ui !== 'blank') {
         sendMessage({ ui: window.ui });
@@ -222,11 +222,11 @@ function bootstrap(pageComponent) {
         view2Data(window.ui.views);
     }
 
-    var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
+    // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
 
-    setTimeout(function () {
-        API.__boot();
-    }, isRunInApp ? 0 : 500);
+    // setTimeout(function () {
+    API.__boot.call(_currentPage);
+    // }, isRunInApp ? 0 : 500);
 }
 
 defineProp(API, '__heroConfig', {});
@@ -239,17 +239,16 @@ defineProp(API, '__afterMessage', loop);
 
 defineReadOnlyProp(API, '__messageList', {});
 
-definePublicFreezeProp(API, 'out', sendMessage);
-definePublicFreezeProp(API, 'outObjects', outObjects);
-definePublicFreezeProp(API, 'setState', setState);
-definePublicFreezeProp(API, 'bootstrap', bootstrap);
-definePublicFreezeProp(API, 'updateView', view2Data);
-definePublicFreezeProp(API, 'boot', API.__boot);
-definePublicFreezeProp(API, 'resetUI', resetUI);
-definePublicFreezeProp(API, 'setState', setState);
+definePublicFreezeProp(API, 'boot', bootstrap);
+// definePublicFreezeProp(API, 'bootstrap', bootstrap);
 definePublicFreezeProp(API, 'getState', getState);
 definePublicFreezeProp(API, 'getUI', getUI);
 definePublicFreezeProp(API, 'in', onMessage);
+definePublicFreezeProp(API, 'out', sendMessage);
+definePublicFreezeProp(API, 'outObjects', outObjects);
+definePublicFreezeProp(API, 'resetUI', resetUI);
+definePublicFreezeProp(API, 'setState', setState);
+definePublicFreezeProp(API, 'updateView', view2Data);
 
 
 (function getDeviceType() {
