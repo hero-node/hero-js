@@ -269,8 +269,7 @@ module.exports = {
     Message: Message,
     ViewWillAppear: ViewWillAppear,
     ViewWillDisappear: ViewWillDisappear,
-    beforeMessage: beforeMessage,
-    onMessage: onMessage,
-    afterMessage: afterMessage,
+    BeforeMessage: beforeMessage,
+    AfterMessage: afterMessage,
     API: API
 };
