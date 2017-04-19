@@ -7,6 +7,16 @@ window.ui2Data = {};
 
 var _deviceType = 'PC';
 
+function _mergeAttributes(o1, o2) {
+    var index;
+    var keys = Object.keys(o2);
+
+    for (index = 0; index < keys.length; index++) {
+        o1[keys[index]] = o2[keys[index]];
+    }
+    return o1;
+}
+
 function view2Data(observeUI) {
     var i;
 
@@ -26,7 +36,7 @@ function view2Data(observeUI) {
             if (typeof v == 'string') {
                 data.text = v;
             } else {
-                API.merge(data, v);
+                _mergeAttributes(data, v);
                 Object.keys(v).forEach(function (key) {
                     data[key] = v[key];
                 });

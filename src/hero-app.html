@@ -466,7 +466,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             if (e.name == pageElement) {
               this.currentPage = e;
               this.$.pages.selected = pageElement;
-              if (!API.contain(this.pageStack,pageElement)) {
+              if (this.pageStack.indexOf(pageElement)===-1) {
                 e.viewDidLoad();
               }
               e.viewWillAppear();
