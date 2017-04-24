@@ -168,20 +168,23 @@ function defineReadOnlyProp(obj, name, value) {
 function resetUI(ui) {
     window.ui = ui;
 }
+var emptyObject = {};
 
 function Component(config) {
     return function (Target) {
-        if (config && config.view) {
+        if (!config) {
+            config = emptyObject;
+        }
+        if (config.view) {
             defineProp(Target, '__defaultViews', config.view);
             resetUI(config.view);
         }
         _currentPage = new Target();
-        if (config && typeof config === 'object') {
+        if (typeof config === 'object') {
             defineReadOnlyProp(API, '__heroConfig', config);
         } else {
             console.warn('Invalid Parameters: Parameters in @Component should be Object');
         }
-        return Target;
     };
 }
 
