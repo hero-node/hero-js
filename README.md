@@ -4,7 +4,8 @@
 # 打包
 `npm run build`
 
-会使用polymer-cli命令打包生成build目录
+# Documentation
+
 
 # 其他
-bower_components作为源代码管理，是为了基于Hero开发的业务App使用
+会在保持接口不变的情况下将该bower_components依赖及代码实现更新，对于开发者透明，暂时将bower_components作为源代码管理
