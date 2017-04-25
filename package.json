@@ -4,9 +4,12 @@
   "description": "Components used in Web Implements Hero Components Interface",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && webpack"
+    "build": "rm -rf dist && webpack",
+    "generate-docs": "jsdoc -c jsdoc.json"
   },
   "devDependencies": {
+    "docdash": "0.4.0",
+    "jsdoc": "3.4.3",
     "webpack": "1.14.0"
   },
   "author": "",
