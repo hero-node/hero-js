@@ -1,7 +1,7 @@
 {
   "name": "hero-js",
   "description": "Hero JS Components Implementations",
-  "main": "dist/index.js",
+  "main": "dist/hero.js",
   "license": "ISC",
   "homepage": "",
   "ignore": [

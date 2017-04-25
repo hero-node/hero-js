@@ -1,7 +1,7 @@
 {
   "name": "hero-js",
   "version": "2.0.0",
-  "description": "",
+  "description": "Components used in Web Implements Hero Components Interface",
   "main": "index.js",
   "scripts": {
     "build": "rm -rf dist && webpack"

@@ -1,510 +1,316 @@
-/*
-* Name: xhr,AJAX封装函数
-* Description: 一个ajax调用封装类,仿jquery的ajax调用方式
-* Author:十年灯
-*/
-var xhr = (function () {
-    var
-        ajax = (function  () {
-            return ('XMLHttpRequest' in window) ? function  () {
-                return new XMLHttpRequest();
-            } : function  () {
-                return new ActiveXObject('Microsoft.XMLHTTP');
-            };
-        })(),
-        formatData = function (fd) {
-            var res = '';
+var API = window.API = {};
+var _outObjects = '';
+var _currentPage = null;
 
-            for (var f in fd) {
-                if (fd[f]) {
-                    res += f + '=' + fd[f] + '&';
-                }
-            }
-            return res.slice(0, -1);
-        },
-        AJAX = function (ops) {
-            var
-                root = this,
-                req = ajax();
-
-            root.url = ops.url;
-            root.contentType = ops.contentType;
-            root.type = ops.type || 'responseText';
-            root.method = ops.method || 'GET';
-            root.async = ops.async || true;
-            root.data = ops.data || {};
-            root.complete = ops.complete || function  () {};
-            root.success = ops.success || function () {};
-            root.error =  ops.error || function (s) { alert(root.url + '->status:' + s + 'error!'); };
-            root.abort = req.abort;
-            root.timeout = ops.timeout || 90000;
-            root.setData = function  (data) {
-                for (var d in data) {
-                    root.data[d] = data[d];
-                }
-            };
-
-            root.send = function  () {
-                var datastring = root.data, get = false, async = root.async, complete = root.complete, method = root.method, type = root.type;
-
-                if (!root.contentType) {
-                    datastring = formatData(root.data);
-                }
-                if (method === 'GET') {
-                    root.url += '?' + datastring;
-                    get = true;
-                }
-                req.timeout = root.timeout;
-                req.open(method, root.url, async);
-            // if (host.search(/10./i) < 0) {
-            //     req.withCredentials = true;
-            //     req.setRequestHeader("X-Session-Share-Header",'true');
-            // };
-                if (!get) {
-                    if (root.contentType) {
-                        req.setRequestHeader('Content-type', root.contentType);
-                    } else {
-                        req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                    }
-                }
-
-            // 在send之前重置onreadystatechange方法,否则会出现新的同步请求会执行两次成功回调(chrome等在同步请求时也会执行onreadystatechange)
-                req.onreadystatechange = async ? function  () {
-                // console.log('async true');
-                    if (req.readyState == 4) {
-                        complete();
-                        if (req.status == 200) {
-                            root.success(req[type]);
-                        } else {
-                            root.error(req.status);
-                        }
-                    }
-                } : null;
-                req.send(datastring);
-                if (!async) {
-                // console.log('async false');
-                    complete();
-                    root.success(req[type]);
-                }
-            };
-            root.url && root.send();
-        };
-
-    return function (ops) { return new AJAX(ops); };
-})();
-/*
-  hero.js
-  hero
-
-  Created by gpliu on 14/10/16.
-  Copyright (c) 2015年 GPLIU. All rights reserved.
-*/
-
-var host = window.location.origin;
-
-window.host = host;
-window.path = host + '/mkt/asset2cash'; // 如果url路径有前缀请加上;
-localStorage.versionPath = path;
-var ui;
-
-window.ui = ui;
-
-var err_ui = {
-    nav: {
-        title: '界面出错啦'
-    },
-    views:
-    [
-        {
-            class: 'HeroButton',
-            frame: { x: '0.3x', y: '44', w: '0.4x', h: '66' },
-            title: '刷新',
-            click: { command: 'refresh' }
-        }
-    ]
-};
-var loadedClass = [];
-
+window.ui = {};
 window.ui2Data = {};
-(function () {
-    var w = window;
-    var _deviceType = 'PC';
-    var _userid;
-    var _card;
-    var _initData;
-    var _outObjects;
 
-    w.API = {
-        c0: '468BF6',
-        c1: 'cccccc',
-        c2: '999999',
-        c3: '666666',
-        c4: '333333',
-        c5: '1e304a',
-        c6: 'd70c18',
-        c7: 'ffffff',
-        c8: 'fbfbfb',
-        c9: 'f5f5f5',
-        c10: 'f0f0f0',
-        c11: 'e4e4e4',
-        c12: 'ff5500',
-        c13: 'ff7842',
-        c14: '33b653',
-        c15: 'ffeeee',
-        c16: 'ffb7b7',
-        c17: 'f2fffd',
-        c18: 'daf8f3',
-        c19: '37455c',
-        c20: 'f9fdfd',
-        c21: 'f4fbfb',
-        c02: '009671',
-        c62: 'ac0913',
-        c71: 'ffffffb2',
-        c75: 'ffffff80',
+var _deviceType = 'PC';
 
-        s0: '56',
-        s6: '45',
-        s9: '33',
-        s1: '28',
-        s7: '20',
-        s2: '18',
-        s3: '16',
-        s4: '14',
-        s5: '12',
-        s8: '11',
-        saveUserInfo: function (key, value) {
-            if (localStorage.phone) {
-                var userJson = localStorage[localStorage.phone];
-                var userDic = {};
+function _mergeAttributes(o1, o2) {
+    var index;
+    var keys = Object.keys(o2);
 
-                if (userJson) {
-                    userDic = JSON.parse(localStorage[localStorage.phone]);
-                }
-                userDic[key] = value;
-                localStorage[localStorage.phone] = JSON.stringify(userDic);
-            }
-        },
-        getUserInfo: function (key) {
-            if (localStorage.phone) {
-                var userJson = localStorage[localStorage.phone];
+    for (index = 0; index < keys.length; index++) {
+        o1[keys[index]] = o2[keys[index]];
+    }
+    return o1;
+}
 
-                if (userJson) {
-                    var value = null;
-                    var userDic = JSON.parse(userJson);
+function view2Data(observeUI) {
+    var i;
 
-                    value = userDic[key];
-                    return value;
-                }
-            }
-            return null;
-        },
-        fmoney: function (s, n) {
-            n = n >= 0 && n <= 20 ? n : 2;
-            s = parseFloat((s + '').replace(/[^\d\.-]/g, '')).toFixed(n) + '';
-            var l = s.split('.')[0].split('').reverse(),
-                r = s.split('.')[1];
+    if (observeUI instanceof Array) {
+        for (i = 0; i < observeUI.length; i++) {
+            view2Data(observeUI[i]);
+        }
+    } else if (observeUI.subViews) {
+        view2Data(observeUI.subViews);
+    }
+    if (observeUI.name) {
+        window.ui2Data['_' + observeUI.name] = '';
+        window.ui2Data.__defineSetter__(observeUI.name, function (v) {
+            window.ui2Data['_' + observeUI.name] = v;
+            var data = { name: observeUI.name };
 
-            t = '';
-            for (i = 0; i < l.length; i++) {
-                t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? ',' : '');
-            }
-            return t.split('').reverse().join('') + (r ? ('.' + r) : '');
-        },
-        outObjects: function () {
-            if (_outObjects) {
-                var str = '';
-
-                if (typeof (_outObjects) === 'string') {
-                    str = _outObjects;
-                } else {
-                    str = JSON.stringify(_outObjects);
-                }
-                _outObjects = '';
-                return str;
+            if (typeof v == 'string') {
+                data.text = v;
             } else {
-                return '';
-            }
-        },
-        out: function (data)        {
-            if (_deviceType == 'IOS') {
-                _outObjects = data;
-                var nativeObject = 'hero://' + 'ready';
-                var iframe = document.createElement('iframe');
-
-                iframe.setAttribute('src', nativeObject);
-                document.documentElement.appendChild(iframe);
-                iframe.parentNode.removeChild(iframe);
-                iframe = null;
-            } else if (_deviceType == 'IOS8') {
-                window.webkit.messageHandlers.native.postMessage(data);
-            } else if (_deviceType == 'ANDROID') {
-                if (typeof (data) === 'object') {
-                    data = JSON.stringify(data);
-                }
-                window.native.on(data);
-            } else {
-                API.page.on(data);
-            }
-        },
-        in: function (data) {
-            if (typeof (data) === 'string') {
-                data = JSON.parse(data);
-            }
-            if (data.her) {
-                if (_card.charAt(0) == '/') {
-                    data = data.her;
-                    xhr({
-                        url: _card,
-                        data: data,
-                        async: true,
-                        method: 'GET',
-                        success: function  (data) {
-                            API.out(data);
-                        },
-                        error: function (data) {
-                            API.out(data);
-                        }
-                    });
-                } else {
-                    data = data.her;
-                    data.userid = _userid;
-                    data.card = _card;
-                    io.emit('on', data);
-                }
-            } else if (data.socket) {
-                io.emit('message', data.socket);
-            } else if (data.http) {
-                if (data.http.keepError) {
-                } else {
-                    API.out({ datas: { name: 'toast', text: '' } });
-                }
-                data = data.http;
-                var api = data.url;
-                var success = data.success;
-                var fail = data.fail;
-                var apiData = data.data;
-
-                if (!data.contentType) {
-                    for (var prop in apiData) {
-                        apiData[prop] = encodeURIComponent(apiData[prop]);
-                    }
-                }
-                xhr({
-                    url: (api.search(/ttp/) > 0 ? api : host + api),
-                    async: true,
-                    data: apiData,
-                    contentType: data.contentType,
-                    method: data.method ? data.method : 'GET',
-                    timeout: data.timeout ? data.timeout : 30000,
-                    success: function (data) {
-                        API.out({ command: 'stopLoading' });
-                        if (typeof (data) === 'string') {
-                            data = JSON.parse(data);
-                        }
-                        if (data.result === 'success') {
-                            if (success) {
-                                success(data);
-                            } else {
-                                data.api = api;
-                                API.reloadData(data);
-                            }
-                        } else if (data.result === 'login') {
-                            // localStorage.username = '';
-                            if (localStorage.fastLoginType === 'kFaskLoginGesture') {
-                                API.out({ command: 'present:' + path + '/protect_gesture.html' });
-                            } else if (localStorage.fastLoginType === 'kFaskLoginTouchID') {
-                                API.out({ command: 'present:' + path + '/protect_touchID.html' });
-                            } else {
-                                API.out({ command: 'present:' + path + '/login.html' });
-                            }
-                        } else if (data.result === 'error') {
-                            if (data.errors && data.errors.length > 0) {
-                                if (fail) {
-                                    fail(data);
-                                } else {
-                                    if (data.errors && data.errors.length > 0 && data.errors[0].length > 0) {
-                                        API.out({ datas: { name: 'toast', text: data.errors[0] } });
-                                    } else if (data.code) {
-                                        var cmsError = false;
-
-                                        for (var i = window.errors.length - 1; i >= 0; i--) {
-                                            var error  = window.errors[i];
-
-                                            if (error.code == data.code) {
-                                                cmsError = true;
-                                                API.out({ datas: { name: 'toast', text: error['zh-CN'] } });
-                                            }
-                                        }
-                                        if (!cmsError) {
-                                            API.out({ datas: { name: 'toast', text: '网络返回出错，错误代码:' + data.code } });
-                                        }
-                                    }
-                                }
-                            }                            else if (data.content) {
-                                if (data.content.apiReturn) {
-                                    if (data.content.apiReturn.ValidationError || data.content.apiReturn.ErrorMessage) {
-                                        if (fail) {
-                                            fail(data);
-                                        } else {
-                                            if (data.content.apiReturn.ValidationError) {
-                                                API.out({ datas: { name: 'toast', text: data.content.apiReturn.ValidationError } });
-                                            } else {
-                                                API.out({ datas: { name: 'toast', text: data.content.apiReturn.ErrorMessage } });
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
-                            API.reloadData(data);
-                        }
-                    },
-                    error: function (data) {
-                        API.out({ command: 'stopLoading' });
-                        if (fail) {
-                            fail({ errors: ['网络异常，请检查网络连接后重试'] });
-                        } else {
-                            API.out({ datas: { name: 'toast', icon: 'error_icon', text: '网络异常，请检查网络连接后重试' } });
-                        }
-                    }
+                _mergeAttributes(data, v);
+                Object.keys(v).forEach(function (key) {
+                    data[key] = v[key];
                 });
-            } else {
-                if (data.name && data.value) {
-                    ui2Data['_' + data.name] = data.value;
-                }
-                API.special_logic(data);
             }
-        },
-        special_logic: function () {
-            // 需要被各个页面重写的方法
-        },
-        boot: function () {
-            // 需要被各个页面重写的方法
-        },
-        reloadData: function () {
-            // 需要被各个页面重写的方法
-        },
-        deviceType: function ()        {
-            return _deviceType;
-        },
-        setDeviceType: function (deviceType)  {
-            _deviceType = deviceType;
-            if (ui === undefined) {
-                ui = err_ui;
-            }
-            if (ui !== 'blank') {
-                API.out({ ui: ui });
-            }
-            if (_deviceType === 'IOS') {
-                API.boot(_initData);
-            } else if (_deviceType === 'ANDROID') {
-                API.boot(_initData);
-            } else {
-                if (ui && ui.views) {
-                    API.ui2Data(ui.views);
-                }
-                setTimeout(function () {
-                    API.boot(_initData);
-                }, 500);
-            }
-        },
-        setUserid: function (userid)        {
-            _userid = userid;
-        },
-        setCard: function (card) {
-            _card = card;
-            if (_card.charAt(0) !== '/') {
-                API.connect();
-            }
-        },
-        getInitData: function () {
-            if (localStorage.boot) {
-                _initData = JSON.parse(localStorage.boot);
-                localStorage.boot = '';
-            }
-            _initData = _initData || {};
-            var params = (window.location.search.split('?')[1] || '').split('&');
+            API.out({ datas: data });
+        });
+        window.ui2Data.__defineGetter__(observeUI.name, function () {
+            return window.ui2Data['_' + observeUI.name];
+        });
 
-            for (var param in params) {
-                if (params.hasOwnProperty(param)) {
-                    paramParts = params[param].split('=');
-                    _initData[paramParts[0]] = decodeURIComponent(paramParts[1] || '');
-                }
-            }
-            return _initData;
-        },
-        ui2Data: function (observeUI) {
-            if (observeUI instanceof Array) {
-                for (var i = 0; i < observeUI.length; i++) {
-                    API.ui2Data(observeUI[i]);
-                }
-            } else if (observeUI.subViews) {
-                API.ui2Data(observeUI.subViews);
-            }
-            if (observeUI.name) {
-                ui2Data['_' + observeUI.name] = '';
-                ui2Data.__defineSetter__(observeUI.name, function (v) {
-                    ui2Data['_' + observeUI.name] = v;
-                    var data = { name: observeUI.name };
+    }
+}
 
-                    if (typeof v == 'string') {
-                        data.text = v;
-                    } else {
-                        API.merge(data, v);
-                    }
-                    API.out({ datas: data });
-                });
-                ui2Data.__defineGetter__(observeUI.name, function () {
-                    return ui2Data['_' + observeUI.name];
-                });
+function sendMessage(data) {
+    var iframe;
 
-            }
-        },
-        getDeviceType: function ()        {
-            return _deviceType;
-        },
-        getVersion: function ()        {
-            return '0.0.1';
-        },
-        getCookie: function (name) {
-            var arr, reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
+    if (_deviceType === 'IOS') {
+        _outObjects = data;
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('src', 'hero://ready');
 
-            if (arr = document.cookie.match(reg))                { return unescape(arr[2]); }            else                { return null; }
-        },
-        camelCase2bar: function (str) {
-            var low = str.toLowerCase();
-            var des = low.substr(0, 2);
+        document.documentElement.appendChild(iframe);
+        iframe.parentNode.removeChild(iframe);
+        iframe = null;
 
-            for (var i = 2; i < str.length; i++) {
-                if (str.charAt(i) !== low.charAt(i)) {
-                    des = des.concat('-' + low.charAt(i));
-                } else {
-                    des = des.concat(low.charAt(i));
-                }
-            }
-            return des;
-        },
-        createElementFromJson: function (json) {
-            var viewName = json.class || json.res;
+    } else if (_deviceType === 'IOS8') {
+        window.webkit.messageHandlers.native.postMessage(data);
+    } else if (_deviceType === 'ANDROID') {
+        if (typeof data === 'object') {
+            data = JSON.stringify(data);
+        }
+        window.native.on(data);
+    } else {
+        window.API.page.on(data);
+    }
+}
 
-            if (viewName) {
-                var className = API.camelCase2bar(viewName);
-                var str = '<' + className + ' json=' + encodeURIComponent(JSON.stringify(json)) + '></' + className + '>';
 
-                return str;
-            }
-            return '';
-        },
-        contain: function (objs, obj) {
-            var i = objs.length;
+function loop() {}
 
-            while (i--) { if (objs[i] === obj) { return true; } } return false;
-        },
-        merge: function (o1, o2) { for (var key in o2) { o1[key] = o2[key]; } return o1; },
-        remove: function (arr, value) {
-            if (!arr) { return; } var a = arr.indexOf(value);
+function outObjects() {
+    var messages = '';
 
-            if (a >= 0) { arr.splice(a, 1); }
+    if (_outObjects) {
+        if (typeof _outObjects === 'string') {
+            messages = _outObjects;
+        } else {
+            messages = JSON.stringify(_outObjects);
+        }
+        _outObjects = '';
+    }
+
+    return messages;
+}
+
+// eslint-disable-next-line
+function __executeExpression(expression, data, page) {
+    // eslint-disable-next-line
+    return (function (expression, __data, __page, window, API) {
+        // eslint-disable-next-line
+        var value = eval('expression');
+        // eslint-disable-next-line
+        value = eval(value);
+        return value;
+    })(expression, data, page, null, null);
+}
+
+function onMessage(data) {
+    if (typeof (data) === 'string') {
+        data = JSON.parse(data);
+    }
+
+    if (data.name && data.value) {
+        window.ui2Data['_' + data.name] = data.value;
+    }
+    API.__beforeMessage.call(_currentPage, data);
+    Object.keys(API.__messageList).forEach(function (expressions) {
+        var matchCondition = __executeExpression(expressions, data, _currentPage);
+
+        if (matchCondition) {
+            API.__messageList[expressions].forEach(function (callback) {
+                callback.call(_currentPage, data);
+            });
+        }
+    });
+    API.__afterMessage.call(_currentPage, data);
+}
+
+function beforeMessage(target, name, descriptor) {
+    API.__beforeMessage = target[name];
+    // Only one callback method
+    descriptor.writable = false;
+    return descriptor;
+}
+
+function afterMessage(target, name, descriptor) {
+    API.__afterMessage = target[name];
+    // Only one callback method
+    descriptor.writable = false;
+    return descriptor;
+}
+
+function definePublicFreezeProp(obj, name, value) {
+    Object.defineProperty(obj, name, {
+        enumerable: true,
+        configurable: false,
+        writable: false,
+        value: value
+    });
+}
+function defineProp(obj, name, value, isEnumerable) {
+    Object.defineProperty(obj, name, {
+        enumerable: !!isEnumerable,
+        configurable: false,
+        writable: true,
+        value: value
+    });
+}
+function defineReadOnlyProp(obj, name, value) {
+    Object.defineProperty(obj, name, {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: value
+    });
+}
+
+
+function resetUI(ui) {
+    window.ui = ui;
+}
+var emptyObject = {};
+
+function Component(config) {
+    return function (Target) {
+        if (!config) {
+            config = emptyObject;
+        }
+        if (config.view) {
+            defineProp(Target, '__defaultViews', config.view);
+            resetUI(config.view);
+        }
+        _currentPage = new Target();
+        if (typeof config === 'object') {
+            defineReadOnlyProp(API, '__heroConfig', config);
+        } else {
+            console.warn('Invalid Parameters: Parameters in @Component should be Object');
         }
     };
+}
+
+
+function ViewWillAppear(target, name, descriptor) {
+    API.__viewWillAppear = target[name];
+    // Only one callback method
+    descriptor.writable = false;
+    return descriptor;
+}
+
+
+function ViewWillDisappear(target, name, descriptor) {
+    API.__viewWillDisppear = target[name];
+    // Only one callback method
+    descriptor.writable = false;
+    return descriptor;
+}
+
+
+function Boot(target, name, descriptor) {
+    API.__boot = target[name];
+    // Only one boot callback method
+    descriptor.writable = false;
+    return descriptor;
+}
+
+
+function Message(expressions) {
+    if (!API.__messageList[expressions]) {
+        API.__messageList[expressions] = [];
+    }
+    return function (target, name, descriptor) {
+        API.__messageList[expressions].push(target[name]);
+        return descriptor;
+    };
+}
+
+function getUI() {
+    return window.ui;
+}
+
+function getState() {
+    return window.ui2Data;
+}
+function setState(status) {
+    if (!status) {
+        return;
+    }
+    if (typeof status !== 'object') {
+        return;
+    }
+    Object.keys(status).forEach(function (key) {
+        window.ui2Data[key] = status[key];
+    });
+}
+
+
+function bootstrap() {
+
+    if (window.ui !== 'blank') {
+        sendMessage({ ui: window.ui });
+    }
+
+    if (window.ui && window.ui.views) {
+        view2Data(window.ui.views);
+    }
+
+    // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
+
+    // setTimeout(function () {
+    API.__boot.call(_currentPage);
+    // }, isRunInApp ? 0 : 500);
+}
+
+function __viewWillDisppearCallback() {
+    API.__viewWillDisppear.call(_currentPage);
+}
+function __viewWillAppearCallback() {
+    API.__viewWillDisppear.call(_currentPage);
+}
+
+defineProp(API, '__heroConfig', {});
+defineProp(API, '__boot', loop);
+defineProp(API, '__viewWillDisppear', loop);
+defineProp(API, '__viewWillAppear', loop);
+
+definePublicFreezeProp(API, '__viewWillDisppearCallback', __viewWillDisppearCallback);
+definePublicFreezeProp(API, '__viewWillAppearCallback', __viewWillAppearCallback);
+
+defineProp(API, '__beforeMessage', loop);
+defineProp(API, '__afterMessage', loop);
+
+defineReadOnlyProp(API, '__messageList', {});
+
+definePublicFreezeProp(API, 'boot', bootstrap);
+// definePublicFreezeProp(API, 'bootstrap', bootstrap);
+definePublicFreezeProp(API, 'getState', getState);
+definePublicFreezeProp(API, 'getUI', getUI);
+definePublicFreezeProp(API, 'in', onMessage);
+definePublicFreezeProp(API, 'out', sendMessage);
+definePublicFreezeProp(API, 'outObjects', outObjects);
+definePublicFreezeProp(API, 'resetUI', resetUI);
+definePublicFreezeProp(API, 'setState', setState);
+definePublicFreezeProp(API, 'updateView', view2Data);
+
+
+(function getDeviceType() {
+    var ua = navigator.userAgent.toLowerCase();
+
+    if (ua.indexOf('hero-ios') !== -1) {
+        _deviceType = 'IOS';
+    } else if (ua.indexOf('hero-android') !== -1) {
+        _deviceType = 'ANDROID';
+    } else if (ua.indexOf('micromessenger') !== -1) {
+        _deviceType = 'WECHAT';
+    }
 })();
+
+module.exports = {
+    Component: Component,
+    Boot: Boot,
+    Message: Message,
+    ViewWillAppear: ViewWillAppear,
+    ViewWillDisappear: ViewWillDisappear,
+    BeforeMessage: beforeMessage,
+    AfterMessage: afterMessage,
+    Hero: API
+};
