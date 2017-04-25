@@ -61,6 +61,45 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports) {
 
+	/**
+	 * Pants module.
+	 * @module hero-js/API
+	 */
+
+	 /**
+	  * Solves equations of the form a * x = b
+	  * @description
+	  ```
+	  * import { Component, Boot } from 'hero-js';
+	  *
+	  * var defaultUIViews = {
+	  *   version:0,
+	  *   backgroundColor:'ffffff',
+	  *   nav:{
+	  *     title:'Home Page',
+	  *     navigationBarHiddenH5:true,
+	  *   },
+	  *   views:
+	  *   [
+	  *     {
+	  *       'class':'HeroWebView',
+	  *       name:'webview',
+	  *       frame:{w:'1x',h:'1x'}
+	  *     },
+	  *   ]
+	  * }
+	  * &#64Component({
+	  *   view: defaultUIViews
+	  * })
+	  * export class DecoratePage {
+	  *   &#64Boot
+	  *   boot(){
+	  *     console.log('Bootstrap Successfully!')
+	  *   }
+	  * }
+	  ```
+	  */
+
 	var API = window.API = {};
 	var _outObjects = '';
 	var _currentPage = null;
@@ -113,6 +152,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
+
+	/**
+	 * JS代码往组件发送视图更新数据
+	 * @param {Object} data - 需要更新的视图数据
+	 */
 	function sendMessage(data) {
 	    var iframe;
 
@@ -187,15 +231,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    API.__afterMessage.call(_currentPage, data);
 	}
-
-	function beforeMessage(target, name, descriptor) {
+	/**
+	 * 定义JS代码在执行消息回调方法之前需要执行的方法，参数同@Message
+	 */
+	function BeforeMessage(target, name, descriptor) {
 	    API.__beforeMessage = target[name];
 	    // Only one callback method
 	    descriptor.writable = false;
 	    return descriptor;
 	}
-
-	function afterMessage(target, name, descriptor) {
+	/**
+	 * 定义JS代码在执行消息回调方法成功后需要执行的方法，参数同@Message
+	 */
+	function AfterMessage(target, name, descriptor) {
 	    API.__afterMessage = target[name];
 	    // Only one callback method
 	    descriptor.writable = false;
@@ -233,6 +281,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	var emptyObject = {};
 
+	/**
+	 * 定义当前页面为一个组件，所指定的类将会被自动创建一个实例
+	 * @param {object} config - 可以传入view参数，指定当前页面初始化时的界面数据
+	 *
+	 */
 	function Component(config) {
 	    return function (Target) {
 	        if (!config) {
@@ -251,7 +304,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	}
 
-
+	/**
+	 * 定义当前页面在渲染之前的回调
+	 */
 	function ViewWillAppear(target, name, descriptor) {
 	    API.__viewWillAppear = target[name];
 	    // Only one callback method
@@ -259,7 +314,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return descriptor;
 	}
 
-
+	/**
+	 * 定义当前页面在离开之前的回调
+	 */
 	function ViewWillDisappear(target, name, descriptor) {
 	    API.__viewWillDisppear = target[name];
 	    // Only one callback method
@@ -267,7 +324,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return descriptor;
 	}
 
-
+	/**
+	 * 定义当前页面启动时的回调方法
+	 */
 	function Boot(target, name, descriptor) {
 	    API.__boot = target[name];
 	    // Only one boot callback method
@@ -275,7 +334,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return descriptor;
 	}
 
-
+	/**
+	 * 定义Native原生组件往JS代码发送消息时的回调方法，方法中的第一个参数为具体的消息内容
+	 * 如@Message('__data && __data.type="myMessage"')
+	 * @param {string} expressions - JS表达式，当该表达式执行结果为true时，会进入该回调，否则不进入该回调。
+	 *  表达式中可以使用__data来引用该消息内容
+	 */
 	function Message(expressions) {
 	    if (!API.__messageList[expressions]) {
 	        API.__messageList[expressions] = [];
@@ -290,9 +354,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return window.ui;
 	}
 
+	/**
+	 *
+	 * @return {object} 返回当前页面中的每个元素及组件的状态数据
+	 */
 	function getState() {
 	    return window.ui2Data;
 	}
+	/**
+	 * 设置当前页面中的元素及组件的状态
+	 * @return {object} 对象中的key对应元素组件，value为更新后的值
+	 */
 	function setState(status) {
 	    if (!status) {
 	        return;
@@ -373,8 +445,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Message: Message,
 	    ViewWillAppear: ViewWillAppear,
 	    ViewWillDisappear: ViewWillDisappear,
-	    BeforeMessage: beforeMessage,
-	    AfterMessage: afterMessage,
+	    BeforeMessage: BeforeMessage,
+	    AfterMessage: AfterMessage,
 	    Hero: API
 	};
 

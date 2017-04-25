@@ -4,7 +4,7 @@
   "description": "Components used in Web Implements Hero Components Interface",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf dist && webpack",
+    "build": "rm -rf dist && rm -rf docs && webpack && npm run generate-docs",
     "generate-docs": "jsdoc -c jsdoc.json -u tutorials"
   },
   "devDependencies": {
