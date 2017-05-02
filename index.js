@@ -1,6 +1,6 @@
 /**
  * Pants module.
- * @module hero-js/API
+ * @module hero-js/Hero
  */
 
  /**
@@ -37,7 +37,7 @@
   ```
   */
 
-var API = window.API = {};
+var Hero = window.Hero = {};
 var _outObjects = '';
 var _currentPage = null;
 
@@ -80,7 +80,7 @@ function view2Data(observeUI) {
                     data[key] = v[key];
                 });
             }
-            API.out({ datas: data });
+            Hero.out({ datas: data });
         });
         window.ui2Data.__defineGetter__(observeUI.name, function () {
             return window.ui2Data['_' + observeUI.name];
@@ -114,7 +114,7 @@ function sendMessage(data) {
         }
         window.native.on(data);
     } else {
-        window.API.page.on(data);
+        window.Hero.page.on(data);
     }
 }
 
@@ -139,7 +139,7 @@ function outObjects() {
 // eslint-disable-next-line
 function __executeExpression(expression, data, page) {
     // eslint-disable-next-line
-    return (function (expression, __data, __page, window, API) {
+    return (function (expression, __data, __page, window, Hero) {
         // eslint-disable-next-line
         var value = eval('expression');
         // eslint-disable-next-line
@@ -156,23 +156,23 @@ function onMessage(data) {
     if (data.name && data.value) {
         window.ui2Data['_' + data.name] = data.value;
     }
-    API.__beforeMessage.call(_currentPage, data);
-    Object.keys(API.__messageList).forEach(function (expressions) {
+    Hero.__beforeMessage.call(_currentPage, data);
+    Object.keys(Hero.__messageList).forEach(function (expressions) {
         var matchCondition = __executeExpression(expressions, data, _currentPage);
 
         if (matchCondition) {
-            API.__messageList[expressions].forEach(function (callback) {
+            Hero.__messageList[expressions].forEach(function (callback) {
                 callback.call(_currentPage, data);
             });
         }
     });
-    API.__afterMessage.call(_currentPage, data);
+    Hero.__afterMessage.call(_currentPage, data);
 }
 /**
  * 定义JS代码在执行消息回调方法之前需要执行的方法，参数同@Message
  */
 function BeforeMessage(target, name, descriptor) {
-    API.__beforeMessage = target[name];
+    Hero.__beforeMessage = target[name];
     // Only one callback method
     descriptor.writable = false;
     return descriptor;
@@ -181,7 +181,7 @@ function BeforeMessage(target, name, descriptor) {
  * 定义JS代码在执行消息回调方法成功后需要执行的方法，参数同@Message
  */
 function AfterMessage(target, name, descriptor) {
-    API.__afterMessage = target[name];
+    Hero.__afterMessage = target[name];
     // Only one callback method
     descriptor.writable = false;
     return descriptor;
@@ -234,7 +234,7 @@ function Component(config) {
         }
         _currentPage = new Target();
         if (typeof config === 'object') {
-            defineReadOnlyProp(API, '__heroConfig', config);
+            defineReadOnlyProp(Hero, '__heroConfig', config);
         } else {
             console.warn('Invalid Parameters: Parameters in @Component should be Object');
         }
@@ -245,7 +245,7 @@ function Component(config) {
  * 定义当前页面在渲染之前的回调
  */
 function ViewWillAppear(target, name, descriptor) {
-    API.__viewWillAppear = target[name];
+    Hero.__viewWillAppear = target[name];
     // Only one callback method
     descriptor.writable = false;
     return descriptor;
@@ -255,7 +255,7 @@ function ViewWillAppear(target, name, descriptor) {
  * 定义当前页面在离开之前的回调
  */
 function ViewWillDisappear(target, name, descriptor) {
-    API.__viewWillDisppear = target[name];
+    Hero.__viewWillDisppear = target[name];
     // Only one callback method
     descriptor.writable = false;
     return descriptor;
@@ -265,7 +265,7 @@ function ViewWillDisappear(target, name, descriptor) {
  * 定义当前页面启动时的回调方法
  */
 function Boot(target, name, descriptor) {
-    API.__boot = target[name];
+    Hero.__boot = target[name];
     // Only one boot callback method
     descriptor.writable = false;
     return descriptor;
@@ -278,11 +278,11 @@ function Boot(target, name, descriptor) {
  *  表达式中可以使用__data来引用该消息内容
  */
 function Message(expressions) {
-    if (!API.__messageList[expressions]) {
-        API.__messageList[expressions] = [];
+    if (!Hero.__messageList[expressions]) {
+        Hero.__messageList[expressions] = [];
     }
     return function (target, name, descriptor) {
-        API.__messageList[expressions].push(target[name]);
+        Hero.__messageList[expressions].push(target[name]);
         return descriptor;
     };
 }
@@ -328,40 +328,40 @@ function bootstrap() {
     // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
 
     // setTimeout(function () {
-    API.__boot.call(_currentPage);
+    Hero.__boot.call(_currentPage);
     // }, isRunInApp ? 0 : 500);
 }
 
 function __viewWillDisppearCallback() {
-    API.__viewWillDisppear.call(_currentPage);
+    Hero.__viewWillDisppear.call(_currentPage);
 }
 function __viewWillAppearCallback() {
-    API.__viewWillDisppear.call(_currentPage);
+    Hero.__viewWillDisppear.call(_currentPage);
 }
 
-defineProp(API, '__heroConfig', {});
-defineProp(API, '__boot', loop);
-defineProp(API, '__viewWillDisppear', loop);
-defineProp(API, '__viewWillAppear', loop);
+defineProp(Hero, '__heroConfig', {});
+defineProp(Hero, '__boot', loop);
+defineProp(Hero, '__viewWillDisppear', loop);
+defineProp(Hero, '__viewWillAppear', loop);
 
-definePublicFreezeProp(API, '__viewWillDisppearCallback', __viewWillDisppearCallback);
-definePublicFreezeProp(API, '__viewWillAppearCallback', __viewWillAppearCallback);
+definePublicFreezeProp(Hero, '__viewWillDisppearCallback', __viewWillDisppearCallback);
+definePublicFreezeProp(Hero, '__viewWillAppearCallback', __viewWillAppearCallback);
 
-defineProp(API, '__beforeMessage', loop);
-defineProp(API, '__afterMessage', loop);
+defineProp(Hero, '__beforeMessage', loop);
+defineProp(Hero, '__afterMessage', loop);
 
-defineReadOnlyProp(API, '__messageList', {});
+defineReadOnlyProp(Hero, '__messageList', {});
 
-definePublicFreezeProp(API, 'boot', bootstrap);
-// definePublicFreezeProp(API, 'bootstrap', bootstrap);
-definePublicFreezeProp(API, 'getState', getState);
-definePublicFreezeProp(API, 'getUI', getUI);
-definePublicFreezeProp(API, 'in', onMessage);
-definePublicFreezeProp(API, 'out', sendMessage);
-definePublicFreezeProp(API, 'outObjects', outObjects);
-definePublicFreezeProp(API, 'resetUI', resetUI);
-definePublicFreezeProp(API, 'setState', setState);
-definePublicFreezeProp(API, 'updateView', view2Data);
+definePublicFreezeProp(Hero, 'boot', bootstrap);
+// definePublicFreezeProp(Hero, 'bootstrap', bootstrap);
+definePublicFreezeProp(Hero, 'getState', getState);
+definePublicFreezeProp(Hero, 'getUI', getUI);
+definePublicFreezeProp(Hero, 'in', onMessage);
+definePublicFreezeProp(Hero, 'out', sendMessage);
+definePublicFreezeProp(Hero, 'outObjects', outObjects);
+definePublicFreezeProp(Hero, 'resetUI', resetUI);
+definePublicFreezeProp(Hero, 'setState', setState);
+definePublicFreezeProp(Hero, 'updateView', view2Data);
 
 
 (function getDeviceType() {
@@ -384,5 +384,5 @@ module.exports = {
     ViewWillDisappear: ViewWillDisappear,
     BeforeMessage: BeforeMessage,
     AfterMessage: AfterMessage,
-    Hero: API
+    Hero: Hero
 };
