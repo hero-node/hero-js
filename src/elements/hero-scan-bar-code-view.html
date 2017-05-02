@@ -41,7 +41,7 @@ HeroScanBarCodeViewhavior ={
     var that = this;
    setTimeout(function(){
       that.json.getBarCode.value='http://Only.test.com&invitationKey=97979';
-      API.out(that.json.getBarCode)
+      this.controller.on(that.json.getBarCode)
    },2000);
   }
 }

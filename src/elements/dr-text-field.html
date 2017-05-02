@@ -81,9 +81,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }
         };
       };
-      if (json.size) {
-        this.$.native.style.fontSize = json.size+'px';
-      };
       if(json.hideBottomLine){
         var childs = this.$.input.$$('paper-input-container').querySelectorAll('div');
         for (var i = 0; i < childs.length; i++) {
@@ -97,6 +94,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         };
       }
+      if (this.$.native.style.display === 'block') {
+        if (json.size) {
+          this.$.native.style.fontSize = json.size+'px';
+        };
+        if (json.focus) {
+            var ua = navigator.userAgent.toLowerCase();
+            if(ua.indexOf("iphone") > 0){
+              this.$.native.focus();
+            }else if (ua.indexOf('chrome') > 0) {
+              var that = this;
+              setTimeout(function(){
+                that.$.native.focus();
+              },300);
+            }else{
+              var that = this;
+              setTimeout(function(){
+                that.$.native.focus();
+              },300);
+            }
+        };
+        if (json.blur) {
+          this.$.native.blur();
+        };
+      };
+
     },
     ready:function(){
     },

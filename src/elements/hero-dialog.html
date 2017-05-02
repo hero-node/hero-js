@@ -59,6 +59,14 @@ HeroDialogBehavior ={
           that.$.dialog.style.height=rootEl.style.height;
         }
         that.$.dialog.open();
+        for (var i = 0; i < rootEl.childNodes.length; i++) {
+          var view = rootEl.childNodes[i];
+          if (view.nodeName.search('BUTTON') > 0) {
+            view.addEventListener('click',function(){
+              that.close();
+            });
+          };
+        };
       },200);
     }
   },
@@ -75,7 +83,7 @@ HeroDialogBehavior ={
   }
   </style>
   <template>
-    <paper-dialog id='dialog' on-tap='close'>
+    <paper-dialog id='dialog'>
 
     </paper-dialog>
   </template>

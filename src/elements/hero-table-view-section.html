@@ -42,6 +42,9 @@ HeroTableViewSectionBehavior = {
     }
   },      
   on: function(json) {
+    if (!this.controller) {
+      this.controller = APP.currentPage;
+    };
     if (json.sectionTitle) {
       this.title = json.sectionTitle;
     }else{
@@ -71,11 +74,9 @@ HeroTableViewSectionBehavior = {
         }
         if (row.height) {
           cell.$.heroContent.style.height = row.height+'px';
-        }else{
-          cell.$.heroContent.style.height = '44px';
-        };
+        }
         if (i != json.rows.length-1) {
-          cell.$.heroContent.style.borderBottom = '1px solid #ddd';
+          cell.json = {bottomLine:true};
         }
         this.$.heroContent.appendChild(cell);
      };
@@ -84,7 +85,7 @@ HeroTableViewSectionBehavior = {
   selectItem: function(item){
     var json = item.srcElement.json
     if (json.action) {
-      this.controller.out(json.action)
+      this.controller.on(json.action)
     };
   }
 }
@@ -96,23 +97,29 @@ HeroTableViewSectionBehavior = {
       margin: 0px;
       padding: 0px;
       background-color: #fff;
-      border-bottom:1px solid #ddd;
-      border-top:1px solid #ddd;
+      border-bottom:1px solid #e4e4e4;
+      border-top:1px solid #e4e4e4;
     }
-    p{
+    #title{
       display: block;
       font-size: 12px;
       color: #999;
-      height: 20px;
-      margin: 2px;
+      height: 29px;
+      line-height: 29px;
+      margin: 0px;
+      padding: 0px;
       margin-left: 15px;
-      margin-top: 22px;
+    }
+    #sectionGap{
+      display: block;
+      height: 15px;
     }
     </style>
   <template>
+    <div id='sectionGap'>
+    </div>
     <p id='title'>{{title}}</p>
     <div id='heroContent'>
-        <div style='margin-left:15px;' id='item' json={{item}} hidden='true'></div>
     </div>
   </template>
 </dom-module>
@@ -120,6 +127,6 @@ HeroTableViewSectionBehavior = {
 <script>
   Polymer({
     is: "hero-table-view-section",
-    behaviors: [HeroBehavior,HeroTableViewSectionBehavior]
+    behaviors: [HeroBehavior,HeroTableViewSectionBehavior],
   })
 </script>

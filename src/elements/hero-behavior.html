@@ -63,15 +63,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
       },
       oon:function(json){
-        for (var i = 0; i < this.behaviors.length; i++) {
-          var behavior = this.behaviors[i];
-          if (behavior.on) {
-            behavior.on.apply(this, [json]);
-          };
-        };
-        if (this.on) {
-          this.on(json);
-        };
+        this.setJson(json);
       },
       setController:function(controller){
         if (this.$.heroContent) {
@@ -164,9 +156,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
             this.height = hInt;
 
-            if (json.yOffset) {
-              var refName = json.yOffset.split(/\+/)[0];
-              var offset = parseFloat(json.yOffset.split(/\+/)[1]);
+            if (this.json.yOffset) {
+              var refName = this.json.yOffset.split(/\+/)[0];
+              var offset = parseFloat(this.json.yOffset.split(/\+/)[1]);
               var top = this.controller.findViewByname(refName,this.controller.heroContent);
               top = top || this.controller.findViewByname(refName,this.parentElement);
               if (top) {
@@ -183,9 +175,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 };
               }
             }
-            if (json.xOffset) {
-              var refName = json.xOffset.split(/\+/)[0];
-              var offset = parseFloat(json.xOffset.split(/\+/)[1]);
+            if (this.json.xOffset) {
+              var refName = this.json.xOffset.split(/\+/)[0];
+              var offset = parseFloat(this.json.xOffset.split(/\+/)[1]);
               var top = this.controller.findViewByname(refName,this.controller.heroContent);
               top = top || this.controller.findViewByname(refName,this.parentElement);
               if (top) {

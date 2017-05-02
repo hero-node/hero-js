@@ -49,8 +49,11 @@ HeroSwitchBehavior ={
     }
   },
   valueChange:function(value){
-    this.click.value=value;
-    API.out(this.click)
+    if (this.json&&this.json.click) {
+      this.json.click.value=value;
+      this.json.click.name=this.getName();
+      this.controller.on(this.json.click)
+    };
   }
 }
 </script>

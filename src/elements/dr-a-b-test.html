@@ -46,7 +46,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       ready:function(){
         var that = this;
        setTimeout(function(){
-          API.out({abtest:'check',value:[]})
+          this.controller.on({abtest:'check',value:[]})
        },2000);
       }
     })

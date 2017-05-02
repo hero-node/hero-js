@@ -37,8 +37,11 @@ HeroTableViewBehavior ={
   },      
   on: function(json) {
     if (json.header) {
+        while (this.$.header.lastChild) {
+           this.$.header.removeChild(this.$.header.lastChild);
+        }
         var viewObject = json.header;
-        var view = document.createElement(API.camelCase2bar(viewObject.class||viewObject.res));
+        var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
         this.$.header.appendChild(view);
         view.controller = this.controller;
         if (viewObject.frame) {
@@ -51,8 +54,11 @@ HeroTableViewBehavior ={
       this.items = json.data;
     };
     if (json.footer) {
+        while (this.$.footer.lastChild) {
+           this.$.footer.removeChild(this.$.footer.lastChild);
+        }
         var viewObject = json.footer;
-        var view = document.createElement(API.camelCase2bar(viewObject.class||viewObject.res));
+        var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
         this.$.footer.appendChild(view);
         view.controller = this.controller;
         if (viewObject.frame) {
@@ -74,10 +80,9 @@ HeroTableViewBehavior ={
     <style type="text/css">
     #heroContent{
       display: inline-block;
-      position: relative;
+      position: absolute;
       overflow: auto;
       padding: 0px;
-      padding-top: 15px;
       background-color: #fff;
     }
     </style>
@@ -85,7 +90,7 @@ HeroTableViewBehavior ={
     <div id='heroContent'>
       <div id = 'header'></div>
       <template is="dom-repeat" items="{{items}}">
-        <hero-table-view-section json={{item}} ></hero-table-view-section>
+        <hero-table-view-section json={{item}}></hero-table-view-section>
       </template>
       <div id = 'footer'></div>
     </div>

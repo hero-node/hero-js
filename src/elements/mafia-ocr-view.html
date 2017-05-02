@@ -52,25 +52,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
         if (json.type === '银行卡') {
           this.actionObject.value = {bankCode:'888888888888888'};
-          API.out(this.actionObject);
+          this.controller.on(this.actionObject);
         };
         if (json.type === '身份证反面') {
           this.actionObject.value = {code:'美国华盛顿特区',valid:'2999-10-19'};
-          API.out(this.actionObject);
+          this.controller.on(this.actionObject);
         };
         if (json.type === '身份证正面') {
           this.actionObject.value = {name:'奥巴马',code:312267198910107678+(new Date()).getTime()+'',address:'美国华盛顿特区白宫'};
-          API.out(this.actionObject);
+          this.controller.on(this.actionObject);
         };
         if (json.type === '身份证') {
           this.actionObject.value = {name:'奥巴马',code:312267198910107678+(new Date()).getTime()+'',address:'美国华盛顿特区白宫'};
-          API.out(this.actionObject);
+          this.controller.on(this.actionObject);
           this.actionObject.value = {code:'美国华盛顿特区',valid:'2999-10-19'};
-          API.out(this.actionObject);
+          this.controller.on(this.actionObject);
         };
         if (json.type === '敏识') {
           this.actionObject.value = {minshi:true};
-          API.out(this.actionObject);
+          this.controller.on(this.actionObject);
         };
       },
     })

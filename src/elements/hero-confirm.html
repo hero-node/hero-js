@@ -64,11 +64,11 @@ HeroConfirmBehavior ={
     },
     tapOk: function() {
       this.close();
-      API.out(this.action);
+      this.controller.on(this.action);
     },
     tapCancel:function(){
       this.close();
-      API.out(this.cancelAction);
+      this.controller.on(this.cancelAction);
     }
 }
 </script>

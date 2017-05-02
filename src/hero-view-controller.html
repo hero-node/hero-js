@@ -33,8 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       behaviors: [HeroBehavior],
       properties: {
         url: {
-          type: String,
-          observer: 'setWebUrl',
+          type: String
         },
         title: {
           type: String,
@@ -113,9 +112,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               if (typeof v == 'string') {
                   data.text = v;
               }else{
-                  API.merge(data,v);
+                  Hero.merge(data,v);
               }
-              API.out({datas:data});
+              Hero.out({datas:data});
             });
             ui2Data.__defineGetter__(observeUI.name, function() {
                 return ui2Data['_'+observeUI.name];
@@ -123,10 +122,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           };
       },
       attached:function(){
-        if (window.ui && window.API) {
+        if (window.ui && window.Hero) {
           this.view = ui;
-          this.controller = API;
-          API.page = this;
+          this.controller = Hero;
+          Hero.page = this;
           var heroContent = document.createElement('div');
           heroContent.style.display = 'block';
           heroContent.style.position = 'absolute';
@@ -143,7 +142,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }
           this.viewWillAppear();
           if (this.view !== 'blank') {
-            API.out({ui:this.view});
+            Hero.out({ui:this.view});
           };
           if (this.initData.test) {
             var js = document.createElement('script');
@@ -159,12 +158,32 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             this.ui2Data(ui.views);
           };
           this.viewDidLoad();
+        }else{
+          var iframe = document.createElement('iframe');
+          iframe.style.display = 'inline-block';
+          iframe.style.position = 'absolute';
+          iframe.style.overflow = 'hidden';
+          iframe.style.top = '0px';
+          iframe.style.left = '0px';
+          iframe.style.border = '0px';
+          iframe.style.borderWidth = '0px';
+          iframe.style.height = '100%';
+          iframe.style.width = '100%';
+          iframe.src = this.url;
+          this.appendChild(iframe);
+          var that  = this;
+          iframe.onload = function(){
+            try{
+             that.title = iframe.contentDocument.title;
+            }catch(e) {}
+            APP.setNav({title:that.title});
+          }
         }
       },
-      ready:function(){
-      },
       viewDidLoad:function(){
-        this.controller.boot(this.initData);
+        if(this.controller){
+          this.controller.boot(this.initData);
+        }
       },
       viewWillAppear:function(){
         this.getInitData();
@@ -178,30 +197,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
         if (this.appearObject) {
           this.controller.in(this.appearObject);
-        };
+        }else if(Hero.viewWillAppear){
+          Hero.viewWillAppear();
+        }
       },
       viewWillDisappear:function(){
-
-      },
-      setWebUrl:function(url){
-        if (!API) {
-          var iframe = document.createElement('iframe');
-          iframe.style.display = 'inline-block';
-          iframe.style.position = 'absolute';
-          iframe.style.overflow = 'hidden';
-          iframe.style.top = '0px';
-          iframe.style.left = '0px';
-          iframe.style.border = '0px';
-          iframe.style.borderWidth = '0px';
-          iframe.style.height = '100%';
-          iframe.style.width = '100%';
-          iframe.src = url;
-          this.appendChild(iframe);
-          var that  = this;
-          iframe.onload = function(){
-            that.title = iframe.contentDocument.title;
-            APP.setNav({title:that.title});
-          }
+        if(Hero.viewWillDisappear){
+          Hero.viewWillDisappear();
         }
       },
       on:function(json){
@@ -309,7 +311,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               }
             }else if (command.show) {
               if (command.show.action || command.show.cancelAction) {
-                  // confirm(command.show.content) && API.out(command.show.action);
                   var confirm = document.createElement('hero-confirm');
                   confirm.controller = this;
                   confirm.oon({'text': command.show.content || '',action:command.show.action,cancelAction:command.show.cancelAction});

@@ -43,6 +43,9 @@ HeroImageViewBehavior ={
     }
   },      
   on: function(json) {
+    if (json.base64image) {
+        this.$.img.src = json.base64image;
+    };
     if (json.image) {
        isStaticImage=true;
       if (json.image.substring(0,4) === 'http') {

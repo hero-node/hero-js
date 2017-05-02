@@ -104,6 +104,9 @@ HeroLabelBehavior ={
       p.style.color=this.$.text.style.color;
       p.style.fontSize = this.$.text.style.fontSize;
       p.style.textAlign = this.$.text.style.textAlign;
+      if (!json.hasOwnProperty("numberOfLines") ) {
+        p.style.lineHeight = this.$.heroContent.style.height;
+      };
       while (this.$.heroContent.lastChild) {
          this.$.heroContent.removeChild(this.$.heroContent.lastChild);
       }

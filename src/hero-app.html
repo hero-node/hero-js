@@ -216,7 +216,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     var localStorageTemp = {};
     var forceMem = false;
     try {
-        window.localStorage.boot = "{}";
+      window.localStorage.boot = "{}";
     } catch(e) {
       forceMem = true;
     }
@@ -227,7 +227,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     };
   </script>
   <script>
-
     Polymer({
       is: 'hero-app',
       behaviors: [HeroBehavior],
@@ -333,9 +332,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
       },
       page2Element:function(page){
-        // if (page.search(window.location.host) < 0) {
-        //   return page;
-        // };
         var pageElement = page.replace('_','-');
         if (page.search(/.html/) > 0) {
           pageElement = pageElement.split('/').pop();
@@ -344,7 +340,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           };
           pageElement = pageElement.replace('.html','');
           pageElement = pageElement.search(/-/)>0?pageElement:'hero-'+pageElement;
-        };
+        }else{
+          pageElement = pageElement.replace('http://','');
+          pageElement = pageElement.replace('https://','');
+          pageElement = pageElement.replace(/\./g,'-');
+        }
         return pageElement;
       },
       ready:function(){
@@ -352,7 +352,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         window.addEventListener('popstate', function(e) {
           if (e.state) {
             window.APP.gotoPage(e.state.state,'back');
-          };
+          }
         });
         this.$.backBtn.controller = this;
         this.$.backBtn.oon({image:'back.png',click:{goBack:true}});
@@ -362,16 +362,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         // setTimeout(function(){
         //   that.$.cover.style.display = 'none';
         // },1800);
-        window.last_API = '';
-        window.__defineSetter__('API', function(v) {
-          window[window.location.href+'_API'] = v;
+        window.last_Hero = '';
+        window.__defineSetter__('Hero', function(v) {
+          window[window.location.href+'_Hero'] = v;
         });
-        window.__defineGetter__('API', function() {
-          var _api = window[window.location.href+'_API'];
-          if (_api) {
-            window.last_API = _api;
+        window.__defineGetter__('Hero', function() {
+          var _Hero = window[window.location.href+'_Hero'];
+          if (_Hero) {
+            window.last_Hero = _Hero;
           };
-          return window.last_API;
+          return window.last_Hero;
         });
         window.last_ui2Data = '';
         window.__defineSetter__('ui2Data', function(v) {
@@ -467,7 +467,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             if (e.name == pageElement) {
               this.currentPage = e;
               this.$.pages.selected = pageElement;
-              if (!API.contain(this.pageStack,pageElement)) {
+              if (!Hero.contain(this.pageStack,pageElement)) {
                 e.viewDidLoad();
               }
               e.viewWillAppear();

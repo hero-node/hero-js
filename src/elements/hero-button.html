@@ -92,7 +92,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
         if (json.titleColor) {
           this.titleColor = '#'+json.titleColor;
-          this.$.heroContent.style.color = '#'+json.titleColor;
+          this.$.button.style.color = '#'+json.titleColor;
         };
         if (json.backgroundColor) {
           this.$.heroContent.style.backgroundColor = '#'+json.backgroundColor;
@@ -158,5 +158,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   Polymer({
     is: "hero-button",
       behaviors: [HeroBehavior,HeroButtonBehavior],
+      ready:function(){
+        this.$.button.style.color = '#ddd';
+      }
     })
 </script>

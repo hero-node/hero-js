@@ -34,7 +34,7 @@ HeroLocationViewBehavior ={
     if(json.fetch_coordinate){
       json.fetch_coordinate.la = 122.0;
       json.fetch_coordinate.lo = 122.0;
-      API.out(json.fetch_coordinate);
+      this.controller.on(json.fetch_coordinate);
     }
   },
 }
