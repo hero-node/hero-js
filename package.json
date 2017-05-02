@@ -1,12 +1,16 @@
 {
   "name": "hero-js",
   "version": "2.0.0",
-  "description": "",
+  "description": "Components used in Web Implements Hero Components Interface",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf build && polymer build"
+    "build": "rm -rf dist && rm -rf docs && webpack && npm run generate-docs",
+    "generate-docs": "jsdoc -c jsdoc.json -u tutorials"
   },
   "devDependencies": {
+    "docdash": "0.4.0",
+    "jsdoc": "3.4.3",
+    "webpack": "1.14.0"
   },
   "author": "",
   "license": "ISC"

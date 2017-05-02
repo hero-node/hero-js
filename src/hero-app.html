@@ -132,11 +132,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         width: 100%;
         background-color: #fff;
         background-size:cover;
-        /*background-image: url('../images/default.png');*/
       }
       #title {
         display:inline-block;
-        position: absolute; 
+        position: absolute;
         overflow:hidden;
         width: 100%;
         height: 100%;
@@ -299,10 +298,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (str.length == 3 || str.length == 6) {
           return '#'+str;
         }else if(str.length == 8){
-          var r = parseInt('0x'+str.substr(0,2)); 
-          var g = parseInt('0x'+str.substr(2,2)); 
-          var b = parseInt('0x'+str.substr(4,2)); 
-          var a = parseInt('0x'+str.substr(6,2))/255; 
+          var r = parseInt('0x'+str.substr(0,2));
+          var g = parseInt('0x'+str.substr(2,2));
+          var b = parseInt('0x'+str.substr(4,2));
+          var a = parseInt('0x'+str.substr(6,2))/255;
           return 'rgba('+r+','+g+','+b+','+a+')';
         }
       },
@@ -424,7 +423,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             this.$.rightBtn.style.display = 'inline-block'
           }else{
             this.$.rightBtn.style.display = 'none'
-          } 
+          }
         };
       },
       loadPage:function(page){
@@ -467,7 +466,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             if (e.name == pageElement) {
               this.currentPage = e;
               this.$.pages.selected = pageElement;
-              if (!Hero.contain(this.pageStack,pageElement)) {
+              if (this.pageStack.indexOf(pageElement)===-1) {
                 e.viewDidLoad();
               }
               e.viewWillAppear();
