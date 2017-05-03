@@ -53,7 +53,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           type: Boolean,
           value:true
         }
-      },      
+      },
       on: function(json) {
         if (json.title) {
           this.$.title.innerHTML = json.title;
@@ -80,9 +80,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           if(json.imageN.startWith('http')) {
             url = json.image;
           }else if (json.imageN.search(/\./)>0) {
-              url = 'images/' +json.imageN;
+              url = require('../images/' + json.imageN);
           }else{
-              url = 'images/' +json.imageN+'.png';
+              url = require('../images/' + json.imageN+'.png');
           };
           this.$.heroContent.style.backgroundImage = 'url('+url+')';
           this.$.heroContent.style.backgroundSize = 'cover'
