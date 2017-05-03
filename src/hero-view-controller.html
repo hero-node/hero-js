@@ -186,7 +186,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
       },
       viewWillAppear:function(){
-        API.__viewWillAppearCallback && API.__viewWillAppearCallback();
+        Hero.__viewWillAppearCallback && Hero.__viewWillAppearCallback();
         this.getInitData();
         if (this.view && this.view.nav) {
           if (this.view.tintColor) {
@@ -203,7 +203,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
       },
       viewWillDisappear:function(){
-        API.__viewWillDisppearCallback && API.__viewWillDisppearCallback();
+        Hero.__viewWillDisppearCallback && Hero.__viewWillDisppearCallback();
       },
       on:function(json){
         if (Array.isArray(json)) {
