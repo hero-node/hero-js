@@ -218,6 +218,35 @@ function resetUI(ui) {
 }
 var emptyObject = {};
 
+function bootstrap() {
+
+    if (window.ui !== 'blank') {
+        sendMessage({ ui: window.ui });
+    }
+
+    if (window.ui && window.ui.views) {
+        view2Data(window.ui.views);
+    }
+
+    // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
+
+    // setTimeout(function () {
+    Hero.__boot.call(_currentPage);
+    // }, isRunInApp ? 0 : 500);
+}
+
+function _getDeviceType() {
+    var ua = navigator.userAgent.toLowerCase();
+
+    if (ua.indexOf('hero-ios') !== -1) {
+        _deviceType = 'IOS';
+    } else if (ua.indexOf('hero-android') !== -1) {
+        _deviceType = 'ANDROID';
+    } else if (ua.indexOf('micromessenger') !== -1) {
+        _deviceType = 'WECHAT';
+    }
+}
+
 /**
  * 定义当前页面为一个组件，所指定的类将会被自动创建一个实例
  * @param {object} config - 可以传入view参数，指定当前页面初始化时的界面数据
@@ -233,6 +262,9 @@ function Component(config) {
             resetUI(config.view);
         }
         _currentPage = new Target();
+        if (_getDeviceType() === 'PC') {
+            bootstrap();
+        }
         if (typeof config === 'object') {
             defineReadOnlyProp(Hero, '__heroConfig', config);
         } else {
@@ -315,39 +347,11 @@ function setState(status) {
 }
 
 
-function bootstrap() {
-
-    if (window.ui !== 'blank') {
-        sendMessage({ ui: window.ui });
-    }
-
-    if (window.ui && window.ui.views) {
-        view2Data(window.ui.views);
-    }
-
-    // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
-
-    // setTimeout(function () {
-    Hero.__boot.call(_currentPage);
-    // }, isRunInApp ? 0 : 500);
-}
-
 function __viewWillDisppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
 }
 function __viewWillAppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
-}
-function _getDeviceType() {
-    var ua = navigator.userAgent.toLowerCase();
-
-    if (ua.indexOf('hero-ios') !== -1) {
-        _deviceType = 'IOS';
-    } else if (ua.indexOf('hero-android') !== -1) {
-        _deviceType = 'ANDROID';
-    } else if (ua.indexOf('micromessenger') !== -1) {
-        _deviceType = 'WECHAT';
-    }
 }
 
 function getDeviceType() {
@@ -378,10 +382,6 @@ definePublicFreezeProp(Hero, 'resetUI', resetUI);
 definePublicFreezeProp(Hero, 'setState', setState);
 definePublicFreezeProp(Hero, 'updateView', view2Data);
 definePublicFreezeProp(Hero, 'getDeviceType', getDeviceType);
-
-if (_getDeviceType() === 'PC') {
-    bootstrap();
-}
 
 module.exports = {
     Component: Component,
