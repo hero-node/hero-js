@@ -338,8 +338,7 @@ function __viewWillDisppearCallback() {
 function __viewWillAppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
 }
-
-function getDeviceType() {
+function _getDeviceType() {
     var ua = navigator.userAgent.toLowerCase();
 
     if (ua.indexOf('hero-ios') !== -1) {
@@ -351,7 +350,9 @@ function getDeviceType() {
     }
 }
 
-getDeviceType();
+function getDeviceType() {
+    return _deviceType;
+}
 
 defineProp(Hero, '__heroConfig', {});
 defineProp(Hero, '__boot', loop);
@@ -377,6 +378,10 @@ definePublicFreezeProp(Hero, 'resetUI', resetUI);
 definePublicFreezeProp(Hero, 'setState', setState);
 definePublicFreezeProp(Hero, 'updateView', view2Data);
 definePublicFreezeProp(Hero, 'getDeviceType', getDeviceType);
+
+if (_getDeviceType() === 'PC') {
+    bootstrap();
+}
 
 module.exports = {
     Component: Component,
