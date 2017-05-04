@@ -262,7 +262,7 @@ function Component(config) {
             resetUI(config.view);
         }
         _currentPage = new Target();
-        if (_getDeviceType() === 'PC') {
+        if (_getDeviceType() !== 'PC') {
             bootstrap();
         }
         if (typeof config === 'object') {
