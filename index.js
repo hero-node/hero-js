@@ -235,7 +235,7 @@ function bootstrap() {
     // }, isRunInApp ? 0 : 500);
 }
 
-function _getDeviceType() {
+(function () {
     var ua = navigator.userAgent.toLowerCase();
 
     if (ua.indexOf('hero-ios') !== -1) {
@@ -245,6 +245,11 @@ function _getDeviceType() {
     } else if (ua.indexOf('micromessenger') !== -1) {
         _deviceType = 'WECHAT';
     }
+    return _deviceType;
+})();
+
+function getDeviceType() {
+    return _deviceType;
 }
 
 /**
@@ -262,7 +267,7 @@ function Component(config) {
             resetUI(config.view);
         }
         _currentPage = new Target();
-        if (_getDeviceType() !== 'PC') {
+        if (getDeviceType() !== 'PC') {
             bootstrap();
         }
         if (typeof config === 'object') {
@@ -352,10 +357,6 @@ function __viewWillDisppearCallback() {
 }
 function __viewWillAppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
-}
-
-function getDeviceType() {
-    return _deviceType;
 }
 
 defineProp(Hero, '__heroConfig', {});
