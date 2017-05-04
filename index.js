@@ -339,6 +339,20 @@ function __viewWillAppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
 }
 
+function getDeviceType() {
+    var ua = navigator.userAgent.toLowerCase();
+
+    if (ua.indexOf('hero-ios') !== -1) {
+        _deviceType = 'IOS';
+    } else if (ua.indexOf('hero-android') !== -1) {
+        _deviceType = 'ANDROID';
+    } else if (ua.indexOf('micromessenger') !== -1) {
+        _deviceType = 'WECHAT';
+    }
+}
+
+getDeviceType();
+
 defineProp(Hero, '__heroConfig', {});
 defineProp(Hero, '__boot', loop);
 defineProp(Hero, '__viewWillDisppear', loop);
@@ -362,19 +376,7 @@ definePublicFreezeProp(Hero, 'outObjects', outObjects);
 definePublicFreezeProp(Hero, 'resetUI', resetUI);
 definePublicFreezeProp(Hero, 'setState', setState);
 definePublicFreezeProp(Hero, 'updateView', view2Data);
-
-
-(function getDeviceType() {
-    var ua = navigator.userAgent.toLowerCase();
-
-    if (ua.indexOf('hero-ios') !== -1) {
-        _deviceType = 'IOS';
-    } else if (ua.indexOf('hero-android') !== -1) {
-        _deviceType = 'ANDROID';
-    } else if (ua.indexOf('micromessenger') !== -1) {
-        _deviceType = 'WECHAT';
-    }
-})();
+definePublicFreezeProp(Hero, 'getDeviceType', getDeviceType);
 
 module.exports = {
     Component: Component,
