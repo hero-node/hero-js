@@ -62,7 +62,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     is: "dr-text-field",
     behaviors: [HeroBehavior,HeroTextFieldBehavior],
     on:function(json){
-      if (json.style == 'drlender') {
+      if (json.theme == 'drlender') {
         this.$.input.style.display = 'none';
         this.$.native.style.display = 'block';
         this.$.heroContent.style.border = "1px solid #"+this.json.color;
@@ -123,7 +123,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     ready:function(){
     },
     onchange:function(){
-      if (this.json.style == 'drlender') {
+      if (this.json.theme == 'drlender') {
         this.$.heroContent.style.border = "1px solid #"+this.json.tintColor;
       };
       if (this.json.textFieldDidEditing) {
@@ -133,7 +133,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       };
     },
     onfocus:function(){
-      if (this.json.style == 'drlender') {
+      if (this.json.theme == 'drlender') {
         this.$.heroContent.style.border = "1px solid #"+this.json.tintColor;
       };
       if (this.json.textFieldDidBeginEditing) {
@@ -143,7 +143,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       };
     },
     onblur:function(){
-      if (this.json.style == 'drlender') {
+      if (this.json.theme == 'drlender') {
         this.$.heroContent.style.border = "1px solid #"+this.json.color;
       };
       if (this.json.textFieldDidEndEditing) {
