@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 HeroLabelBehavior ={
   on: function(json) {
     if (json.text !== undefined) {
-      this.$.text.innerHTML = json.text;
+      this.$.text.innerText = json.text;
       if (!json.hasOwnProperty("numberOfLines") ) {
         this.$.text.style.lineHeight = this.$.heroContent.style.height;
       };
@@ -119,12 +119,14 @@ HeroLabelBehavior ={
       this.$.text.innerHTML = json.attributedText;
     }
     if (json.hAuto) {
-      this.$.heroContent.style.height = 'initial';
+      this.$.heroContent.style.height = 'inherit';
       this.async(function(){
-        var h = this.$.heroContent.getBoundingClientRect().height
-        this.oon({frame:{x:parseFloat(this.$.heroContent.style.left)+'',y:parseFloat(this.$.heroContent.style.top)+'',w:
+        var h = this.$.heroContent.getBoundingClientRect().height;
+        if (h>0) {
+          this.oon({frame:{x:parseFloat(this.$.heroContent.style.left)+'',y:parseFloat(this.$.heroContent.style.top)+'',w:
           parseFloat(this.$.heroContent.style.width)+'',h:h+''}});
-      },100);
+        };
+      },1000);
     };
   }
 }
@@ -132,7 +134,7 @@ HeroLabelBehavior ={
 
 <dom-module id="hero-label">
     <style type="text/css">
-    div{
+    #heroContent{
       display: block;
       position: absolute;
       overflow: hidden;
