@@ -157,13 +157,17 @@ function onMessage(data) {
         window.ui2Data['_' + data.name] = data.value;
     }
     Hero.__beforeMessage.call(_currentPage, data);
-    Object.keys(Hero.__messageList).forEach(function (expressions) {
-        var matchCondition = __executeExpression(expressions, data, _currentPage);
+    Hero.__messageList.forEach(function (expressions) {
+        var matchCondition = false;
+
+        if (typeof expressions.condition === 'function') {
+            matchCondition = expressions.condition.call(_currentPage, data);
+        } else if (typeof expressions.condition === 'boolean') {
+            matchCondition = expressions.condition;
+        }
 
         if (matchCondition) {
-            Hero.__messageList[expressions].forEach(function (callback) {
-                callback.call(_currentPage, data);
-            });
+            expressions.callback.call(_currentPage, data);
         }
     });
     Hero.__afterMessage.call(_currentPage, data);
@@ -314,12 +318,22 @@ function Boot(target, name, descriptor) {
  * @param {string} expressions - JS表达式，当该表达式执行结果为true时，会进入该回调，否则不进入该回调。
  *  表达式中可以使用__data来引用该消息内容
  */
-function Message(expressions) {
-    if (!Hero.__messageList[expressions]) {
-        Hero.__messageList[expressions] = [];
+function Message(condition) {
+
+    var validCondition = true;
+
+    if (typeof condition !== 'function' && typeof condition !== 'undefined') {
+        console.warn('Invalid Usage of @Message(' + condition + ')');
+        validCondition = false;
     }
+
     return function (target, name, descriptor) {
-        Hero.__messageList[expressions].push(target[name]);
+        if (validCondition) {
+            Hero.__messageList.push({
+                condition: condition ? condition : true,
+                callback: target[name]
+            });
+        }
         return descriptor;
     };
 }
@@ -370,7 +384,7 @@ definePublicFreezeProp(Hero, '__viewWillAppearCallback', __viewWillAppearCallbac
 defineProp(Hero, '__beforeMessage', loop);
 defineProp(Hero, '__afterMessage', loop);
 
-defineReadOnlyProp(Hero, '__messageList', {});
+defineReadOnlyProp(Hero, '__messageList', []);
 
 definePublicFreezeProp(Hero, 'boot', bootstrap);
 // definePublicFreezeProp(Hero, 'bootstrap', bootstrap);
