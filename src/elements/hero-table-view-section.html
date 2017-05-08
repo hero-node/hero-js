@@ -76,7 +76,7 @@ HeroTableViewSectionBehavior = {
           cell.$.heroContent.style.height = row.height+'px';
         }
         if (i != json.rows.length-1) {
-          cell.json = {bottomLine:true};
+          cell.setJson({bottomLine:true});
         }
         this.$.heroContent.appendChild(cell);
      };
