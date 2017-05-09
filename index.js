@@ -223,6 +223,8 @@ function resetUI(ui) {
 var emptyObject = {};
 
 function bootstrap() {
+  
+    Hero.__boot.call(_currentPage);
 
     if (window.ui !== 'blank') {
         sendMessage({ ui: window.ui });
@@ -235,7 +237,6 @@ function bootstrap() {
     // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
 
     // setTimeout(function () {
-    Hero.__boot.call(_currentPage);
     // }, isRunInApp ? 0 : 500);
 }
 
