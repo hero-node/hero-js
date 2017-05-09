@@ -78,7 +78,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (json.imageN) {
           var url;
           if(json.imageN.startWith('http')) {
-            url = json.image;
+            url = json.imageN;
           }else if (json.imageN.search(/\./)>0) {
               url = require('../images/' + json.imageN);
           }else{
