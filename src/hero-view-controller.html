@@ -112,7 +112,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               if (typeof v == 'string') {
                   data.text = v;
               }else{
-                  Hero.merge(data,v);
+                for (var key in v) {
+                  data[key] = v[key];
+                };
               }
               Hero.out({datas:data});
             });
