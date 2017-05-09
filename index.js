@@ -313,10 +313,9 @@ function Boot(target, name, descriptor) {
 }
 
 /**
- * 定义Native原生组件往JS代码发送消息时的回调方法，方法中的第一个参数为具体的消息内容
- * 如@Message('__data && __data.type="myMessage"')
- * @param {string} expressions - JS表达式，当该表达式执行结果为true时，会进入该回调，否则不进入该回调。
- *  表达式中可以使用__data来引用该消息内容
+ * 定义Native原生组件往JS代码发送消息时的回调方法，方法中的第一个参数为函数，当函数执行结果为true时，被@Message所注释的方法会被执行，
+ * 如@Message(function(data){ return data && data.type="myMessage"})
+ * @param {function} condition - 当该表达式执行结果为true时，会进入该回调，否则不进入该回调。
  */
 function Message(condition) {
 
