@@ -223,16 +223,17 @@ function resetUI(ui) {
 var emptyObject = {};
 
 function bootstrap() {
-  
+
+    if (window.ui && window.ui.views) {
+        view2Data(window.ui.views);
+    }
+    
     Hero.__boot.call(_currentPage);
 
     if (window.ui !== 'blank') {
         sendMessage({ ui: window.ui });
     }
 
-    if (window.ui && window.ui.views) {
-        view2Data(window.ui.views);
-    }
 
     // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
 
