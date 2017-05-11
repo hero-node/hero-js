@@ -3,7 +3,7 @@
         "allowUnknownTags": false
     },
     "source": {
-        "include": ["index.js"],
+        "include": ["hero.js"],
         "includePattern": ".js$",
         "excludePattern": "(node_modules/|docs|bower_components)"
     },
