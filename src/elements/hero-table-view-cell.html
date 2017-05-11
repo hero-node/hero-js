@@ -94,6 +94,7 @@ HeroTableViewCellBehavior ={
 }
 </script>
 <dom-module id="hero-table-view-cell">
+  <template>
     <style type="text/css">
     :host {
       display: block;
@@ -138,7 +139,6 @@ HeroTableViewCellBehavior ={
       height: 44px;
     }
     </style>
-  <template>
     <div id='heroContent' on-Tap='onTap' >
       <paper-ripple id='ripple'></paper-ripple>
       <img id='icon' src=''></img>

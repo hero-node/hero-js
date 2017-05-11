@@ -63,6 +63,7 @@ HeroTextViewBehavior = {
 }
 </script>
 <dom-module id="hero-text-view">
+  <template>
     <style type="text/css">
     div{
       display: inline-block;
@@ -81,7 +82,6 @@ HeroTextViewBehavior = {
       background-color: transparent;
     }
     </style>
-  <template>
     <div id='heroContent'>
       <textarea id='text' value="{{text}}"></textarea>
     </div>

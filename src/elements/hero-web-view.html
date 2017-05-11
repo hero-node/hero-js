@@ -97,6 +97,7 @@ HeroWebViewBehavior = {
 }
 </script>
 <dom-module id="hero-web-view">
+  <template>
     <style type="text/css">
     iframe{
       display: block;
@@ -119,7 +120,6 @@ HeroWebViewBehavior = {
       height: 100%;
     }
     </style>
-  <template>
     <div id='heroContent'>
       <iframe src={{url}} id='iframe' hidden=true>
       </iframe>

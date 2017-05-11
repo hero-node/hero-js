@@ -29,7 +29,8 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
  <dom-module id="dr-text-field">
-     <style type="text/css">
+  <template>
+    <style type="text/css">
     div{
       display: inline-block;
       position: absolute;
@@ -49,8 +50,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       background-color: transparent;
     }
     </style>
-
-  <template>
     <div id='heroContent'>
     <paper-input label="{{placeHolder}}" type="{{type}}" id='input' value='{{text}}' color='{{color}}'></paper-input>
     <input id = 'native' on-blur='onblur' on-focus='onfocus' on-change='onchange' on-keyup='onchange'></input>
