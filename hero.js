@@ -47,6 +47,12 @@ window.ui2Data = {};
 var _deviceType = 'PC';
 
 function _mergeAttributes(o1, o2) {
+    if (!o2) {
+        return;
+    }
+    if (typeof o2 !== 'object') {
+        return;
+    }
     var index;
     var keys = Object.keys(o2);
 
@@ -76,6 +82,12 @@ function view2Data(observeUI) {
                 data.text = v;
             } else {
                 _mergeAttributes(data, v);
+                if (!v) {
+                    return;
+                }
+                if (typeof v !== 'object') {
+                    return;
+                }
                 Object.keys(v).forEach(function (key) {
                     data[key] = v[key];
                 });
@@ -106,8 +118,6 @@ function sendMessage(data) {
         iframe.parentNode.removeChild(iframe);
         iframe = null;
 
-    } else if (_deviceType === 'IOS8') {
-        window.webkit.messageHandlers.native.postMessage(data);
     } else if (_deviceType === 'ANDROID') {
         if (typeof data === 'object') {
             data = JSON.stringify(data);
@@ -223,16 +233,17 @@ function resetUI(ui) {
 var emptyObject = {};
 
 function bootstrap() {
-  
+
+    if (window.ui && window.ui.views) {
+        view2Data(window.ui.views);
+    }
+
     Hero.__boot.call(_currentPage);
 
     if (window.ui !== 'blank') {
         sendMessage({ ui: window.ui });
     }
 
-    if (window.ui && window.ui.views) {
-        view2Data(window.ui.views);
-    }
 
     // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
 
@@ -272,8 +283,12 @@ function Component(config) {
             resetUI(config.view);
         }
         _currentPage = new Target();
-        if (getDeviceType() !== 'PC') {
+        if (getDeviceType() === 'ANDROID' || getDeviceType() === 'IOS') {
             bootstrap();
+        } else {
+            var logo = ' \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n    @@@@@        @@@@@                                           @@@@@@@         @@@@@@                                                 \n    @@@@@        @@@@@                                           @@@@@@@         @@@@@@                                                 \n    @@@@@        @@@@@                                           @@@@@@@        @@@@@@@                                                 \n    @@@@@        @@@@@                                           @@@@@@@@       @@@@@@@                                                 \n    @@@@@        @@@@@                                           @@@@@@@@       @@@@@@@                                                 \n    @@@@@        @@@@@                                           @@@@@@@@      @@@@@@@@                                                 \n    @@@@@        @@@@@                                           @@@@ @@@@     @@@@@@@@                                                 \n    @@@@@@@@@@@@@@@@@@                                           @@@@ @@@@     @@@ @@@@                                                 \n    @@@@@@@@@@@@@@@@@@                                           @@@@ @@@@    @@@@ @@@@                                                 \n    @@@@@@@@@@@@@@@@@@                          @@               @@@@  @@@@   @@@@ @@@@       @@                                        \n    @@@@@@@@@@@@@@@@@@   @@@@@@@  @@@@@@@@    @@@@@@             @@@@  @@@@   @@@@ @@@@    @@@@@@@   @@@@@@@@  @@@  @@      @@@@@@@@    \n    @@@@@@@@@@@@@@@@@@   @@@@@@@  @@@  @@@   @@@  @@@            @@@@  @@@@  @@@@  @@@@    @@@  @@@  @@@  @@@  @@@  @@      @@@@@@@@    \n    @@@@@        @@@@@   @@       @@    @@   @@    @@@           @@@@   @@@@ @@@@  @@@@   @@@    @@  @@@   @@  @@@  @@      @@@         \n    @@@@@        @@@@@   @@       @@    @@  @@@     @@  @@@@@@   @@@@   @@@@ @@@   @@@@   @@     @@@ @@@   @@  @@@  @@      @@@         \n    @@@@@        @@@@@   @@@@@@@  @@@@@@@   @@@     @@  @@@@@@   @@@@   @@@@@@@@   @@@@   @@     @@@ @@@@@@@   @@@  @@      @@@@@@@     \n    @@@@@        @@@@@   @@@@@@@  @@@@@@@   @@@     @@  @@@@@@   @@@@    @@@@@@@   @@@@   @@     @@@ @@@   @@  @@@  @@      @@@@@@@     \n    @@@@@        @@@@@   @@       @@   @@@  @@@    @@@           @@@@    @@@@@@    @@@@   @@     @@  @@@   @@@ @@@  @@      @@@         \n    @@@@@        @@@@@   @@       @@    @@   @@@   @@            @@@@    @@@@@@    @@@@   @@@   @@@  @@@   @@@ @@@  @@      @@@         \n    @@@@@        @@@@@   @@@@@@@@ @@    @@@  @@@@@@@@            @@@@     @@@@@    @@@@    @@@@@@@   @@@@@@@@  @@@  @@@@@@@ @@@@@@@@    \n    @@@@@        @@@@@   @@@@@@@@ @@@   @@@    @@@@@             @@@@@    @@@@     @@@@     @@@@@    @@@@@@@   @@@  @@@@@@@ @@@@@@@@    \n                                                                                                                                        \n                                                                                                                                        \n ';
+
+            console.log(logo);
         }
         if (typeof config === 'object') {
             defineReadOnlyProp(Hero, '__heroConfig', config);
