@@ -5,7 +5,7 @@
   "main": "hero.js",
   "scripts": {
     "build": "rm -rf dist && rm -rf docs && webpack && npm run generate-docs",
-    "generate-docs": "jsdoc -c jsdoc.json -u tutorials -d build",
+    "generate-docs": "rm -rf build && jsdoc -c jsdoc.json -u tutorials -d build",
     "predeploy": "npm run generate-docs",
     "deploy": "gh-pages -d build"
   },

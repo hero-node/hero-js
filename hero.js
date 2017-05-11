@@ -1,8 +1,3 @@
-/**
- * Pants module.
- * @module hero-js/Hero
- */
-
  /**
   * Solves equations of the form a * x = b
   * @description
@@ -36,7 +31,6 @@
   * }
   ```
   */
-
 var Hero = window.Hero = {};
 var _outObjects = '';
 var _currentPage = null;
@@ -413,6 +407,10 @@ definePublicFreezeProp(Hero, 'setState', setState);
 definePublicFreezeProp(Hero, 'updateView', view2Data);
 definePublicFreezeProp(Hero, 'getDeviceType', getDeviceType);
 
+/**
+ * Hero JS
+ * @module hero-js
+ */
 module.exports = {
     Component: Component,
     Boot: Boot,
@@ -420,6 +418,10 @@ module.exports = {
     ViewWillAppear: ViewWillAppear,
     ViewWillDisappear: ViewWillDisappear,
     BeforeMessage: BeforeMessage,
+    /**
+     * Get the red, green, and blue values of a color.
+     * each ranging from 0 to 255.
+     */
     AfterMessage: AfterMessage,
     Hero: Hero
 };
