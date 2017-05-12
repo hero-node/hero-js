@@ -31,8 +31,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <script>
 HeroWebViewBehavior = {
   properties: {
-    url:{
-      type: String
+    iframe:{
+      type: Object
     },
     innerHtml:{
       type: String
@@ -44,7 +44,7 @@ HeroWebViewBehavior = {
   observerHijackUrls:function(){
     var url = '';
     try {
-      url = this.$.iframe.contentWindow.location.href;
+      url = this.iframe.contentWindow.location.href;
     } catch(e) {}
     for (var i = 0; i < this.hijackURLs.length; i++) {
       var hackurl = this.hijackURLs[i].url;
@@ -64,15 +64,21 @@ HeroWebViewBehavior = {
       this.hijackURLs = json.hijackURLs;
       this.observerHijackUrls()
     }if (json.url) {
-      if(this.$.iframe){
-        this.$.heroContent.removeChild(this.$.iframe);
+      if(this.iframe){
+        this.$.heroContent.removeChild(this.iframe);
+        this.iframe = undefined;
       }
-      var iframe = document.createElement('iframe');
-      iframe.id = 'iframe';
-      this.$.heroContent.appendChild(iframe);
-      this.$.iframe.hidden = false;
+      this.iframe = document.createElement('iframe');
+      this.iframe.style.margin = '0px';
+      this.iframe.style.padding = '0px';
+      this.iframe.style.width = '100%';
+      this.iframe.style.height = '100%';
+      this.iframe.style.border = '0px';
+      this.iframe.style.borderWidth = '0px';
+      this.$.heroContent.appendChild(this.iframe);
+      this.iframe.hidden = false;
       if (typeof(json.url) === 'string') {
-        this.url = json.url;
+        this.iframe.src = json.url;
       }else if(typeof(json.url) === 'object'){
         var url = json.url.url;
         var method = json.url.method;
@@ -85,19 +91,19 @@ HeroWebViewBehavior = {
         };
         innerHtml += '<input type="submit" value="submit"></input>';
         innerHtml += '</form>';
-        this.$.iframe.contentWindow.document.body.innerHTML = innerHtml;
+        this.iframe.contentWindow.document.body.innerHTML = innerHtml;
         var script = document.createElement('script');
         script.innerHTML = 'document.getElementById("form").submit()';
-        this.$.iframe.contentWindow.document.body.appendChild(script);
+        this.iframe.contentWindow.document.body.appendChild(script);
       }
     }else if (json.innerHtml) {
       this.$.heroContent.innerHTML = json.innerHtml;
     }else if(json.in){
       this.$.iframe.contentWindow.Hero.in(json.in);
     }else if(json.out){
-      this.$.iframe.contentWindow.Hero.out(json.out);
+      this.iframe.contentWindow.Hero.out(json.out);
     }else if(json.mode == 'replay'){
-      this.$.iframe.contentWindow.Hero.in = function(){};
+      this.iframe.contentWindow.Hero.in = function(){};
     }
   }
 }
