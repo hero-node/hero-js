@@ -1,3 +1,7 @@
+/**
+ * Hero JS
+ *
+ */
  /**
   * Solves equations of the form a * x = b
   * @description
@@ -98,6 +102,7 @@ function view2Data(observeUI) {
 
 /**
  * JS代码往组件发送视图更新数据
+ * @alias Hero.out
  * @param {Object} data - 需要更新的视图数据
  */
 function sendMessage(data) {
@@ -185,9 +190,6 @@ function BeforeMessage(target, name, descriptor) {
     descriptor.writable = false;
     return descriptor;
 }
-/**
- * 定义JS代码在执行消息回调方法成功后需要执行的方法，参数同@Message
- */
 function AfterMessage(target, name, descriptor) {
     Hero.__afterMessage = target[name];
     // Only one callback method
@@ -291,10 +293,23 @@ function Component(config) {
         }
     };
 }
-
-/**
- * 定义当前页面在渲染之前的回调
- */
+ /**
+  * @description
+  * Callback method when before page appear.
+  ```javascript
+  * import { ViewWillAppear, Component } from 'hero-js';
+  *
+  * &#64Component({
+  *   view: ''
+  * })
+  * export class DecoratePage {
+  *   &#64ViewWillAppear
+  *   beforePageAppear(){
+  *     console.log('Page will appear...')
+  *   }
+  * }
+  ```
+  */
 function ViewWillAppear(target, name, descriptor) {
     Hero.__viewWillAppear = target[name];
     // Only one callback method
@@ -303,7 +318,21 @@ function ViewWillAppear(target, name, descriptor) {
 }
 
 /**
- * 定义当前页面在离开之前的回调
+ * @description
+ * Callback method when page will disappear.
+ ```javascript
+ * import { ViewWillDisappear, Component } from 'hero-js';
+ *
+ * &#64Component({
+ *   view: ''
+ * })
+ * export class DecoratePage {
+ *   &#64ViewWillDisappear
+ *   pageWillDisappear(){
+ *     console.log('Page will disappear...')
+ *   }
+ * }
+ ```
  */
 function ViewWillDisappear(target, name, descriptor) {
     Hero.__viewWillDisppear = target[name];
@@ -313,7 +342,21 @@ function ViewWillDisappear(target, name, descriptor) {
 }
 
 /**
- * 定义当前页面启动时的回调方法
+ * @description
+ * Callback method when page bootstrap. This method executed before @ViewWillAppear. <br>1. In Browser Environment: this method will executed every time when page loaded.<br> 2. In Native Environment: this method execute one time only.
+```javascript
+ *import { Boot, Component } from 'hero-js';
+ *
+ * &#64Component({
+ *   view: ''
+ * })
+ * export class DecoratePage {
+ *  &#64Boot
+ *  start(){
+ *    console.log('Bootstrap Successfully!')
+ *  }
+ * }
+ ```
  */
 function Boot(target, name, descriptor) {
     Hero.__boot = target[name];
@@ -323,9 +366,80 @@ function Boot(target, name, descriptor) {
 }
 
 /**
- * 定义Native原生组件往JS代码发送消息时的回调方法，方法中的第一个参数为函数，当函数执行结果为true时，被@Message所注释的方法会被执行，
- * 如@Message(function(data){ return data && data.type="myMessage"})
- * @param {function} condition - 当该表达式执行结果为true时，会进入该回调，否则不进入该回调。
+ * @description
+ * Handle messages sent from Native to JS. Given the condition, whether invoke the decorated function or not.
+```javascript
+* import { Component, Message } from 'hero-js';
+*
+* &#64Component({
+*   view: {
+*             version:0,
+*             backgroundColor:'ffffff',
+*             nav:{
+*                 navigationBarHiddenH5:true
+*             },
+*             views:[
+*                 {
+*                     class:'DRTextField',
+*                     type:'phone',
+*                     theme:'green',
+*                     frame:{x:'15',r:'15',y:'115',h:'50'},
+*                     placeHolder:'手机号码',
+*                     name:'phone',
+*                     textFieldDidEditing:{name:'phone'},
+*                 },
+*                 {
+*                     class:'DRTextField',
+*                     theme:'green',
+*                     frame:{x:'15',r:'15',y:'178',h:'50'},
+*                     placeHolder:'密码',
+*                     secure:true,
+*                     name:'password',
+*                     drSecure:{'secure':true}, // 带小眼睛
+*                     textFieldDidEditing:{name:'password'},
+*                 },
+*                 {
+*                     class:'DRButton',
+*                     name:'loginBtn',
+*                     DRStyle:'B1',
+*                     enable:false,
+*                     frame:{x:'15',r:'15',y:'0',h:'44'},
+*                     yOffset:'password+50',
+*                     title:'登录',
+*                     click:{click:'login'}
+*                 },
+*             ]
+*
+*   }
+* })
+* export class DecoratePage {
+*
+*     &#64Message(function(data){
+*       return data.click && data.click === "login";
+*     })
+*     login(data) {
+*       console.log('Send request...');
+*     }
+* }
+
+ ```
+ * @param {function} condition - if condition is `function`, decorated function invoked when the result of condition equals to true <br>if condition equals `undefined`, the decorated method will invoked.<br>
+ * condition has one argument: <br>
+ * `data`: The message sent from Native Component
+ ```javascript
+ * &#64Message(function(data){
+ *   // parameter data is the message
+ *   function checkCondition(data){
+ *      return true;
+ *   }
+ *   return checkCondition(data);
+ * })
+ * callback(data) {
+ *   // parameter data is the message
+ *   // this method will invoked if condition is true
+ *   console.log('Send request...');
+ * }
+ ```
  */
 function Message(condition) {
 
@@ -407,10 +521,6 @@ definePublicFreezeProp(Hero, 'setState', setState);
 definePublicFreezeProp(Hero, 'updateView', view2Data);
 definePublicFreezeProp(Hero, 'getDeviceType', getDeviceType);
 
-/**
- * Hero JS
- * @module hero-js
- */
 module.exports = {
     Component: Component,
     Boot: Boot,
@@ -418,10 +528,7 @@ module.exports = {
     ViewWillAppear: ViewWillAppear,
     ViewWillDisappear: ViewWillDisappear,
     BeforeMessage: BeforeMessage,
-    /**
-     * Get the red, green, and blue values of a color.
-     * each ranging from 0 to 255.
-     */
     AfterMessage: AfterMessage,
+    /** Hero */
     Hero: Hero
 };
