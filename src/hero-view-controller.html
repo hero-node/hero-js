@@ -52,26 +52,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         ui2data: {
           type: Object,
         },
-        initData: {
-          type: Object,
-        },
         appearObject:{
           type: Object,
         }
-      },
-      getInitData:function(){
-        if (localStorage.boot) {
-            this.initData = JSON.parse(localStorage.boot);
-        };
-        this.initData = this.initData || {};
-        var params = (this.url.split('?')[1] || '').split('&');
-        for(var param in params) {
-            if (params.hasOwnProperty(param)){
-                paramParts = params[param].split('=');
-                this.initData[paramParts[0]] = decodeURIComponent(paramParts[1] || "");
-             }
-        }
-        return this.initData;
       },
       findViewByname:function(name,root){
         if (!name) {
@@ -141,24 +124,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }else{
             heroContent.style.backgroundColor='#ffffff';
           }
-          this.viewWillAppear();
-          if (this.view !== 'blank') {
-            Hero.out({ui:this.view});
-          };
-          if (this.initData.test) {
-            // var js = document.createElement('script');
-            // js.src = host+'/test/js/test.js';
-            // document.head.appendChild(js);
-          };
-          if (localStorage.phone) {
-            var js = document.createElement('script');
-            js.src = path+'/js/log.js';
-            document.head.appendChild(js);
-          };
           if (ui && ui.views) {
             this.ui2Data(ui.views);
           };
           this.viewDidLoad();
+          this.viewWillAppear();
         }else{
           var iframe = document.createElement('iframe');
           iframe.style.display = 'inline-block';
@@ -183,12 +153,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       },
       viewDidLoad:function(){
         if(this.controller){
-          this.controller.boot(this.initData);
+          this.controller.boot();
         }
       },
       viewWillAppear:function(){
         Hero.__viewWillAppearCallback && Hero.__viewWillAppearCallback();
-        this.getInitData();
         if (this.view && this.view.nav) {
           if (this.view.tintColor) {
             this.view.nav.tintColor = this.view.tintColor;
