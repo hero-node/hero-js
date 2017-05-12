@@ -64,6 +64,12 @@ HeroWebViewBehavior = {
       this.hijackURLs = json.hijackURLs;
       this.observerHijackUrls()
     }if (json.url) {
+      if(this.$.iframe){
+        this.$.heroContent.removeChild(this.$.iframe);
+      }
+      var iframe = document.createElement('iframe');
+      iframe.id = 'iframe';
+      this.$.heroContent.appendChild(iframe);
       this.$.iframe.hidden = false;
       if (typeof(json.url) === 'string') {
         this.url = json.url;
@@ -121,8 +127,6 @@ HeroWebViewBehavior = {
     }
     </style>
     <div id='heroContent'>
-      <iframe src={{url}} id='iframe' hidden=true>
-      </iframe>
     </div>
   </template>
 </dom-module>

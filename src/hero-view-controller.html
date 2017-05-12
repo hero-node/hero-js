@@ -62,7 +62,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       getInitData:function(){
         if (localStorage.boot) {
             this.initData = JSON.parse(localStorage.boot);
-            localStorage.boot = '';
         };
         this.initData = this.initData || {};
         var params = (this.url.split('?')[1] || '').split('&');
