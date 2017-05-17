@@ -1,40 +1,4 @@
-/**
- * Hero JS
- *
- */
- /**
-  * Solves equations of the form a * x = b
-  * @description
-  ```
-  * import { Component, Boot } from 'hero-js';
-  *
-  * var defaultUIViews = {
-  *   version:0,
-  *   backgroundColor:'ffffff',
-  *   nav:{
-  *     title:'Home Page',
-  *     navigationBarHiddenH5:true,
-  *   },
-  *   views:
-  *   [
-  *     {
-  *       'class':'HeroWebView',
-  *       name:'webview',
-  *       frame:{w:'1x',h:'1x'}
-  *     },
-  *   ]
-  * }
-  * &#64Component({
-  *   view: defaultUIViews
-  * })
-  * export class DecoratePage {
-  *   &#64Boot
-  *   boot(){
-  *     console.log('Bootstrap Successfully!')
-  *   }
-  * }
-  ```
-  */
+/** @class Hero */
 var Hero = window.Hero = {};
 var _outObjects = '';
 var _currentPage = null;
@@ -181,15 +145,60 @@ function onMessage(data) {
     });
     Hero.__afterMessage.call(_currentPage, data);
 }
-/**
- * 定义JS代码在执行消息回调方法之前需要执行的方法，参数同@Message
- */
+ /**
+  * @description
+  Define the interceptor before [`@Message`]{@link Message} invoked.
+  ```javascript
+  * import { BeforeMessage, Component, Message } from 'hero-js';
+  *
+  * &#64Component()
+  * export class DecoratePage {
+  *
+  *     &#64BeforeMessage
+  *     before(data) {
+  *         console.log('Checking data is valid...', data);
+  *     }
+  *
+  *     &#64Message(function(data){
+  *       return data.click && data.click === "login";
+  *     })
+  *     login(data) {
+  *         console.log('Sending Request...');
+  *     }
+  *
+  * }
+  ```
+  */
 function BeforeMessage(target, name, descriptor) {
     Hero.__beforeMessage = target[name];
     // Only one callback method
     descriptor.writable = false;
     return descriptor;
 }
+ /**
+  * @description
+  * Define the interceptor after [`@Message`]{@link Message} invoked.
+  ```javascript
+  * import { AfterMessage, Component, Message } from 'hero-js';
+  *
+  * &#64Component()
+  * export class DecoratePage {
+  *
+  *     &#64Message(function(data){
+  *       return data.click && data.click === "login";
+  *     })
+  *     login(data) {
+  *         console.log('Sending Request...');
+  *     }
+  *
+  *     &#64AfterMessage
+  *     after(data) {
+  *       console.log('Checking consistence of data...', data);
+  *     }
+  *
+  * }
+  ```
+  */
 function AfterMessage(target, name, descriptor) {
     Hero.__afterMessage = target[name];
     // Only one callback method
@@ -226,7 +235,7 @@ function defineReadOnlyProp(obj, name, value) {
 function resetUI(ui) {
     window.ui = ui;
 }
-var emptyObject = {};
+var emptyObject = { view: '' };
 
 function bootstrap() {
 
@@ -257,11 +266,42 @@ function getDeviceType() {
     return _deviceType;
 }
 
-/**
- * 定义当前页面为一个组件，所指定的类将会被自动创建一个实例
- * @param {object} config - 可以传入view参数，指定当前页面初始化时的界面数据
- *
- */
+ /**
+  * @description
+  * Mark current `class` as a component which cause an instance of the class created automatically.
+  ```javascript
+  * import { Component } from 'hero-js';
+  *
+  * &#64Component()
+  * export class DecoratePage {
+  *
+  * }
+  ```
+  * @param {object} config configurations of the marked class. Valid Attributes:
+  *
+  * `view` The layout of the Component
+  *
+  ```javascript
+  * &#64Component({
+  *   view: {
+  *     version:0,
+  *     backgroundColor:'ffffff',
+  *     nav:{
+  *       title:'Home Page',
+  *       navigationBarHiddenH5:true,
+  *     },
+  *     views:
+  *     [
+  *       {
+  *         'class':'HeroWebView',
+  *         name:'webview',
+  *         frame:{w:'1x',h:'1x'}
+  *       },
+  *     ]
+  *   }
+  * })
+  ```
+  */
 function Component(config) {
     return function (Target) {
         if (!config) {
@@ -288,13 +328,11 @@ function Component(config) {
 }
  /**
   * @description
-  * Callback method when before page appear.
+  * Callback method before page will appear.
   ```javascript
-  * import { ViewWillAppear, Component } from 'hero-js';
+  * import { Component, ViewWillAppear } from 'hero-js';
   *
-  * &#64Component({
-  *   view: ''
-  * })
+  * &#64Component()
   * export class DecoratePage {
   *   &#64ViewWillAppear
   *   beforePageAppear(){
@@ -314,11 +352,9 @@ function ViewWillAppear(target, name, descriptor) {
  * @description
  * Callback method when page will disappear.
  ```javascript
- * import { ViewWillDisappear, Component } from 'hero-js';
+ * import { Component, ViewWillDisappear } from 'hero-js';
  *
- * &#64Component({
- *   view: ''
- * })
+ * &#64Component()
  * export class DecoratePage {
  *   &#64ViewWillDisappear
  *   pageWillDisappear(){
@@ -336,13 +372,11 @@ function ViewWillDisappear(target, name, descriptor) {
 
 /**
  * @description
- * Callback method when page bootstrap. This method executed before @ViewWillAppear. <br>1. In Browser Environment: this method will executed every time when page loaded.<br> 2. In Native Environment: this method execute one time only.
+ * Callback method when page bootstrap. This method executed before [`@ViewWillAppear`]{@link ViewWillAppear}. <br>1. In Browser Environment: this method will executed every time when page loaded.<br> 2. In Native Environment: this method execute one time only.
 ```javascript
  *import { Boot, Component } from 'hero-js';
  *
- * &#64Component({
- *   view: ''
- * })
+ * &#64Component()
  * export class DecoratePage {
  *  &#64Boot
  *  start(){
@@ -360,7 +394,7 @@ function Boot(target, name, descriptor) {
 
 /**
  * @description
- * Handle messages sent from Native to JS. Given the condition, whether invoke the decorated function or not.
+ * Handle messages sent from NativeApp to JS. Given the condition, whether invoke the decorated function or not.
 ```javascript
 * import { Component, Message } from 'hero-js';
 *
@@ -399,6 +433,7 @@ function Boot(target, name, descriptor) {
 *                     frame:{x:'15',r:'15',y:'0',h:'44'},
 *                     yOffset:'password+50',
 *                     title:'登录',
+*                     // define the message sent from NativeApp to JS when the button click.
 *                     click:{click:'login'}
 *                 },
 *             ]
@@ -407,7 +442,9 @@ function Boot(target, name, descriptor) {
 * })
 * export class DecoratePage {
 *
+*     // Receive the message from NativeApp
 *     &#64Message(function(data){
+*       // whether call the login method according to the result of this function
 *       return data.click && data.click === "login";
 *     })
 *     login(data) {
@@ -416,22 +453,38 @@ function Boot(target, name, descriptor) {
 * }
 
  ```
- * @param {function} condition - if condition is `function`, decorated function invoked when the result of condition equals to true <br>if condition equals `undefined`, the decorated method will invoked.<br>
- * condition has one argument: <br>
- * `data`: The message sent from Native Component
+ * @param {function} condition - `condition` function and the decorated function `callback` has one argument: <br> `data`: The message sent from NativeApp.
+ *
+ * if condition is `function`, decorated function `callback` invoked when the result of condition equals to true.<br>
  ```javascript
  * &#64Message(function(data){
- *   // parameter data is the message
+ *   // condition function
  *   function checkCondition(data){
  *      return true;
  *   }
  *   return checkCondition(data);
  * })
  * callback(data) {
- *   // parameter data is the message
- *   // this method will invoked if condition is true
+ *   // decorated function
  *   console.log('Send request...');
  * }
+ ```
+ *
+ * if condition equals `undefined`, the decorated method `callback` will always invoked.
+ ```
+ * &#64Message()
+ * callback(data){
+ *  console.log('Received Data:', data);
+ *}
+ ```
+ * Equals to
+ ```
+ * &#64Message(function(data){
+ *  return true;
+ * })
+ * callback(data){
+ *  console.log('Received Data:', data);
+ *}
  ```
  */
 function Message(condition) {
@@ -459,7 +512,7 @@ function getUI() {
 }
 
 /**
- *
+ * @memberof Hero
  * @return {object} 返回当前页面中的每个元素及组件的状态数据
  */
 function getState() {
@@ -467,6 +520,7 @@ function getState() {
 }
 /**
  * 设置当前页面中的元素及组件的状态
+ * @memberof Hero
  * @return {object} 对象中的key对应元素组件，value为更新后的值
  */
 function setState(status) {
@@ -522,6 +576,5 @@ module.exports = {
     ViewWillDisappear: ViewWillDisappear,
     BeforeMessage: BeforeMessage,
     AfterMessage: AfterMessage,
-    /** Hero */
     Hero: Hero
 };
