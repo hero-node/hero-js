@@ -63,6 +63,11 @@ function view2Data(observeUI) {
     }
 }
 
+function checkValidUsage(name, descriptor) {
+    if (!descriptor || !Object.prototype.hasOwnProperty.call(descriptor, 'writable')) {
+        throw new Error('Invalid usage of @' + name + '. Expected @' + name + ' without any expression. For Example: \n\n@' + name + '\ncallback(){\n   \/\/Todo\n}\n');
+    }
+}
 
 /**
  * JS代码往组件发送视图更新数据
@@ -170,6 +175,7 @@ function onMessage(data) {
   ```
   */
 function BeforeMessage(target, name, descriptor) {
+    checkValidUsage('BeforeMessage', descriptor);
     Hero.__beforeMessage = target[name];
     // Only one callback method
     descriptor.writable = false;
@@ -200,6 +206,7 @@ function BeforeMessage(target, name, descriptor) {
   ```
   */
 function AfterMessage(target, name, descriptor) {
+    checkValidUsage('AfterMessage', descriptor);
     Hero.__afterMessage = target[name];
     // Only one callback method
     descriptor.writable = false;
@@ -342,6 +349,7 @@ function Component(config) {
   ```
   */
 function ViewWillAppear(target, name, descriptor) {
+    checkValidUsage('ViewWillAppear', descriptor);
     Hero.__viewWillAppear = target[name];
     // Only one callback method
     descriptor.writable = false;
@@ -364,6 +372,7 @@ function ViewWillAppear(target, name, descriptor) {
  ```
  */
 function ViewWillDisappear(target, name, descriptor) {
+    checkValidUsage('ViewWillDisappear', descriptor);
     Hero.__viewWillDisppear = target[name];
     // Only one callback method
     descriptor.writable = false;
@@ -386,6 +395,7 @@ function ViewWillDisappear(target, name, descriptor) {
  ```
  */
 function Boot(target, name, descriptor) {
+    checkValidUsage('Boot', descriptor);
     Hero.__boot = target[name];
     // Only one boot callback method
     descriptor.writable = false;
