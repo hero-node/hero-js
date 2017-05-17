@@ -1,8 +1,8 @@
 {
-    "index": {
-        "title": "One"
+    "define": {
+        "title": "Hero Components"
     },
     "cli": {
-        "title": "Hero Cli"
+        "title": "Hero-cli Tool"
     }
 }
