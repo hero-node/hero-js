@@ -526,7 +526,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (history.state && history.state.state === page || option === 'load') {
           history.replaceState({state:page},pageElement,"?state="+page);
         }
-        this.loadPage(page);
         if (!this.contain(this.pageStack,pageElement)) {
           this.pageStack.push(pageElement);
         }else{
@@ -534,6 +533,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             this.pageStack.pop();
           }
         }
+        this.loadPage(page);
       },
 
     });

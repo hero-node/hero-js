@@ -157,7 +157,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
       },
       viewWillAppear:function(){
-        Hero.__viewWillAppearCallback && Hero.__viewWillAppearCallback();
         if (this.view && this.view.nav) {
           if (this.view.tintColor) {
             this.view.nav.tintColor = this.view.tintColor;
@@ -173,7 +172,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
       },
       viewWillDisappear:function(){
-        Hero.__viewWillDisppearCallback && Hero.__viewWillDisppearCallback();
+        if (this.disAppearObject) {
+          this.controller.in(this.disAppearObject);
+        }else if(Hero.viewWillDisppear){
+          Hero.viewWillDisppear();
+        }
       },
       on:function(json){
         if (Array.isArray(json)) {

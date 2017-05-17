@@ -246,7 +246,7 @@ function bootstrap() {
         view2Data(window.ui.views);
     }
     Hero.__boot.call(_currentPage);
-    
+
 }
 
 (function () {
@@ -540,7 +540,7 @@ function __viewWillDisppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
 }
 function __viewWillAppearCallback() {
-    Hero.__viewWillDisppear.call(_currentPage);
+    Hero.__viewWillAppear.call(_currentPage);
 }
 
 defineProp(Hero, '__heroConfig', {});
@@ -548,8 +548,9 @@ defineProp(Hero, '__boot', loop);
 defineProp(Hero, '__viewWillDisppear', loop);
 defineProp(Hero, '__viewWillAppear', loop);
 
-definePublicFreezeProp(Hero, '__viewWillDisppearCallback', __viewWillDisppearCallback);
-definePublicFreezeProp(Hero, '__viewWillAppearCallback', __viewWillAppearCallback);
+// Legacy Name
+defineReadOnlyProp(Hero, 'viewWillDisppear', __viewWillDisppearCallback);
+defineReadOnlyProp(Hero, 'viewWillAppear', __viewWillAppearCallback);
 
 defineProp(Hero, '__beforeMessage', loop);
 defineProp(Hero, '__afterMessage', loop);
