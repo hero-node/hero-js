@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Tutorials</h3><ul><li><a href="tutorial-cli.html">Hero Cli</a></li><li><a href="tutorial-index_.html">One</a></li><li><a href="tutorial-test.html">test</a></li></ul><h3>Global</h3><ul><li><a href="global.html#BeforeMessage">BeforeMessage</a></li><li><a href="global.html#Boot">Boot</a></li><li><a href="global.html#Component">Component</a></li><li><a href="global.html#getState">getState</a></li><li><a href="global.html#Hero">Hero</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#setState">setState</a></li><li><a href="global.html#ViewWillAppear">ViewWillAppear</a></li><li><a href="global.html#ViewWillDisappear">ViewWillDisappear</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Hero.html">Hero</a><ul class='methods'><li data-type='method'><a href="Hero.html#.getState">getState</a></li><li data-type='method'><a href="Hero.html#.out">out</a></li><li data-type='method'><a href="Hero.html#.setState">setState</a></li></ul></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-cli.html">Hero Cli</a></li><li><a href="tutorial-index_.html">One</a></li><li><a href="tutorial-test.html">test</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AfterMessage">AfterMessage</a></li><li><a href="global.html#BeforeMessage">BeforeMessage</a></li><li><a href="global.html#Boot">Boot</a></li><li><a href="global.html#Component">Component</a></li><li><a href="global.html#Message">Message</a></li><li><a href="global.html#ViewWillAppear">ViewWillAppear</a></li><li><a href="global.html#ViewWillDisappear">ViewWillDisappear</a></li></ul>
 </nav>
 
 <div id="main">
@@ -106,12 +106,18 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id="Hero"><span class="type-signature"></span>Hero<span class="type-signature"></span></h4>
 
+    
+
+    <h4 class="name" id="AfterMessage"><span class="type-signature"></span>AfterMessage<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
 
 
 
@@ -121,7 +127,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line38">line 38</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line202">line 202</a>
     </li></ul></dd>
     
 
@@ -161,32 +167,24 @@
 
 
 <div class="description">
-    <pre class="prettyprint source"><code>import { Component, Boot } from 'hero-js';
+    <p>Define the interceptor after <a href="global.html#Message"><code>@Message</code></a> invoked.</p>
+<pre class="prettyprint source lang-javascript"><code>import { AfterMessage, Component, Message } from 'hero-js';
 
-var defaultUIViews = {
-  version:0,
-  backgroundColor:'ffffff',
-  nav:{
-    title:'Home Page',
-    navigationBarHiddenH5:true,
-  },
-  views:
-  [
-    {
-      'class':'HeroWebView',
-      name:'webview',
-      frame:{w:'1x',h:'1x'}
-    },
-  ]
-}
-&#64Component({
-  view: defaultUIViews
-})
+&#64Component()
 export class DecoratePage {
-  &#64Boot
-  boot(){
-    console.log('Bootstrap Successfully!')
-  }
+
+    &#64Message(function(data){
+      return data.click && data.click === &quot;login&quot;;
+    })
+    login(data) {
+        console.log('Sending Request...');
+    }
+
+    &#64AfterMessage
+    after(data) {
+      console.log('Checking consistence of data...', data);
+    }
+
 }</code></pre>
 </div>
 
@@ -197,11 +195,22 @@ export class DecoratePage {
 
 
 
-        
-    
 
-    
-        <h3 class="subsection-title">Methods</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -220,7 +229,7 @@ export class DecoratePage {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line187">line 187</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line172">line 172</a>
     </li></ul></dd>
     
 
@@ -260,7 +269,25 @@ export class DecoratePage {
 
 
 <div class="description">
-    <p>定义JS代码在执行消息回调方法之前需要执行的方法，参数同@Message</p>
+    <p>Define the interceptor before <a href="global.html#Message"><code>@Message</code></a> invoked.</p>
+<pre class="prettyprint source lang-javascript"><code>import { BeforeMessage, Component, Message } from 'hero-js';
+
+&#64Component()
+export class DecoratePage {
+
+    &#64BeforeMessage
+    before(data) {
+        console.log('Checking data is valid...', data);
+    }
+
+    &#64Message(function(data){
+      return data.click && data.click === &quot;login&quot;;
+    })
+    login(data) {
+        console.log('Sending Request...');
+    }
+
+}</code></pre>
 </div>
 
 
@@ -304,7 +331,7 @@ export class DecoratePage {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line361">line 361</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line388">line 388</a>
     </li></ul></dd>
     
 
@@ -344,12 +371,10 @@ export class DecoratePage {
 
 
 <div class="description">
-    <p>Callback method when page bootstrap. This method executed before @ViewWillAppear. <br>1. In Browser Environment: this method will executed every time when page loaded.<br> 2. In Native Environment: this method execute one time only.</p>
+    <p>Callback method when page bootstrap. This method executed before <a href="global.html#ViewWillAppear"><code>@ViewWillAppear</code></a>. <br>1. In Browser Environment: this method will executed every time when page loaded.<br> 2. In Native Environment: this method execute one time only.</p>
 <pre class="prettyprint source lang-javascript"><code>import { Boot, Component } from 'hero-js';
 
-&#64Component({
-  view: ''
-})
+&#64Component()
 export class DecoratePage {
  &#64Boot
  start(){
@@ -399,7 +424,7 @@ export class DecoratePage {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line272">line 272</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line305">line 305</a>
     </li></ul></dd>
     
 
@@ -439,7 +464,13 @@ export class DecoratePage {
 
 
 <div class="description">
-    <p>定义当前页面为一个组件，所指定的类将会被自动创建一个实例</p>
+    <p>Mark current <code>class</code> as a component which cause an instance of the class created automatically.</p>
+<pre class="prettyprint source lang-javascript"><code>import { Component } from 'hero-js';
+
+&#64Component()
+export class DecoratePage {
+
+}</code></pre>
 </div>
 
 
@@ -493,7 +524,26 @@ export class DecoratePage {
 
             
 
-            <td class="description last"><p>可以传入view参数，指定当前页面初始化时的界面数据</p></td>
+            <td class="description last"><p>configurations of the marked class. Valid Attributes:</p>
+<p><code>view</code> The layout of the Component</p>
+<pre class="prettyprint source lang-javascript"><code>&#64Component({
+  view: {
+    version:0,
+    backgroundColor:'ffffff',
+    nav:{
+      title:'Home Page',
+      navigationBarHiddenH5:true,
+    },
+    views:
+    [
+      {
+        'class':'HeroWebView',
+        name:'webview',
+        frame:{w:'1x',h:'1x'}
+      },
+    ]
+  }
+})</code></pre></td>
         </tr>
 
     
@@ -520,108 +570,6 @@ export class DecoratePage {
 
     
 
-    <h4 class="name" id="getState"><span class="type-signature"></span>getState<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line472">line 472</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>返回当前页面中的每个元素及组件的状态数据</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
     <h4 class="name" id="Message"><span class="type-signature"></span>Message<span class="signature">(condition)</span><span class="type-signature"></span></h4>
 
     
@@ -634,7 +582,7 @@ export class DecoratePage {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line444">line 444</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line490">line 490</a>
     </li></ul></dd>
     
 
@@ -674,7 +622,7 @@ export class DecoratePage {
 
 
 <div class="description">
-    <p>Handle messages sent from Native to JS. Given the condition, whether invoke the decorated function or not.</p>
+    <p>Handle messages sent from NativeApp to JS. Given the condition, whether invoke the decorated function or not.</p>
 <pre class="prettyprint source lang-javascript"><code>import { Component, Message } from 'hero-js';
 
 &#64Component({
@@ -712,6 +660,7 @@ export class DecoratePage {
                     frame:{x:'15',r:'15',y:'0',h:'44'},
                     yOffset:'password+50',
                     title:'登录',
+                    // define the message sent from NativeApp to JS when the button click.
                     click:{click:'login'}
                 },
             ]
@@ -720,7 +669,9 @@ export class DecoratePage {
 })
 export class DecoratePage {
 
+    // Receive the message from NativeApp
     &#64Message(function(data){
+      // whether call the login method according to the result of this function
       return data.click && data.click === &quot;login&quot;;
     })
     login(data) {
@@ -780,18 +731,28 @@ export class DecoratePage {
 
             
 
-            <td class="description last"><p>if condition is <code>function</code>, decorated function invoked when the result of condition equals to true <br>if condition equals <code>undefined</code>, the decorated method will invoked.<br><br>condition has one argument: <br><br><code>data</code>: The message sent from Native Component</p>
+            <td class="description last"><p><code>condition</code> function and the decorated function <code>callback</code> has one argument: <br> <code>data</code>: The message sent from NativeApp.</p>
+<p>if condition is <code>function</code>, decorated function <code>callback</code> invoked when the result of condition equals to true.<br></p>
 <pre class="prettyprint source lang-javascript"><code>&#64Message(function(data){
-  // parameter data is the message
+  // condition function
   function checkCondition(data){
      return true;
   }
   return checkCondition(data);
 })
 callback(data) {
-  // parameter data is the message
-  // this method will invoked if condition is true
+  // decorated function
   console.log('Send request...');
+}</code></pre><p>if condition equals <code>undefined</code>, the decorated method <code>callback</code> will always invoked.</p>
+<pre class="prettyprint source"><code>&#64Message()
+callback(data){
+ console.log('Received Data:', data);
+}</code></pre><p>Equals to</p>
+<pre class="prettyprint source"><code>&#64Message(function(data){
+ return true;
+})
+callback(data){
+ console.log('Received Data:', data);
 }</code></pre></td>
         </tr>
 
@@ -819,112 +780,6 @@ callback(data) {
 
     
 
-    <h4 class="name" id="setState"><span class="type-signature"></span>setState<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line479">line 479</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>设置当前页面中的元素及组件的状态</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>对象中的key对应元素组件，value为更新后的值</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
     <h4 class="name" id="ViewWillAppear"><span class="type-signature"></span>ViewWillAppear<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
@@ -937,7 +792,7 @@ callback(data) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line313">line 313</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line344">line 344</a>
     </li></ul></dd>
     
 
@@ -977,12 +832,10 @@ callback(data) {
 
 
 <div class="description">
-    <p>Callback method when before page appear.</p>
-<pre class="prettyprint source lang-javascript"><code>import { ViewWillAppear, Component } from 'hero-js';
+    <p>Callback method before page will appear.</p>
+<pre class="prettyprint source lang-javascript"><code>import { Component, ViewWillAppear } from 'hero-js';
 
-&#64Component({
-  view: ''
-})
+&#64Component()
 export class DecoratePage {
   &#64ViewWillAppear
   beforePageAppear(){
@@ -1032,7 +885,7 @@ export class DecoratePage {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line337">line 337</a>
+        <a href="hero.js.html">hero.js</a>, <a href="hero.js.html#line366">line 366</a>
     </li></ul></dd>
     
 
@@ -1073,11 +926,9 @@ export class DecoratePage {
 
 <div class="description">
     <p>Callback method when page will disappear.</p>
-<pre class="prettyprint source lang-javascript"><code>import { ViewWillDisappear, Component } from 'hero-js';
+<pre class="prettyprint source lang-javascript"><code>import { Component, ViewWillDisappear } from 'hero-js';
 
-&#64Component({
-  view: ''
-})
+&#64Component()
 export class DecoratePage {
   &#64ViewWillDisappear
   pageWillDisappear(){
@@ -1128,7 +979,7 @@ export class DecoratePage {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri May 12 2017 17:46:31 GMT+0800 (CST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed May 17 2017 13:34:57 GMT+0800 (CST) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
