@@ -5,4 +5,4 @@
 `npm run build`
 
 # Documentation
-http://hero-mobile.github.io
+https://hero-mobile.github.io/hero-js
