@@ -4,5 +4,8 @@
     },
     "cli": {
         "title": "Hero-cli Tool"
+    },
+    "build-native": {
+        "title": "Build Native"
     }
 }
