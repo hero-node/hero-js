@@ -41,26 +41,29 @@ HeroDialogBehavior ={
   on: function(json) {
     if(json.str){
       var viewObject = JSON.parse(json.str);
+      viewObject.center = {x:'0.5x',y:'0.5x'};
       this.contentView = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
       if(this.contentView.setJson){
-        this.$.dialog.appendChild(this.contentView);
+        this.$.heroContent.appendChild(this.contentView);
         this.contentView.controller = this.controller;
         this.contentView.json = (viewObject);
       }else{
         console.log(viewObject.class||viewObject.res);
       }
+      this.$.heroContent.style.animation = 'alphaOut 0.5s';
+      var cancelable = true;
+      if (viewObject.hasOwnProperty('cancelable')) {
+        cancelable = viewObject.cancelable;
+      };
       var that=this;
       setTimeout(function(){
-        var rootEl=that.contentView.$.heroContent;
-        if(rootEl){
-          rootEl.style.left = '0px';
-          rootEl.style.top = '0px';
-          that.$.dialog.style.width=rootEl.style.width;
-          that.$.dialog.style.height=rootEl.style.height;
-        }
-        that.$.dialog.open();
-        for (var i = 0; i < rootEl.childNodes.length; i++) {
-          var view = rootEl.childNodes[i];
+        if (cancelable) {
+          that.$.button.addEventListener('click',function(){
+            that.close();
+          });
+        };
+        for (var i = 0; i < that.contentView.$.heroContent.childNodes.length; i++) {
+          var view = that.contentView.$.heroContent.childNodes[i];
           if (view.nodeName.search('BUTTON') > 0) {
             view.addEventListener('click',function(){
               that.close();
@@ -71,21 +74,47 @@ HeroDialogBehavior ={
     }
   },
   close:function(){
-    this.$.dialog.close();
+      this.$.heroContent.style.animation = 'alphaOut 0.5s';
+      this.async(function(){
+        this.parentElement.removeChild(this);
+      },400);
+
   }
 }
 </script>
 <dom-module id="hero-dialog">
   <template>
   <style type="text/css">
-  paper-dialog{
-    margin: 0px;
-    padding: 0px;
+  #heroContent{
+      display: block;
+      position: absolute;
+      overflow: hidden;
+      margin: 0px;
+      padding: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4)
+  }
+  #button{
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.001)
+  }
+  @keyframes alphaIn
+  {
+    from {background-color: rgba(0,0,0,0.4);}
+    to {background-color: rgba(0,0,0,0.0);}
+  }
+  @keyframes alphaOut
+  {
+    from {background-color: rgba(0,0,0,0.0);}
+    to {background-color: rgba(0,0,0,0.4);}
   }
   </style>
-    <paper-dialog id='dialog'>
-
-    </paper-dialog>
+    <div id='heroContent'>
+      <paper-button noink id='button'>
+      </paper-button>
+    </div>
   </template>
 </dom-module>
 

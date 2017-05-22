@@ -89,7 +89,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           if (p.getBoundingClientRect().width>0 && p.getBoundingClientRect().height>0) {
             return {w:p.getBoundingClientRect().width,h:p.getBoundingClientRect().height};
           }else if(p.style.width.substr(p.style.width.length-2,2) == 'px'){
-            return {w:(parseInt(p.style.width)!=0)?parseInt(p.style.width):window.innerWidth,h:(parseInt(p.style.height)!=0)?parseInt(p.style.height):window.innerHeight};
+            return {w:(parseFloat(p.style.width)!=0)?parseFloat(p.style.width):window.innerWidth,h:(parseFloat(p.style.height)!=0)?parseFloat(p.style.height):window.innerHeight};
           }else{
             return this.getParentSize(p);
           }
@@ -123,29 +123,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             var b = frame.b;
             var xInt, yInt, wInt, hInt;
             if (x) {
-              xInt = x.charAt(x.length - 1) === 'x' ? (parseFloat(x) * frame.p.w) : parseInt(x);
+              xInt = x.charAt(x.length - 1) === 'x' ? (parseFloat(x) * frame.p.w) : parseFloat(x);
             };
             if (y) {
-              yInt = y.charAt(y.length - 1) === 'x' ? (parseFloat(y) * frame.p.h) : parseInt(y);
+              yInt = y.charAt(y.length - 1) === 'x' ? (parseFloat(y) * frame.p.h) : parseFloat(y);
             };
             if (w) {
-              wInt = w.charAt(w.length - 1) === 'x' ? (parseFloat(w) * frame.p.w) : parseInt(w);
+              wInt = w.charAt(w.length - 1) === 'x' ? (parseFloat(w) * frame.p.w) : parseFloat(w);
             };
             if (h) {
-              hInt = h.charAt(h.length - 1) === 'x' ? (parseFloat(h) * frame.p.h) : parseInt(h);
+              hInt = h.charAt(h.length - 1) === 'x' ? (parseFloat(h) * frame.p.h) : parseFloat(h);
             };
             if (r) {
               if (!x) {
-                xInt = frame.p.w - (wInt + (r.charAt(r.length - 1) === 'x' ? parseFloat(r) * frame.p.w : parseInt(r)));
+                xInt = frame.p.w - (wInt + (r.charAt(r.length - 1) === 'x' ? parseFloat(r) * frame.p.w : parseFloat(r)));
               } else {
-                wInt = frame.p.w - (xInt + (r.charAt(r.length - 1) === 'x' ? parseFloat(r) * frame.p.w : parseInt(r)));
+                wInt = frame.p.w - (xInt + (r.charAt(r.length - 1) === 'x' ? parseFloat(r) * frame.p.w : parseFloat(r)));
               };
             };
             if (b) {
               if (!y) {
-                yInt = frame.p.h - (hInt + (b.charAt(b.length - 1) === 'x' ? parseFloat(b) * frame.p.h : parseInt(b)));
+                yInt = frame.p.h - (hInt + (b.charAt(b.length - 1) === 'x' ? parseFloat(b) * frame.p.h : parseFloat(b)));
               } else {
-                hInt = frame.p.h - (yInt + (b.charAt(b.length - 1) === 'x' ? parseFloat(b) * frame.p.h : parseInt(b)));
+                hInt = frame.p.h - (yInt + (b.charAt(b.length - 1) === 'x' ? parseFloat(b) * frame.p.h : parseFloat(b)));
               };
             };
             this.$.heroContent.style.left = xInt + 'px';
@@ -204,7 +204,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             };
             if (this.json.contentSizeElementY) {
               if (this.$.heroContent.style.display != 'none' && this.parent) {
-                this.parent.json.frame.h = parseInt(this.$.heroContent.style.top)+parseInt(this.$.heroContent.style.height)+'';
+                this.parent.json.frame.h = parseFloat(this.$.heroContent.style.top)+parseFloat(this.$.heroContent.style.height)+'';
                 var frame = this.parent.json.frame;
                 this.parent.oon({frame:frame});
               };
@@ -228,12 +228,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           var y = json.center.y;
           if (x) {
             var wInt = parseFloat(w);
-            var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseInt(x);
+            var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
             this.$.heroContent.style.left=xInt-wInt/2+'px';
           };
           if (y) {
             var hInt = parseFloat(h);
-            var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseInt(y);
+            var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
             this.$.heroContent.style.top = yInt - hInt/2 + 'px';
           };
         };
