@@ -260,6 +260,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 if (loading) {
                   loading.oon({show:false});
                 };
+                var showing=document.querySelector('hero-dialog');
+                if (showing) {
+                  showing.parentElement.removeChild(showing);
+                };
               }
               else if(command.substring(0,5) === 'goto:'){
                 var url = command.replace('goto:','');
