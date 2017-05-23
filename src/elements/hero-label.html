@@ -47,7 +47,13 @@ HeroLabelBehavior ={
       this.$.text.style.color = APP.str2Color(json.textColor);
     };
     if (json.weight) {
-      this.$.text.style.fontWeight = json.weight;
+      if (json.weight === 'light') {
+        this.$.text.style.fontWeight = 300;
+      }else if (json.weight === 'bold') {
+        this.$.text.style.fontWeight = 500;
+      }else{
+        this.$.text.style.fontWeight = json.weight;
+      }
     };
     if (json.attribute) {
       this.$.text.style.display = 'none';
