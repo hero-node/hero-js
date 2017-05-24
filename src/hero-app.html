@@ -294,6 +294,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         };
       },
+      merge:function(o1, o2) {
+        for (var key in o2) {
+            o1[key] = o2[key];
+        }
+        return o1;
+      },      
       str2Color:function(str){
         if (str.length == 3 || str.length == 6) {
           return '#'+str;
