@@ -227,6 +227,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             for(var num in datas){
                 var data = datas[num];
                 var element = this.findViewByname(data.name,this.heroContent);
+                if(!element){
+                  element = this.findViewByname(data.name,document.body);
+                }
                 if (element && element.oon) {
                     element.oon(data);
                 };
@@ -236,6 +239,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               datas.frame.p = {w:window.innerWidth,h:window.innerHeight};
             };
             var element = this.findViewByname(datas.name,this.heroContent);
+            if(!element){
+              element = this.findViewByname(datas.name,document.body);
+            }
             if (element && element.oon) {
                 element.oon(datas);
             };
