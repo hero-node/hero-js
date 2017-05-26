@@ -211,7 +211,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 var view = json.ui_fragment[num];
                 var parentElement;
                 if (view.parent) {
-                  parentElement = this.findViewByname(view.parent,document.body);
+                  parentElement = this.findViewByname(view.parent,this.heroContent);
                 }else{
                   parentElement = this.heroContent;
                 }
