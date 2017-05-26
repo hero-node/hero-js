@@ -211,7 +211,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 var view = json.ui_fragment[num];
                 var parentElement;
                 if (view.parent) {
-                    parentElement = this.findViewByname(view.parent,this.heroContent);
+                  parentElement = this.findViewByname(view.parent,document.body);
                 }else{
                   parentElement = this.heroContent;
                 }
@@ -253,7 +253,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 window.location.reload();
               }
               else if(command==='showLoading'){
-                var loading=this.findViewByname('loading',this.heroContent);
+                var loading = this.findViewByname(datas.name,this.heroContent);
+                if(!loading){
+                  loading = this.findViewByname(datas.name,document.body);
+                }
                 if(!loading){
                   var loading = document.createElement('hero-loading');
                   loading.controller = this;
@@ -262,7 +265,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 loading.oon({show:true,name:'loading'});
               }
               else if(command==='stopLoading'){
-                var loading=this.findViewByname('loading',this.heroContent);
+                var loading = this.findViewByname(datas.name,this.heroContent);
+                if(!loading){
+                  loading = this.findViewByname(datas.name,document.body);
+                }                
                 if (loading) {
                   loading.oon({show:false});
                 };
@@ -306,7 +312,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   var dialog = document.createElement('hero-dialog');
                   dialog.controller = this;
                   dialog.json = {'str': JSON.stringify(command.show)};
-                  this.heroContent.appendChild(dialog);
+                  document.body.appendChild(dialog);
                 }
               }else if(command.delay) {
                   var delayObj = command.delay;
