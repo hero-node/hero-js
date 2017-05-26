@@ -253,10 +253,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 window.location.reload();
               }
               else if(command==='showLoading'){
-                var loading = this.findViewByname(datas.name,this.heroContent);
-                if(!loading){
-                  loading = this.findViewByname(datas.name,document.body);
-                }
+                var loading = this.findViewByname('loading',this.heroContent);
                 if(!loading){
                   var loading = document.createElement('hero-loading');
                   loading.controller = this;
@@ -265,10 +262,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 loading.oon({show:true,name:'loading'});
               }
               else if(command==='stopLoading'){
-                var loading = this.findViewByname(datas.name,this.heroContent);
-                if(!loading){
-                  loading = this.findViewByname(datas.name,document.body);
-                }                
+                var loading = this.findViewByname('loading',this.heroContent);
                 if (loading) {
                   loading.oon({show:false});
                 };
