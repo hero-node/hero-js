@@ -16,5 +16,10 @@
     "webpack": "1.14.0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "js2xmlparser": "^3.0.0",
+    "mustache": "^2.3.0",
+    "xml2js": "^0.4.17"
+  }
 }
