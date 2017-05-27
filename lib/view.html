@@ -1,0 +1,48 @@
+<hero-view version="0" backgroundColor="ffffff" nav="navigationBarHiddenH5=true;">
+  <DRTextField
+      hero-if="showTelephone"
+      hero-html="'手机号码'"
+      name="phone"
+      type="phone"
+      theme="green"
+      placeHolder="手机号码"
+      frame="{ x: '15', r: '15', y: '115', h: '50' }"
+      textFieldDidEditing="{ name: 'phone' }"></DRTextField>
+
+  <DRTextField
+    hero-text="'密码'"
+      name="password"
+      theme="green"
+      secure="true"
+      placeHolder="密码"
+      frame="{ x: '15', r: '15', y: '178', h: '50' }"
+      drSecure="{ secure: true }"
+      textFieldDidEditing="{ name: 'password' }">密码</DRTextField>
+
+  <DRButton
+    hero-pre
+    name="loginBtn"
+    DRStyle="B1"
+    enable="false"
+    frame="{ x: '15', r: '15', y: '0', h: '44' }"
+    yOffset="password+50"
+    title="登录"
+    click="{ click: 'login' }">登录</DRButton>
+
+  <HeroLabel
+    hero-for="(item, index) in [0, 1, 2]"
+    frame="{ w: '1x', h: '50', b: '0' }"
+    text="Powered by Dianrong.com">Powered by Dianrong.com</HeroLabel>
+
+  <HeroLabel
+    hero-for="(item, index) in labels"
+    frame="{ w: '1x', h: '50', b: '0' }"
+    text="${item}">Powered by Dianrong.com</HeroLabel>
+
+  <HeroToast
+    name="toast"
+    corrnerRadius="10"
+    frame="{ w: '300', h: '44' }"
+    center="{ x: '0.5x', y: '0.5x' }"></HeroToast>
+
+</hero-view>

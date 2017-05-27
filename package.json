@@ -18,7 +18,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "jquery": "^3.2.1",
     "js2xmlparser": "^3.0.0",
+    "jsdom": "^11.0.0",
     "mustache": "^2.3.0",
     "xml2js": "^0.4.17"
   }
