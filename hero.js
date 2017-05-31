@@ -56,6 +56,10 @@ function view2Data(observeUI) {
             }
             Hero.out({ datas: data });
         });
+        window.ui2Data.__defineGetter__(observeUI.name, function () {
+            return window.ui2Data['_' + observeUI.name];
+        });
+
     }
 }
 
@@ -128,7 +132,13 @@ function onMessage(data) {
     }
 
     if (data.name && data.value) {
-        window.ui2Data[data.name] = data.value;
+        window.ui2Data['_' + data.name] = data.value;
+        if(window.ui2Data[data.name] !== data.value){
+          window.ui2Data[data.name] = data.value;
+          window.ui2Data.__defineGetter__(data.name, function () {
+              return window.ui2Data['_' + data.name];
+          });
+        }
     }
     Hero.__beforeMessage.call(_currentPage, data);
     Hero.__messageList.forEach(function (expressions) {
