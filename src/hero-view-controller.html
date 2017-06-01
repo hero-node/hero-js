@@ -326,9 +326,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
               };
         }else{
-          if(json.hasOwnProperty('name') && json.hasOwnProperty('value')){
-              ui2Data['_'+json.name] = json.value;
-          }
           this.controller.in(json);
         }
       }

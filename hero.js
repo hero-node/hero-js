@@ -130,8 +130,7 @@ function onMessage(data) {
     if (typeof (data) === 'string') {
         data = JSON.parse(data);
     }
-
-    if (data.name && data.value) {
+    if(data.hasOwnProperty('name') && data.hasOwnProperty('value')){
         window.ui2Data['_' + data.name] = data.value;
         if(window.ui2Data[data.name] !== data.value){
           window.ui2Data[data.name] = data.value;
