@@ -32,6 +32,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <template>
   <style type="text/css">
   #heroContent{
+      display: none;
+      position: absolute;
+      overflow: hidden;
+      margin: 0px;
+      padding: 0px;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.1);
+
+  }
+  #geetest{
       display: block;
       position: absolute;
       overflow: hidden;
@@ -45,6 +56,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   }
   </style>
     <div id='heroContent'>
+      <div id='geetest'>
+      </div>  
     </div>  
   </template>
 </dom-module>
@@ -354,6 +367,7 @@ window.initGeetest = function (userConfig, callback) {
       },
       on: function(json) {
         if (json.geetest) {
+          this.$.heroContent.style.display = 'block'
           var data = json.geetest;
           initGeetest({
               gt: data.gt,
@@ -362,7 +376,7 @@ window.initGeetest = function (userConfig, callback) {
               new_captcha: data.new_captcha,
           }, function (captchaObj) {
             var that = drGeetest;
-            captchaObj.appendTo(that.$.heroContent)
+            captchaObj.appendTo(that.$.geetest)
             // captchaObj.verify();
             captchaObj.onReady(function () {
             });
@@ -383,7 +397,7 @@ window.initGeetest = function (userConfig, callback) {
                 };
               }
               that.controller.on(that.testAction);
-              captchaObj.destroy()
+              that.$.heroContent.style.display = 'none'
             });
             captchaObj.onError(function () {
               that.testAction = { value: { result: 'failed' } };
