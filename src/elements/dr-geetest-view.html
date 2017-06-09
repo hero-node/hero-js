@@ -377,34 +377,43 @@ window.initGeetest = function (userConfig, callback) {
           }, function (captchaObj) {
             var that = drGeetest;
             captchaObj.appendTo(that.$.geetest)
-            // captchaObj.verify();
             captchaObj.onReady(function () {
             });
             captchaObj.onSuccess(function () {
               var result = captchaObj.getValidate();
               if (!result) {
-                that.testAction = { value: { result: 'failed' } };
+                that.testAction.value = { result: 'failed' } ;
               }
               else {
-                that.testAction = {
-                  value: {
+        
+                that.testAction.value =  {
                     content: {
                       geetest_challenge: result.geetest_challenge,
                       geetest_validate: result.geetest_validate,
                       geetest_seccode: result.geetest_seccode
                     }, result: 'success'
-                  }
                 };
               }
               that.controller.on(that.testAction);
-              that.$.heroContent.style.display = 'none'
+              that.$.heroContent.style.display = 'none';
+              var childs=that.$.geetest.childNodes; 
+              for(var i = childs.length - 1; i >= 0; i--) 
+              { that.$.geetest.removeChild(childs[i]);}
             });
             captchaObj.onError(function () {
-              that.testAction = { value: { result: 'failed' } };
+              that.testAction.value = { result: 'failed' } ;
               that.controller.on(that.testAction);
+              var childs=that.$.geetest.childNodes;
+              for(var i = childs.length - 1; i >= 0; i--) 
+              { that.$.geetest.removeChild(childs[i]); }            
             });
           })
         };
+        if(json.action)
+        {
+            this.testAction=json.action;
+        }
+
       },
       ready:function(){
         drGeetest = this;
