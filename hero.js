@@ -114,18 +114,6 @@ function outObjects() {
     return messages;
 }
 
-// eslint-disable-next-line
-function __executeExpression(expression, data, page) {
-    // eslint-disable-next-line
-    return (function (expression, __data, __page, window, Hero) {
-        // eslint-disable-next-line
-        var value = eval('expression');
-        // eslint-disable-next-line
-        value = eval(value);
-        return value;
-    })(expression, data, page, null, null);
-}
-
 function onMessage(data) {
     if (typeof (data) === 'string') {
         data = JSON.parse(data);
@@ -238,7 +226,6 @@ function defineReadOnlyProp(obj, name, value) {
     });
 }
 
-
 function resetUI(ui) {
     window.ui = ui;
 }
@@ -314,10 +301,14 @@ function Component(config) {
         if (!config) {
             config = emptyObject;
         }
-        if (config.view) {
+
+        if (config.template) {
+            defineReadOnlyProp(Target.prototype, '__heroRender', config.template);
+        } else if (config.view) {
             defineProp(Target, '__defaultViews', config.view);
             resetUI(config.view);
         }
+
         _currentPage = new Target();
         if (getDeviceType() === 'ANDROID' || getDeviceType() === 'IOS') {
             bootstrap();
@@ -545,6 +536,12 @@ function setState(status) {
     });
 }
 
+function diff(before, after) {
+    console.log(JSON.stringify(before));
+    console.log(JSON.stringify(after));
+    console.log(JSON.stringify(_currentPage.__heroRender._template));
+    
+}
 
 function __viewWillDisppearCallback() {
     Hero.__viewWillDisppear.call(_currentPage);
@@ -573,6 +570,7 @@ definePublicFreezeProp(Hero, 'getState', getState);
 definePublicFreezeProp(Hero, 'getUI', getUI);
 definePublicFreezeProp(Hero, 'in', onMessage);
 definePublicFreezeProp(Hero, 'out', sendMessage);
+definePublicFreezeProp(Hero, 'diff', diff);
 definePublicFreezeProp(Hero, 'outObjects', outObjects);
 definePublicFreezeProp(Hero, 'resetUI', resetUI);
 definePublicFreezeProp(Hero, 'setState', setState);
