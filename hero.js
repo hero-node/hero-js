@@ -3,6 +3,7 @@ var Hero = window.Hero = {};
 var _outObjects = '';
 var _currentPage = null;
 var _observeProperties = [];
+var _rootElementVariable;
 
 window.ui = {};
 window.ui2Data = {};
@@ -260,6 +261,144 @@ function getDeviceType() {
     return _deviceType;
 }
 
+var isArray = Array.isArray;
+
+function isRegExp(value) {
+    return toString.call(value) === '[object RegExp]';
+}
+function isFunction(value) { return typeof value === 'function'; }
+function isDefined(value) { return typeof value !== 'undefined'; }
+
+function isDate(value) {
+    return toString.call(value) === '[object Date]';
+}
+function createMap() {
+    return Object.create(null);
+}
+
+function equals(o1, o2) {
+    if (o1 === o2) { return true; }
+    if (o1 === null || o2 === null) { return false; }
+    if (o1 !== o1 && o2 !== o2) { return true; } // NaN === NaN
+    var t1 = typeof o1, t2 = typeof o2, length, key, keySet;
+
+    if (t1 === t2 && t1 === 'object') {
+        if (isArray(o1)) {
+            if (!isArray(o2)) { return false; }
+            if ((length = o1.length) === o2.length) {
+                for (key = 0; key < length; key++) {
+                    if (!equals(o1[key], o2[key])) { return false; }
+                }
+                return true;
+            }
+        } else if (isDate(o1)) {
+            if (!isDate(o2)) { return false; }
+            return equals(o1.getTime(), o2.getTime());
+        } else if (isRegExp(o1)) {
+            if (!isRegExp(o2)) { return false; }
+            return o1.toString() === o2.toString();
+        } else {
+            if (isArray(o2) || isDate(o2) || isRegExp(o2)) { return false; }
+            keySet = createMap();
+            for (key in o1) {
+                if (isFunction(o1[key])) { continue; }
+                if (!equals(o1[key], o2[key])) { return false; }
+                keySet[key] = true;
+            }
+            for (key in o2) {
+                if (!(key in keySet) &&
+                key.charAt(0) !== '$' &&
+                isDefined(o2[key]) &&
+                !isFunction(o2[key])) { return false; }
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+function _diff(_differences, before, after, template) {
+
+    if (!before && !after) {
+        return;
+    }
+
+    if (!before || !after) { // if one is null --> Remove or Add
+        _differences.push({
+            type: before ? 'R' : 'A',
+            name: before ? before.name : after.name,
+            value: before ? null : after
+        });
+        return;
+    }
+    // Compare Attribute
+    if (template.dynamic) {
+        template.dynamic.forEach(function (attr) {
+            var beforeExists = (attr in before);
+            var afterExists = (attr in after);
+
+            if (beforeExists && afterExists) {
+                if (!equals(before[attr], after[attr])) {
+                    _differences.push({
+                        // Update
+                        type: 'U',
+                        name: before.name,
+                        attr: attr,
+                        value: after[attr]
+                    });
+                }
+            } else if (beforeExists !== afterExists) { // one is true, one is false --> Changed
+                _differences.push({
+                    // R : Remove, A: Add
+                    type: beforeExists ? 'R' : 'A',
+                    name: beforeExists ? before.name : after.name,
+                    attr: attr,
+                    value: beforeExists ? null : after[attr]
+                });
+            }
+        });
+    }
+
+    var isRoot, childAttr, beforeChildElements, afterChildElements;
+
+    // Compare Child
+    if (template.childrens) {
+        isRoot = (template.key === _rootElementVariable);
+        childAttr = isRoot ? 'views' : 'subViews';
+
+        template.childrens.forEach(function (childTempate) {
+            beforeChildElements = before[childAttr].filter(function (element) {
+                return element[_currentPage.__heroRender._className] === childTempate.key;
+            });
+            afterChildElements = after[childAttr].filter(function (element) {
+                return element[_currentPage.__heroRender._className] === childTempate.key;
+            });
+
+            var bLen, aLen, idx, iLen;
+
+            bLen = beforeChildElements.length;
+            aLen = afterChildElements.length;
+            if (bLen > aLen) {
+                afterChildElements.length = bLen;
+            } else if (bLen < aLen) {
+                beforeChildElements.length = aLen;
+            }
+            for (idx = 0, iLen = beforeChildElements.length; idx < iLen; idx++) {
+              // For Each will skip undefined element
+                _diff(_differences, beforeChildElements[idx], afterChildElements[idx], childTempate);
+            }
+        });
+    }
+}
+
+function diff(before, after, template) {
+    var _differences = [];
+
+    _diff(_differences, before, after, template);
+    console.log(_differences);
+    return _differences;
+}
+
 /**
  * Define a property.
  */
@@ -489,7 +628,9 @@ function defineReactive$$1(
             }
             // childOb = observe(newVal);
             observe(newVal);
+
             console.log('Set Value: Before=',  value, 'after', newVal);
+            diff(window.ui, _currentPage.__heroRender(_currentPage), _currentPage.__heroRender._template);
         }
     });
 }
@@ -551,7 +692,6 @@ function _generate$Refs(view) {
     });
     return $refs;
 }
-var _rootElementVariable;
 
 /**
   * @description
@@ -844,143 +984,6 @@ function setState(status) {
     Object.keys(status).forEach(function (key) {
         window.ui2Data[key] = status[key];
     });
-}
-var isArray = Array.isArray;
-
-function isRegExp(value) {
-    return toString.call(value) === '[object RegExp]';
-}
-function isFunction(value) { return typeof value === 'function'; }
-function isDefined(value) { return typeof value !== 'undefined'; }
-
-function isDate(value) {
-    return toString.call(value) === '[object Date]';
-}
-function createMap() {
-    return Object.create(null);
-}
-
-function equals(o1, o2) {
-    if (o1 === o2) { return true; }
-    if (o1 === null || o2 === null) { return false; }
-    if (o1 !== o1 && o2 !== o2) { return true; } // NaN === NaN
-    var t1 = typeof o1, t2 = typeof o2, length, key, keySet;
-
-    if (t1 === t2 && t1 === 'object') {
-        if (isArray(o1)) {
-            if (!isArray(o2)) { return false; }
-            if ((length = o1.length) === o2.length) {
-                for (key = 0; key < length; key++) {
-                    if (!equals(o1[key], o2[key])) { return false; }
-                }
-                return true;
-            }
-        } else if (isDate(o1)) {
-            if (!isDate(o2)) { return false; }
-            return equals(o1.getTime(), o2.getTime());
-        } else if (isRegExp(o1)) {
-            if (!isRegExp(o2)) { return false; }
-            return o1.toString() === o2.toString();
-        } else {
-            if (isArray(o2) || isDate(o2) || isRegExp(o2)) { return false; }
-            keySet = createMap();
-            for (key in o1) {
-                if (isFunction(o1[key])) { continue; }
-                if (!equals(o1[key], o2[key])) { return false; }
-                keySet[key] = true;
-            }
-            for (key in o2) {
-                if (!(key in keySet) &&
-                key.charAt(0) !== '$' &&
-                isDefined(o2[key]) &&
-                !isFunction(o2[key])) { return false; }
-            }
-            return true;
-        }
-    }
-    return false;
-}
-
-function _diff(_differences, before, after, template) {
-
-    if (!before && !after) {
-        return;
-    }
-
-    if (!before || !after) { // if one is null --> Remove or Add
-        _differences.push({
-            type: before ? 'R' : 'A',
-            name: before ? before.name : after.name,
-            value: before ? null : after
-        });
-        return;
-    }
-    // Compare Attribute
-    if (template.dynamic) {
-        template.dynamic.forEach(function (attr) {
-            var beforeExists = (attr in before);
-            var afterExists = (attr in after);
-
-            if (beforeExists && afterExists) {
-                if (!equals(before[attr], after[attr])) {
-                    _differences.push({
-                        // Update
-                        type: 'U',
-                        name: before.name,
-                        attr: attr,
-                        value: after[attr]
-                    });
-                }
-            } else if (beforeExists !== afterExists) { // one is true, one is false --> Changed
-                _differences.push({
-                    // R : Remove, A: Add
-                    type: beforeExists ? 'R' : 'A',
-                    name: beforeExists ? before.name : after.name,
-                    attr: attr,
-                    value: beforeExists ? null : after[attr]
-                });
-            }
-        });
-    }
-
-    var isRoot, childAttr, beforeChildElements, afterChildElements;
-
-    // Compare Child
-    if (template.childrens) {
-        isRoot = (template.key === _rootElementVariable);
-        childAttr = isRoot ? 'views' : 'subViews';
-
-        template.childrens.forEach(function (childTempate) {
-            beforeChildElements = before[childAttr].filter(function (element) {
-                return element[_currentPage.__heroRender._className] === childTempate.key;
-            });
-            afterChildElements = after[childAttr].filter(function (element) {
-                return element[_currentPage.__heroRender._className] === childTempate.key;
-            });
-
-            var bLen, aLen, idx, iLen;
-
-            bLen = beforeChildElements.length;
-            aLen = afterChildElements.length;
-            if (bLen > aLen) {
-                afterChildElements.length = bLen;
-            } else if (bLen < aLen) {
-                beforeChildElements.length = aLen;
-            }
-            for (idx = 0, iLen = beforeChildElements.length; idx < iLen; idx++) {
-              // For Each will skip undefined element
-                _diff(_differences, beforeChildElements[idx], afterChildElements[idx], childTempate);
-            }
-        });
-    }
-}
-
-function diff(before, after, template) {
-    var _differences = [];
-
-    _diff(_differences, before, after, template);
-
-    return _differences;
 }
 
 function __viewWillDisppearCallback() {
