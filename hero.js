@@ -2,6 +2,7 @@
 var Hero = window.Hero = {};
 var _outObjects = '';
 var _currentPage = null;
+var _observeProperties = [];
 
 window.ui = {};
 window.ui2Data = {};
@@ -259,6 +260,267 @@ function getDeviceType() {
     return _deviceType;
 }
 
+/**
+ * Define a property.
+ */
+function def(obj, key, val, enumerable) {
+    Object.defineProperty(obj, key, {
+        value: val,
+        enumerable: !!enumerable,
+        writable: true,
+        configurable: true
+    });
+}
+
+/*
+ * not type checking this file because flow doesn't play well with
+ * dynamically accessing methods on Array prototype
+ */
+
+var arrayProto = Array.prototype;
+var arrayMethods = Object.create(arrayProto);
+
+[
+    'push',
+    'pop',
+    'shift',
+    'unshift',
+    'splice',
+    'sort',
+    'reverse'
+]
+.forEach(function (method) {
+  // cache original method
+    var original = arrayProto[method];
+
+    def(arrayMethods, method, function mutator() {
+        var arguments$1 = arguments;
+
+    // avoid leaking arguments:
+    // http://jsperf.com/closure-with-arguments
+        var i = arguments.length;
+        var args = new Array(i);
+
+        while (i--) {
+            args[i] = arguments$1[i];
+        }
+        // eslint-disable-next-line
+        var result = original.apply(this, args);
+        // eslint-disable-next-line
+        var ob = this.__ob__;
+        var inserted;
+
+        switch (method) {
+            case 'push':
+                inserted = args;
+                break;
+            case 'unshift':
+                inserted = args;
+                break;
+            case 'splice':
+                inserted = args.slice(2);
+                break;
+        }
+        if (inserted) { ob.observeArray(inserted); }
+    // notify change
+        ob.dep.notify();
+        return result;
+    });
+});
+
+var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
+
+// can we use __proto__?
+var hasProto = '__proto__' in {};
+// helpers
+
+/**
+ * Augment an target Object or Array by intercepting
+ * the prototype chain using __proto__
+ */
+function protoAugment(target, src) {
+  /* eslint-disable no-proto */
+    target.__proto__ = src;
+  /* eslint-enable no-proto */
+}
+/**
+ * Augment an target Object or Array by defining
+ * hidden properties.
+ */
+function copyAugment(target, src, keys) {
+    var i, l, key;
+
+    for (i = 0, l = keys.length; i < l; i++) {
+        key = keys[i];
+
+        def(target, key, src[key]);
+    }
+}
+/**
+ * Quick object check - this is primarily used to tell
+ * Objects from primitive values when we know the value
+ * is a JSON-compliant type.
+ */
+function isObject(obj) {
+    return obj !== null && typeof obj === 'object';
+}
+var _toString = Object.prototype.toString;
+
+/**
+ * Strict object type check. Only returns true
+ * for plain JavaScript objects.
+ */
+function isPlainObject(obj) {
+    return _toString.call(obj) === '[object Object]';
+}
+/**
+ * Check whether the object has the property.
+ */
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function hasOwn(obj, key) {
+    return hasOwnProperty.call(obj, key);
+}
+
+/**
+ * Observer class that are attached to each observed
+ * object. Once attached, the observer converts target
+ * object's property keys into getter/setters that
+ * collect dependencies and dispatches updates.
+ */
+var Observer = function Observer(value) {
+    this.value = value;
+    // this.dep = new Dep();
+    // this.vmCount = 0;
+    def(value, '__ob__', this);
+    if (Array.isArray(value)) {
+        // eslint-disable-next-line
+        var augment = hasProto ? protoAugment : copyAugment;
+
+        augment(value, arrayMethods, arrayKeys);
+        this.observeArray(value);
+    } else {
+        this.walk(value);
+    }
+};
+
+/**
+ * Attempt to create an observer instance for a value,
+ * returns the new observer if successfully observed,
+ * or the existing observer if the value already has one.
+ */
+function observe(value) {
+    if (!isObject(value)) {
+        return;
+    }
+    var ob;
+
+    if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
+        ob = value.__ob__;
+    } else if (
+      Object.isExtensible(value) &&
+      (Array.isArray(value) || isPlainObject(value))
+    ) {
+        ob = new Observer(value);
+    }
+    //
+    // if (asRootData && ob) {
+    //     ob.vmCount++;
+    // }
+    return ob;
+}
+
+/**
+ * Define a reactive property on an Object.
+ */
+function defineReactive$$1(
+  obj,
+  key,
+  val,
+  customSetter
+) {
+    // var dep = new Dep();
+
+    var property = Object.getOwnPropertyDescriptor(obj, key);
+
+    if (property && property.configurable === false) {
+        return;
+    }
+
+  // cater for pre-defined getter/setters
+    var getter = property && property.get;
+    var setter = property && property.set;
+
+    // var childOb = observe(val);
+    observe(val);
+
+    Object.defineProperty(obj, key, {
+        enumerable: true,
+        configurable: true,
+        get: function reactiveGetter() {
+            var value = getter ? getter.call(obj) : val;
+
+            // if (Dep.target) {
+            //     dep.depend();
+            //     if (childOb) {
+            //         childOb.dep.depend();
+            //     }
+            //     if (Array.isArray(value)) {
+            //         dependArray(value);
+            //     }
+            // }
+            return value;
+        },
+        set: function reactiveSetter(newVal) {
+            var value = getter ? getter.call(obj) : val;
+      /* eslint-disable no-self-compare */
+
+            if (newVal === value || (newVal !== newVal && value !== value)) {
+                return;
+            }
+      /* eslint-enable no-self-compare */
+            if (customSetter) {
+                customSetter();
+            }
+            if (setter) {
+                setter.call(obj, newVal);
+            } else {
+                val = newVal;
+            }
+            // childOb = observe(newVal);
+            observe(newVal);
+            console.log('Set Value: Before=',  value, 'after', newVal);
+        }
+    });
+}
+/**
+ * Walk through each property and convert them into
+ * getter/setters. This method should only be called when
+ * value type is Object.
+ */
+Observer.prototype.walk = function walk(obj) {
+    var keys = Object.keys(obj);
+    var i;
+
+    for (i = 0; i < keys.length; i++) {
+        defineReactive$$1(obj, keys[i], obj[keys[i]]);
+    }
+};
+/**
+ * Observe a list of Array items.
+ */
+Observer.prototype.observeArray = function (items) {
+    var i, l;
+
+    for (i = 0, l = items.length; i < l; i++) {
+        observe(items[i]);
+    }
+};
+
+// function _watchObject() {
+//
+// }
+
 function traverseView(view, isRoot, callback) {
     if (!view) {
         return;
@@ -336,6 +598,9 @@ function Component(config) {
         var _viewUI;
 
         _currentPage = new Target();
+        _observeProperties.forEach(function (attrName) {
+            observe(_currentPage[attrName]);
+        });
         if (config.template) {
             defineReadOnlyProp(Target.prototype, '__heroRender', config.template);
             _viewUI = _currentPage.__heroRender(_currentPage);
@@ -365,7 +630,7 @@ function Component(config) {
 
 function Observable(target, name, descriptor) {
     checkValidUsage('Observable', descriptor);
-
+    _observeProperties.push(name);
     descriptor.writable = false;
     return descriptor;
 }
