@@ -96,7 +96,6 @@ function sendMessage(data) {
     }
 }
 
-
 function loop() {}
 
 function outObjects() {
@@ -260,9 +259,39 @@ function getDeviceType() {
     return _deviceType;
 }
 
+function traverseView(view, isRoot, callback) {
+    if (!view) {
+        return;
+    }
+    if (view.name) {
+        callback && callback(view);
+    }
+
+    var attrName = isRoot ? 'views' : 'subViews';
+
+    if (view[attrName]) {
+        view[attrName].forEach(function (subV) {
+            traverseView(subV, false, callback);
+        });
+    }
+}
+function _generate$Refs(view) {
+    if (!view) {
+        _currentPage.$refs = null;
+        return;
+    }
+    var $refs = {};
+
+    $refs.$root = view;
+
+    traverseView(view, true, function (viewWithName) {
+        $refs[viewWithName.name] = viewWithName;
+    });
+    return $refs;
+}
 var _rootElementVariable;
 
- /**
+/**
   * @description
   * Mark current `class` as a component which cause an instance of the class created automatically.
   ```javascript
@@ -304,15 +333,20 @@ function Component(config) {
             config = emptyObject;
         }
 
+        var _viewUI;
+
+        _currentPage = new Target();
         if (config.template) {
             defineReadOnlyProp(Target.prototype, '__heroRender', config.template);
+            _viewUI = _currentPage.__heroRender(_currentPage);
+            resetUI(_viewUI);
+            _currentPage.$refs = _generate$Refs(_viewUI);
         } else if (config.view) {
             defineProp(Target, '__defaultViews', config.view);
             resetUI(config.view);
         }
         var logo;
 
-        _currentPage = new Target();
         _rootElementVariable = _currentPage.__heroRender._viewName;
         if (getDeviceType() === 'ANDROID' || getDeviceType() === 'IOS') {
             bootstrap();
@@ -328,7 +362,14 @@ function Component(config) {
         }
     };
 }
- /**
+
+function Observable(target, name, descriptor) {
+    checkValidUsage('Observable', descriptor);
+
+    descriptor.writable = false;
+    return descriptor;
+}
+/**
   * @description
   * Callback method before page will appear.
   ```javascript
@@ -646,10 +687,10 @@ function _diff(_differences, before, after, template) {
 
         template.childrens.forEach(function (childTempate) {
             beforeChildElements = before[childAttr].filter(function (element) {
-                return element.class === childTempate.key;
+                return element[_currentPage.__heroRender._className] === childTempate.key;
             });
             afterChildElements = after[childAttr].filter(function (element) {
-                return element.class === childTempate.key;
+                return element[_currentPage.__heroRender._className] === childTempate.key;
             });
 
             var bLen, aLen, idx, iLen;
@@ -716,6 +757,7 @@ module.exports = {
     Boot: Boot,
     Message: Message,
     ViewWillAppear: ViewWillAppear,
+    Observable: Observable,
     ViewWillDisappear: ViewWillDisappear,
     BeforeMessage: BeforeMessage,
     AfterMessage: AfterMessage,
