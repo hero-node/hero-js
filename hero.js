@@ -4,6 +4,7 @@ var _outObjects = '';
 var _currentPage = null;
 var _observeProperties = [];
 var _rootElementVariable;
+var _$oot = '$root';
 
 window.ui = {};
 window.ui2Data = {};
@@ -122,6 +123,9 @@ function onMessage(data) {
 
     if (data.name && data.value) {
         window.ui2Data['_' + data.name] = data.value;
+        if (_currentPage.$refs && _currentPage.$refs[data.name]) {
+            _currentPage.$refs[data.name].text = data.value;
+        }
     }
     Hero.__beforeMessage.call(_currentPage, data);
     Hero.__messageList.forEach(function (expressions) {
@@ -395,7 +399,6 @@ function diff(before, after, template) {
     var _differences = [];
 
     _diff(_differences, before, after, template);
-    console.log(_differences);
     return _differences;
 }
 
@@ -543,6 +546,36 @@ var Observer = function Observer(value) {
     }
 };
 
+function traverseView(view, isRoot, callback) {
+    if (!view) {
+        return;
+    }
+    if (view.name) {
+        callback && callback(view);
+    }
+
+    var attrName = isRoot ? 'views' : 'subViews';
+
+    if (view[attrName]) {
+        view[attrName].forEach(function (subV) {
+            traverseView(subV, false, callback);
+        });
+    }
+}
+function _generate$Refs(view) {
+    if (!view) {
+        _currentPage.$refs = null;
+        return;
+    }
+    var $refs = {};
+
+    $refs[_$oot] = view;
+
+    traverseView(view, true, function (viewWithName) {
+        $refs[viewWithName.name] = viewWithName;
+    });
+    return $refs;
+}
 /**
  * Attempt to create an observer instance for a value,
  * returns the new observer if successfully observed,
@@ -578,8 +611,6 @@ function defineReactive$$1(
   val,
   customSetter
 ) {
-    // var dep = new Dep();
-
     var property = Object.getOwnPropertyDescriptor(obj, key);
 
     if (property && property.configurable === false) {
@@ -590,25 +621,13 @@ function defineReactive$$1(
     var getter = property && property.get;
     var setter = property && property.set;
 
-    // var childOb = observe(val);
     observe(val);
 
     Object.defineProperty(obj, key, {
         enumerable: true,
         configurable: true,
         get: function reactiveGetter() {
-            var value = getter ? getter.call(obj) : val;
-
-            // if (Dep.target) {
-            //     dep.depend();
-            //     if (childOb) {
-            //         childOb.dep.depend();
-            //     }
-            //     if (Array.isArray(value)) {
-            //         dependArray(value);
-            //     }
-            // }
-            return value;
+            return getter ? getter.call(obj) : val;
         },
         set: function reactiveSetter(newVal) {
             var value = getter ? getter.call(obj) : val;
@@ -617,7 +636,6 @@ function defineReactive$$1(
             if (newVal === value || (newVal !== newVal && value !== value)) {
                 return;
             }
-      /* eslint-enable no-self-compare */
             if (customSetter) {
                 customSetter();
             }
@@ -626,11 +644,27 @@ function defineReactive$$1(
             } else {
                 val = newVal;
             }
-            // childOb = observe(newVal);
             observe(newVal);
+            var newUI = _currentPage.__heroRender(_currentPage);
 
-            console.log('Set Value: Before=',  value, 'after', newVal);
-            diff(window.ui, _currentPage.__heroRender(_currentPage), _currentPage.__heroRender._template);
+            // console.log('Set Value: Before=',  value, 'after', newVal);
+            var differences = diff(window.ui, newUI, _currentPage.__heroRender._template);
+            var _refs, p, _value;
+
+            if (differences && differences.length) {
+                resetUI(newUI);
+                _refs = _generate$Refs(newUI);
+
+                if (_currentPage.$refs) {
+                    for (p in _currentPage.$refs) {
+                        if (p !== _$oot && hasOwn(_currentPage.$refs, p)) {
+                            _value = _currentPage.$refs[p].text;
+                          // _refs[]
+                        }
+                    }
+                }
+                console.log(differences);
+            }
         }
     });
 }
@@ -661,37 +695,6 @@ Observer.prototype.observeArray = function (items) {
 // function _watchObject() {
 //
 // }
-
-function traverseView(view, isRoot, callback) {
-    if (!view) {
-        return;
-    }
-    if (view.name) {
-        callback && callback(view);
-    }
-
-    var attrName = isRoot ? 'views' : 'subViews';
-
-    if (view[attrName]) {
-        view[attrName].forEach(function (subV) {
-            traverseView(subV, false, callback);
-        });
-    }
-}
-function _generate$Refs(view) {
-    if (!view) {
-        _currentPage.$refs = null;
-        return;
-    }
-    var $refs = {};
-
-    $refs.$root = view;
-
-    traverseView(view, true, function (viewWithName) {
-        $refs[viewWithName.name] = viewWithName;
-    });
-    return $refs;
-}
 
 /**
   * @description
@@ -743,6 +746,7 @@ function Component(config) {
         });
         if (config.template) {
             defineReadOnlyProp(Target.prototype, '__heroRender', config.template);
+            _rootElementVariable = _currentPage.__heroRender._viewName;
             _viewUI = _currentPage.__heroRender(_currentPage);
             resetUI(_viewUI);
             _currentPage.$refs = _generate$Refs(_viewUI);
@@ -752,7 +756,6 @@ function Component(config) {
         }
         var logo;
 
-        _rootElementVariable = _currentPage.__heroRender._viewName;
         if (getDeviceType() === 'ANDROID' || getDeviceType() === 'IOS') {
             bootstrap();
         } else {
