@@ -57,27 +57,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
       },
       findViewByname:function(name,root){
-        if (!name) {
-          return undefined;
-        };
-        if (name == root.id) {
-          return root;
-        };
-        if(root.$ && root.$.heroContent){
-          for (var i = 0; i < root.$.heroContent.children.length; i++) {
-            var v = this.findViewByname(name,root.$.heroContent.children[i]);
-            if (v) {
-              return v;
-            };
-          };
-        }
-        for (var i = 0; i < root.children.length; i++) {
-          var v = this.findViewByname(name,root.children[i]);
-          if (v) {
-            return v;
-          };
-        };
-        return undefined;
+        return root.querySelector('#'+name);
       },
       ui2Data:function(observeUI){
           if (Array.isArray(observeUI)) {
