@@ -233,6 +233,8 @@ function defineReadOnlyProp(obj, name, value) {
 
 function resetUI(ui) {
     window.ui = ui;
+    _currentPage.$refs = _generate$Refs(ui);
+    observe(_currentPage.$refs);
 }
 var emptyObject = { view: '' };
 
@@ -570,10 +572,11 @@ function _generate$Refs(view) {
     var $refs = {};
 
     $refs[_$oot] = view;
-
-    traverseView(view, true, function (viewWithName) {
-        $refs[viewWithName.name] = viewWithName;
-    });
+    if (typeof view === 'object') {
+        traverseView(view, true, function (viewWithName) {
+            $refs[viewWithName.name] = viewWithName;
+        });
+    }
     return $refs;
 }
 /**
@@ -633,6 +636,7 @@ function defineReactive$$1(
             var value = getter ? getter.call(obj) : val;
       /* eslint-disable no-self-compare */
 
+            console.log('Set Value:', newVal, value);
             if (newVal === value || (newVal !== newVal && value !== value)) {
                 return;
             }
@@ -749,7 +753,6 @@ function Component(config) {
             _rootElementVariable = _currentPage.__heroRender._viewName;
             _viewUI = _currentPage.__heroRender(_currentPage);
             resetUI(_viewUI);
-            _currentPage.$refs = _generate$Refs(_viewUI);
         } else if (config.view) {
             defineProp(Target, '__defaultViews', config.view);
             resetUI(config.view);
