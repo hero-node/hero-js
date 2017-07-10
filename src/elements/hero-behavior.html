@@ -96,6 +96,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
         return {w:window.innerWidth,h:window.innerHeight};
       },
+      merge:function(o1, o2) {
+        for (var key in o2) {
+            o1[key] = o2[key];
+        }
+        return o1;
+      },
       ready:function(){
       },
       on: function(json) {
@@ -107,11 +113,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           if (!this.json) {
             this.json = json;
           }else{
-            if (this.merge) {
-              this.merge(this.json,json);
-            }else{
-              APP.merge(this.json,json);
-            }
+            this.merge(this.json,json);
           }
           if (json.name) {
             this.id = json.name;
