@@ -107,7 +107,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           if (!this.json) {
             this.json = json;
           }else{
-            APP.merge(this.json,json);
+            if (this.merge) {
+              this.merge(this.json,json);
+            }else{
+              APP.merge(this.json,json);
+            }
           }
           if (json.name) {
             this.id = json.name;
