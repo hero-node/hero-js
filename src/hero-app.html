@@ -526,12 +526,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (this.$.pages.selectedItem) {
           this.$.pages.selectedItem.viewWillDisappear();
         };
-        if (option != 'dissmiss' && option != 'back' && option != 'rootBack' && option != 'load') {
+        if (!history.state || history.state.state === page || option === 'load') {
+          history.replaceState({state:page},pageElement,"?state="+page);
+        }else if (option != 'dissmiss' && option != 'back' && option != 'rootBack' && option != 'load') {
           history.pushState({state:page}, pageElement, "?state="+page);
         };
-        if (history.state && history.state.state === page || option === 'load') {
-          history.replaceState({state:page},pageElement,"?state="+page);
-        }
         if (!this.contain(this.pageStack,pageElement)) {
           this.pageStack.push(pageElement);
         }else{
