@@ -134,6 +134,17 @@ HeroLabelBehavior ={
         };
       },1000);
     };
+    if (json.wAuto) {
+      this.$.heroContent.style.width = 'inherit';
+      this.async(function(){
+        var w = this.$.heroContent.getBoundingClientRect().width;
+        if (w>0) {
+          this.oon({frame:{x:parseFloat(this.$.heroContent.style.left)+'',y:parseFloat(this.$.heroContent.style.top)+'',w:w+'',h:parseFloat(this.$.heroContent.style.height)+''}});
+        };
+      },1000);
+    };
+
+    
   }
 }
 </script>

@@ -96,12 +96,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
         return {w:window.innerWidth,h:window.innerHeight};
       },
-      merge:function(o1, o2) {
-        for (var key in o2) {
-            o1[key] = o2[key];
-        }
-        return o1;
-      },
       ready:function(){
       },
       on: function(json) {
@@ -113,7 +107,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           if (!this.json) {
             this.json = json;
           }else{
-            this.merge(this.json,json);
+            APP.merge(this.json,json);
           }
           if (json.name) {
             this.id = json.name;
@@ -176,6 +170,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   var ctop = parseFloat(heroContent.style.top) + h + offset;
                   this.$.heroContent.style.top = ctop + 'px';
                   this.top = ctop;
+                  this.json.frame.y=ctop+'';
+                  yInt = ctop;
                 }
                 if (!top.heroLayoutListenners) { top.heroLayoutListenners = []};
                 if (!APP.contain(top.heroLayoutListenners,this)) {
@@ -195,6 +191,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                   var ctop = parseFloat(heroContent.style.left) + w + offset;
                   this.$.heroContent.style.left = ctop + 'px';
                   this.left = ctop;
+                  this.json.frame.x=ctop+'';
+                  xInt = ctop;
                 }
                 if (!top.heroLayoutListenners) { top.heroLayoutListenners = []};
                 if (!APP.contain(top.heroLayoutListenners,this)) {
@@ -217,6 +215,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 this.parent.oon({frame:frame});
               };
             };
+            if (this.json.center) {
+              var frame = this.json.frame || {};
+              if (!this.json.frame || !this.json.frame.p) {
+                frame.p = {w:window.screen.width,h:window.screen.height};
+              };
+              var w = this.$.heroContent.style.width;
+              var h = this.$.heroContent.style.height;
+              var x = this.json.center.x;
+              var y = this.json.center.y;
+              if (x) {
+                var wInt = parseFloat(w);
+                var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
+                this.$.heroContent.style.left=xInt-wInt/2+'px';
+              };
+              if (y) {
+                var hInt = parseFloat(h);
+                var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
+                this.$.heroContent.style.top = yInt - hInt/2 + 'px';
+              };
+            };
             if (this.heroLayoutListenners) {
               for (var i = 0; i < this.heroLayoutListenners.length; i++) {
                 var o = this.heroLayoutListenners[i];
@@ -225,26 +243,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             };
         }
         
-        if (json.center) {
-          if (!json.frame || !json.frame.p) {
-            var frame = json.frame || {};
-            frame.p = {w:window.screen.width,h:window.screen.height};
-          };
-          var w = this.$.heroContent.style.width;
-          var h = this.$.heroContent.style.height;
-          var x = json.center.x;
-          var y = json.center.y;
-          if (x) {
-            var wInt = parseFloat(w);
-            var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
-            this.$.heroContent.style.left=xInt-wInt/2+'px';
-          };
-          if (y) {
-            var hInt = parseFloat(h);
-            var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
-            this.$.heroContent.style.top = yInt - hInt/2 + 'px';
-          };
-        };
         if (json.alpha) {
           this.$.heroContent.style.opacity = json.alpha;
         };
