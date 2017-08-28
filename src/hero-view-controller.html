@@ -247,7 +247,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 if (loading) {
                   loading.oon({show:false});
                 };
-                var showing=document.querySelector('hero-dialog');
+                var showing=document.querySelector('hero-dialog')||document.querySelector('hero-loading') ;
                 if (showing) {
                   showing.parentElement.removeChild(showing);
                 };
@@ -255,7 +255,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               else if(command.substring(0,5) === 'goto:'){
                 var url = command.replace('goto:','');
                 if(url.substring(0,3) == 'tel'){
-                  this.on({command:{show:{title:'拨打电话'+url}}});
+                  // this.on({command:{show:{title:'拨打电话'+url}}});
+                  window.location.href = 'tel://'+url;
                 }else{
                   APP.gotoPage(url);
                 }

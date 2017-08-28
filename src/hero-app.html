@@ -337,6 +337,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
       },
       page2Element:function(page){
+        if (page.search(/pageName=/)>0) {
+          var pageElement = page.split('pageName=')[1];
+          pageElement = pageElement.search(/-/)>0?pageElement:'hero-'+pageElement;
+          return pageElement;
+        };
         var pageElement = page.replace('_','-');
         if (page.search(/.html/) > 0) {
           pageElement = pageElement.split('/').pop();
@@ -346,9 +351,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           pageElement = pageElement.replace('.html','');
           pageElement = pageElement.search(/-/)>0?pageElement:'hero-'+pageElement;
         }else{
-          pageElement = pageElement.replace('http://','');
-          pageElement = pageElement.replace('https://','');
-          pageElement = pageElement.replace(/\./g,'-');
+          // pageElement = pageElement.replace('http://','');
+          // pageElement = pageElement.replace('https://','');
+          // pageElement = pageElement.replace(/\./g,'-');
         }
         return pageElement;
       },
@@ -356,12 +361,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         window.APP = this;
         window.addEventListener('popstate', function(e) {
           if (e.state) {
-            window.APP.gotoPage(e.state.state,'back');
+            window.APP.gotoPage(e.state.state||e.state.heropage ,'back');
           }
         });
         this.$.backBtn.controller = this;
         this.$.backBtn.oon({image:'back.png',click:{goBack:true}});
-        this.$.rightBtn.oon({title:'right',titleColor:'ffffff'});
+        this.$.rightBtn.oon({title:' ',titleColor:'ffffff'});
         // this.$.cover.style.animation = 'coverGo 2s';
         var that = this;
         // setTimeout(function(){
@@ -526,10 +531,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (this.$.pages.selectedItem) {
           this.$.pages.selectedItem.viewWillDisappear();
         };
-        if (!history.state || history.state.state === page || option === 'load') {
-          history.replaceState({state:page},pageElement,"?state="+page);
+        if (!history.state || (history.state.state || history.state.heropage) === page || option === 'load') {
+          history.replaceState({heropage:page},pageElement,"?heropage="+page);
         }else if (option != 'dissmiss' && option != 'back' && option != 'rootBack' && option != 'load') {
-          history.pushState({state:page}, pageElement, "?state="+page);
+          history.pushState({heropage:page}, pageElement, "?heropage="+page);
         };
         if (!this.contain(this.pageStack,pageElement)) {
           this.pageStack.push(pageElement);

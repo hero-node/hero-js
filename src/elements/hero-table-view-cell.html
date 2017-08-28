@@ -75,12 +75,21 @@ HeroTableViewCellBehavior ={
     if (json.icon) {
       this.$.icon.style.display = 'block';
       this.$.icon.src = json.icon;
-      if (json.size) {
-        this.$.icon.style.top = ((json.height?json.height:44)-json.size)/2+'px';
-        this.$.icon.style.width = json.size+'px';
-        this.$.icon.style.height = json.size+'px';
-      };
-      this.$.title.style.left = 15+8+parseFloat(this.$.icon.style.width)+'px';
+      this.$.icon.style.top = '5px';
+      this.$.icon.style.left = '10px';
+      this.$.icon.style.width = json.height-10+'px';
+      this.$.icon.style.height = json.height-10+'px';
+      this.$.title.style.left = 15+8+json.height-10+'px';
+      this.$.title.style.top = '0px';
+      this.$.title.style.height = json.height/2+'px';
+      this.$.title.style.lineHeight = json.height/2+'px';
+
+      this.$.other.style.top = json.height/2+'px';
+      this.$.other.style.left = 15+8+json.height-10+'px';
+      this.$.other.style.height = json.height/2+'px';
+      this.$.other.style.lineHeight = '';
+      this.$.other.style.color = '#aaa';
+
     };
   },
   onTap:function(){
@@ -119,6 +128,9 @@ HeroTableViewCellBehavior ={
     }
     #title{
       left: 15px;
+    }
+    #other{
+      font-size: 14px;
     }
     #bottomLine{
       left: 15px;
