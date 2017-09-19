@@ -1,479 +1,404 @@
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else if(typeof exports === 'object')
-		exports["Hero"] = factory();
-	else
-		root["Hero"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
-/******/ 			return installedModules[moduleId].exports;
-
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			exports: {},
-/******/ 			id: moduleId,
-/******/ 			loaded: false
-/******/ 		};
-
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-
-
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(1);
-
-
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-	/**
-	 * Pants module.
-	 * @module hero-js/Hero
-	 */
-
-	 /**
-	  * Solves equations of the form a * x = b
-	  * @description
-	  ```
-	  * import { Component, Boot } from 'hero-js';
-	  *
-	  * var defaultUIViews = {
-	  *   version:0,
-	  *   backgroundColor:'ffffff',
-	  *   nav:{
-	  *     title:'Home Page',
-	  *     navigationBarHiddenH5:true,
-	  *   },
-	  *   views:
-	  *   [
-	  *     {
-	  *       'class':'HeroWebView',
-	  *       name:'webview',
-	  *       frame:{w:'1x',h:'1x'}
-	  *     },
-	  *   ]
-	  * }
-	  * &#64Component({
-	  *   view: defaultUIViews
-	  * })
-	  * export class DecoratePage {
-	  *   &#64Boot
-	  *   boot(){
-	  *     console.log('Bootstrap Successfully!')
-	  *   }
-	  * }
-	  ```
-	  */
-
-	var Hero = window.Hero = {};
-	var _outObjects = '';
-	var _currentPage = null;
-
-	window.ui = {};
-	window.ui2Data = {};
-
-	var _deviceType = 'PC';
-
-	function _mergeAttributes(o1, o2) {
-	    var index;
-	    var keys = Object.keys(o2);
-
-	    for (index = 0; index < keys.length; index++) {
-	        o1[keys[index]] = o2[keys[index]];
-	    }
-	    return o1;
-	}
-
-	function view2Data(observeUI) {
-	    var i;
-
-	    if (observeUI instanceof Array) {
-	        for (i = 0; i < observeUI.length; i++) {
-	            view2Data(observeUI[i]);
-	        }
-	    } else if (observeUI.subViews) {
-	        view2Data(observeUI.subViews);
-	    }
-	    if (observeUI.name) {
-	        window.ui2Data['_' + observeUI.name] = '';
-	        window.ui2Data.__defineSetter__(observeUI.name, function (v) {
-	            window.ui2Data['_' + observeUI.name] = v;
-	            var data = { name: observeUI.name };
-
-	            if (typeof v == 'string') {
-	                data.text = v;
-	            } else {
-	                _mergeAttributes(data, v);
-	                Object.keys(v).forEach(function (key) {
-	                    data[key] = v[key];
-	                });
-	            }
-	            Hero.out({ datas: data });
-	        });
-	        window.ui2Data.__defineGetter__(observeUI.name, function () {
-	            return window.ui2Data['_' + observeUI.name];
-	        });
-
-	    }
-	}
-
-
-	/**
-	 * JS代码往组件发送视图更新数据
-	 * @param {Object} data - 需要更新的视图数据
-	 */
-	function sendMessage(data) {
-	    var iframe;
-
-	    if (_deviceType === 'IOS') {
-	        _outObjects = data;
-	        iframe = document.createElement('iframe');
-	        iframe.setAttribute('src', 'hero://ready');
-
-	        document.documentElement.appendChild(iframe);
-	        iframe.parentNode.removeChild(iframe);
-	        iframe = null;
-
-	    } else if (_deviceType === 'IOS8') {
-	        window.webkit.messageHandlers.native.postMessage(data);
-	    } else if (_deviceType === 'ANDROID') {
-	        if (typeof data === 'object') {
-	            data = JSON.stringify(data);
-	        }
-	        window.native.on(data);
-	    } else {
-	        window.Hero.page.on(data);
-	    }
-	}
-
-
-	function loop() {}
-
-	function outObjects() {
-	    var messages = '';
-
-	    if (_outObjects) {
-	        if (typeof _outObjects === 'string') {
-	            messages = _outObjects;
-	        } else {
-	            messages = JSON.stringify(_outObjects);
-	        }
-	        _outObjects = '';
-	    }
-
-	    return messages;
-	}
-
-	// eslint-disable-next-line
-	function __executeExpression(expression, data, page) {
-	    // eslint-disable-next-line
-	    return (function (expression, __data, __page, window, Hero) {
-	        // eslint-disable-next-line
-	        var value = eval('expression');
-	        // eslint-disable-next-line
-	        value = eval(value);
-	        return value;
-	    })(expression, data, page, null, null);
-	}
-
-	function onMessage(data) {
-	    if (typeof (data) === 'string') {
-	        data = JSON.parse(data);
-	    }
-
-	    if (data.name && data.value) {
-	        window.ui2Data['_' + data.name] = data.value;
-	    }
-	    Hero.__beforeMessage.call(_currentPage, data);
-	    Hero.__messageList.forEach(function (expressions) {
-	        var matchCondition = false;
-
-	        if (typeof expressions.condition === 'function') {
-	            matchCondition = expressions.condition.call(_currentPage, data);
-	        } else if (typeof expressions.condition === 'boolean') {
-	            matchCondition = expressions.condition;
-	        }
-
-	        if (matchCondition) {
-	            expressions.callback.call(_currentPage, data);
-	        }
-	    });
-	    Hero.__afterMessage.call(_currentPage, data);
-	}
-	/**
-	 * 定义JS代码在执行消息回调方法之前需要执行的方法，参数同@Message
-	 */
-	function BeforeMessage(target, name, descriptor) {
-	    Hero.__beforeMessage = target[name];
-	    // Only one callback method
-	    descriptor.writable = false;
-	    return descriptor;
-	}
-	/**
-	 * 定义JS代码在执行消息回调方法成功后需要执行的方法，参数同@Message
-	 */
-	function AfterMessage(target, name, descriptor) {
-	    Hero.__afterMessage = target[name];
-	    // Only one callback method
-	    descriptor.writable = false;
-	    return descriptor;
-	}
-
-	function definePublicFreezeProp(obj, name, value) {
-	    Object.defineProperty(obj, name, {
-	        enumerable: true,
-	        configurable: false,
-	        writable: false,
-	        value: value
-	    });
-	}
-	function defineProp(obj, name, value, isEnumerable) {
-	    Object.defineProperty(obj, name, {
-	        enumerable: !!isEnumerable,
-	        configurable: false,
-	        writable: true,
-	        value: value
-	    });
-	}
-	function defineReadOnlyProp(obj, name, value) {
-	    Object.defineProperty(obj, name, {
-	        enumerable: false,
-	        configurable: false,
-	        writable: false,
-	        value: value
-	    });
-	}
-
-
-	function resetUI(ui) {
-	    window.ui = ui;
-	}
-	var emptyObject = {};
-
-	function bootstrap() {
-
-	    if (window.ui !== 'blank') {
-	        sendMessage({ ui: window.ui });
-	    }
-
-	    if (window.ui && window.ui.views) {
-	        view2Data(window.ui.views);
-	    }
-
-	    // var isRunInApp = (_deviceType === 'IOS' || _deviceType === 'ANDROID');
-
-	    // setTimeout(function () {
-	    Hero.__boot.call(_currentPage);
-	    // }, isRunInApp ? 0 : 500);
-	}
-
-	(function () {
-	    var ua = navigator.userAgent.toLowerCase();
-
-	    if (ua.indexOf('hero-ios') !== -1) {
-	        _deviceType = 'IOS';
-	    } else if (ua.indexOf('hero-android') !== -1) {
-	        _deviceType = 'ANDROID';
-	    } else if (ua.indexOf('micromessenger') !== -1) {
-	        _deviceType = 'WECHAT';
-	    }
-	    return _deviceType;
-	})();
-
-	function getDeviceType() {
-	    return _deviceType;
-	}
-
-	/**
-	 * 定义当前页面为一个组件，所指定的类将会被自动创建一个实例
-	 * @param {object} config - 可以传入view参数，指定当前页面初始化时的界面数据
-	 *
-	 */
-	function Component(config) {
-	    return function (Target) {
-	        if (!config) {
-	            config = emptyObject;
-	        }
-	        if (config.view) {
-	            defineProp(Target, '__defaultViews', config.view);
-	            resetUI(config.view);
-	        }
-	        _currentPage = new Target();
-	        if (getDeviceType() !== 'PC') {
-	            bootstrap();
-	        }
-	        if (typeof config === 'object') {
-	            defineReadOnlyProp(Hero, '__heroConfig', config);
-	        } else {
-	            console.warn('Invalid Parameters: Parameters in @Component should be Object');
-	        }
-	    };
-	}
-
-	/**
-	 * 定义当前页面在渲染之前的回调
-	 */
-	function ViewWillAppear(target, name, descriptor) {
-	    Hero.__viewWillAppear = target[name];
-	    // Only one callback method
-	    descriptor.writable = false;
-	    return descriptor;
-	}
-
-	/**
-	 * 定义当前页面在离开之前的回调
-	 */
-	function ViewWillDisappear(target, name, descriptor) {
-	    Hero.__viewWillDisppear = target[name];
-	    // Only one callback method
-	    descriptor.writable = false;
-	    return descriptor;
-	}
-
-	/**
-	 * 定义当前页面启动时的回调方法
-	 */
-	function Boot(target, name, descriptor) {
-	    Hero.__boot = target[name];
-	    // Only one boot callback method
-	    descriptor.writable = false;
-	    return descriptor;
-	}
-
-	/**
-	 * 定义Native原生组件往JS代码发送消息时的回调方法，方法中的第一个参数为具体的消息内容
-	 * 如@Message('__data && __data.type="myMessage"')
-	 * @param {string} expressions - JS表达式，当该表达式执行结果为true时，会进入该回调，否则不进入该回调。
-	 *  表达式中可以使用__data来引用该消息内容
-	 */
-	function Message(condition) {
-
-	    var validCondition = true;
-
-	    if (typeof condition !== 'function' && typeof condition !== 'undefined') {
-	        console.warn('Invalid Usage of @Message(' + condition + ')');
-	        validCondition = false;
-	    }
-
-	    return function (target, name, descriptor) {
-	        if (validCondition) {
-	            Hero.__messageList.push({
-	                condition: condition ? condition : true,
-	                callback: target[name]
-	            });
-	        }
-	        return descriptor;
-	    };
-	}
-
-	function getUI() {
-	    return window.ui;
-	}
-
-	/**
-	 *
-	 * @return {object} 返回当前页面中的每个元素及组件的状态数据
-	 */
-	function getState() {
-	    return window.ui2Data;
-	}
-	/**
-	 * 设置当前页面中的元素及组件的状态
-	 * @return {object} 对象中的key对应元素组件，value为更新后的值
-	 */
-	function setState(status) {
-	    if (!status) {
-	        return;
-	    }
-	    if (typeof status !== 'object') {
-	        return;
-	    }
-	    Object.keys(status).forEach(function (key) {
-	        window.ui2Data[key] = status[key];
-	    });
-	}
-
-
-	function __viewWillDisppearCallback() {
-	    Hero.__viewWillDisppear.call(_currentPage);
-	}
-	function __viewWillAppearCallback() {
-	    Hero.__viewWillDisppear.call(_currentPage);
-	}
-
-	defineProp(Hero, '__heroConfig', {});
-	defineProp(Hero, '__boot', loop);
-	defineProp(Hero, '__viewWillDisppear', loop);
-	defineProp(Hero, '__viewWillAppear', loop);
-
-	definePublicFreezeProp(Hero, '__viewWillDisppearCallback', __viewWillDisppearCallback);
-	definePublicFreezeProp(Hero, '__viewWillAppearCallback', __viewWillAppearCallback);
-
-	defineProp(Hero, '__beforeMessage', loop);
-	defineProp(Hero, '__afterMessage', loop);
-
-	defineReadOnlyProp(Hero, '__messageList', []);
-
-	definePublicFreezeProp(Hero, 'boot', bootstrap);
-	// definePublicFreezeProp(Hero, 'bootstrap', bootstrap);
-	definePublicFreezeProp(Hero, 'getState', getState);
-	definePublicFreezeProp(Hero, 'getUI', getUI);
-	definePublicFreezeProp(Hero, 'in', onMessage);
-	definePublicFreezeProp(Hero, 'out', sendMessage);
-	definePublicFreezeProp(Hero, 'outObjects', outObjects);
-	definePublicFreezeProp(Hero, 'resetUI', resetUI);
-	definePublicFreezeProp(Hero, 'setState', setState);
-	definePublicFreezeProp(Hero, 'updateView', view2Data);
-	definePublicFreezeProp(Hero, 'getDeviceType', getDeviceType);
-
-	module.exports = {
-	    Component: Component,
-	    Boot: Boot,
-	    Message: Message,
-	    ViewWillAppear: ViewWillAppear,
-	    ViewWillDisappear: ViewWillDisappear,
-	    BeforeMessage: BeforeMessage,
-	    AfterMessage: AfterMessage,
-	    Hero: Hero
-	};
-
-
-/***/ }
-/******/ ])
-});
-;
+/*
+  hero.js
+  hero
+
+  Created by gpliu on 14/10/16.
+  Copyright (c) 2015年 GPLIU. All rights reserved.
+*/
+
+var xhr = function () {
+    var ajax = function  () {
+        return ('XMLHttpRequest' in window) ? function  () {
+                return new XMLHttpRequest();
+            } : function  () {
+            return new ActiveXObject("Microsoft.XMLHTTP");
+        }
+    }(),
+    formatData= function (fd) {
+        var res = '';
+        for(var f in fd) {
+            if (fd[f]) {
+                res += f+'='+fd[f]+'&';
+            };
+        }
+        return res.slice(0,-1);
+    },
+    AJAX = function(ops) {
+        var
+        root = this,
+        req = ajax();
+        root.url = ops.url;
+        root.contentType = ops.contentType;
+        root.type = ops.type || 'responseText';
+        root.method = ops.method || 'GET';
+        root.async = ops.async || true;
+        root.data = ops.data || {};
+        root.complete = ops.complete || function  () {};
+        root.success = ops.success || function(){};
+        root.error =  ops.error || function (s) { alert(root.url+'->status:'+s+'error!')};
+        root.abort = req.abort;
+        root.timeout = ops.timeout || 30000;
+        root.setData = function  (data) {
+            for(var d in data) {
+                root.data[d] = data[d];
+            }
+        }
+        root.send = function  () {
+            var datastring = formatData(root.data),
+            sendstring,get = false,
+            async = root.async,
+            complete = root.complete,
+            method = root.method,
+            type=root.type;
+            if(method === 'GET') {
+                root.url+='?'+datastring;
+                get = true;
+            }
+            req.timeout = root.timeout;
+            req.open(method,root.url,async);
+
+            if(!get) {
+                if (root.contentType) {
+                    req.setRequestHeader("Content-type",root.contentType);
+                }else{
+                    req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                }
+                sendstring = datastring;
+            }
+            req.onreadystatechange = async ? function  () {
+                // console.log('async true');
+                if (req.readyState ==4){
+                    complete();
+                    if(req.status == 200) {
+                        root.success(req[type]);
+                    } else {
+                        root.error(req.status);
+                    }
+                }
+            } : null;
+            req.send(sendstring);
+            if(!async) {
+                complete();
+                root.success(req[type]);
+            }
+        }
+        root.url && root.send();
+    };
+    return function(ops) {return new AJAX(ops);}
+}();
+
+var ui;
+var ui2Data = {};
+(function () {
+    var w = window;
+    var _deviceType = 'PC';
+    var _initData;
+    var _outObjects;
+    document.onreadystatechange = function () {
+      var state = document.readyState;
+      if (state == 'complete') {
+        _initData = Hero.getInitData();
+        if (_initData.test) {
+            var js = document.createElement('script');
+            js.src = host+window.location.pathname.replace(/html/,'js');
+            document.head.appendChild(js);
+        };
+        if (localStorage.username) {
+            var js = document.createElement('script');
+            js.src = path+'/js/log.js';
+            document.head.appendChild(js);
+        };
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.indexOf("hero-ios") > 0){
+            Hero.setDeviceType('IOS');
+        }else if (ua.indexOf('hero-android') > 0) {
+            Hero.setDeviceType('ANDROID');
+        }else if(ua.indexOf('micromessenger') > 0){
+            Hero.setDeviceType('WECHAT');
+        }else{
+            Hero.setDeviceType('PC');
+            console.log('%cyou are hero !!! ', 'background-image:-webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );color:transparent;-webkit-background-clip: text;font-size:5em;');
+        };
+        if (ui && ui.views) {
+            Hero.ui2Data(ui.views);
+        };
+      }
+    };
+    w.Hero = {
+		c0:'00bc8d',
+		c1:'cccccc',
+		c2:'999999',
+		c3:'666666',
+		c4:'333333',
+		c5:'0f2348',
+		c6:'d70c18',
+		c7:'ffffff',
+		c8:'fbfbfb',
+		c9:'f5f5f5',
+		c10:'f0f0f0',
+		c11:'e4e4e4',
+		c12:'ff5500',
+		c13:'ff7842',
+		c14:'33b653',
+		c15:'ffeeee',
+		c16:'ffb7b7',
+		c17:'f2fffd',
+		c18:'daf8f3',
+		c19:'122f5b',
+		c20:'f9fdfd',
+		c21:'f4fbfb',
+		c02:'009671',
+		c62:'ac0913',
+		c71:'ffffffb2',
+        c75:'ffffff80',
+
+		s0:'56',
+		s6:'45',
+		s9:'33',
+		s1:'28',
+		s7:'20',
+		s2:'18',
+		s3:'16',
+		s4:'14',
+		s5:'12',
+		s8:'11',
+
+        borrower400:'10109188    ',
+        connect:function(card)
+        {
+            io = io.connect();
+            io.on('connect',function(){
+                io.emit('sub', card);
+            });
+            io.on('message',function(data){
+                Hero.out(data);
+            });
+        },
+        disconnect:function()
+        {
+            io.disconnect();
+        },
+        outObjects:function(){
+            if (_outObjects) {
+                var str = '';
+                if (typeof(_outObjects) === 'string') {
+                    str = _outObjects;
+                }else{
+                    str = JSON.stringify(_outObjects);
+                }
+                _outObjects = '';
+                return str;
+            }else{
+                return '';
+            }
+        },
+        out:function(data)
+        {
+            if (_deviceType == 'IOS') {
+                _outObjects = data;
+                var nativeObject = 'hero://' + 'ready';
+                var iframe = document.createElement('iframe');
+                iframe.setAttribute('src', nativeObject);
+                document.documentElement.appendChild(iframe);
+                iframe.parentNode.removeChild(iframe);
+                iframe = null;
+            }else if(_deviceType == 'IOS8'){
+                window.webkit.messageHandlers.native.postMessage(data)
+            }else if(_deviceType == 'ANDROID'){
+                if (typeof(data) === 'object') {
+                    data = JSON.stringify(data);
+                };
+                window.native.on(data);
+            }else{
+                Hero.page.on(data);
+            }
+        },
+        in:function(data){
+            if (typeof(data) === 'string') {
+                data = JSON.parse(data);
+            };
+            if (data.socket) {
+                io.emit('message', data.socket);
+            }else if(data.http){
+                if (data.http.keepError) {
+                } else {
+                    Hero.out({datas:{name:'toast',text:''}});
+                }
+                data = data.http;
+                var api = data.url;
+                var success = data.success;
+                var fail = data.fail;
+				var apiData = data.data;
+				for (var prop in apiData) {
+					apiData[prop] = encodeURIComponent(apiData[prop]);
+				}
+                xhr({
+                    url:(api.search(/ttp/)>0?api:host+api),
+                    async:true,
+                    data:apiData,
+                    contentType:data.contentType,
+                    method:data.method?data.method:'GET',
+                    timeout:data.timeout?data.timeout:30000,
+                    success: function(data){
+                        Hero.out({command:'stopLoading'});
+                        if (typeof(data) === 'string') {
+                            data = JSON.parse(data);
+                        };
+                        if (data.result === 'success') {
+                            if (success) {
+                                success(data);
+                            }else{
+                                data.api = api;
+                                Hero.reloadData(data);
+                            }
+                        }else if(data.result === 'login'){
+                            Hero.out({command:{loginSDK:{action:'login'}}});
+                        } else if (data.result === 'error') {
+                            if (data.errors && data.errors.length > 0) {
+                                if (fail) {
+                                    fail(data);
+                                }else{
+                                    Hero.out({datas:{name:'toast',text:data.errors[0]}});
+                                }
+                            }
+                            else if (data.content) {
+                                if (data.content.apiReturn) {
+                                    if (data.content.apiReturn.ValidationError || data.content.apiReturn.ErrorMessage) {
+                                        if (fail) {
+                                            fail(data);
+                                        }else{
+                                            if (data.content.apiReturn.ValidationError) {
+                                                Hero.out({datas:{name:'toast',text:data.content.apiReturn.ValidationError}});
+                                            } else {
+                                                Hero.out({datas:{name:'toast',text:data.content.apiReturn.ErrorMessage}});
+                                            }
+                                        }
+                                    };
+                                };
+                            };
+                        }else{
+                            Hero.reloadData(data);
+                        }
+                    },
+                    error:function(data){
+                        Hero.out({command:'stopLoading'});
+                        if (fail) {
+                            fail({errors:['网络异常，请检查网络连接后重试']});
+                        }else{
+                            Hero.out({datas:{name:'toast',icon:'error_icon',text:'网络异常，请检查网络连接后重试'}});
+                        }
+                    }
+                });
+            }else{
+                if(data.name && data.value){
+                    ui2Data['_'+data.name] = data.value;
+                }
+                Hero.global_events(data);
+                Hero.special_logic(data);
+            };
+        },
+        special_logic:function(){
+            //需要被各个页面重写的方法
+        },
+        global_events: function() {
+            //
+        },
+        boot:function(){
+            //需要被各个页面重写的方法
+        },
+        reloadData:function(){
+            //需要被各个页面重写的方法
+        },
+        deviceType:function()
+        {
+            return _deviceType;
+        },
+        setDeviceType:function(deviceType)
+        {
+            _deviceType = deviceType;
+            if (ui === undefined) {
+                ui = err_ui;
+            };
+            if (ui !== 'blank') {
+                Hero.out({ui:ui});
+            };
+            if(_deviceType === 'IOS'){
+                Hero.boot(_initData);
+            }else if(_deviceType === 'ANDROID'){
+                Hero.boot(_initData);
+            }else{
+                setTimeout(function() {
+                    Hero.boot(_initData);
+                }, 180);
+            }
+        },
+        setUserid:function(userid)
+        {
+            _userid = userid;
+        },
+        setCard:function(card){
+            _card = card;
+            if (_card.charAt(0) !== '/') {
+                Hero.connect();
+            }
+        },
+        getInitData:function(){
+            if (localStorage.boot) {
+                _initData = JSON.parse(localStorage.boot);
+            };
+            _initData = _initData || {};
+            var params = (window.location.search.split('?')[1] || '').split('&');
+            for(var param in params) {
+                if (params.hasOwnProperty(param)){
+                    paramParts = params[param].split('=');
+                    _initData[paramParts[0]] = decodeURIComponent(paramParts[1] || "");
+                 }
+            }
+            return _initData;
+        },
+        ui2Data:function(observeUI){
+            if (observeUI instanceof Array) {
+                for (var i = 0; i < observeUI.length; i++) {
+                    Hero.ui2Data(observeUI[i]);
+                };
+            }else if(observeUI.subViews){
+                Hero.ui2Data(observeUI.subViews);
+            }
+            if (observeUI.name) {
+                ui2Data['_'+observeUI.name] = {};
+                ui2Data.__defineSetter__(observeUI.name, function(v) {
+                    ui2Data['_'+observeUI.name] = v;
+                    var data = {name:observeUI.name};
+                    if (typeof v == 'string') {
+                        data.text = v;
+                    }else{
+                        Hero.merge(data,v);
+                    }
+                    Hero.out({datas:data});
+                });
+                ui2Data.__defineGetter__(observeUI.name, function() {
+                    return ui2Data['_'+observeUI.name];
+                });
+
+            };
+        },
+        getDeviceType:function()
+        {
+            return _deviceType;
+        },
+        getVersion:function()
+        {
+            return '0.0.1';
+        },
+        getCookie:function(name) {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+            if(arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        },
+        contain:function(objs,obj){var i = objs.length;while (i--) {if (objs[i] === obj) {return true;}}return false;},
+        merge:function(o1,o2){for(var key in o2){o1[key]=o2[key]}return o1},
+        remove:function(arr,value) {if(!arr)return;var a = arr.indexOf(value);if (a >= 0){arr.splice(a, 1)}}
+    };
+})();
