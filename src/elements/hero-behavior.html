@@ -106,7 +106,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if(json !== undefined){
           if (!this.json) {
             this.json = json;
-          }else{
+          }else if(window.APP){
             APP.merge(this.json,json);
           }
           if (json.name) {
