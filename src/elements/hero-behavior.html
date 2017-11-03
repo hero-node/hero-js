@@ -28,6 +28,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
+
 <script>
     HeroBehavior = {
       properties: {
@@ -215,26 +216,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 this.parent.oon({frame:frame});
               };
             };
-            if (this.json.center) {
-              var frame = this.json.frame || {};
-              if (!this.json.frame || !this.json.frame.p) {
-                frame.p = {w:window.screen.width,h:window.screen.height};
-              };
-              var w = this.$.heroContent.style.width;
-              var h = this.$.heroContent.style.height;
-              var x = this.json.center.x;
-              var y = this.json.center.y;
-              if (x) {
-                var wInt = parseFloat(w);
-                var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
-                this.$.heroContent.style.left=xInt-wInt/2+'px';
-              };
-              if (y) {
-                var hInt = parseFloat(h);
-                var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
-                this.$.heroContent.style.top = yInt - hInt/2 + 'px';
-              };
-            };
             if (this.heroLayoutListenners) {
               for (var i = 0; i < this.heroLayoutListenners.length; i++) {
                 var o = this.heroLayoutListenners[i];
@@ -242,7 +223,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               };
             };
         }
-        
+        if (this.json.center) {
+          var frame = this.json.frame || {};
+          if (!this.json.frame || !this.json.frame.p) {
+            frame.p = {w:window.screen.width,h:window.screen.height};
+          };
+          var w = this.$.heroContent.style.width;
+          var h = this.$.heroContent.style.height;
+          var x = this.json.center.x;
+          var y = this.json.center.y;
+          if (x) {
+            var wInt = parseFloat(w);
+            var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
+            this.$.heroContent.style.left=xInt-wInt/2+'px';
+          };
+          if (y) {
+            var hInt = parseFloat(h);
+            var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
+            this.$.heroContent.style.top = yInt - hInt/2 + 'px';
+          };
+        };
         if (json.alpha) {
           this.$.heroContent.style.opacity = json.alpha;
         };
@@ -282,9 +282,41 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (json.zIndex) {
           this.$.heroContent.style.zIndex = json.zIndex;
         };
-
+        if (json.dashBorder) {
+          var dash = json.dashBorder;
+          var color = dash.color;
+          var pattern = dash.pattern;
+          if (dash.left) {
+            this.$.heroContent.style.borderLeftColor = '#'+color;
+            this.$.heroContent.style.borderLeftStyle = 'dashed';
+            this.$.heroContent.style.borderLeftWidth = '1px';
+          };
+          if (dash.right) {
+            this.$.heroContent.style.borderRightColor = '#'+color;
+            this.$.heroContent.style.borderRightStyle = 'dashed';
+            this.$.heroContent.style.borderRightWidth = '1px';
+          };
+          if (dash.bottom) {
+            this.$.heroContent.style.borderBottomColor = '#'+color;
+            this.$.heroContent.style.borderBottomStyle = 'dashed';
+            this.$.heroContent.style.borderBottomWidth = '1px';
+          };
+          if (dash.top) {
+            this.$.heroContent.style.borderTopColor = '#'+color;
+            this.$.heroContent.style.borderTopStyle = 'dashed';
+            this.$.heroContent.style.borderTopWidth = '1px';
+          };
+        };
         if (json.autolayout) {
           
+        };
+        if (json.raised) {
+          this.$.heroContent.style.overflow = 'visible';
+          this.$.heroContent.style.boxShadow = '0px 20px 20px #eeeeee';
+        };
+        if (json.gradientBackgroundColor) {
+          var colors = json.gradientBackgroundColor;
+          this.$.heroContent.style.background = '-webkit-linear-gradient(top,#'+colors[0]+',#'+colors[1]+')';
         }
         if (json.subViews) {
           while (this.$.heroContent.lastChild) {

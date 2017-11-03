@@ -29,23 +29,23 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <script>
-HeroDeviceBehavior = {
+HeroContactBehavior ={
+    ready: function () {
+    },
     on:function(json){
-      if (json.getInfo) {
-        var getInfo = json.getInfo;
-        if (getInfo.channel) {
-          this.controller.on({channel:{value:'h5'}});
-        };
-        if (getInfo.deviceId) {
-          this.controller.on({deviceId:{value:{idfa:'h5_none'}}});
-        };
+      if (json.show) {
+        alert('设备不支持此操作');
+        this.controller.on({name:this.json.name,value:{name:'奥巴马',phone:'13333333333'}});
       };
-    }
+    },
 }
 </script>
-<dom-module id="hero-device">
+<dom-module id="hero-contact-view">
   <template>
   <style type="text/css">
+  #heroContent{
+    background-color: rgba(0.5,0.5,0.5,0.5);
+  }
   </style>
   <div id='heroContent'></div>
   </template>
@@ -53,7 +53,7 @@ HeroDeviceBehavior = {
 
 <script>
   Polymer({
-    is: "hero-device",
-      behaviors: [HeroBehavior,HeroDeviceBehavior]
-  })
+		is: 'hero-contact-view',
+    behaviors: [HeroBehavior,HeroContactBehavior]
+	});
 </script>

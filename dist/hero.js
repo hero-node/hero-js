@@ -1,404 +1,231 @@
 /*
-  hero.js
-  hero
+  Hero.js
+  Hero
 
   Created by gpliu on 14/10/16.
   Copyright (c) 2015年 GPLIU. All rights reserved.
 */
 
-var xhr = function () {
-    var ajax = function  () {
-        return ('XMLHttpRequest' in window) ? function  () {
-                return new XMLHttpRequest();
-            } : function  () {
-            return new ActiveXObject("Microsoft.XMLHTTP");
-        }
-    }(),
-    formatData= function (fd) {
-        var res = '';
-        for(var f in fd) {
-            if (fd[f]) {
-                res += f+'='+fd[f]+'&';
-            };
-        }
-        return res.slice(0,-1);
-    },
-    AJAX = function(ops) {
-        var
-        root = this,
-        req = ajax();
-        root.url = ops.url;
-        root.contentType = ops.contentType;
-        root.type = ops.type || 'responseText';
-        root.method = ops.method || 'GET';
-        root.async = ops.async || true;
-        root.data = ops.data || {};
-        root.complete = ops.complete || function  () {};
-        root.success = ops.success || function(){};
-        root.error =  ops.error || function (s) { alert(root.url+'->status:'+s+'error!')};
-        root.abort = req.abort;
-        root.timeout = ops.timeout || 30000;
-        root.setData = function  (data) {
-            for(var d in data) {
-                root.data[d] = data[d];
-            }
-        }
-        root.send = function  () {
-            var datastring = formatData(root.data),
-            sendstring,get = false,
-            async = root.async,
-            complete = root.complete,
-            method = root.method,
-            type=root.type;
-            if(method === 'GET') {
-                root.url+='?'+datastring;
-                get = true;
-            }
-            req.timeout = root.timeout;
-            req.open(method,root.url,async);
+// Hero base
 
-            if(!get) {
-                if (root.contentType) {
-                    req.setRequestHeader("Content-type",root.contentType);
-                }else{
-                    req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                }
-                sendstring = datastring;
-            }
-            req.onreadystatechange = async ? function  () {
-                // console.log('async true');
-                if (req.readyState ==4){
-                    complete();
-                    if(req.status == 200) {
-                        root.success(req[type]);
-                    } else {
-                        root.error(req.status);
-                    }
-                }
-            } : null;
-            req.send(sendstring);
-            if(!async) {
-                complete();
-                root.success(req[type]);
-            }
-        }
-        root.url && root.send();
-    };
-    return function(ops) {return new AJAX(ops);}
-}();
+Hero = {};
+Hero.ui;
+Hero.ui2Data={};
+Hero.initData;
+Hero.name = window.location.href.match(/[^(/index)][A-Za-z0-9_-]+.html/)[0];
+Hero.deviceType = (navigator.userAgent.toLowerCase().indexOf("hero-ios") > 0)?'IOS': (navigator.userAgent.toLowerCase().indexOf("hero-android") > 0)?'ANDROID':(navigator.userAgent.toLowerCase().indexOf("micromessenger") > 0)?'WECHAT':'PC';
+Hero.on = function(msg){
+    //page logic
+};
+Hero.viewWillAppear = function() {
+};
+Hero.viewWillDisappear = function() {
+};
+Hero.viewDidLoad = function() {
+};
+Hero.boot = function(){
+    Hero.jsProcessUI(Hero.ui);
+    Hero.observeUI(Hero.ui);
+    Hero.out({'ui':Hero.ui});
+    Hero.viewDidLoad();
+};
+document.onreadystatechange = function () {
+  var state = document.readyState;
+  if (state == 'complete') {
 
-var ui;
-var ui2Data = {};
-(function () {
-    var w = window;
-    var _deviceType = 'PC';
+  }
+};
+
+
+
+
+
+//Hero utils function
+Hero.connect = function(card)
+{
+    window._io = io.connect();
+    window._io.on('message',function(data){
+        Hero.out(data);
+    });
+};
+Hero.disconnect = function()
+{
+    window._io.disconnect();
+};
+Hero.getInitData = function(){
     var _initData;
-    var _outObjects;
-    document.onreadystatechange = function () {
-      var state = document.readyState;
-      if (state == 'complete') {
-        _initData = Hero.getInitData();
-        if (_initData.test) {
-            var js = document.createElement('script');
-            js.src = host+window.location.pathname.replace(/html/,'js');
-            document.head.appendChild(js);
-        };
-        if (localStorage.username) {
-            var js = document.createElement('script');
-            js.src = path+'/js/log.js';
-            document.head.appendChild(js);
-        };
-        var ua = navigator.userAgent.toLowerCase();
-        if(ua.indexOf("hero-ios") > 0){
-            Hero.setDeviceType('IOS');
-        }else if (ua.indexOf('hero-android') > 0) {
-            Hero.setDeviceType('ANDROID');
-        }else if(ua.indexOf('micromessenger') > 0){
-            Hero.setDeviceType('WECHAT');
-        }else{
-            Hero.setDeviceType('PC');
-            console.log('%cyou are hero !!! ', 'background-image:-webkit-gradient( linear, left top, right top, color-stop(0, #f22), color-stop(0.15, #f2f), color-stop(0.3, #22f), color-stop(0.45, #2ff), color-stop(0.6, #2f2),color-stop(0.75, #2f2), color-stop(0.9, #ff2), color-stop(1, #f22) );color:transparent;-webkit-background-clip: text;font-size:5em;');
-        };
-        if (ui && ui.views) {
-            Hero.ui2Data(ui.views);
-        };
-      }
+    if (localStorage.boot) {
+        _initData = JSON.parse(localStorage.boot);
     };
-    w.Hero = {
-		c0:'00bc8d',
-		c1:'cccccc',
-		c2:'999999',
-		c3:'666666',
-		c4:'333333',
-		c5:'0f2348',
-		c6:'d70c18',
-		c7:'ffffff',
-		c8:'fbfbfb',
-		c9:'f5f5f5',
-		c10:'f0f0f0',
-		c11:'e4e4e4',
-		c12:'ff5500',
-		c13:'ff7842',
-		c14:'33b653',
-		c15:'ffeeee',
-		c16:'ffb7b7',
-		c17:'f2fffd',
-		c18:'daf8f3',
-		c19:'122f5b',
-		c20:'f9fdfd',
-		c21:'f4fbfb',
-		c02:'009671',
-		c62:'ac0913',
-		c71:'ffffffb2',
-        c75:'ffffff80',
-
-		s0:'56',
-		s6:'45',
-		s9:'33',
-		s1:'28',
-		s7:'20',
-		s2:'18',
-		s3:'16',
-		s4:'14',
-		s5:'12',
-		s8:'11',
-
-        borrower400:'10109188    ',
-        connect:function(card)
-        {
-            io = io.connect();
-            io.on('connect',function(){
-                io.emit('sub', card);
-            });
-            io.on('message',function(data){
-                Hero.out(data);
-            });
-        },
-        disconnect:function()
-        {
-            io.disconnect();
-        },
-        outObjects:function(){
-            if (_outObjects) {
-                var str = '';
-                if (typeof(_outObjects) === 'string') {
-                    str = _outObjects;
-                }else{
-                    str = JSON.stringify(_outObjects);
-                }
-                _outObjects = '';
-                return str;
-            }else{
-                return '';
-            }
-        },
-        out:function(data)
-        {
-            if (_deviceType == 'IOS') {
-                _outObjects = data;
-                var nativeObject = 'hero://' + 'ready';
-                var iframe = document.createElement('iframe');
-                iframe.setAttribute('src', nativeObject);
-                document.documentElement.appendChild(iframe);
-                iframe.parentNode.removeChild(iframe);
-                iframe = null;
-            }else if(_deviceType == 'IOS8'){
-                window.webkit.messageHandlers.native.postMessage(data)
-            }else if(_deviceType == 'ANDROID'){
-                if (typeof(data) === 'object') {
-                    data = JSON.stringify(data);
-                };
-                window.native.on(data);
-            }else{
-                Hero.page.on(data);
-            }
-        },
-        in:function(data){
-            if (typeof(data) === 'string') {
-                data = JSON.parse(data);
-            };
-            if (data.socket) {
-                io.emit('message', data.socket);
-            }else if(data.http){
-                if (data.http.keepError) {
-                } else {
-                    Hero.out({datas:{name:'toast',text:''}});
-                }
-                data = data.http;
-                var api = data.url;
-                var success = data.success;
-                var fail = data.fail;
-				var apiData = data.data;
-				for (var prop in apiData) {
-					apiData[prop] = encodeURIComponent(apiData[prop]);
-				}
-                xhr({
-                    url:(api.search(/ttp/)>0?api:host+api),
-                    async:true,
-                    data:apiData,
-                    contentType:data.contentType,
-                    method:data.method?data.method:'GET',
-                    timeout:data.timeout?data.timeout:30000,
-                    success: function(data){
-                        Hero.out({command:'stopLoading'});
-                        if (typeof(data) === 'string') {
-                            data = JSON.parse(data);
-                        };
-                        if (data.result === 'success') {
-                            if (success) {
-                                success(data);
-                            }else{
-                                data.api = api;
-                                Hero.reloadData(data);
-                            }
-                        }else if(data.result === 'login'){
-                            Hero.out({command:{loginSDK:{action:'login'}}});
-                        } else if (data.result === 'error') {
-                            if (data.errors && data.errors.length > 0) {
-                                if (fail) {
-                                    fail(data);
-                                }else{
-                                    Hero.out({datas:{name:'toast',text:data.errors[0]}});
-                                }
-                            }
-                            else if (data.content) {
-                                if (data.content.apiReturn) {
-                                    if (data.content.apiReturn.ValidationError || data.content.apiReturn.ErrorMessage) {
-                                        if (fail) {
-                                            fail(data);
-                                        }else{
-                                            if (data.content.apiReturn.ValidationError) {
-                                                Hero.out({datas:{name:'toast',text:data.content.apiReturn.ValidationError}});
-                                            } else {
-                                                Hero.out({datas:{name:'toast',text:data.content.apiReturn.ErrorMessage}});
-                                            }
-                                        }
-                                    };
-                                };
-                            };
-                        }else{
-                            Hero.reloadData(data);
-                        }
-                    },
-                    error:function(data){
-                        Hero.out({command:'stopLoading'});
-                        if (fail) {
-                            fail({errors:['网络异常，请检查网络连接后重试']});
-                        }else{
-                            Hero.out({datas:{name:'toast',icon:'error_icon',text:'网络异常，请检查网络连接后重试'}});
-                        }
-                    }
-                });
-            }else{
-                if(data.name && data.value){
-                    ui2Data['_'+data.name] = data.value;
-                }
-                Hero.global_events(data);
-                Hero.special_logic(data);
-            };
-        },
-        special_logic:function(){
-            //需要被各个页面重写的方法
-        },
-        global_events: function() {
-            //
-        },
-        boot:function(){
-            //需要被各个页面重写的方法
-        },
-        reloadData:function(){
-            //需要被各个页面重写的方法
-        },
-        deviceType:function()
-        {
-            return _deviceType;
-        },
-        setDeviceType:function(deviceType)
-        {
-            _deviceType = deviceType;
-            if (ui === undefined) {
-                ui = err_ui;
-            };
-            if (ui !== 'blank') {
-                Hero.out({ui:ui});
-            };
-            if(_deviceType === 'IOS'){
-                Hero.boot(_initData);
-            }else if(_deviceType === 'ANDROID'){
-                Hero.boot(_initData);
-            }else{
-                setTimeout(function() {
-                    Hero.boot(_initData);
-                }, 180);
-            }
-        },
-        setUserid:function(userid)
-        {
-            _userid = userid;
-        },
-        setCard:function(card){
-            _card = card;
-            if (_card.charAt(0) !== '/') {
-                Hero.connect();
-            }
-        },
-        getInitData:function(){
-            if (localStorage.boot) {
-                _initData = JSON.parse(localStorage.boot);
-            };
-            _initData = _initData || {};
-            var params = (window.location.search.split('?')[1] || '').split('&');
-            for(var param in params) {
-                if (params.hasOwnProperty(param)){
-                    paramParts = params[param].split('=');
-                    _initData[paramParts[0]] = decodeURIComponent(paramParts[1] || "");
-                 }
-            }
-            return _initData;
-        },
-        ui2Data:function(observeUI){
-            if (observeUI instanceof Array) {
-                for (var i = 0; i < observeUI.length; i++) {
-                    Hero.ui2Data(observeUI[i]);
-                };
-            }else if(observeUI.subViews){
-                Hero.ui2Data(observeUI.subViews);
-            }
-            if (observeUI.name) {
-                ui2Data['_'+observeUI.name] = {};
-                ui2Data.__defineSetter__(observeUI.name, function(v) {
-                    ui2Data['_'+observeUI.name] = v;
-                    var data = {name:observeUI.name};
-                    if (typeof v == 'string') {
-                        data.text = v;
-                    }else{
-                        Hero.merge(data,v);
-                    }
-                    Hero.out({datas:data});
-                });
-                ui2Data.__defineGetter__(observeUI.name, function() {
-                    return ui2Data['_'+observeUI.name];
-                });
-
-            };
-        },
-        getDeviceType:function()
-        {
-            return _deviceType;
-        },
-        getVersion:function()
-        {
-            return '0.0.1';
-        },
-        getCookie:function(name) {
-            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-            if(arr = document.cookie.match(reg))
-                return unescape(arr[2]);
-            else
-                return null;
-        },
-        contain:function(objs,obj){var i = objs.length;while (i--) {if (objs[i] === obj) {return true;}}return false;},
-        merge:function(o1,o2){for(var key in o2){o1[key]=o2[key]}return o1},
-        remove:function(arr,value) {if(!arr)return;var a = arr.indexOf(value);if (a >= 0){arr.splice(a, 1)}}
+    _initData = _initData || {};
+    var params = (window.location.search.split('?')[1] || '').split('&');
+    for(var param in params) {
+        if (params.hasOwnProperty(param)){
+            paramParts = params[param].split('=');
+            _initData[paramParts[0]] = decodeURIComponent(paramParts[1] || "");
+         }
+    }
+    return _initData;
+};
+Hero.getCookie = function(name) {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr = document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
+},
+Hero.contain = function(objs,obj){var i = objs.length;while (i--) {if (objs[i] === obj) {return true;}}return false;},
+Hero.merge = function(o1,o2){for(var key in o2){o1[key]=o2[key]}return o1},
+Hero.remove = function(arr,value) {if(!arr)return;var a = arr.indexOf(value);if (a >= 0){arr.splice(a, 1)}}
+Hero.async = function(fun,second){
+    setTimeout(function(){
+        fun();
+    },second*1000);
+}
+Hero.datas = function(data){Hero.out({datas:data})}
+Hero.command = function(data){Hero.out({command:data})}
+Hero.setChildPropertyByName = function(o,name,value){
+    Object.keys(o).forEach(function(k){ 
+        if (o[k].name === name){
+            Hero.merge(o[k],value)
+        }else if(typeof o[k] === 'object'){
+            Hero.setChildPropertyByName(o[k],name,value)
+        }
+    })
+}
+Hero._outObjects = '';
+Hero.outObjects = function(){
+    return Hero._outObjects;
+};
+Hero.out = function(data)
+{
+    if (Hero.deviceType == 'IOS') {
+        Hero._outObjects = JSON.stringify(data);
+        var nativeObject = 'Hero://' + 'ready';
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('src', nativeObject);
+        document.documentElement.appendChild(iframe);
+        iframe.parentNode.removeChild(iframe);
+        iframe = null;
+    }else if(Hero.deviceType == 'IOS8'){
+        window.webkit.messageHandlers.native.postMessage(data)
+    }else if(Hero.deviceType == 'ANDROID'){
+        if (typeof(data) === 'object') {
+            data = JSON.stringify(data);
+        };
+        window.native.on(data);
+    }else{
+        Hero.page.on(data);
+    }
+};
+Hero.in = function(data){
+    if (typeof(data) === 'string') {
+        data = JSON.parse(data);
     };
-})();
+    if (data.socket) {
+        window._io.emit('message', data.socket);
+    }else if(data.http){
+        data = data.http;
+        var api = data.url;
+        var success = data.success;
+        var fail = data.fail;
+        var apiData = data.data;
+        for (var prop in apiData) {
+            apiData[prop] = encodeURIComponent(apiData[prop]);
+        }
+        xhr({
+            url:(api.search(/ttp/)>0?api:host+api),
+            async:true,
+            data:apiData,
+            contentType:data.contentType,
+            method:data.method?data.method:'GET',
+            timeout:data.timeout?data.timeout:30000,
+            success: function(data){
+                if (typeof(data) === 'string') {
+                    data = JSON.parse(data);
+                };
+                success(data);
+            },
+            error:function(data){
+                fail(data);
+            }
+        });
+    }else{
+        if(data.name && data.value){
+            Hero.ui2Data['_'+data.name] = data.value;
+        }
+        Hero.on(data);
+    }
+}
+Hero.findUI = function(ui,func ){
+    if (ui instanceof Array) {
+        for (var i = 0; i < ui.length; i++) {
+            func(ui[i]);
+        };
+    }
+    if(ui.subViews){
+        func(ui.subViews);
+    }
+    if(ui.views){
+        func(ui.views);
+    }
+    if(ui.leftMenu){
+        func(ui.leftMenu);
+    }
+    if(ui.footer){
+        func(ui.footer);
+    }
+    if(ui.header){
+        func(ui.header);
+    }
+}
+Hero.observeUI = function(ui){
+    Hero.findUI(ui,Hero.observeUI)
+    if (ui.name) {
+        Hero.ui2Data['_'+ui.name] = {};
+        Hero.ui2Data.__defineSetter__(ui.name, function(v) {
+            Hero.ui2Data['_'+ui.name] = v;
+            var data = {name:ui.name};
+            if (typeof v == 'string') {
+                data.text = v;
+            }else{
+                Hero.merge(data,v);
+            }
+            Hero.out({datas:data});
+        });
+        Hero.ui2Data.__defineGetter__(ui.name, function() {
+            return Hero.ui2Data['_'+ui.name];
+        });
+    };
+};
+Hero.jsProcessUI = function(ui){
+    Hero.findUI(ui,Hero.jsProcessUI)
+    if(ui.jsClass && window[ui.jsClass]){
+        var t1 = JSON.parse(JSON.stringify(window[ui.jsClass]));
+        var t2 = Hero.merge({},ui);
+        Object.keys(t2).forEach(function(k){
+            Hero.setChildPropertyByName(t1,k,t2[k]);
+        });
+        Hero.merge(ui,t1);
+        Hero.merge(ui,t2);
+        ui.jsClass = undefined;
+        Hero.jsProcessUI(ui);
+    }
+};
+Hero.loadScriptSync = function (src) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.type = "text/javascript";
+    s.async = false;
+    document.getElementsByTagName('head')[0].appendChild(s);
+}
+Hero.loadScriptSync('js/extend.js');
+document.onreadystatechange = function () {
+  var state = document.readyState;
+  if (state == 'complete') {
+    if(Hero.deviceType === 'IOS' || Hero.deviceType === 'ANDROID'){
+        Hero.boot();
+    }
+  }
+};
+

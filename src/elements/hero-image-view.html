@@ -52,9 +52,9 @@ HeroImageViewBehavior ={
         this.url = json.image;
       }else{
         if (json.image.search(/\./)>0) {
-          this.url = require('../images/' + json.image);
+          this.url = ('images/' + json.image);
         }else{
-          this.url = require('../images/' + json.image +'.png');
+          this.url = ('images/' + json.image +'.png');
         };
       };
     }

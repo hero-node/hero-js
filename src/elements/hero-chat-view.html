@@ -29,31 +29,92 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <script>
-HeroDeviceBehavior = {
+HeroChatViewBehavior ={
+    ready: function () {
+    },
     on:function(json){
-      if (json.getInfo) {
-        var getInfo = json.getInfo;
-        if (getInfo.channel) {
-          this.controller.on({channel:{value:'h5'}});
-        };
-        if (getInfo.deviceId) {
-          this.controller.on({deviceId:{value:{idfa:'h5_none'}}});
-        };
+      if (json.newMsg) {
+        var cell = document.createElement('hero-chat-msg-view');
+        cell.on(json.newMsg);
+        this.$.msgContent.appendChild(cell);
+        this.$.msgContent.scrollTop = this.$.msgContent.scrollHeight - this.$.msgContent.getBoundingClientRect().height;
       };
+    },
+    send:function(){
+      this.controller.on({msg:this.$.inputText.value});
+      this.$.inputText.value = '';
     }
 }
 </script>
-<dom-module id="hero-device">
+<dom-module id="hero-chat-view">
   <template>
   <style type="text/css">
+  #heroContent{
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+  }
+  #msgContent{
+    position: absolute;
+    overflow: scroll;
+    margin: 0px;
+    padding: 0px;
+    top: 0px;
+    bottom: 50px;
+    width: 100%;
+    border-bottom: 0.5px;
+    border-bottom-color: #ddd;
+    border-bottom-style: solid;
+  }
+  #input{
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 50px;
+  }
+  #inputText{
+    position: absolute;
+    margin: 0px;
+    left: 5px;
+    font-size: 15px;
+    padding: 0px;
+    height: 100%;
+    width: 70%;
+
+  }
+  #inputText:focus{
+    outline: none;
+  }
+  #inputText:hover {
+    outline: none;
+  }
+  #inputButton{
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    color: #666;
+    right: 0px;
+    width: 25%;
+    background-color: #f1f1f1;
+  }
   </style>
-  <div id='heroContent'></div>
+  <div id='heroContent'>
+    <div id='msgContent'></div>
+    <div id='input'>
+      <input id='inputText'></input>
+      <paper-button id='inputButton' on-tap='send'>发送</paper-button>
+    </div>
+  </div>
   </template>
 </dom-module>
 
 <script>
   Polymer({
-    is: "hero-device",
-      behaviors: [HeroBehavior,HeroDeviceBehavior]
-  })
+		is: 'hero-chat-view',
+    behaviors: [HeroBehavior,HeroChatViewBehavior]
+	});
 </script>

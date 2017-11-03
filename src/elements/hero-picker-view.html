@@ -85,7 +85,7 @@ HeroPickerViewBehavior ={
        else{
          this.selectAction.value=value;
        }
-       this.controller.out(this.selectAction);
+       this.controller.on(this.selectAction);
     }
   },
   on: function(json) {
@@ -238,6 +238,11 @@ HeroPickerViewBehavior ={
   }
 }
 </script>
+
+<link rel="stylesheet" type="text/css" href="pickerviewbase/anypicker-font.css">
+<link rel="stylesheet" type="text/css" href="pickerviewbase/anypicker.css">
+<link rel="stylesheet" type="text/css" href="pickerviewbase/anypicker-ios.css">
+
 <dom-module id="hero-picker-view">
   <template>
   <link rel="stylesheet" type="text/css" href="pickerviewbase/anypicker-font.css">

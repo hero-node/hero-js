@@ -28,63 +28,41 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<dom-module id="mafia-loan-table">
+<script>
+HeroChatMsgViewBehavior ={
+    ready: function () {
+    },
+    on:function(json){
+      if (json.text) {
+        this.$.text.innerHTML = json.text;
+      };
+    },
+}
+</script>
+<dom-module id="hero-chat-msg-view">
   <template>
-    <style type="text/css">
+  <style type="text/css">
     #heroContent{
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      margin: 0px;
-      padding: 0px;
+      position: relative;
       display: block;
-      overflow: auto;
+      padding: 5px;
     }
-    #headImg{
-      height: 160px;
-      width: 100%;
-      overflow: visible;
+    #text{
+      font-size: 14px;
+      padding: 0px;
+      margin: 0px;
+      color: #666;
     }
-    </style>
-    <div id='heroContent'>
-      <div id='headImg'></div>
-      <template is="dom-repeat" items="{{items}}">
-        <mafia-loan-table-cell json={{item}}></mafia-loan-table-cell>
-      </template>
-      <p> </p>
-    </div>
+  </style>
+  <div id='heroContent'>
+    <p id='text'></p>
+  </div>
   </template>
 </dom-module>
 
 <script>
   Polymer({
-    is: "mafia-loan-table",
-      behaviors: [HeroBehavior],
-      properties: {
-        items:{
-          type: Array
-        }
-      },      
-      on: function(json) {
-        if (json.heads ) {
-          this.$.headImg.style.backgroundImage = 'url('+json.heads[0].url+')';
-          this.$.headImg.style.backgroundPosition = 'bottom center';
-          this.$.headImg.style.backgroundSize = 'cover'
-        };
-        if (json.header && json.header.subViews) {
-          this.$.headImg.style.backgroundImage = 'url('+json.header.subViews[0].data[0].url+')';
-          this.$.headImg.style.backgroundPosition = 'bottom center';
-          this.$.headImg.style.backgroundSize = 'cover'
-        };
-        if (json.data) {
-          this.items = json.data[0].rows;
-          var that = this;
-          this.async(function(){
-            for (var i = 0; i < that.$.heroContent.children.length; i++) {
-              that.$.heroContent.children[i].controller = that.controller;
-            };
-          },100);
-        };
-      },
-    })
+    is: 'hero-chat-msg-view',
+    behaviors: [HeroBehavior,HeroChatMsgViewBehavior]
+  });
 </script>
