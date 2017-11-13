@@ -268,12 +268,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
         if (json.hasOwnProperty("hidden") ) {
           if (json.hidden) {
-            // this.$.heroContent.hidden = 'hidden';
+            if (this.json.contentSizeElementY) {
+                this.parent.json.frame.h = parseFloat(this.$.heroContent.style.top)+'';
+                var frame = this.parent.json.frame;
+                this.parent.oon({frame:frame});
+            };
             this.$.heroContent.style.display = 'none';
           }else{
+            if (this.json.contentSizeElementY) {
+                this.parent.json.frame.h = parseFloat(this.$.heroContent.style.top)+parseFloat(this.$.heroContent.style.height)+'';
+                var frame = this.parent.json.frame;
+                this.parent.oon({frame:frame});
+            };
             this.$.heroContent.style.display = 'block';
-            // this.$.heroContent.hidden = undefined;
-            // delete this.$.heroContent['hidden'];
           }
         };
         if (json.hasOwnProperty("h5_hidden") ) {
