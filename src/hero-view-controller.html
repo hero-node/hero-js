@@ -57,7 +57,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
       },
       findViewByname:function(name,root){
-        return root.querySelector('#'+name);
+        var view = root.querySelector('#'+name);
+        if ((!view)  || (!view.json) ) {
+          for (var i = 0; i < root.children.length; i++) {
+            if(root.children[i].$ && root.children[i].$.heroContent ){
+              view =  this.findViewByname(name,root.children[i].$.heroContent);
+              if (view) {
+                break;
+              };
+            }
+          };
+        };
+        if (view && view.$ && view.$.heroContent) {
+          return view;
+        };
       },
       ui2Data:function(observeUI){
           if (Array.isArray(observeUI)) {
@@ -87,8 +100,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           };
       },
       attached:function(){
-        if (window.ui && window.Hero) {
-          this.view = ui;
+        if (window.Hero && window.Hero.ui) {
+          this.view = window.Hero.ui;
           this.controller = Hero;
           Hero.page = this;
           var heroContent = document.createElement('div');
@@ -105,11 +118,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           }else{
             heroContent.style.backgroundColor='#ffffff';
           }
-          if (ui && ui.views) {
-            this.ui2Data(ui.views);
-          };
-          this.viewDidLoad();
           this.viewWillAppear();
+          this.viewDidLoad();
         }else{
           var iframe = document.createElement('iframe');
           iframe.style.display = 'inline-block';
@@ -121,8 +131,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           iframe.style.borderWidth = '0px';
           iframe.style.height = '100%';
           iframe.style.width = '100%';
-          iframe.src = this.url;
           this.appendChild(iframe);
+          var url = this.url;
+          setTimeout(function(){
+            iframe.src = url;
+          },1000);
           var that  = this;
           iframe.onload = function(){
             try{
@@ -148,7 +161,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
         if (this.appearObject) {
           this.controller.in(this.appearObject);
-        }else if(Hero.viewWillAppear){
+        }else if(Hero && Hero.viewWillAppear){
           Hero.viewWillAppear();
         }
       },
@@ -171,6 +184,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }else if (json.ui) {
           while (this.heroContent.lastChild) {
              this.heroContent.removeChild(this.heroContent.lastChild);
+          }
+          if(json.ui.leftMenu){
+            var leftMenu = json.ui.leftMenu;
+            APP.$.leftMenu.style.backgroundColor = '#'+(leftMenu.backgroundColor||'f5f5f5');
+            for(var num in leftMenu.views){
+              var viewObject = leftMenu.views[num];
+              var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
+              if(view.setJson){
+                APP.$.leftMenu.appendChild(view);
+                view.controller = this;
+                view.json = (viewObject);
+              }else{
+                console.log(viewObject.class||viewObject.res);
+              }
+            }
           }
           var views = json.ui.views;
           for(var num in views){
@@ -211,6 +239,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 if(!element){
                   element = this.findViewByname(data.name,document.body);
                 }
+                if (!element) {
+                  element = this.findViewByname(data.name,APP.$.leftMenu);
+                };
                 if (element && element.oon) {
                     element.oon(data);
                 };
@@ -223,6 +254,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             if(!element){
               element = this.findViewByname(datas.name,document.body);
             }
+            if (!element) {
+              element = this.findViewByname(datas.name,APP.$.leftMenu);
+            };
             if (element && element.oon) {
                 element.oon(datas);
             };
@@ -267,12 +301,31 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               }else if(command.substring(0,8) === 'rootBack'){
                   window.history.back()
               }else if(command.substring(0,8) === 'present:'){
+                var _data = {};
+                var params = (window.location.search.split('?')[1] || '').split('&');
+                for(var param in params) {
+                    if (params.hasOwnProperty(param)){
+                        paramParts = params[param].split('=');
+                        _data[paramParts[0]] = decodeURIComponent(paramParts[1] || "");
+                     }
+                }
+                if(_data.heropage){
+                  window.presentedPage = _data.heropage;
+                }
                 APP.gotoPage(command.substring(8,command.length),'present');
               }else if(command.substring(0,7) === 'dismiss'){
+                if(window.presentedPage){
+                  APP.gotoPage(window.presentedPage);
+                  window.presentedPage = '';
+                }else{
                   window.history.back()
+                }
               }else if(command.substring(0,6) === 'submit'){
                   //todo
               }
+            }else if(command.hasOwnProperty("showMenu")){
+              var showMenu = command.showMenu;
+              APP.showLeftmenu(showMenu);
             }else if (command.show) {
               if (command.show.action || command.show.cancelAction) {
                   var confirm = document.createElement('hero-confirm');
@@ -282,7 +335,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 }else if(command.show.title||command.show.content){
                   var alert = document.createElement('hero-alert');
                   alert.controller = this;
-                  alert.oon({'text': command.show.title || ''});
+                  alert.oon({'text': command.show.title || command.show.content});
                   this.heroContent.appendChild(alert);
                 }else if(command.show.class){
                   var dialog = document.createElement('hero-dialog');

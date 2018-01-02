@@ -28,30 +28,30 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-left-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-down-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-right-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-from-top-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-from-left-animation.html">
-<link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
-<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../../neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-from-top-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-from-bottom-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="../../paper-styles/color.html">
 
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
-<link rel="import" href="../bower_components/paper-slider/paper-slider.html">
-<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
-<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-toast/paper-toast.html">
+<link rel="import" href="../../paper-spinner/paper-spinner.html">
+<link rel="import" href="../../paper-slider/paper-slider.html">
+<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../paper-menu/paper-menu.html">
+<link rel="import" href="../../paper-ripple/paper-ripple.html">
+<link rel="import" href="../../paper-item/paper-item.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-dialog/paper-dialog.html">
 
 <link rel="import" href="elements/hero-behavior.html">
 <link rel="import" href="hero-view-controller.html">
@@ -65,32 +65,25 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <link rel="import" href="elements/hero-label.html">
 <link rel="import" href="elements/hero-text-view.html">
 <link rel="import" href="elements/hero-text-field.html">
+<link rel="import" href="elements/hero-paper-text-field.html">
+<link rel="import" href="elements/hero-code-view.html">
 <link rel="import" href="elements/hero-image-view.html">
 <link rel="import" href="elements/hero-loading.html">
 <link rel="import" href="elements/hero-toolbar-item.html">
 <link rel="import" href="elements/hero-check-box.html">
 <link rel="import" href="elements/hero-toast.html">
 <link rel="import" href="elements/hero-slider.html">
-<!-- <link rel="import" href="elements/hero-location-view.html"> -->
 <link rel="import" href="elements/hero-device.html">
+<link rel="import" href="elements/hero-chat-view.html">
+<link rel="import" href="elements/hero-chat-msg-view.html">
 <link rel="import" href="elements/hero-confirm.html">
+<link rel="import" href="elements/hero-contact-view.html">
 <link rel="import" href="elements/hero-alert.html">
 <link rel="import" href="elements/hero-switch.html">
 <link rel="import" href="elements/hero-scroll-view.html">
-<!-- <link rel="import" href="elements/hero-scan-bar-code-view.html"> -->
 <link rel="import" href="elements/hero-dialog.html">
+<link rel="import" href="elements/hero-picker-view.html">
 
-<!-- <link rel="import" href="elements/mafia-loan-table.html"> -->
-<!-- <link rel="import" href="elements/mafia-loan-table-cell.html">
-<link rel="import" href="elements/mafia-ocr-view.html">
- -->
-<!-- <link rel="import" href="elements/dr-a-b-test.html"> -->
-<!-- <link rel="import" href="elements/dr-slider-view.html">
-<link rel="import" href="elements/dr-text-field.html">
-<link rel="import" href="elements/dr-table-view.html">
-<link rel="import" href="elements/dr-table-view-cell.html">
-<link rel="import" href="elements/dr-button.html">
-<link rel="import" href="elements/dr-code-view.html">
  -->
 <dom-module id="hero-app">
   <template>
@@ -110,7 +103,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         overflow:hidden;
         top: 0px;
         width: 100%;
-        height: 44px;
+        height: 43px;
         background-color: #ffffff;
         border-bottom:1px solid #ddd;
       }
@@ -132,6 +125,34 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         width: 100%;
         background-color: #fff;
         background-size:cover;
+      }
+      #menu {
+        display:block;
+        position: absolute;
+        overflow:hidden;
+        display: none;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.4);
+      }
+      #leftMenu {
+        display:block;
+        position: absolute;
+        overflow:hidden;
+        display: none;
+        height: 100%;
+        width: 66%;
+        background-color: #fff;
+      }
+      #rightMenu {
+        display:block;
+        position: absolute;
+        overflow:hidden;
+        display: none;
+        height: 100%;
+        left: 34%;
+        width: 66%;
+        background-color: #fff;
       }
       #title {
         display:inline-block;
@@ -198,6 +219,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         from {transform:scale(1,1);}
         to {transform:scale(1.1,1.1);}
       }
+      @keyframes leftMenuIn
+      {
+        from {left: -66%;}
+        to {left: 0%;}
+      }
+      @keyframes leftMenuOut
+      {
+        from {left: 0%;}
+        to {left: -66%;}
+      }
     </style>
     <div id='bar'>
       <hero-button class='btn' id ='backBtn'></hero-button>
@@ -208,6 +239,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <neon-animated-pages id='pages' role="main" attr-for-selected="name" >
     </neon-animated-pages>
     <div id='tab'></div>
+    <div id='menu' on-tap='closeMenu'>
+      <div id='leftMenu'></div>
+      <div id='rightMenu'></div>
+    </div>
     <!-- <div id='cover'></div> -->
   </template>
 
@@ -248,6 +283,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         tabs : {
           type: Array
         },
+        leftMent : {
+          type: Object
+        }
       },
       on:function(json){
         if (json.tabs) {
@@ -367,21 +405,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         this.$.backBtn.controller = this;
         this.$.backBtn.oon({image:'back.png',click:{goBack:true}});
         this.$.rightBtn.oon({title:' ',titleColor:'ffffff'});
+        this.$.leftMenu.style.width = parseInt(window.innerWidth)*2/3+'px';
         // this.$.cover.style.animation = 'coverGo 2s';
         var that = this;
         // setTimeout(function(){
         //   that.$.cover.style.display = 'none';
         // },1800);
-        window.last_Hero = '';
         window.__defineSetter__('Hero', function(v) {
           window[window.location.href+'_Hero'] = v;
         });
         window.__defineGetter__('Hero', function() {
-          var _Hero = window[window.location.href+'_Hero'];
-          if (_Hero) {
-            window.last_Hero = _Hero;
-          };
-          return window.last_Hero;
+          return window[window.location.href+'_Hero'] ||{} ;
         });
         window.last_ui2Data = '';
         window.__defineSetter__('ui2Data', function(v) {
@@ -401,7 +435,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             nav = nav.nav;
           };
           this.$.title.innerHTML = nav.title||'';
+          if (nav.titleView) {
+            nav.titleView.center = {x:'0.5x',y:'0.5x'};
+            var element = document.createElement(APP.camelCase2bar(nav.titleView.class ||nav.titleView.res));
+            this.$.bar.appendChild(element);
+            element.controller = this;
+            element.json = (nav.titleView);
+          };
           document.title = nav.title||'';
+          if (nav.titleColor) {
+            this.$.title.style.color = '#'+nav.titleColor;
+          };
           if (nav.tintColor) {
             this.$.bar.style.backgroundColor = this.str2Color(nav.tintColor);
           };
@@ -409,7 +453,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             this.$.bar.style.height = '0px';
             this.$.pages.style.top = '0px';
           }else {
-            this.$.bar.style.height = '44px';
+            this.$.bar.style.height = '43px';
             this.$.pages.style.top = '44px';
           };
           if (nav.leftItems && nav.leftItems.length>0) {
@@ -436,6 +480,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             this.$.rightBtn.style.display = 'none'
           }
         };
+      },
+      showLeftmenu:function(show){
+        if (show) {
+          this.$.menu.style.display = 'block';
+          this.$.leftMenu.style.display = 'block';
+          this.$.leftMenu.style.animation = 'leftMenuIn 0.3s';
+        }else{
+          this.$.leftMenu.style.animation = 'leftMenuOut 0.3s';
+          this.async(function(){
+            this.$.menu.style.display = 'none';
+            this.$.leftMenu.style.display = 'none';
+          },200);
+        }
+      },
+      closeMenu:function(){
+        this.showLeftmenu(false);
       },
       loadPage:function(page){
         var pageElement = this.page2Element(page);
