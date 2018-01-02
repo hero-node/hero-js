@@ -28,6 +28,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
+
 <script>
     HeroBehavior = {
       properties: {
@@ -96,6 +97,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         }
         return {w:window.innerWidth,h:window.innerHeight};
       },
+      calcStr:function(x,p){
+        if (x.split('+').length > 1) {
+          var x1 = x.split('+')[0];
+          var x2 = x.split('+')[1];
+          xInt = (x1.charAt(x1.length - 1) === 'x' ? (parseFloat(x1) * p) : parseFloat(x1)) + (x2.charAt(x2.length - 1) === 'x' ? (parseFloat(x2) * p) : parseFloat(x2));
+        }else if (x.split('-').length > 1) {
+          var x1 = x.split('-')[0]||'0';
+          var x2 = x.split('-')[1];
+          xInt = (x1.charAt(x1.length - 1) === 'x' ? (parseFloat(x1) * p) : parseFloat(x1)) - (x2.charAt(x2.length - 1) === 'x' ? (parseFloat(x2) * p) : parseFloat(x2));
+        }else{
+          xInt = x.charAt(x.length - 1) === 'x' ? (parseFloat(x) * p) : parseFloat(x);
+        }
+        return xInt;
+      },
       ready:function(){
       },
       on: function(json) {
@@ -106,7 +121,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if(json !== undefined){
           if (!this.json) {
             this.json = json;
-          }else{
+          }else if(window.APP){
             APP.merge(this.json,json);
           }
           if (json.name) {
@@ -125,29 +140,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             var b = frame.b;
             var xInt, yInt, wInt, hInt;
             if (x) {
-              xInt = x.charAt(x.length - 1) === 'x' ? (parseFloat(x) * frame.p.w) : parseFloat(x);
+              xInt = this.calcStr(x,json.frame.p.w);
             };
             if (y) {
-              yInt = y.charAt(y.length - 1) === 'x' ? (parseFloat(y) * frame.p.h) : parseFloat(y);
+              yInt = this.calcStr(y,json.frame.p.h);
             };
             if (w) {
-              wInt = w.charAt(w.length - 1) === 'x' ? (parseFloat(w) * frame.p.w) : parseFloat(w);
+              wInt = this.calcStr(w,json.frame.p.w);
             };
             if (h) {
-              hInt = h.charAt(h.length - 1) === 'x' ? (parseFloat(h) * frame.p.h) : parseFloat(h);
+              hInt = this.calcStr(h,json.frame.p.h);
             };
             if (r) {
               if (!x) {
-                xInt = frame.p.w - (wInt + (r.charAt(r.length - 1) === 'x' ? parseFloat(r) * frame.p.w : parseFloat(r)));
+                xInt = frame.p.w - (wInt + this.calcStr(r,json.frame.p.w));
               } else {
-                wInt = frame.p.w - (xInt + (r.charAt(r.length - 1) === 'x' ? parseFloat(r) * frame.p.w : parseFloat(r)));
+                wInt = frame.p.w - (xInt + this.calcStr(r,json.frame.p.w));
               };
             };
             if (b) {
               if (!y) {
-                yInt = frame.p.h - (hInt + (b.charAt(b.length - 1) === 'x' ? parseFloat(b) * frame.p.h : parseFloat(b)));
+                yInt = frame.p.h - (hInt + this.calcStr(b,json.frame.p.h));
               } else {
-                hInt = frame.p.h - (yInt + (b.charAt(b.length - 1) === 'x' ? parseFloat(b) * frame.p.h : parseFloat(b)));
+                hInt = frame.p.h - (yInt + this.calcStr(b,json.frame.p.h));
               };
             };
             this.$.heroContent.style.left = xInt + 'px';
@@ -215,26 +230,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 this.parent.oon({frame:frame});
               };
             };
-            if (this.json.center) {
-              var frame = this.json.frame || {};
-              if (!this.json.frame || !this.json.frame.p) {
-                frame.p = {w:window.screen.width,h:window.screen.height};
-              };
-              var w = this.$.heroContent.style.width;
-              var h = this.$.heroContent.style.height;
-              var x = this.json.center.x;
-              var y = this.json.center.y;
-              if (x) {
-                var wInt = parseFloat(w);
-                var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
-                this.$.heroContent.style.left=xInt-wInt/2+'px';
-              };
-              if (y) {
-                var hInt = parseFloat(h);
-                var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
-                this.$.heroContent.style.top = yInt - hInt/2 + 'px';
-              };
-            };
             if (this.heroLayoutListenners) {
               for (var i = 0; i < this.heroLayoutListenners.length; i++) {
                 var o = this.heroLayoutListenners[i];
@@ -242,7 +237,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
               };
             };
         }
-        
+        if (this.json.center) {
+          var frame = this.json.frame || {};
+          if (!this.json.frame || !this.json.frame.p) {
+            frame.p = {w:window.screen.width,h:window.screen.height};
+          };
+          var w = this.$.heroContent.style.width;
+          var h = this.$.heroContent.style.height;
+          var x = this.json.center.x;
+          var y = this.json.center.y;
+          if (x) {
+            var wInt = parseFloat(w);
+            var xInt = x.charAt(x.length-1) === 'x'?(parseFloat(x)*frame.p.w):parseFloat(x);
+            this.$.heroContent.style.left=xInt-wInt/2+'px';
+          };
+          if (y) {
+            var hInt = parseFloat(h);
+            var yInt = y.charAt(y.length - 1) === 'x'?(parseFloat(y) * frame.p.h):parseFloat(y);
+            this.$.heroContent.style.top = yInt - hInt/2 + 'px';
+          };
+        };
         if (json.alpha) {
           this.$.heroContent.style.opacity = json.alpha;
         };
@@ -254,12 +268,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         };
         if (json.hasOwnProperty("hidden") ) {
           if (json.hidden) {
-            // this.$.heroContent.hidden = 'hidden';
+            if (this.json.contentSizeElementY) {
+                this.parent.json.frame.h = parseFloat(this.$.heroContent.style.top)+'';
+                var frame = this.parent.json.frame;
+                this.parent.oon({frame:frame});
+            };
             this.$.heroContent.style.display = 'none';
           }else{
+            if (this.json.contentSizeElementY) {
+                this.parent.json.frame.h = parseFloat(this.$.heroContent.style.top)+parseFloat(this.$.heroContent.style.height)+'';
+                var frame = this.parent.json.frame;
+                this.parent.oon({frame:frame});
+            };
             this.$.heroContent.style.display = 'block';
-            // this.$.heroContent.hidden = undefined;
-            // delete this.$.heroContent['hidden'];
           }
         };
         if (json.hasOwnProperty("h5_hidden") ) {
@@ -282,10 +303,60 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         if (json.zIndex) {
           this.$.heroContent.style.zIndex = json.zIndex;
         };
-
+        if (json.dashBorder) {
+          var dash = json.dashBorder;
+          var color = dash.color;
+          var pattern = dash.pattern;
+          if (dash.left) {
+            this.$.heroContent.style.borderLeftColor = '#'+color;
+            this.$.heroContent.style.borderLeftStyle = 'dashed';
+            this.$.heroContent.style.borderLeftWidth = '1px';
+          };
+          if (dash.right) {
+            this.$.heroContent.style.borderRightColor = '#'+color;
+            this.$.heroContent.style.borderRightStyle = 'dashed';
+            this.$.heroContent.style.borderRightWidth = '1px';
+          };
+          if (dash.bottom) {
+            this.$.heroContent.style.borderBottomColor = '#'+color;
+            this.$.heroContent.style.borderBottomStyle = 'dashed';
+            this.$.heroContent.style.borderBottomWidth = '1px';
+          };
+          if (dash.top) {
+            this.$.heroContent.style.borderTopColor = '#'+color;
+            this.$.heroContent.style.borderTopStyle = 'dashed';
+            this.$.heroContent.style.borderTopWidth = '1px';
+          };
+        };
         if (json.autolayout) {
           
+        };
+        if (json.raised) {
+          this.$.heroContent.style.overflow = 'visible';
+          this.$.heroContent.style.boxShadow = '0px 20px 20px #eeeeee';
+        };
+        if (json.gradientBackgroundColor) {
+          var colors = json.gradientBackgroundColor;
+          this.$.heroContent.style.background = '-webkit-linear-gradient(top,#'+colors[0]+',#'+colors[1]+')';
         }
+        if (json.gesture) {
+          var gesture = json.gesture;
+          for (var i = 0; i < gesture.length; i++) {
+            var ges = gesture[i];
+            if (ges.name === 'swip') {
+              this.$.heroContent.addEventListener('touchmove',function(event){
+                var event = event || window.event;  
+                var oInp = document.getElementById("inp");  
+                switch(event.type){  
+                  case 'touchmove':
+                  event.touches[0].clientX
+                }
+
+              }, false);  
+
+            };
+          };
+        };
         if (json.subViews) {
           while (this.$.heroContent.lastChild) {
              this.$.heroContent.removeChild(this.$.heroContent.lastChild);
