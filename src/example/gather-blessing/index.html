@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    body {
+      margin: 0px;
+      padding: 0px;
+      -webkit-user-select: none;
+    }
+  </style>
+  <title></title>
+  <meta name="theme-color" content="#fff">
+  <script src="./@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/fu.js"></script>
+  <script src="../../lib/bundle.js"></script>
+</head>
+<body>
+</body>
+<script>
+  var loadPage = window.location.search.split('=').pop();
+
+  var app = {tabs:[
+    {url:loadPage|| path+'home.html'},
+  ]};
+  document.write('<hero-app json='+JSON.stringify(app)+'></hero-app>');
+</script>
+</html>

@@ -1,0 +1,32 @@
+import './components/polyfills.js';
+import HeroElement from './components/hero-element.js';
+import HeroPages from './components/hero-page.js';
+import HeroButton from './components/hero-button.js';
+import HeroLabel from './components/hero-label.js';
+import HeroImageView from './components/hero-image-view.js';
+import HeroTextField from './components/hero-text-field.js';
+import HeroTextView from './components/hero-text-view.js';
+import HeroToast from './components/hero-toast.js';
+import HeroToolbarItem from './components/hero-toolbar-item.js';
+import UiView from './components/ui-view.js';
+import HeroViewController from './components/hero-view-controller.js';
+import HeroApp from './components/hero-app.js';
+
+var components = [
+    HeroElement,
+    HeroButton,
+    HeroLabel,
+    HeroPages,
+    HeroImageView,
+    HeroTextField,
+    HeroTextView,
+    HeroToast,
+    HeroToolbarItem,
+    UiView,
+    HeroViewController,
+    HeroApp
+];
+
+for(var i=0, len=components.length;i<len;i++){
+    window.customElements.define(components[i].customName, components[i]);
+}

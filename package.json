@@ -1,20 +1,16 @@
 {
   "name": "hero-js",
-  "version": "2.0.0",
-  "description": "Components used in Web Implements Hero Components Interface",
-  "main": "hero.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/lib/bundle.js",
+  "module": "src/index.js",
   "scripts": {
-    "build": "rm -rf dist && rm -rf docs && webpack && npm run generate-docs",
-    "generate-docs": "rm -rf build && jsdoc -c jsdoc.json -u tutorials -d build --readme ./INDEX_README.md",
-    "predeploy": "npm run generate-docs",
-    "deploy": "gh-pages -d build"
-  },
-  "devDependencies": {
-    "docdash": "0.4.0",
-    "gh-pages": "^1.0.0",
-    "jsdoc": "3.4.3",
-    "webpack": "1.14.0"
+    "start": "http-server",
+    "lib": "rollup src/index.js --file src/lib/bundle.js --format iife"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "rollup": "^0.65.0"
+  }
 }
