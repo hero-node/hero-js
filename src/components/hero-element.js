@@ -93,7 +93,7 @@ export default class HeroElement extends HTMLElement {
     this.on && this.on(json);
 
     if(json && json.ripple){
-      this.$.heroContent.addEventListener('click', (function(e){
+      this.$.heroContent.addEventListener('touchstart', (function(e){
         // Remove any old one
         var effectHolder = this.shadowDom.querySelector('#ripple');
         effectHolder && effectHolder.remove();

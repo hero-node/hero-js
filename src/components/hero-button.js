@@ -7,7 +7,7 @@ export default class HeroButton extends HeroElement{
         button: this.shadowDom.querySelector('button')
       }
       
-      this.$.button.addEventListener('click', this.onClick.bind(this));
+      this.$.button.addEventListener('touchstart', this.onClick.bind(this));
   }
   
   on(json) {

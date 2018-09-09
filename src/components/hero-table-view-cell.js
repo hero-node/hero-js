@@ -13,7 +13,7 @@ export default class HeroTableViewCell extends HeroElement {
         bottomLine: this.shadowDom.querySelector('#bottomLine'),
       }
 
-      this.$.heroContent.addEventListener('click', this.onTap.bind(this));
+      this.$.heroContent.addEventListener('touchstart', this.onTap.bind(this));
   }
 
 

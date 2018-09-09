@@ -24,8 +24,8 @@ export default class HeroConfirm extends HeroElement {
         wpr: this.shadowDom.querySelector('.wpr')
       }
 
-      this.$.confirm.addEventListener('click', this.tapOk.bind(this));
-      this.$.cancel.addEventListener('click', this.tapCancel.bind(this));
+      this.$.confirm.addEventListener('touchstart', this.tapOk.bind(this));
+      this.$.cancel.addEventListener('touchstart', this.tapCancel.bind(this));
   }
 
   template(json) {
