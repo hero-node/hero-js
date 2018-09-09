@@ -13,11 +13,13 @@ export default class HeroContactView extends HeroElement {
     `;
   }
 
-  on(json){
+  on(json) {
     if (json.show) {
       alert('设备不支持此操作');
-      this.controller.on({name:this.json.name,value:{name:'奥巴马',phone:'13333333333'}});
-    };
+      this.controller.on({
+        name: this.json.name,
+        value: { name: '奥巴马', phone: '13333333333' },
+      });
+    }
   }
-
 }

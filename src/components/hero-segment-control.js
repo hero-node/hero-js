@@ -1,8 +1,7 @@
 import HeroElement from './hero-element';
 
 export default class HeroSegmentControl extends HeroElement {
-
-  template(json){
+  template() {
     return `
     <style type="text/css">
       div{

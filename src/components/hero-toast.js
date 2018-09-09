@@ -1,12 +1,11 @@
 import HeroElement from './hero-element';
 
 export default class HeroToast extends HeroElement {
-
   init() {
     this.$ = {
       p: this.shadowDom.querySelector('p'),
-      div: this.shadowDom.querySelector('#wpr')
-    }
+      div: this.shadowDom.querySelector('#wpr'),
+    };
   }
 
   template() {
@@ -46,18 +45,17 @@ export default class HeroToast extends HeroElement {
   }
 
   on(json) {
-    if(json.corrnerRadius){
-        this.$.div.style.borderRadius = json.corrnerRadius + 'px';
+    if (json.corrnerRadius) {
+      this.$.div.style.borderRadius = json.corrnerRadius + 'px';
     }
     if (json.text && json.text.length > 0) {
-        this.updateContent(this.$.p, json.text);
-        this.$.div.classList.remove('hidden');
+      this.updateContent(this.$.p, json.text);
+      this.$.div.classList.remove('hidden');
 
-        var that = this;
-        setTimeout(function(){
-          that.$.div.classList.add('hidden');
-        }, 2000)
-    };
+      var that = this;
+      setTimeout(function() {
+        that.$.div.classList.add('hidden');
+      }, 2000);
+    }
   }
-
 }

@@ -1,14 +1,13 @@
 import HeroElement from './hero-element';
 
 export default class HeroChatMsgView extends HeroElement {
-
-  init(json) {
-      this.$ = {
-        p: this.shadowDom.querySelector('p')
-      }
+  init() {
+    this.$ = {
+      p: this.shadowDom.querySelector('p'),
+    };
   }
 
-  template(json){
+  template(json) {
     return `
       <style>
         div{
@@ -30,7 +29,6 @@ export default class HeroChatMsgView extends HeroElement {
   on(json) {
     if (json.text) {
       this.updateContent(this.$.p, json.text);
-    };
+    }
   }
-
 }

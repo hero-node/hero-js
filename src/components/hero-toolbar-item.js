@@ -1,14 +1,13 @@
 import HeroElement from './hero-element';
 
 export default class HeroToolbarItem extends HeroElement {
-
   init() {
     this.$ = {
       title: this.shadowDom.querySelector('#title'),
       button: this.shadowDom.querySelector('hero-button'),
       div: this.shadowDom.querySelector('#wpr'),
-      img: this.shadowDom.querySelector('img')
-    }
+      img: this.shadowDom.querySelector('img'),
+    };
   }
 
   template() {
@@ -74,16 +73,15 @@ export default class HeroToolbarItem extends HeroElement {
   on(json) {
     if (json.title) {
       this.updateContent(this.$.title, json.title);
-    };
+    }
     if (json.image) {
       this.$.image.src = json.image;
-    };
+    }
 
-    if(json.selected){
+    if (json.selected) {
       this.$.div.classList.add('selected');
-    }else{
+    } else {
       this.$.div.classList.remove('selected');
     }
   }
-
 }

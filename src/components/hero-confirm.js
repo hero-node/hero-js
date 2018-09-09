@@ -1,8 +1,7 @@
 import HeroElement from './hero-element';
 
 export default class HeroConfirm extends HeroElement {
-
-  constructor(){
+  constructor() {
     super();
 
     var btOk = '确定',
@@ -14,18 +13,17 @@ export default class HeroConfirm extends HeroElement {
     }
     this.btOk = btOk;
     this.btCancel = btCancel;
-
   }
   init() {
-      this.$ = {
-        confirm: this.shadowDom.querySelector('#confirm'),
-        cancel: this.shadowDom.querySelector('#cancel'),
-        text: this.shadowDom.querySelector('p'),
-        wpr: this.shadowDom.querySelector('.wpr')
-      }
+    this.$ = {
+      confirm: this.shadowDom.querySelector('#confirm'),
+      cancel: this.shadowDom.querySelector('#cancel'),
+      text: this.shadowDom.querySelector('p'),
+      wpr: this.shadowDom.querySelector('.wpr'),
+    };
 
-      this.$.confirm.addEventListener('touchstart', this.tapOk.bind(this));
-      this.$.cancel.addEventListener('touchstart', this.tapCancel.bind(this));
+    this.$.confirm.addEventListener('touchstart', this.tapOk.bind(this));
+    this.$.cancel.addEventListener('touchstart', this.tapCancel.bind(this));
   }
 
   template(json) {
@@ -57,19 +55,17 @@ export default class HeroConfirm extends HeroElement {
     `;
   }
 
-  on(json){
-    if(json.text){
+  on(json) {
+    if (json.text) {
       this.updateContent(this.$.text, json.text);
-      var that=this;
-      setTimeout(function(){
+      var that = this;
+      setTimeout(function() {
         that.open();
-      },50);
+      }, 50);
     }
-
   }
   open() {
     this.$.wpr.style.display = 'block';
-    
   }
   close() {
     this.$.wpr.style.display = 'none';
@@ -78,9 +74,8 @@ export default class HeroConfirm extends HeroElement {
     this.close();
     this.controller.on(this._json.action);
   }
-  tapCancel(){
+  tapCancel() {
     this.close();
     this.controller.on(this._json.cancelAction);
   }
-
 }

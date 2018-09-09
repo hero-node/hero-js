@@ -1,8 +1,7 @@
 import HeroElement from './hero-element';
 
 export default class HeroWebView extends HeroElement {
-
-  template(json) {
+  template() {
     return `
     <style type="text/css">
       iframe{
@@ -32,31 +31,33 @@ export default class HeroWebView extends HeroElement {
     `;
   }
 
-  observerHijackUrls(){
+  observerHijackUrls() {
     var url = '';
     try {
       url = this.iframe.contentWindow.location.href;
-    } catch(e) {}
+      // eslint-disable-next-line
+    } catch (e) {}
     for (var i = 0; i < this.hijackURLs.length; i++) {
       var hackurl = this.hijackURLs[i].url;
       var isLoad = this.hijackURLs[i].isLoad;
       if (hackurl === url) {
-        this.controller.on({name:this.getName(),url:hackurl});
+        this.controller.on({ name: this.getName(), url: hackurl });
         return isLoad;
-      };
-    };
+      }
+    }
     var that = this;
-    setTimeout(function(){
+    setTimeout(function() {
       that.observerHijackUrls();
-    },1000);
+    }, 1000);
   }
 
   on(json) {
     if (json.hijackURLs) {
       this.hijackURLs = json.hijackURLs;
-      this.observerHijackUrls()
-    }if (json.url) {
-      if(this.iframe){
+      this.observerHijackUrls();
+    }
+    if (json.url) {
+      if (this.iframe) {
         this.$.wpr.removeChild(this.iframe);
         this.iframe = undefined;
       }
@@ -69,18 +70,19 @@ export default class HeroWebView extends HeroElement {
       this.iframe.style.borderWidth = '0px';
       this.$.wpr.appendChild(this.iframe);
       this.iframe.hidden = false;
-      if (typeof(json.url) === 'string') {
+      if (typeof json.url === 'string') {
         this.iframe.src = json.url;
-      }else if(typeof(json.url) === 'object'){
+      } else if (typeof json.url === 'object') {
         var url = json.url.url;
-        var method = json.url.method;
         var data = json.url.data;
 
-        var innerHtml = '<form style="" id="form" method="POST" action="'+url+'">';
+        var innerHtml =
+          '<form style="" id="form" method="POST" action="' + url + '">';
         var keys = Object.keys(data);
         for (var i = 0; i < keys.length; i++) {
-          innerHtml += "<input name='"+keys[i]+"' value='"+data[keys[i]]+"'/>"
-        };
+          innerHtml +=
+            "<input name='" + keys[i] + "' value='" + data[keys[i]] + "'/>";
+        }
         innerHtml += '<input type="submit" value="submit"></input>';
         innerHtml += '</form>';
         this.iframe.contentWindow.document.body.innerHTML = innerHtml;
@@ -88,14 +90,14 @@ export default class HeroWebView extends HeroElement {
         script.innerHTML = 'document.getElementById("form").submit()';
         this.iframe.contentWindow.document.body.appendChild(script);
       }
-    }else if (json.innerHtml) {
+    } else if (json.innerHtml) {
       this.$.wpr.innerHTML = json.innerHtml;
-    }else if(json.in){
+    } else if (json.in) {
       this.iframe.contentWindow.Hero.in(json.in);
-    }else if(json.out){
+    } else if (json.out) {
       this.iframe.contentWindow.Hero.out(json.out);
-    }else if(json.mode == 'replay'){
-      this.iframe.contentWindow.Hero.in = function(){};
+    } else if (json.mode == 'replay') {
+      this.iframe.contentWindow.Hero.in = function() {};
     }
   }
 }

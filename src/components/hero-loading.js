@@ -1,15 +1,14 @@
 import HeroElement from './hero-element';
 
 export default class HeroLoading extends HeroElement {
-
-  init(json) {
-      this.$ = {
-          layer: this.shadowDom.querySelector('#layer'),
-          loading: this.shadowDom.querySelector('#loading')
-      }
+  init() {
+    this.$ = {
+      layer: this.shadowDom.querySelector('#layer'),
+      loading: this.shadowDom.querySelector('#loading'),
+    };
   }
 
-  template(json) {
+  template() {
     return `
       <style type="text/css">
         #loading{
@@ -34,11 +33,10 @@ export default class HeroLoading extends HeroElement {
     `;
   }
 
-  on(json){
-    if(typeof json.show==='boolean'){
-      this.$.loading.active=json.show;
-      this.$.layer.style.visibility=json.show?'visible':'hidden';
+  on(json) {
+    if (typeof json.show === 'boolean') {
+      this.$.loading.active = json.show;
+      this.$.layer.style.visibility = json.show ? 'visible' : 'hidden';
     }
   }
-
 }

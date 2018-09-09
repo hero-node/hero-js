@@ -1,14 +1,13 @@
 import HeroElement from './hero-element';
 
 export default class HeroTextView extends HeroElement {
-
   init() {
     this.$ = {
-      textarea: this.shadowDom.querySelector('textarea')
-  }
+      textarea: this.shadowDom.querySelector('textarea'),
+    };
 
-  this.$.textarea.addEventListener('change', this.textChange.bind(this));
-}
+    this.$.textarea.addEventListener('change', this.textChange.bind(this));
+  }
 
   template() {
     return `
@@ -30,31 +29,30 @@ export default class HeroTextView extends HeroElement {
   }
 
   on(json) {
-
-    if(json.size){
+    if (json.size) {
       this.$.textarea.style.fontSize = json.size + 'px';
     }
-    if(json.alignment){
+    if (json.alignment) {
       this.$.textarea.style.textAlign = json.alignment;
     }
-    if(json.textColor){
-      this.$.textarea.style.color = '#'+json.textColor;
+    if (json.textColor) {
+      this.$.textarea.style.color = '#' + json.textColor;
     }
     if (json.append) {
-      this.text = (this.text||'')+'\n'+json.append;
-      this.$.textarea.scrollTop = this.$.textarea.scrollHeight - this.$.textarea.clientHeight;
-    }; 
+      this.text = (this.text || '') + '\n' + json.append;
+      this.$.textarea.scrollTop =
+        this.$.textarea.scrollHeight - this.$.textarea.clientHeight;
+    }
 
-    if(json.text){
+    if (json.text) {
       this.$.textarea.value = json.text;
     }
   }
 
-  textChange(text){
-    if(this._json.textFieldDidEditing){
+  textChange(text) {
+    if (this._json.textFieldDidEditing) {
       this._json.textFieldDidEditing.value = text;
       this.controller.on(this._json.textFieldDidEditing);
     }
   }
-
 }

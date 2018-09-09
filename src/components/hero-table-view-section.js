@@ -1,17 +1,16 @@
 import HeroElement from './hero-element';
 
 export default class HeroTableViewSection extends HeroElement {
-
-  wrapperTemplate(html){
+  wrapperTemplate(html) {
     return html;
   }
 
   init() {
-      this.$ = {
-        sectionGap: this.shadowDom.querySelector('#sectionGap'),
-        heroContent: this.shadowDom.querySelector('#heroContent'),
-        title: this.shadowDom.querySelector('#title')
-      }
+    this.$ = {
+      sectionGap: this.shadowDom.querySelector('#sectionGap'),
+      heroContent: this.shadowDom.querySelector('#heroContent'),
+      title: this.shadowDom.querySelector('#title'),
+    };
   }
 
   template() {
@@ -48,11 +47,11 @@ export default class HeroTableViewSection extends HeroElement {
 
   on(json) {
     if (!this.controller) {
-      this.controller = APP.currentPage;
-    };
+      this.controller = window.APP.currentPage;
+    }
     if (json.sectionTitle) {
       this.updateContent(this.$.title, json.sectionTitle);
-    }else{
+    } else {
       this.$.title.style.display = 'none';
     }
     if (json.rows) {
@@ -61,12 +60,14 @@ export default class HeroTableViewSection extends HeroElement {
         var row = json.rows[i];
         var cell;
         if (row.class || row.res) {
-          cell = document.createElement(APP.camelCase2bar(row.class||row.res));
+          cell = document.createElement(
+            window.APP.camelCase2bar(row.class || row.res)
+          );
           cell.controller = this.controller;
           this.$.heroContent.appendChild(cell);
           cell.in(row);
           cell.$.heroContent.style.position = 'relative';
-        }else{
+        } else {
           cell = document.createElement('hero-table-view-cell');
           cell.controller = this.controller;
           this.$.heroContent.appendChild(cell);
@@ -74,14 +75,13 @@ export default class HeroTableViewSection extends HeroElement {
           this.$.heroContent.appendChild(cell);
         }
         if (row.height) {
-          cell.$.heroContent.style.height = row.height+'px';
+          cell.$.heroContent.style.height = row.height + 'px';
         }
-        if (i != json.rows.length-1) {
-          cell.in({bottomLine:true});
+        if (i != json.rows.length - 1) {
+          cell.in({ bottomLine: true });
         }
         this.$.heroContent.appendChild(cell);
-     };
-    };
+      }
+    }
   }
-
 }

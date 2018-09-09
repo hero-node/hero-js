@@ -1,24 +1,23 @@
 import HeroElement from './hero-element';
 
 export default class HeroAlert extends HeroElement {
-
-  constructor(){
+  constructor() {
     super();
-    var btOk='确定';
+    var btOk = '确定';
     var ul = navigator.language.toLowerCase();
     if (ul === 'en-us') {
-      btOk='ok';
+      btOk = 'ok';
     }
-    this.btOk=btOk;
+    this.btOk = btOk;
   }
   init() {
-      this.$ = {
-        button: this.shadowDom.querySelector('button'),
-        p: this.shadowDom.querySelector('p'),
-        wpr: this.shadowDom.querySelector('.wpr')
-      }
+    this.$ = {
+      button: this.shadowDom.querySelector('button'),
+      p: this.shadowDom.querySelector('p'),
+      wpr: this.shadowDom.querySelector('.wpr'),
+    };
 
-      this.$.button.addEventListener('touchstart', this.close.bind(this));
+    this.$.button.addEventListener('touchstart', this.close.bind(this));
   }
 
   template(json) {
@@ -48,13 +47,13 @@ export default class HeroAlert extends HeroElement {
     `;
   }
 
-  on(json){
-    if(json.text){
+  on(json) {
+    if (json.text) {
       this.updateContent(this.$.p, json.text);
-      var that=this;
-      setTimeout(function(){
+      var that = this;
+      setTimeout(function() {
         that.open();
-      },50);
+      }, 50);
     }
   }
 
@@ -65,5 +64,4 @@ export default class HeroAlert extends HeroElement {
   close() {
     this.$.wpr.style.display = 'none';
   }
-
 }

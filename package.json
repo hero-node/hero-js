@@ -7,14 +7,13 @@
   "scripts": {
     "start": "http-server",
     "lib": "npm run dist-iife && npm run dist-cjs",
-    "dist-iife": "rollup src/index.js --file src/dist/hero-iife.js --format iife",
+    "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
     "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [
       "prettier --trailing-comma es5 --single-quote --write",
-      "eslint --fix",
       "git add"
     ],
     "yarn.lock": [

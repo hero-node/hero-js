@@ -1,7 +1,7 @@
 import HeroElement from './hero-element';
 
 export default class HeroLocationView extends HeroElement {
-  template(json){
+  template() {
     return `
     <style type="text/css">
       div{
@@ -13,8 +13,8 @@ export default class HeroLocationView extends HeroElement {
     `;
   }
 
-  on(json){
-    if(json.fetch_coordinate){
+  on(json) {
+    if (json.fetch_coordinate) {
       json.fetch_coordinate.la = 122.0;
       json.fetch_coordinate.lo = 122.0;
       this.controller.on(json.fetch_coordinate);

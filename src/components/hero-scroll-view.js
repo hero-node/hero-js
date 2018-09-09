@@ -10,5 +10,4 @@ export default class HeroScrollView extends HeroElement {
       </style>
     `;
   }
-
 }

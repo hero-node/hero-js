@@ -1,8 +1,7 @@
 import HeroElement from './hero-element';
 
 export default class HeroScanBarCodeView extends HeroElement {
-
-  template(json) {
+  template() {
     return `
     <style type="text/css">
       div{display: inline-block;position:absolute;overflow: hidden; margin: 0px;padding: 0px;width: 100%;height: 100%;}
@@ -12,12 +11,11 @@ export default class HeroScanBarCodeView extends HeroElement {
     `;
   }
 
-  connectedCallback(){
+  connectedCallback() {
     var that = this;
-    setTimeout(function(){
-        that.json.getBarCode.value='http://Only.test.com&invitationKey=97979';
-        this.controller.on(that.json.getBarCode)
-    },2000);
+    setTimeout(function() {
+      that.json.getBarCode.value = 'http://Only.test.com&invitationKey=97979';
+      this.controller.on(that.json.getBarCode);
+    }, 2000);
   }
-
 }

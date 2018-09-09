@@ -1,35 +1,32 @@
 import HeroElement from './hero-element';
 
-export default class HeroLabel extends HeroElement{
+export default class HeroLabel extends HeroElement {
+  init() {
+    this.$ = {
+      span: this.shadowDom.querySelector('span'),
+    };
+  }
 
-    init() {
-        this.$ = {
-            span: this.shadowDom.querySelector('span')
-        }
+  on(json) {
+    if (json.text !== undefined) {
+      this.updateContent(this.$.span, json.text);
     }
+    if (json.size) {
+      this.$.span.style.fontSize = json.size + 'px';
+    }
+    if (json.alignment) {
+      this.$.span.style.textAlign = json.alignment;
+    }
+    if (json.textColor) {
+      this.$.span.style.color = '#' + json.textColor;
+    }
+    if (json.weight) {
+      this.$.span.style.fontWeight = json.weight;
+    }
+  }
 
-    on(json){
-
-        if (json.text !== undefined) {
-          this.updateContent(this.$.span, json.text);
-        };
-        if (json.size) {
-            this.$.span.style.fontSize = json.size + 'px';
-        };
-        if (json.alignment) {
-            this.$.span.style.textAlign = json.alignment;
-        };
-        if (json.textColor) {
-            this.$.span.style.color = '#'+json.textColor;
-        };
-        if (json.weight) {
-            this.$.span.style.fontWeight = json.weight;
-        };
-        
-      }
-
-    template(json){
-        return `
+  template() {
+    return `
          <style>
             span{
                 display: block;
@@ -37,5 +34,5 @@ export default class HeroLabel extends HeroElement{
           </style>
           <span></span>
         `;
-      }
+  }
 }

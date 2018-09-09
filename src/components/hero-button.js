@@ -1,51 +1,49 @@
 import HeroElement from './hero-element';
 
-export default class HeroButton extends HeroElement{
-
+export default class HeroButton extends HeroElement {
   init() {
-      this.$ = {
-        button: this.shadowDom.querySelector('button')
-      }
-      
-      this.$.button.addEventListener('touchstart', this.onClick.bind(this));
+    this.$ = {
+      button: this.shadowDom.querySelector('button'),
+    };
+
+    this.$.button.addEventListener('touchstart', this.onClick.bind(this));
   }
-  
+
   on(json) {
-      if(json.title){
-        this.updateContent(this.$.button, json.title);
+    if (json.title) {
+      this.updateContent(this.$.button, json.title);
+    }
+    if (json.disabled) {
+      this.updateAttr(this.$.button, 'disabled', json.disabled);
+      if (json.titleDisabledColor) {
+        this.$.button.style.color = '#' + json.titleDisabledColor;
       }
-      if(json.disabled){
-        this.updateAttr(this.$.button, 'disabled', json.disabled);
-        if(json.titleDisabledColor){
-          this.$.button.style.color = '#'+json.titleDisabledColor;
-        }
-        if(json.backgroundDisabledColor){
-          this.$.button.style.background = '#'+json.backgroundDisabledColor;
-        }
-
-      }else{
-        if(json.titleColor){
-          this.$.button.style.color = '#'+json.titleColor;
-        }
-        if(json.backgroundColor){
-          this.$.button.style.background = '#'+json.backgroundColor;
-        }
+      if (json.backgroundDisabledColor) {
+        this.$.button.style.background = '#' + json.backgroundDisabledColor;
       }
-      if(json.size){
-        this.$.button.style.fontSize = json.size+'px';
+    } else {
+      if (json.titleColor) {
+        this.$.button.style.color = '#' + json.titleColor;
       }
-
-      if(json.cornerRadius){
-        this.$.button.style.borderRadius = json.cornerRadius+'px';
+      if (json.backgroundColor) {
+        this.$.button.style.background = '#' + json.backgroundColor;
       }
     }
-
-    onClick (){
-      this.controller.on(this._json.click);
+    if (json.size) {
+      this.$.button.style.fontSize = json.size + 'px';
     }
 
-    template(json){
-      return `
+    if (json.cornerRadius) {
+      this.$.button.style.borderRadius = json.cornerRadius + 'px';
+    }
+  }
+
+  onClick() {
+    this.controller.on(this._json.click);
+  }
+
+  template(json) {
+    return `
        <style>
           button {
             font-size: ${json.size}px;
@@ -72,5 +70,5 @@ export default class HeroButton extends HeroElement{
           <button></button>
         </div>
       `;
-    }
+  }
 }
