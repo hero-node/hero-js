@@ -442,10 +442,10 @@ export default class HeroApp extends HeroElement {
       this.$.leftMenu.style.animation = 'leftMenuIn 0.3s';
     }else{
       this.$.leftMenu.style.animation = 'leftMenuOut 0.3s';
-      this.async(function(){
+      // this.async(function(){
         this.$.menu.style.display = 'none';
         this.$.leftMenu.style.display = 'none';
-      },200);
+      // },200);
     }
   }
   closeMenu(){

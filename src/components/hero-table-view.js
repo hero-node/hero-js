@@ -1,4 +1,6 @@
 import HeroElement from './hero-element';
+import './hero-table-view-section';
+import './hero-table-view-cell';
 
 export default class HeroTableView extends HeroElement {
 
@@ -37,9 +39,7 @@ export default class HeroTableView extends HeroElement {
 
   on(json) {
     if (json.header) {
-        while (this.$.header.lastChild) {
-           this.$.header.removeChild(this.$.header.lastChild);
-        }
+        this.$.header.innerHTML = '';
         var viewObject = json.header;
         var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
         this.$.header.appendChild(view);
@@ -58,9 +58,7 @@ export default class HeroTableView extends HeroElement {
       }).join('');
     };
     if (json.footer) {
-        while (this.$.footer.lastChild) {
-           this.$.footer.removeChild(this.$.footer.lastChild);
-        }
+        this.$.footer.innerHTML = '';
         var viewObject = json.footer;
         var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
         this.$.footer.appendChild(view);
@@ -72,11 +70,11 @@ export default class HeroTableView extends HeroElement {
         view.$.heroContent.style.position = 'relative';
     };
     var that = this;
-    this.async(function(){
+    // this.async(function(){
       for (var i = 0; i < that.$.heroContent.children.length; i++) {
         that.$.heroContent.children[i].controller = that.controller;
       };
-    },100);
+    // },100);
   }
 
 }

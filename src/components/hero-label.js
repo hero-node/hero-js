@@ -14,16 +14,16 @@ export default class HeroLabel extends HeroElement{
           this.updateContent(this.$.span, json.text);
         };
         if (json.size) {
-          this.updateCSSRule('span', 'fontSize', json.size+'px');
+            this.$.span.style.fontSize = json.size + 'px';
         };
         if (json.alignment) {
-          this.updateCSSRule('span', 'textAlign', json.alignment);
+            this.$.span.style.textAlign = json.alignment;
         };
         if (json.textColor) {
-            this.updateCSSRule('span', 'color', json.textColor);
+            this.$.span.style.color = '#'+json.textColor;
         };
         if (json.weight) {
-            this.updateCSSRule('span', 'fontWeight', json.weight);
+            this.$.span.style.fontWeight = json.weight;
         };
         
       }
@@ -33,13 +33,9 @@ export default class HeroLabel extends HeroElement{
          <style>
             span{
                 display: block;
-                font-size: ${json.size}px;
-                text-align: ${json.alignment};
-                color: ${json.textColor};
-                font-weight: ${json.weight};
             }
           </style>
-          <span>${json.text}</span>
+          <span></span>
         `;
       }
 }

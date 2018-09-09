@@ -10,7 +10,7 @@ export default class HeroTableViewSection extends HeroElement {
       this.$ = {
         sectionGap: this.shadowDom.querySelector('#sectionGap'),
         heroContent: this.shadowDom.querySelector('#heroContent'),
-        title: this.shadowDom.querySelector('title')
+        title: this.shadowDom.querySelector('#title')
       }
   }
 
@@ -42,7 +42,7 @@ export default class HeroTableViewSection extends HeroElement {
     </style>
     <div id='sectionGap'>
     </div>
-    <p id='title'>${json.sectionTitle}</p>
+    <p id='title'></p>
     <div id='heroContent'>
     </div>
 
@@ -54,14 +54,16 @@ export default class HeroTableViewSection extends HeroElement {
       this.controller = APP.currentPage;
     };
     if (json.sectionTitle) {
-      this.title = json.sectionTitle;
+      this.updateContent(this.$.title, json.sectionTitle);
     }else{
       this.$.title.style.display = 'none';
     }
     if (json.rows) {
-      while (this.$.heroContent.lastChild) {
-         this.$.heroContent.removeChild(this.$.heroContent.lastChild);
-      }
+      // while (this.$.heroContent.lastChild) {
+      //    this.$.heroContent.removeChild(this.$.heroContent.lastChild);
+      // }
+
+      this.$.heroContent.innerHTML = '';
       for (var i = 0; i < json.rows.length; i++) {
         var row = json.rows[i];
         var cell;
@@ -69,14 +71,14 @@ export default class HeroTableViewSection extends HeroElement {
           cell = document.createElement(APP.camelCase2bar(row.class||row.res));
           cell.controller = this.controller;
           this.$.heroContent.appendChild(cell);
-          cell.json = row;
+          cell.in(row);
           cell.$.heroContent.style.position = 'relative';
           // cell.tabIndex = i+'';
         }else{
           cell = document.createElement('hero-table-view-cell');
           cell.controller = this.controller;
           this.$.heroContent.appendChild(cell);
-          cell.json = row;
+          cell.in(row);
           // cell.tabIndex = i+'';
           this.$.heroContent.appendChild(cell);
         }

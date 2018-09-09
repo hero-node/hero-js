@@ -5,6 +5,9 @@ import HeroButton from './components/hero-button.js';
 import HeroLabel from './components/hero-label.js';
 import HeroImageView from './components/hero-image-view.js';
 import HeroTextField from './components/hero-text-field.js';
+import HeroTableView from './components/hero-table-view.js';
+import HeroTableViewCell from './components/hero-table-view-cell.js';
+import HeroTableViewSection from './components/hero-table-view-section.js';
 import HeroTextView from './components/hero-text-view.js';
 import HeroToast from './components/hero-toast.js';
 import HeroToolbarItem from './components/hero-toolbar-item.js';
@@ -18,6 +21,9 @@ var components = [
     HeroLabel,
     HeroPages,
     HeroImageView,
+    HeroTableViewCell,
+    HeroTableViewSection,
+    HeroTableView,
     HeroTextField,
     HeroTextView,
     HeroToast,
