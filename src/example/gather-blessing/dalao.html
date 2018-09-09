@@ -234,7 +234,7 @@ function getlist(list,j) {
             Hero.rows = [];
             for (var i = 0; i < list.length; i++) {
                 Hero.rows.push({
-                    class:'UIView',
+                    class:'HeroView',
                     frame:{w:'1x',h:'66'},
                     subViews:[
                         {
@@ -311,7 +311,7 @@ Hero.ui = {
             frame:{w:'1x',y:'200',b:'0'},
             name:'list',
             footer:{
-                class:'UIView',
+                class:'HeroView',
                 frame:{w:'1x',h:'60'},
                 subViews:[
                     {
@@ -320,7 +320,7 @@ Hero.ui = {
                         title:'我也要撒币',
                         backgroundColor:'bd3a53',
                         titleColor:'eeeeee',
-                        click:{command:'goto:'+path+'/sabi.html'}
+                        click:{command:'goto:'+path+'sabi.html'}
                     }
                 ]
             }

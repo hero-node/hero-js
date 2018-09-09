@@ -2736,8 +2736,8 @@
 
     }
 
-    class UiView extends HeroElement {
-
+    class HeroView extends HeroElement {
+      
     }
 
     class HeroViewController extends HeroElement {
@@ -3659,7 +3659,7 @@
         HeroTextView,
         HeroToast,
         HeroToolbarItem,
-        UiView,
+        HeroView,
         HeroViewController,
         HeroApp
     ];

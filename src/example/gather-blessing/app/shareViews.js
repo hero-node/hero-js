@@ -6,14 +6,14 @@ window.maskColor = '212121';
 window.tintColor = 'd7ba7e';
 window.tintColorL = 'ebaa73';
 
-window.lineView = {class:'UIView',backgroundColor:'eeeeee'}
+window.lineView = {class:'HeroView',backgroundColor:'eeeeee'}
 window.msgButton = {
 	class:'HeroButton',
 	click:{},
 	borderColor:'eeeeee'
 }
 window.backButton = {
-	class:'UIView',
+	class:'HeroView',
 	subViews:[
 		{
 			class:'HeroImageView',
@@ -29,7 +29,7 @@ window.backButton = {
 	]
 }
 window.closeBar = {
-	class:'UIView',
+	class:'HeroView',
 	frame:{w:'1x',h:'64'},
 	border:{bottom:true},
 	subViews:[
@@ -53,14 +53,14 @@ window.closeBar = {
             text:'',
         },
 		{
-			class:'UIView',
+			class:'HeroView',
 			frame:{w:'1x',h:'1',b:'0'},
 			backgroundColor:'eeeeee',
 		},
 	]
 }
 window.navBar = {
-				class:'UIView',
+				class:'HeroView',
 				frame:{w:'1x',h:'64'},
 				gradientBackgroundColor:['4f4f56','262a30'],
 				subViews:[

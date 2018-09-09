@@ -108,7 +108,7 @@ var xhr = function () {
                 if (json.response_code === 'SUCCESS') {
                 	success(json);
                 }else if(json.response_code === 'MEMBER_NOT_LOGIN_ERROR'){
-					Hero.command('present:'+path+'/login.html');
+					Hero.command('present:'+path+'login.html');
                 }else{
                     Hero.datas({name:'toast',text:json.memo || json.response_message})
                 }
@@ -139,7 +139,7 @@ var xhr = function () {
                 if (json.response_code === 'SUCCESS') {
                 	success(json);
                 }else if(json.response_code === 'MEMBER_NOT_LOGIN_ERROR'){
-					Hero.command('present:'+path+'/login.html');
+					Hero.command('present:'+path+'login.html');
                 }else{
                     Hero.datas({name:'toast',text:json.memo || json.response_message})
                 }

@@ -8,7 +8,7 @@ import HeroTextField from './components/hero-text-field.js';
 import HeroTextView from './components/hero-text-view.js';
 import HeroToast from './components/hero-toast.js';
 import HeroToolbarItem from './components/hero-toolbar-item.js';
-import UiView from './components/ui-view.js';
+import HeroView from './components/hero-view.js';
 import HeroViewController from './components/hero-view-controller.js';
 import HeroApp from './components/hero-app.js';
 
@@ -22,7 +22,7 @@ var components = [
     HeroTextView,
     HeroToast,
     HeroToolbarItem,
-    UiView,
+    HeroView,
     HeroViewController,
     HeroApp
 ];

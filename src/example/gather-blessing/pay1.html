@@ -14,7 +14,7 @@
   Hero.on = function(json){
       if(json.click === 'pay'){
           localStorage.pageType = 'duihuan';
-          Hero.command('goto:'+path+'/pay3.html');
+          Hero.command('goto:'+path+'pay3.html');
       }
       if (json.click === 'copy') {
           window.copyTextToClipboard(inpoutByteCode);
@@ -40,7 +40,7 @@
               image:path+'images/2018.png'
           },
           {
-              class:'UIView',
+              class:'HeroView',
               frame:{w:'1x',y:'200',h:'100'},
               subViews:[
                   {
@@ -69,7 +69,7 @@
               ]
           },
           {
-              class:'UIView',
+              class:'HeroView',
               frame:{w:'1x',y:'300',h:'100'},
               subViews:[
                   {
@@ -93,7 +93,7 @@
                       backgroundColor:'bd3a53',
                       titleColor:'eeeeee',
                       cornerRadius:6,
-                      click:{command:'goto:'+path+'/pay4.html'}
+                      click:{command:'goto:'+path+'pay4.html'}
                   }
               ]
           },
