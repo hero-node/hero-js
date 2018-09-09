@@ -11,7 +11,7 @@ export default class HeroAlert extends HeroElement {
     }
     this.btOk=btOk;
   }
-  init(json) {
+  init() {
       this.$ = {
         button: this.shadowDom.querySelector('button'),
         p: this.shadowDom.querySelector('p'),
@@ -59,11 +59,11 @@ export default class HeroAlert extends HeroElement {
   }
 
   open() {
-    this.updateCSSRule('.wpr', 'display', 'block');
+    this.$.wpr.style.display = 'block';
   }
 
   close() {
-    this.updateCSSRule('.wpr', 'display', 'none');
+    this.$.wpr.style.display = 'none';
   }
 
 }

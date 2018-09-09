@@ -4,7 +4,6 @@ import HeroElement from './hero-element';
 export default class HeroPages extends HeroElement{
 
     init() {
-        // super.init(json); // always call super() first in the constructor.
         this.$ = {
             pages: this.shadowDom.querySelector('#pageContainer')
         }
@@ -1350,7 +1349,6 @@ export default class HeroPages extends HeroElement{
         inClass && $inpage.classList.remove(inClass);
         $inpage.classList.add('pt-page-current');
         
-		// isAnimating = false;
     }
     addPage(page){
 		const holder = this.shadowDom.querySelector('.pt-page.holder');
@@ -1368,10 +1366,7 @@ export default class HeroPages extends HeroElement{
 
     on(json){
         const animEndEventName = window.AnimationSupport.end;
-        // if(this.$.pages.children.length === 1){
-        //     this.$.pages.children[0].classList.add('pt-page-current');
-        //     this.selectedItem = this.$.pages.children[0];
-        // }
+     
 		this.currPage = this.shadowDom.querySelector('.pt-page-current');
 
 		if(!json){
@@ -1382,16 +1377,9 @@ export default class HeroPages extends HeroElement{
 		}
 		
 		this.nextPage.classList.add('pt-page-current');
-        // if(json.selected){
-        //     this.currPage = this.shadowDom.querySelector('.pt-page-current');
-		// }
-		
-		// if(!this.nextPage || this.currPage === this.nextPage){
-		// 	return;
-		// }
-
+ 
 		var outClass, inClass;
-        // this.isAnimating = true;
+
         switch( this.effectType ) {
 
 			case 1:
@@ -1691,10 +1679,5 @@ export default class HeroPages extends HeroElement{
 		this.outClass && this.currPage.classList.add(this.outClass);
 		this.inClass && this.nextPage.classList.add(this.inClass);
 
-		// this.currPage.classList.remove('pt-page-current');
-        // this.currPage.classList.remove(outClass);
-        // this.nextPage.classList.remove(inClass);
-        // this.nextPage.classList.add('pt-page-current');
-        
     }
 }

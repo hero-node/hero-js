@@ -16,7 +16,7 @@ export default class HeroConfirm extends HeroElement {
     this.btCancel = btCancel;
 
   }
-  init(json) {
+  init() {
       this.$ = {
         confirm: this.shadowDom.querySelector('#confirm'),
         cancel: this.shadowDom.querySelector('#cancel'),
@@ -68,10 +68,11 @@ export default class HeroConfirm extends HeroElement {
 
   }
   open() {
-    this.updateCSSRule('.wpr', 'display', 'block');
+    this.$.wpr.style.display = 'block';
+    
   }
   close() {
-    this.updateCSSRule('.wpr', 'display', 'none');
+    this.$.wpr.style.display = 'none';
   }
   tapOk() {
     this.close();

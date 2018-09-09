@@ -2,7 +2,7 @@ import HeroElement from './hero-element';
 
 export default class HeroTableViewCell extends HeroElement {
 
-  init(json) {
+  init() {
 
       this.$ = {
         ripple: this.shadowDom.querySelector('#ripple'),
@@ -17,7 +17,7 @@ export default class HeroTableViewCell extends HeroElement {
   }
 
 
-  template(json){
+  template(){
     return `
     <style type="text/css">
       :host {

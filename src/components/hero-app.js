@@ -3,14 +3,10 @@ import HeroViewController from './hero-view-controller';
 
 export default class HeroApp extends HeroElement {
 
-  // attributeChangedCallback(name, oldValue, newValue){
-  //   this.init(JSON.parse(newValue));
-  // }
-
   wrapperTemplate(html){
     return html;
   }
-  init(json){
+  init(){
     this.rootPages = [];
     this.pageStack = [];
     this.loadedPages = [];
@@ -44,7 +40,7 @@ export default class HeroApp extends HeroElement {
     };
   }
 
-  template(json) {
+  template() {
     return `
     <style>
       :host {
@@ -287,12 +283,7 @@ export default class HeroApp extends HeroElement {
   registerElement(element){
     if (!this.contain(this.loadedPages,element)) {
       this.loadedPages.push(element);
-      // Polymer({
-      //   is: element,
-      //   behaviors: [HeroViewController],
-      //   ready:function(){
-      //   }
-      // });
+
       class Page extends HeroViewController{
         constructor(){
           super();
@@ -319,15 +310,10 @@ export default class HeroApp extends HeroElement {
       };
       pageElement = pageElement.replace('.html','');
       pageElement = pageElement.search(/-/)>0?pageElement:'hero-'+pageElement;
-    }else{
-      // pageElement = pageElement.replace('http://','');
-      // pageElement = pageElement.replace('https://','');
-      // pageElement = pageElement.replace(/\./g,'-');
     }
     return pageElement;
   }
   connectedCallback(){
-    // super.ready();
 
     window.APP = this;
     window.addEventListener('popstate', function(e) {
@@ -353,31 +339,8 @@ export default class HeroApp extends HeroElement {
     window.__defineGetter__('Hero', function() {
       return window[window.location.href+'_Hero'];
     });
-    // Object.defineProperty(window,"Hero",{
-    //   set:function(newValue){
-    //     window[window.location.href+'_Hero'] = newValue;
-    //   },
-    //   get:function(){
-    //     return window[window.location.href+'_Hero'] ||{} ;
-    //   },
-    //   configurable:true
-    // })
 
     window.last_ui2Data = '';
-
-    // Object.defineProperty(window,"ui2Data",{
-    //   set:function(newValue){
-    //     window[window.location.href+'_ui2Data'] = newValue;
-    //   },
-    //   get:function(){
-    //     var _ui2Data = window[window.location.href+'_ui2Data'];
-    //     if (_ui2Data) {
-    //       window.last_ui2Data = _ui2Data;
-    //     };
-    //     return window.last_ui2Data;
-    //   },
-    //   configurable:true
-    // })
 
     window.__defineSetter__('ui2Data', function(v) {
         window[window.location.href+'_ui2Data'] = v;
@@ -469,29 +432,15 @@ export default class HeroApp extends HeroElement {
       this.$.pages.on();
       window.importHref(page, function(){
         that.currentPage = document.createElement(pageElement);
-        // that.currentPage.classList.add('pt-page');
         that.currentPage.name = pageElement;
         that.currentPage.url = page;
-        // if (that.$.pages.__domApi) {
-          // that.$.pages.__domApi.appendChild(that.currentPage);
           that.$.pages.addPage(that.currentPage);
-        // }else{
-          // setTimeout(function(){
-          //   that.$.pages.__domApi.appendChild(that.currentPage);
-          // },1100);
-        // }
-          // that.$.pages.on({
-          //   selected : pageElement
-          // });
+   
       }, function(err){
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
           that.$.pages.addPage(that.currentPage);
-          // that.$.pages.selected = pageElement;
-          // that.$.pages.on({
-          //   selected : pageElement
-          // });
       })
     }else{
       this.$.pages.on({
@@ -505,18 +454,6 @@ export default class HeroApp extends HeroElement {
         next.viewDidLoad();
       }
       next.viewWillAppear();
-
-      // for (var i = 0; i < this.$.pages.children.length; i++) {
-      //   var e = this.$.pages.children[i].children[0];
-      //   if (e.name == pageElement) {
-      //     this.currentPage = e;
-      //     // this.$.pages.selected = pageElement;
-      //     this.$.pages.on({
-      //       selected : pageElement
-      //     });
-          
-      //   };
-      // };
     }
   }
   gotoPage(page,option){

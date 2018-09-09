@@ -407,29 +407,6 @@ export default class HeroElement extends HTMLElement {
     };
   }
   }
-
-  updateCSSRule(ruleName, attr, value){
-    for(var i = 0, len = this.shadowDom.styleSheets.length;i<len;i++){
-      var sheet = this.shadowDom.styleSheets[i];
-      var rules = sheet.cssRules || sheet.rules;
-      var isMatch = false;
-      for(var j = 0, jLen = rules.length;j<jLen;j++){
-        var rule = rules[j];
-        if(rule.selectorText === ruleName){
-          if(attr === 'color' && value.indexOf('#')!==0){
-            value = '#'+value
-          }
-          rule.style[attr] = value;
-          isMatch = true;
-          break;
-        }
-      }
-
-      if(isMatch){
-        break;
-      }
-    }
-  }
   
   updateAttr(element, name, value){
     element.setAttribute(name, value);

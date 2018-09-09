@@ -2,18 +2,17 @@ import HeroElement from './hero-element';
 
 export default class HeroToast extends HeroElement {
 
-  init(json) {
+  init() {
     this.$ = {
       p: this.shadowDom.querySelector('p'),
       div: this.shadowDom.querySelector('#wpr')
     }
   }
 
-  template(json) {
+  template() {
     return `
     <style type="text/css">
-      .fit-bottom {
-        display: block;
+      #wpr {
         position: fixed;
         bottom: 0;
         background-color: #323232;
@@ -23,7 +22,7 @@ export default class HeroToast extends HeroElement {
         padding: 16px 24px;
         box-sizing: border-box;
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-        border-radius: ${json.corrnerRadius || 2}px;
+        border-radius: 2px;
         margin: 12px;
         font-size: 14px;
         cursor: default;
@@ -34,7 +33,7 @@ export default class HeroToast extends HeroElement {
         -webkit-font-smoothing: antialiased;
         z-index: 100;
       }
-      .fit-bottom.hidden{
+      .hidden{
         opacity: 0;
         display: none;
       }
@@ -47,6 +46,9 @@ export default class HeroToast extends HeroElement {
   }
 
   on(json) {
+    if(json.corrnerRadius){
+        this.$.div.style.borderRadius = json.corrnerRadius + 'px';
+    }
     if (json.text && json.text.length > 0) {
         this.updateContent(this.$.p, json.text);
         this.$.div.classList.remove('hidden');

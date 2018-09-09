@@ -2,34 +2,6 @@ import HeroElement from './hero-element';
 
 export default class HeroViewController extends HeroElement {
 
-  static get properties() {
-    return {
-      url: {
-        type: String
-      },
-      title: {
-        type: String,
-      },
-      view: {
-        type: Object,
-        // observer: 'setUI',
-      },
-      controller: {
-        type: Object,
-        // observer: 'setController'
-      },
-      heroContent: {
-        type: Object,
-      },
-      ui2data: {
-        type: Object,
-      },
-      appearObject:{
-        type: Object,
-      }
-    };
-  }
-
   findViewByname(name, root){
     var view = root.querySelector('#'+name);
     if ((!view)  || (!view.json) ) {
@@ -104,15 +76,6 @@ export default class HeroViewController extends HeroElement {
       this.controller = Hero;
       Hero.page = this;
       var heroContent = document.createElement('div');
-      // heroContent.style.display = 'block';
-      // heroContent.style.position = 'absolute';
-      // heroContent.style.overflow = 'scroll';
-      // heroContent.style.overflowX = 'hidden';
-      // heroContent.style.visibility = 'hidden';
-      // heroContent.style.backfaceVisibility = 'hidden';
-      // heroContent.style.transform = 'translate3d(0, 0, 0)';
-      // heroContent.style.left = '0';
-      // heroContent.style.top = '0';
       heroContent.style.height = '100%';
       heroContent.style.width = '100%';
       this.appendChild(heroContent);
@@ -357,11 +320,6 @@ export default class HeroViewController extends HeroElement {
               }, delayTime);
           }else if (command.viewWillAppear) {
               this.appearObject = command.viewWillAppear;
-              // if (Array.isArray(command.viewWillAppear)) {
-              //     this.controller.in(command.viewWillAppear[0]);
-              // }else{
-              //     this.controller.in(command.viewWillAppear);
-              // };
           }else if (command.viewWillDisappear) {
 
           };

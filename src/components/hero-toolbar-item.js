@@ -2,20 +2,19 @@ import HeroElement from './hero-element';
 
 export default class HeroToolbarItem extends HeroElement {
 
-  init(json) {
-    // super(json); // always call super() first in the constructor.
+  init() {
     this.$ = {
-      title: this.shadowDom.querySelector('span'),
+      title: this.shadowDom.querySelector('#title'),
       button: this.shadowDom.querySelector('hero-button'),
-      div: this.shadowDom.querySelector('div'),
+      div: this.shadowDom.querySelector('#wpr'),
       img: this.shadowDom.querySelector('img')
     }
   }
 
-  template(json) {
+  template() {
     return `
     <style type="text/css">
-      div{
+      #wpr{
         display: inline-block;
         position: absolute;
         overflow: hidden;
@@ -57,17 +56,17 @@ export default class HeroToolbarItem extends HeroElement {
         left:0px;
         top:0px;
       }
-      div .title{
+      #title{
         color: #999;
       }
-      div.selected .title{
+      #wpr.selected #title{
         color: #00BC8D;
       }
       </style>
-      <div class="wpr ${json.selected?'selected':''}">
-        <img src="${json.image}"></img>
-        <span class="title">${json.title}</span>
-        <hero-button on-tap="onTap"></hero-button>
+      <div id="wpr">
+        <img />
+        <span id="title"></span>
+        <hero-button></hero-button>
       </div>
     `;
   }
@@ -85,12 +84,6 @@ export default class HeroToolbarItem extends HeroElement {
     }else{
       this.$.div.classList.remove('selected');
     }
-  }
-  onTap(){
-    this._json.selected = !this._json.selected;
-    if (this._json.click) {
-      this.controller.on(this._json.click);
-    };
   }
 
 }

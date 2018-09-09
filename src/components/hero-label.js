@@ -2,7 +2,7 @@ import HeroElement from './hero-element';
 
 export default class HeroLabel extends HeroElement{
 
-    init(json) {
+    init() {
         this.$ = {
             span: this.shadowDom.querySelector('span')
         }

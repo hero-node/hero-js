@@ -4,7 +4,7 @@ export default class HeroTextField extends HeroElement{
 
     init(json) {
         this.$ = {
-            div: this.shadowDom.querySelector('span'),
+            div: this.shadowDom.querySelector('div'),
             input: this.shadowDom.querySelector('input')
         }
 
@@ -21,11 +21,11 @@ export default class HeroTextField extends HeroElement{
     on(json){
        
         if (json.size) {
-            this.updateCSSRule('span', 'fontSize', json.size+'px');
+            this.$.div.style.fontSize = json.size+'px';
         };
         
         if (json.textColor) {
-            this.updateCSSRule('span', 'color', json.textColor);
+            this.$.div.style.color = '#' + json.textColor;
         };
         if (json.clear) {
             json.text = '';
@@ -72,13 +72,11 @@ export default class HeroTextField extends HeroElement{
         }
     }
 
-
     template(json){
         return `
          <style>
             input{
-                color: ${json.textColor};
-                font-size: ${json.size || 16}px;
+                font-size: 16px;
                 width: 100%;
                 border: 0;
                 outline: 0;
@@ -94,7 +92,7 @@ export default class HeroTextField extends HeroElement{
             }
           </style>
           <div>
-            <input type="${json.secure?'password': (json.type==='pin'?'tel':json.type)}" placeholder="${json.placeHolder}" value="${json.clear?json.text:''}" />
+            <input />
           </div>
         `;
       }
