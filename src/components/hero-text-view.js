@@ -36,9 +36,12 @@ export default class HeroTextView extends HeroElement {
 
     if (json.append) {
       this.text = (this.text||'')+'\n'+json.append;
-      this.$.text.scrollTop = this.$.text.scrollHeight - this.$.text.clientHeight;
+      this.$.textarea.scrollTop = this.$.textarea.scrollHeight - this.$.textarea.clientHeight;
     }; 
 
+    if(json.text){
+      this.$.textarea.value = json.text;
+    }
   }
 
   textChange(text){
