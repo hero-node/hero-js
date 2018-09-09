@@ -529,29 +529,6 @@
           this.$.heroContent.style.pointerEvents = json.enable?'':'none';
         }  }
       }
-
-      updateCSSRule(ruleName, attr, value){
-        for(var i = 0, len = this.shadowDom.styleSheets.length;i<len;i++){
-          var sheet = this.shadowDom.styleSheets[i];
-          var rules = sheet.cssRules || sheet.rules;
-          var isMatch = false;
-          for(var j = 0, jLen = rules.length;j<jLen;j++){
-            var rule = rules[j];
-            if(rule.selectorText === ruleName){
-              if(attr === 'color' && value.indexOf('#')!==0){
-                value = '#'+value;
-              }
-              rule.style[attr] = value;
-              isMatch = true;
-              break;
-            }
-          }
-
-          if(isMatch){
-            break;
-          }
-        }
-      }
       
       updateAttr(element, name, value){
         element.setAttribute(name, value);
@@ -604,7 +581,6 @@
     class HeroPages extends HeroElement{
 
         init() {
-            // super.init(json); // always call super() first in the constructor.
             this.$ = {
                 pages: this.shadowDom.querySelector('#pageContainer')
             };
@@ -1950,7 +1926,6 @@
             inClass && $inpage.classList.remove(inClass);
             $inpage.classList.add('pt-page-current');
             
-    		// isAnimating = false;
         }
         addPage(page){
     		const holder = this.shadowDom.querySelector('.pt-page.holder');
@@ -1968,10 +1943,7 @@
 
         on(json){
             const animEndEventName = window.AnimationSupport.end;
-            // if(this.$.pages.children.length === 1){
-            //     this.$.pages.children[0].classList.add('pt-page-current');
-            //     this.selectedItem = this.$.pages.children[0];
-            // }
+         
     		this.currPage = this.shadowDom.querySelector('.pt-page-current');
 
     		if(!json){
@@ -1982,16 +1954,9 @@
     		}
     		
     		this.nextPage.classList.add('pt-page-current');
-            // if(json.selected){
-            //     this.currPage = this.shadowDom.querySelector('.pt-page-current');
-    		// }
-    		
-    		// if(!this.nextPage || this.currPage === this.nextPage){
-    		// 	return;
-    		// }
-
+     
     		var outClass, inClass;
-            // this.isAnimating = true;
+
             switch( this.effectType ) {
 
     			case 1:
@@ -2291,18 +2256,12 @@
     		this.outClass && this.currPage.classList.add(this.outClass);
     		this.inClass && this.nextPage.classList.add(this.inClass);
 
-    		// this.currPage.classList.remove('pt-page-current');
-            // this.currPage.classList.remove(outClass);
-            // this.nextPage.classList.remove(inClass);
-            // this.nextPage.classList.add('pt-page-current');
-            
         }
     }
 
     class HeroButton extends HeroElement{
 
-      init(json) {
-          // super.init(json); // always call super() first in the constructor.
+      init() {
           this.$ = {
             button: this.shadowDom.querySelector('button')
           };
@@ -2310,35 +2269,33 @@
           this.$.button.addEventListener('click', this.onClick.bind(this));
       }
       
-      // attributeChangedCallback(name, oldValue, newValue){
-      //   this.init(JSON.parse(newValue));
-      // }
-      
       on(json) {
           if(json.title){
             this.updateContent(this.$.button, json.title);
           }
           if(json.disabled){
             this.updateAttr(this.$.button, 'disabled', json.disabled);
+            if(json.titleDisabledColor){
+              this.$.button.style.color = '#'+json.titleDisabledColor;
+            }
+            if(json.backgroundDisabledColor){
+              this.$.button.style.background = '#'+json.backgroundDisabledColor;
+            }
+
+          }else{
+            if(json.titleColor){
+              this.$.button.style.color = '#'+json.titleColor;
+            }
+            if(json.backgroundColor){
+              this.$.button.style.background = '#'+json.backgroundColor;
+            }
           }
           if(json.size){
-            this.updateCSSRule('button', 'fontSize', json.size+'px');
-          }
-          if(json.titleColor){
-            this.updateCSSRule('button', 'color', json.titleColor);
-          }
-          if(json.backgroundColor){
-            this.updateCSSRule('button', 'background', json.backgroundColor);
+            this.$.button.style.fontSize = json.size+'px';
           }
 
-          if(json.titleDisabledColor){
-            this.updateCSSRule('button[disabled]', 'color', json.titleDisabledColor);
-          }
-          if(json.backgroundDisabledColor){
-            this.updateCSSRule('button[disabled]', 'background', json.backgroundDisabledColor);
-          }
           if(json.cornerRadius){
-            this.updateCSSRule('button', 'borderRadius', json.cornerRadius);
+            this.$.button.style.borderRadius = json.cornerRadius+'px';
           }
         }
 
@@ -2379,7 +2336,7 @@
 
     class HeroLabel extends HeroElement{
 
-        init(json) {
+        init() {
             this.$ = {
                 span: this.shadowDom.querySelector('span')
             };
@@ -2390,13 +2347,13 @@
             if (json.text !== undefined) {
               this.updateContent(this.$.span, json.text);
             }        if (json.size) {
-              this.updateCSSRule('span', 'fontSize', json.size+'px');
+                this.$.span.style.fontSize = json.size + 'px';
             }        if (json.alignment) {
-              this.updateCSSRule('span', 'textAlign', json.alignment);
+                this.$.span.style.textAlign = json.alignment;
             }        if (json.textColor) {
-                this.updateCSSRule('span', 'color', json.textColor);
+                this.$.span.style.color = '#'+json.textColor;
             }        if (json.weight) {
-                this.updateCSSRule('span', 'fontWeight', json.weight);
+                this.$.span.style.fontWeight = json.weight;
             }        
           }
 
@@ -2405,26 +2362,22 @@
          <style>
             span{
                 display: block;
-                font-size: ${json.size}px;
-                text-align: ${json.alignment};
-                color: ${json.textColor};
-                font-weight: ${json.weight};
             }
           </style>
-          <span>${json.text}</span>
+          <span></span>
         `;
           }
     }
 
     class HeroImageView extends HeroElement {
 
-      init(json) {
+      init() {
         this.$ = {
           img: this.shadowDom.querySelector('img')
         };
       }
 
-      template(json){
+      template(){
         return `
       <style type="text/css">
         img {margin: 0px;padding: 0px;width: 100%;height: 100%;border: 0px;}
@@ -2444,7 +2397,7 @@
 
         init(json) {
             this.$ = {
-                div: this.shadowDom.querySelector('span'),
+                div: this.shadowDom.querySelector('div'),
                 input: this.shadowDom.querySelector('input')
             };
 
@@ -2461,10 +2414,10 @@
         on(json){
            
             if (json.size) {
-                this.updateCSSRule('span', 'fontSize', json.size+'px');
+                this.$.div.style.fontSize = json.size+'px';
             }        
             if (json.textColor) {
-                this.updateCSSRule('span', 'color', json.textColor);
+                this.$.div.style.color = '#' + json.textColor;
             }        if (json.clear) {
                 json.text = '';
             }        if (json.text) {
@@ -2507,13 +2460,11 @@
             }
         }
 
-
         template(json){
             return `
          <style>
             input{
-                color: ${json.textColor};
-                font-size: ${json.size || 16}px;
+                font-size: 16px;
                 width: 100%;
                 border: 0;
                 outline: 0;
@@ -2529,16 +2480,330 @@
             }
           </style>
           <div>
-            <input type="${json.secure?'password': (json.type==='pin'?'tel':json.type)}" placeholder="${json.placeHolder}" value="${json.clear?json.text:''}" />
+            <input />
           </div>
         `;
           }
 
     }
 
-    class HeroTextView extends HeroElement {
+    class HeroTableViewSection extends HeroElement {
+
+      wrapperTemplate(html){
+        return html;
+      }
+
+      init() {
+          this.$ = {
+            sectionGap: this.shadowDom.querySelector('#sectionGap'),
+            heroContent: this.shadowDom.querySelector('#heroContent'),
+            title: this.shadowDom.querySelector('#title')
+          };
+      }
+
+      template() {
+        return `
+    <style type="text/css">
+    :focus {outline:none;}
+    #heroContent{
+      margin: 0px;
+      padding: 0px;
+      background-color: #fff;
+      border-bottom:1px solid #e4e4e4;
+      border-top:1px solid #e4e4e4;
+    }
+    #title{
+      display: block;
+      font-size: 12px;
+      color: #999;
+      height: 29px;
+      line-height: 29px;
+      margin: 0px;
+      padding: 0px;
+      margin-left: 15px;
+    }
+    #sectionGap{
+      display: block;
+      height: 15px;
+    }
+    </style>
+    <div id='sectionGap'></div>
+    <p id='title'></p>
+    <div id='heroContent'></div>
+    `;
+      }
+
+      on(json) {
+        if (!this.controller) {
+          this.controller = APP.currentPage;
+        }    if (json.sectionTitle) {
+          this.updateContent(this.$.title, json.sectionTitle);
+        }else{
+          this.$.title.style.display = 'none';
+        }
+        if (json.rows) {
+          this.$.heroContent.innerHTML = '';
+          for (var i = 0; i < json.rows.length; i++) {
+            var row = json.rows[i];
+            var cell;
+            if (row.class || row.res) {
+              cell = document.createElement(APP.camelCase2bar(row.class||row.res));
+              cell.controller = this.controller;
+              this.$.heroContent.appendChild(cell);
+              cell.in(row);
+              cell.$.heroContent.style.position = 'relative';
+            }else{
+              cell = document.createElement('hero-table-view-cell');
+              cell.controller = this.controller;
+              this.$.heroContent.appendChild(cell);
+              cell.in(row);
+              this.$.heroContent.appendChild(cell);
+            }
+            if (row.height) {
+              cell.$.heroContent.style.height = row.height+'px';
+            }
+            if (i != json.rows.length-1) {
+              cell.in({bottomLine:true});
+            }
+            this.$.heroContent.appendChild(cell);
+         }    }  }
+
+    }
+
+    class HeroTableViewCell extends HeroElement {
+
+      init() {
+
+          this.$ = {
+            ripple: this.shadowDom.querySelector('#ripple'),
+            icon: this.shadowDom.querySelector('#icon'),
+            heroContent: this.shadowDom.querySelector('#heroContent'),
+            title: this.shadowDom.querySelector('#title'),
+            other: this.shadowDom.querySelector('#other'),
+            bottomLine: this.shadowDom.querySelector('#bottomLine'),
+          };
+
+          this.$.heroContent.addEventListener('click', this.onTap.bind(this));
+      }
+
+
+      template(){
+        return `
+    <style type="text/css">
+      :host {
+        display: block;
+        position:relative;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+        overflow: hidden;
+        background-color: #fff;
+        left: 0px;
+      }
+      paper-ripple{
+        width: 100%;
+        height: 100%;
+      }
+      p{
+        display: inline-block;
+        position: absolute;
+        overflow: hidden;
+        margin: 0px;padding: 0px;width: 100%;height: 100%;
+      }
+      #title{
+        left: 15px;
+      }
+      #other{
+        font-size: 14px;
+      }
+      #bottomLine{
+        left: 15px;
+        height: 1px;
+        right: 0px;
+        bottom: 0px;
+        display: none;
+        background-color: #e4e4e4;
+      }
+      #icon{
+        position: absolute;
+        left: 15px;
+        width: 15px;
+        height: 15px;
+        display: none;
+      }
+      #heroContent{
+        height: 44px;
+      }
+      </style>
+      <div id='heroContent' on-Tap='onTap' >
+        <paper-ripple id='ripple'></paper-ripple>
+        <img id='icon' src=''></img>
+        <p id='title'></p>
+        <p id='other'></p>
+        <p id='bottomLine'></p>
+      </div>
+
+    `;
+      }
+      wrapperTemplate(html){
+        return html;
+      }
+
+      ready(){
+        super.ready();
+        this.$.ripple.style.color = '#ddd';
+      }
+
+
+      on(json) {
+        if (json.textValue) {
+          this.$.title.innerHTML = json.title;
+          this.$.other.innerHTML = json.textValue;
+          this.$.title.style.lineHeight = json.height?json.height+'px':'44px';
+          this.$.other.style.lineHeight = json.height?json.height+'px':'44px';
+          this.$.title.style.width = '50%';
+          this.$.other.style.width = '50%';
+          this.$.other.style.right = '15px';
+          this.$.other.style.textAlign = 'right';
+        }else if(json.detailText){
+          this.$.title.innerHTML = json.title;
+          this.$.other.innerHTML = json.detailText;
+          this.$.title.style.lineHeight = json.height?json.height/3+'px':'15px';
+          this.$.other.style.lineHeight = json.height?json.height*2/3+'px':'29px';
+          this.$.title.style.top = '2px';
+          this.$.other.style.top = '16px';
+        }else if(json.title){
+          this.$.title.innerHTML = json.title;
+          this.$.title.style.lineHeight = json.height?json.height+'px':'44px';
+        }    if (json.bottomLine) {
+          this.$.bottomLine.style.display = 'block';
+        }    if (json.size) {
+          this.$.title.style.fontSize = json.size+'px';
+          this.$.other.style.fontSize = json.size+'px';
+        }    if (json.color) {
+          this.$.title.style.color = '#'+json.color;
+          this.$.other.style.color = '#'+json.color;
+        }    if(json.hasOwnProperty("ripple")) {
+          if (json.ripple) {
+            this.$.ripple.style.display = 'block';
+          }else{
+            this.$.ripple.style.display = 'none';
+          }
+        }    if(json.hasOwnProperty("valueDelete")) {
+          this.$.other.style.textDecoration = 'line-through';
+        }    if (json.image) {
+          this.$.icon.style.display = 'block';
+          this.$.icon.src = json.image;
+          this.$.icon.style.top = json.height/6+'px';
+          this.$.icon.style.left = '16px';
+          this.$.icon.style.width = json.height*2/3+'px';
+          this.$.icon.style.height = json.height*2/3+'px';
+          if (json.detailText) {
+            this.$.title.style.left = 15+8+json.height-10+'px';
+            this.$.title.style.top = '0px';
+            this.$.title.style.height = json.height/2+'px';
+            this.$.title.style.lineHeight = json.height/2+'px';
+
+            this.$.other.style.top = json.height/2+'px';
+            this.$.other.style.left = 15+8+json.height-10+'px';
+            this.$.other.style.height = json.height/2+'px';
+            this.$.other.style.lineHeight = '';
+            this.$.other.style.color = '#aaa';
+          }else{
+            this.$.title.style.left = 15+8+json.height-10+'px';
+            this.$.title.style.top = '0px';
+            this.$.title.style.height = json.height+'px';
+            this.$.title.style.lineHeight = json.height+'px';
+          }
+
+        }  }
+
+      onTap(){
+        var json = this._json;
+        if (json.action) {
+          this.controller.on(json.action);
+        }else{
+          this.controller.on(json);
+        }
+      }
+
+    }
+
+    class HeroTableView extends HeroElement {
 
       init(json) {
+        this.$ = {
+          header: this.shadowDom.querySelector('#header'),
+          footer: this.shadowDom.querySelector('#footer'),
+          heroContent: this.shadowDom.querySelector('#heroContent'),
+          tableData: this.shadowDom.querySelector('#table-data')
+        };
+      }
+
+      template(json) {
+        return `
+    <style type="text/css">
+      #heroContent{
+        display: inline-block;
+        position: absolute;
+        overflow: auto;
+        padding: 0px;
+        background-color: #fff;
+      }
+      #footer{
+        margin-top: 5px;
+        margin-bottom: 15px;
+      }
+      </style>
+      <div id = 'header'></div>
+      <div id="table-data">
+        <hero-table-view-section json={{item}}></hero-table-view-section>
+      </div>
+      <div id = 'footer'></div>
+
+    `;
+      }
+
+      on(json) {
+        if (json.header) {
+            this.$.header.innerHTML = '';
+            var viewObject = json.header;
+            var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
+            this.$.header.appendChild(view);
+            view.controller = this.controller;
+            if (viewObject.frame) {
+              viewObject.frame.p = {w:parseInt(this.$.heroContent.style.width),h:parseInt(this.$.heroContent.style.height)};
+            }        view.in(viewObject);
+            view.$.heroContent.style.position = 'relative';
+        }    if (json.data) {
+          this.$.tableData.innerHTML = json.data && json.data.map(function(ele){
+            return `
+          <hero-table-view-section json='${JSON.stringify(ele)}'></hero-table-view-section>
+        `
+          }).join('');
+        }    if (json.footer) {
+            this.$.footer.innerHTML = '';
+            var viewObject = json.footer;
+            var view = document.createElement(APP.camelCase2bar(viewObject.class||viewObject.res));
+            this.$.footer.appendChild(view);
+            view.controller = this.controller;
+            if (viewObject.frame) {
+              viewObject.frame.p = {w:parseInt(this.$.heroContent.style.width),h:parseInt(this.$.heroContent.style.height)};
+            }        view.in(viewObject);
+            view.$.heroContent.style.position = 'relative';
+        }    var that = this;
+        // this.async(function(){
+          for (var i = 0; i < that.$.heroContent.children.length; i++) {
+            that.$.heroContent.children[i].controller = that.controller;
+          }    // },100);
+      }
+
+    }
+
+    class HeroTextView extends HeroElement {
+
+      init() {
         this.$ = {
           textarea: this.shadowDom.querySelector('textarea')
       };
@@ -2546,7 +2811,7 @@
       this.$.textarea.addEventListener('change', this.textChange.bind(this));
     }
 
-      template(json) {
+      template() {
         return `
     <style type="text/css">
       textarea{
@@ -2555,21 +2820,27 @@
         padding: 0px;
         width: 100%;
         height: 100%;
-        line-height: 140%;
+        line-height: 1.4;
         vertical-align: center;
         border-color: #fff;
         background-color: transparent;
-        font-size: ${json.size}px;
-        text-align: ${json.alignment};
-        color: ${json.textColor};
       }
       </style>
-      <textarea id='text' value="${json.text}"></textarea>
+      <textarea id='text'></textarea>
     `;
       }
 
       on(json) {
 
+        if(json.size){
+          this.$.textarea.style.fontSize = json.size + 'px';
+        }
+        if(json.alignment){
+          this.$.textarea.style.textAlign = json.alignment;
+        }
+        if(json.textColor){
+          this.$.textarea.style.color = '#'+json.textColor;
+        }
         if (json.append) {
           this.text = (this.text||'')+'\n'+json.append;
           this.$.textarea.scrollTop = this.$.textarea.scrollHeight - this.$.textarea.clientHeight;
@@ -2590,18 +2861,17 @@
 
     class HeroToast extends HeroElement {
 
-      init(json) {
+      init() {
         this.$ = {
           p: this.shadowDom.querySelector('p'),
           div: this.shadowDom.querySelector('#wpr')
         };
       }
 
-      template(json) {
+      template() {
         return `
     <style type="text/css">
-      .fit-bottom {
-        display: block;
+      #wpr {
         position: fixed;
         bottom: 0;
         background-color: #323232;
@@ -2611,7 +2881,7 @@
         padding: 16px 24px;
         box-sizing: border-box;
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-        border-radius: ${json.corrnerRadius || 2}px;
+        border-radius: 2px;
         margin: 12px;
         font-size: 14px;
         cursor: default;
@@ -2622,7 +2892,7 @@
         -webkit-font-smoothing: antialiased;
         z-index: 100;
       }
-      .fit-bottom.hidden{
+      .hidden{
         opacity: 0;
         display: none;
       }
@@ -2635,6 +2905,9 @@
       }
 
       on(json) {
+        if(json.corrnerRadius){
+            this.$.div.style.borderRadius = json.corrnerRadius + 'px';
+        }
         if (json.text && json.text.length > 0) {
             this.updateContent(this.$.p, json.text);
             this.$.div.classList.remove('hidden');
@@ -2649,20 +2922,19 @@
 
     class HeroToolbarItem extends HeroElement {
 
-      init(json) {
-        // super(json); // always call super() first in the constructor.
+      init() {
         this.$ = {
-          title: this.shadowDom.querySelector('span'),
+          title: this.shadowDom.querySelector('#title'),
           button: this.shadowDom.querySelector('hero-button'),
-          div: this.shadowDom.querySelector('div'),
+          div: this.shadowDom.querySelector('#wpr'),
           img: this.shadowDom.querySelector('img')
         };
       }
 
-      template(json) {
+      template() {
         return `
     <style type="text/css">
-      div{
+      #wpr{
         display: inline-block;
         position: absolute;
         overflow: hidden;
@@ -2704,17 +2976,17 @@
         left:0px;
         top:0px;
       }
-      div .title{
+      #title{
         color: #999;
       }
-      div.selected .title{
+      #wpr.selected #title{
         color: #00BC8D;
       }
       </style>
-      <div class="wpr ${json.selected?'selected':''}">
-        <img src="${json.image}"></img>
-        <span class="title">${json.title}</span>
-        <hero-button on-tap="onTap"></hero-button>
+      <div id="wpr">
+        <img />
+        <span id="title"></span>
+        <hero-button></hero-button>
       </div>
     `;
       }
@@ -2731,11 +3003,6 @@
           this.$.div.classList.remove('selected');
         }
       }
-      onTap(){
-        this._json.selected = !this._json.selected;
-        if (this._json.click) {
-          this.controller.on(this._json.click);
-        }  }
 
     }
 
@@ -2744,34 +3011,6 @@
     }
 
     class HeroViewController extends HeroElement {
-
-      static get properties() {
-        return {
-          url: {
-            type: String
-          },
-          title: {
-            type: String,
-          },
-          view: {
-            type: Object,
-            // observer: 'setUI',
-          },
-          controller: {
-            type: Object,
-            // observer: 'setController'
-          },
-          heroContent: {
-            type: Object,
-          },
-          ui2data: {
-            type: Object,
-          },
-          appearObject:{
-            type: Object,
-          }
-        };
-      }
 
       findViewByname(name, root){
         var view = root.querySelector('#'+name);
@@ -2840,15 +3079,6 @@
           this.controller = Hero;
           Hero.page = this;
           var heroContent = document.createElement('div');
-          // heroContent.style.display = 'block';
-          // heroContent.style.position = 'absolute';
-          // heroContent.style.overflow = 'scroll';
-          // heroContent.style.overflowX = 'hidden';
-          // heroContent.style.visibility = 'hidden';
-          // heroContent.style.backfaceVisibility = 'hidden';
-          // heroContent.style.transform = 'translate3d(0, 0, 0)';
-          // heroContent.style.left = '0';
-          // heroContent.style.top = '0';
           heroContent.style.height = '100%';
           heroContent.style.width = '100%';
           this.appendChild(heroContent);
@@ -3081,11 +3311,6 @@
                   }, delayTime);
               }else if (command.viewWillAppear) {
                   this.appearObject = command.viewWillAppear;
-                  // if (Array.isArray(command.viewWillAppear)) {
-                  //     this.controller.in(command.viewWillAppear[0]);
-                  // }else{
-                  //     this.controller.in(command.viewWillAppear);
-                  // };
               }else if (command.viewWillDisappear) ;    }else{
           this.controller.in(json);
         }
@@ -3094,14 +3319,10 @@
 
     class HeroApp extends HeroElement {
 
-      // attributeChangedCallback(name, oldValue, newValue){
-      //   this.init(JSON.parse(newValue));
-      // }
-
       wrapperTemplate(html){
         return html;
       }
-      init(json){
+      init(){
         this.rootPages = [];
         this.pageStack = [];
         this.loadedPages = [];
@@ -3134,7 +3355,7 @@
           });
         }  }
 
-      template(json) {
+      template() {
         return `
     <style>
       :host {
@@ -3369,12 +3590,7 @@
       registerElement(element){
         if (!this.contain(this.loadedPages,element)) {
           this.loadedPages.push(element);
-          // Polymer({
-          //   is: element,
-          //   behaviors: [HeroViewController],
-          //   ready:function(){
-          //   }
-          // });
+
           class Page extends HeroViewController{
             constructor(){
               super();
@@ -3402,7 +3618,6 @@
         return pageElement;
       }
       connectedCallback(){
-        // super.ready();
 
         window.APP = this;
         window.addEventListener('popstate', function(e) {
@@ -3428,31 +3643,8 @@
         window.__defineGetter__('Hero', function() {
           return window[window.location.href+'_Hero'];
         });
-        // Object.defineProperty(window,"Hero",{
-        //   set:function(newValue){
-        //     window[window.location.href+'_Hero'] = newValue;
-        //   },
-        //   get:function(){
-        //     return window[window.location.href+'_Hero'] ||{} ;
-        //   },
-        //   configurable:true
-        // })
 
         window.last_ui2Data = '';
-
-        // Object.defineProperty(window,"ui2Data",{
-        //   set:function(newValue){
-        //     window[window.location.href+'_ui2Data'] = newValue;
-        //   },
-        //   get:function(){
-        //     var _ui2Data = window[window.location.href+'_ui2Data'];
-        //     if (_ui2Data) {
-        //       window.last_ui2Data = _ui2Data;
-        //     };
-        //     return window.last_ui2Data;
-        //   },
-        //   configurable:true
-        // })
 
         window.__defineSetter__('ui2Data', function(v) {
             window[window.location.href+'_ui2Data'] = v;
@@ -3511,10 +3703,10 @@
           this.$.leftMenu.style.animation = 'leftMenuIn 0.3s';
         }else{
           this.$.leftMenu.style.animation = 'leftMenuOut 0.3s';
-          this.async(function(){
+          // this.async(function(){
             this.$.menu.style.display = 'none';
             this.$.leftMenu.style.display = 'none';
-          },200);
+          // },200);
         }
       }
       closeMenu(){
@@ -3537,29 +3729,15 @@
           }      this.$.pages.on();
           window.importHref(page, function(){
             that.currentPage = document.createElement(pageElement);
-            // that.currentPage.classList.add('pt-page');
             that.currentPage.name = pageElement;
             that.currentPage.url = page;
-            // if (that.$.pages.__domApi) {
-              // that.$.pages.__domApi.appendChild(that.currentPage);
               that.$.pages.addPage(that.currentPage);
-            // }else{
-              // setTimeout(function(){
-              //   that.$.pages.__domApi.appendChild(that.currentPage);
-              // },1100);
-            // }
-              // that.$.pages.on({
-              //   selected : pageElement
-              // });
+       
           }, function(err){
               that.currentPage = document.createElement(pageElement);
               that.currentPage.name = pageElement;
               that.currentPage.url = page;
               that.$.pages.addPage(that.currentPage);
-              // that.$.pages.selected = pageElement;
-              // that.$.pages.on({
-              //   selected : pageElement
-              // });
           });
         }else{
           this.$.pages.on({
@@ -3573,18 +3751,6 @@
             next.viewDidLoad();
           }
           next.viewWillAppear();
-
-          // for (var i = 0; i < this.$.pages.children.length; i++) {
-          //   var e = this.$.pages.children[i].children[0];
-          //   if (e.name == pageElement) {
-          //     this.currentPage = e;
-          //     // this.$.pages.selected = pageElement;
-          //     this.$.pages.on({
-          //       selected : pageElement
-          //     });
-              
-          //   };
-          // };
         }
       }
       gotoPage(page,option){
@@ -3658,6 +3824,9 @@
         HeroLabel,
         HeroPages,
         HeroImageView,
+        HeroTableViewCell,
+        HeroTableViewSection,
+        HeroTableView,
         HeroTextField,
         HeroTextView,
         HeroToast,
