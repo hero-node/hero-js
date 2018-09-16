@@ -4036,9 +4036,6 @@ class HeroApp extends HeroElement {
       this.$.tab.style.display = 'block';
       this.$.pages.style.bottom = '44px';
       this.$.backBtn.style.display = 'none';
-    } else {
-      this.$.tab.style.display = 'none';
-      this.$.pages.style.bottom = '0px';
     }
     var animationType = '';
 
@@ -4065,7 +4062,7 @@ class HeroApp extends HeroElement {
       // this.$.pages.on({
       //   animation: 1
       // })
-      animationType = 10;
+      animationType = 9;
     }
     this.$.pages.setEffect(animationType);
 
