@@ -2461,6 +2461,7 @@ class HeroButton extends HeroElement {
           div {
             text-align: center;
             height: 100%;
+            width: 100%;
           }
         </style>
         <div>
@@ -3093,7 +3094,8 @@ class HeroToolbarItem extends HeroElement {
       title: this.shadowDom.querySelector('#title'),
       button: this.shadowDom.querySelector('hero-button'),
       div: this.shadowDom.querySelector('#wpr'),
-      img: this.shadowDom.querySelector('img'),
+      icon: this.shadowDom.querySelector('img'),
+      span: this.shadowDom.querySelector('#wpr span'),
     };
   }
 
@@ -3114,13 +3116,14 @@ class HeroToolbarItem extends HeroElement {
         position: absolute;
         overflow: hidden;
         color: #999999;
+        text-align: center;
+      }
+      #title.hasIcon{
         top:30px;
         left:0px;
-        height:14px;
         font-size: 11px;
         width: 100%;
         line-height: 14px;
-        text-align: center;
       }
       img{
         display: inline-block;
@@ -3150,19 +3153,24 @@ class HeroToolbarItem extends HeroElement {
       }
       </style>
       <div id="wpr">
-        <img />
-        <span id="title"></span>
-        <hero-button></hero-button>
+        <img id="icon" />
+        <span id="span"></span>
+        <hero-button id="title"></hero-button>
       </div>
     `;
   }
 
   on(json) {
     if (json.title) {
-      this.updateContent(this.$.title, json.title);
+      this.$.title.in({ title: json.title });
+      // this.updateContent(this.$.title, json.title);
     }
     if (json.image) {
       this.$.image.src = json.image;
+      this.$.title.classList.add('hasIcon');
+    } else {
+      this.$.span && this.$.span.remove();
+      this.$.icon && this.$.icon.remove();
     }
 
     if (json.selected) {
@@ -3659,7 +3667,7 @@ class HeroApp extends HeroElement {
         right:10px;
         top:12px;
       }
-      neon-animated-pages{
+      hero-pages{
         display:block;
         position: absolute;
         overflow:hidden;
@@ -3723,6 +3731,8 @@ class HeroApp extends HeroElement {
         this.rootPages.push(this.page2Element(tab.url));
         item = document.createElement('hero-toolbar-item');
         this.$.tab.appendChild(item);
+        this.$.tab.style.backgroundColor = '#' + tab.backgroundColor;
+        this.$.tab.style.color = '#' + tab.color;
         item.setController(this);
         item.in({
           frame: {

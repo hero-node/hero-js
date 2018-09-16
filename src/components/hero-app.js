@@ -149,7 +149,7 @@ export default class HeroApp extends HeroElement {
         right:10px;
         top:12px;
       }
-      neon-animated-pages{
+      hero-pages{
         display:block;
         position: absolute;
         overflow:hidden;
@@ -213,6 +213,8 @@ export default class HeroApp extends HeroElement {
         this.rootPages.push(this.page2Element(tab.url));
         item = document.createElement('hero-toolbar-item');
         this.$.tab.appendChild(item);
+        this.$.tab.style.backgroundColor = '#' + tab.backgroundColor;
+        this.$.tab.style.color = '#' + tab.color;
         item.setController(this);
         item.in({
           frame: {

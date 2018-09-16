@@ -64,6 +64,7 @@ export default class HeroButton extends HeroElement {
           div {
             text-align: center;
             height: 100%;
+            width: 100%;
           }
         </style>
         <div>
