@@ -9,6 +9,11 @@ export default class HeroToolbarItem extends HeroElement {
       icon: this.shadowDom.querySelector('img'),
       span: this.shadowDom.querySelector('#wpr span'),
     };
+    this.$.button.setController(this.controller);
+
+    var onTapCallback = this.onTap.bind(this);
+    this.$.button.addEventListener('touchstart', onTapCallback);
+    this.$.button.addEventListener('click', onTapCallback);
   }
 
   template() {
@@ -44,7 +49,7 @@ export default class HeroToolbarItem extends HeroElement {
         width: 22px;
         height: 22px;
       }
-      .overlay {
+      #wpr.selected hero-button{
         background: rgba(0, 0, 0, 0.08);
       }
 
@@ -72,9 +77,28 @@ export default class HeroToolbarItem extends HeroElement {
     `;
   }
 
+  onTap() {
+    this.selected = !this.selected;
+    this.addSelectedClz();
+    if (this._json.click) {
+      this.controller.on(this._json.click);
+    }
+  }
+  addSelectedClz() {
+    if (!this.selected) {
+      this.$.div.classList.add('selected');
+    } else {
+      this.$.div.classList.remove('selected');
+    }
+  }
   on(json) {
     if (json.title) {
-      this.$.title.in({ title: json.title });
+      this.$.title.in({
+        title: json.title,
+        click: {
+          command: 'load:' + json.url,
+        },
+      });
       // this.updateContent(this.$.title, json.title);
     }
     if (json.image) {
@@ -84,11 +108,7 @@ export default class HeroToolbarItem extends HeroElement {
       this.$.span && this.$.span.remove();
       this.$.icon && this.$.icon.remove();
     }
-
-    if (json.selected) {
-      this.$.div.classList.add('selected');
-    } else {
-      this.$.div.classList.remove('selected');
-    }
+    this.selected = this._json.selected;
+    this.addSelectedClz();
   }
 }

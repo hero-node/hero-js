@@ -41,22 +41,21 @@ export default class HeroElement extends HTMLElement {
     if (!this.$.heroContent) {
       this.$.heroContent = this.shadowDom.querySelector('#heroContent');
     }
+    this.controller = controller;
 
     if (this.$.heroContent) {
-      for (i = 0; i < this.$.heroContent.children.length; i++) {
-        child = this.$.heroContent.children[i];
-        if (child.setController) {
-          child.controller = controller;
+      // for (i = 0; i < this.$.heroContent.children.length; i++) {
+      //   child = this.$.heroContent.children[i];
+      //   if (child.setController) {
+      //     child.controller = controller;
+      //   }
+      // }
+
+      this.shadowDom.querySelectorAll('#heroContent *').forEach(function(ele) {
+        if (ele.setController) {
+          ele.controller = controller;
         }
-      }
-    }
-    if (this.$.heroContent1) {
-      for (i = 0; i < this.$.heroContent1.children.length; i++) {
-        child = this.$.heroContent1.children[i];
-        if (child.setController) {
-          child.controller = controller;
-        }
-      }
+      });
     }
   }
 

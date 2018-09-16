@@ -11,7 +11,9 @@ export default class HeroTableViewCell extends HeroElement {
       bottomLine: this.shadowDom.querySelector('#bottomLine'),
     };
 
-    this.$.heroContent.addEventListener('touchstart', this.onTap.bind(this));
+    var onTapCallback = this.onTap.bind(this);
+    this.$.heroContent.addEventListener('touchstart', onTapCallback);
+    this.$.heroContent.addEventListener('click', onTapCallback);
   }
 
   template() {

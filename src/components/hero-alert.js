@@ -17,7 +17,9 @@ export default class HeroAlert extends HeroElement {
       wpr: this.shadowDom.querySelector('.wpr'),
     };
 
-    this.$.button.addEventListener('touchstart', this.close.bind(this));
+    var callback = this.close.bind(this);
+    this.$.button.addEventListener('touchstart', callback);
+    this.$.button.addEventListener('click', callback);
   }
 
   template(json) {

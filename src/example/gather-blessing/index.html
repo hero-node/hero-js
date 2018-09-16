@@ -30,8 +30,10 @@
   var loadPage = window.location.search.split('=').pop();
 
   var app = {tabs:[
-    {url:loadPage|| path+'home.html', title: 'Home', backgroundColor: 'bd3a53'}
+    {url:loadPage|| path+'home.html', title: 'Home', backgroundColor: 'bd3a53'},
+    {url:path+'dalao.html', title: 'dalao', backgroundColor: 'bd3a54'}
   ]};
+  console.log(app);
   document.write('<hero-app json='+JSON.stringify(app)+'></hero-app>');
 </script>
 </html>

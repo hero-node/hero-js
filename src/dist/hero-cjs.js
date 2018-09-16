@@ -207,26 +207,24 @@ class HeroElement extends HTMLElement {
     if (!this.$) {
       this.$ = {};
     }
-    var i, child;
     if (!this.$.heroContent) {
       this.$.heroContent = this.shadowDom.querySelector('#heroContent');
     }
+    this.controller = controller;
 
     if (this.$.heroContent) {
-      for (i = 0; i < this.$.heroContent.children.length; i++) {
-        child = this.$.heroContent.children[i];
-        if (child.setController) {
-          child.controller = controller;
+      // for (i = 0; i < this.$.heroContent.children.length; i++) {
+      //   child = this.$.heroContent.children[i];
+      //   if (child.setController) {
+      //     child.controller = controller;
+      //   }
+      // }
+
+      this.shadowDom.querySelectorAll('#heroContent *').forEach(function(ele) {
+        if (ele.setController) {
+          ele.controller = controller;
         }
-      }
-    }
-    if (this.$.heroContent1) {
-      for (i = 0; i < this.$.heroContent1.children.length; i++) {
-        child = this.$.heroContent1.children[i];
-        if (child.setController) {
-          child.controller = controller;
-        }
-      }
+      });
     }
   }
 
@@ -319,7 +317,6 @@ class HeroElement extends HTMLElement {
           } else {
             buttonWidth = buttonHeight;
           }
-          console.log(e);
           var touchPositon = e.touches[0];
           var x = 0,
             y = 0;
@@ -2725,7 +2722,9 @@ class HeroTableViewCell extends HeroElement {
       bottomLine: this.shadowDom.querySelector('#bottomLine'),
     };
 
-    this.$.heroContent.addEventListener('touchstart', this.onTap.bind(this));
+    var onTapCallback = this.onTap.bind(this);
+    this.$.heroContent.addEventListener('touchstart', onTapCallback);
+    this.$.heroContent.addEventListener('click', onTapCallback);
   }
 
   template() {
@@ -3098,6 +3097,11 @@ class HeroToolbarItem extends HeroElement {
       icon: this.shadowDom.querySelector('img'),
       span: this.shadowDom.querySelector('#wpr span'),
     };
+    this.$.button.setController(this.controller);
+
+    var onTapCallback = this.onTap.bind(this);
+    this.$.button.addEventListener('touchstart', onTapCallback);
+    this.$.button.addEventListener('click', onTapCallback);
   }
 
   template() {
@@ -3133,7 +3137,7 @@ class HeroToolbarItem extends HeroElement {
         width: 22px;
         height: 22px;
       }
-      .overlay {
+      #wpr.selected hero-button{
         background: rgba(0, 0, 0, 0.08);
       }
 
@@ -3161,9 +3165,28 @@ class HeroToolbarItem extends HeroElement {
     `;
   }
 
+  onTap() {
+    this.selected = !this.selected;
+    this.addSelectedClz();
+    if (this._json.click) {
+      this.controller.on(this._json.click);
+    }
+  }
+  addSelectedClz() {
+    if (!this.selected) {
+      this.$.div.classList.add('selected');
+    } else {
+      this.$.div.classList.remove('selected');
+    }
+  }
   on(json) {
     if (json.title) {
-      this.$.title.in({ title: json.title });
+      this.$.title.in({
+        title: json.title,
+        click: {
+          command: 'load:' + json.url,
+        },
+      });
       // this.updateContent(this.$.title, json.title);
     }
     if (json.image) {
@@ -3173,18 +3196,12 @@ class HeroToolbarItem extends HeroElement {
       this.$.span && this.$.span.remove();
       this.$.icon && this.$.icon.remove();
     }
-
-    if (json.selected) {
-      this.$.div.classList.add('selected');
-    } else {
-      this.$.div.classList.remove('selected');
-    }
+    this.selected = this._json.selected;
+    this.addSelectedClz();
   }
 }
 
-class HeroView extends HeroElement {
-  
-}
+class HeroView extends HeroElement {}
 
 class HeroViewController extends HeroElement {
   findViewByname(name, root) {
@@ -3373,7 +3390,7 @@ class HeroViewController extends HeroElement {
         if (view.in) {
           this.heroContent.appendChild(view);
           view.controller = this;
-          if (viewObject.frame) ;
+          if (viewObject.frame);
           view.in(viewObject);
         }
       }
@@ -3478,7 +3495,7 @@ class HeroViewController extends HeroElement {
           } else {
             window.history.back();
           }
-        } else if (command.substring(0, 6) === 'submit') ;
+        } else if (command.substring(0, 6) === 'submit');
       } else if (command.hasOwnProperty('showMenu')) {
         var showMenu = command.showMenu;
         window.APP.showLeftmenu(showMenu);
@@ -4084,23 +4101,23 @@ class HeroApp extends HeroElement {
 }
 
 var components = [
-    HeroElement,
-    HeroButton,
-    HeroLabel,
-    HeroPages,
-    HeroImageView,
-    HeroTableViewCell,
-    HeroTableViewSection,
-    HeroTableView,
-    HeroTextField,
-    HeroTextView,
-    HeroToast,
-    HeroToolbarItem,
-    HeroView,
-    HeroViewController,
-    HeroApp
+  HeroElement,
+  HeroButton,
+  HeroLabel,
+  HeroPages,
+  HeroImageView,
+  HeroTableViewCell,
+  HeroTableViewSection,
+  HeroTableView,
+  HeroTextField,
+  HeroTextView,
+  HeroToast,
+  HeroToolbarItem,
+  HeroView,
+  HeroViewController,
+  HeroApp,
 ];
 
-for(var i=0, len=components.length;i<len;i++){
-    window.customElements.define(components[i].customName, components[i]);
+for (var i = 0, len = components.length; i < len; i++) {
+  window.customElements.define(components[i].customName, components[i]);
 }
