@@ -149,7 +149,6 @@ export default class HeroElement extends HTMLElement {
           } else {
             buttonWidth = buttonHeight;
           }
-          console.log(e);
           var touchPositon = e.touches[0];
           var x = 0,
             y = 0;
