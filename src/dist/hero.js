@@ -114,11 +114,11 @@
 
   (function CSSAnimation() {
     /*
-	        webkitAnimationName => Safari/Chrome
-	        MozAnimationName => Mozilla Firefox
-	        OAnimationName => Opera
-	        animationName => compliant browsers (inc. IE10)
-	     */
+          webkitAnimationName => Safari/Chrome
+          MozAnimationName => Mozilla Firefox
+          OAnimationName => Opera
+          animationName => compliant browsers (inc. IE10)
+       */
     var supported = false;
     var prefixes = ['webkit', 'Moz', 'O', ''];
     var limit = prefixes.length;
@@ -331,10 +331,21 @@
             } else {
               buttonWidth = buttonHeight;
             }
-
+            console.log(e);
+            var touchPositon = e.touches[0];
+            var x = 0,
+              y = 0;
+            if (touchPositon) {
+              var x =
+                (touchPositon.pageX || touchPositon.clientX) -
+                posX -
+                buttonWidth / 2;
+              var y =
+                (touchPositon.pageY || touchPositon.clientY) -
+                posY -
+                buttonHeight / 2;
+            }
             // Get the center of the element
-            var x = e.pageX - posX - buttonWidth / 2;
-            var y = e.pageY - posY - buttonHeight / 2;
 
             var effectWave = document.createElement('div');
             // Add the ripples CSS and start the animation
