@@ -2403,7 +2403,8 @@ class HeroButton extends HeroElement {
       button: this.shadowDom.querySelector('button'),
     };
 
-    this.$.button.addEventListener('touchstart', this.onClick.bind(this));
+    this.$.button.addEventListener('tap', this.onClick.bind(this));
+    this.$.button.addEventListener('click', this.onClick.bind(this));
   }
 
   on(json) {
@@ -3181,7 +3182,9 @@ class HeroToolbarItem extends HeroElement {
   }
 }
 
-class HeroView extends HeroElement {}
+class HeroView extends HeroElement {
+  
+}
 
 class HeroViewController extends HeroElement {
   findViewByname(name, root) {
@@ -3370,7 +3373,7 @@ class HeroViewController extends HeroElement {
         if (view.in) {
           this.heroContent.appendChild(view);
           view.controller = this;
-          if (viewObject.frame);
+          if (viewObject.frame) ;
           view.in(viewObject);
         }
       }
@@ -3475,7 +3478,7 @@ class HeroViewController extends HeroElement {
           } else {
             window.history.back();
           }
-        } else if (command.substring(0, 6) === 'submit');
+        } else if (command.substring(0, 6) === 'submit') ;
       } else if (command.hasOwnProperty('showMenu')) {
         var showMenu = command.showMenu;
         window.APP.showLeftmenu(showMenu);
@@ -4081,23 +4084,23 @@ class HeroApp extends HeroElement {
 }
 
 var components = [
-  HeroElement,
-  HeroButton,
-  HeroLabel,
-  HeroPages,
-  HeroImageView,
-  HeroTableViewCell,
-  HeroTableViewSection,
-  HeroTableView,
-  HeroTextField,
-  HeroTextView,
-  HeroToast,
-  HeroToolbarItem,
-  HeroView,
-  HeroViewController,
-  HeroApp,
+    HeroElement,
+    HeroButton,
+    HeroLabel,
+    HeroPages,
+    HeroImageView,
+    HeroTableViewCell,
+    HeroTableViewSection,
+    HeroTableView,
+    HeroTextField,
+    HeroTextView,
+    HeroToast,
+    HeroToolbarItem,
+    HeroView,
+    HeroViewController,
+    HeroApp
 ];
 
-for (var i = 0, len = components.length; i < len; i++) {
-  window.customElements.define(components[i].customName, components[i]);
+for(var i=0, len=components.length;i<len;i++){
+    window.customElements.define(components[i].customName, components[i]);
 }

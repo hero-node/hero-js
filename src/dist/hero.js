@@ -1,24 +1,14 @@
-(function() {
+(function () {
   'use strict';
 
   String.prototype.endWith = function(str) {
-    if (
-      str == null ||
-      str == '' ||
-      this.length == 0 ||
-      str.length > this.length
-    )
+    if (str == null || str == '' || this.length == 0 || str.length > this.length)
       return false;
     if (this.substring(this.length - str.length) == str) return true;
     else return false;
   };
   String.prototype.startWith = function(str) {
-    if (
-      str == null ||
-      str == '' ||
-      this.length == 0 ||
-      str.length > this.length
-    )
+    if (str == null || str == '' || this.length == 0 || str.length > this.length)
       return false;
     if (this.substr(0, str.length) == str) return true;
     else return false;
@@ -292,8 +282,7 @@
             ? parseFloat(x2) * p
             : parseFloat(x2));
       } else {
-        xInt =
-          x.charAt(x.length - 1) === 'x' ? parseFloat(x) * p : parseFloat(x);
+        xInt = x.charAt(x.length - 1) === 'x' ? parseFloat(x) * p : parseFloat(x);
       }
       return xInt;
     }
@@ -445,8 +434,7 @@
               this.controller.heroContent
             );
             top =
-              top ||
-              this.controller.findViewByname(refName, this.parentElement);
+              top || this.controller.findViewByname(refName, this.parentElement);
             if (top) {
               heroContent = top.$.heroContent;
               if (heroContent.style.top && heroContent.style.top !== 'auto') {
@@ -475,8 +463,7 @@
               this.controller.heroContent
             );
             top =
-              top ||
-              this.controller.findViewByname(refName, this.parentElement);
+              top || this.controller.findViewByname(refName, this.parentElement);
             if (top) {
               heroContent = top.$.heroContent;
               if (heroContent.style.left && heroContent.style.left !== 'auto') {
@@ -634,11 +621,7 @@
         if (json.gradientBackgroundColor) {
           var colors = json.gradientBackgroundColor;
           this.$.heroContent.style.background =
-            '-webkit-linear-gradient(top,#' +
-            colors[0] +
-            ',#' +
-            colors[1] +
-            ')';
+            '-webkit-linear-gradient(top,#' + colors[0] + ',#' + colors[1] + ')';
         }
         // if (json.gesture) {
         // 	var gesture = json.gesture;
@@ -2421,7 +2404,8 @@
         button: this.shadowDom.querySelector('button'),
       };
 
-      this.$.button.addEventListener('touchstart', this.onClick.bind(this));
+      this.$.button.addEventListener('tap', this.onClick.bind(this));
+      this.$.button.addEventListener('click', this.onClick.bind(this));
     }
 
     on(json) {
@@ -2817,12 +2801,8 @@
       if (json.textValue) {
         this.$.title.innerHTML = json.title;
         this.$.other.innerHTML = json.textValue;
-        this.$.title.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
-        this.$.other.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
+        this.$.title.style.lineHeight = json.height ? json.height + 'px' : '44px';
+        this.$.other.style.lineHeight = json.height ? json.height + 'px' : '44px';
         this.$.title.style.width = '50%';
         this.$.other.style.width = '50%';
         this.$.other.style.right = '15px';
@@ -2840,9 +2820,7 @@
         this.$.other.style.top = '16px';
       } else if (json.title) {
         this.$.title.innerHTML = json.title;
-        this.$.title.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
+        this.$.title.style.lineHeight = json.height ? json.height + 'px' : '44px';
       }
       if (json.bottomLine) {
         this.$.bottomLine.style.display = 'block';
@@ -3205,7 +3183,9 @@
     }
   }
 
-  class HeroView extends HeroElement {}
+  class HeroView extends HeroElement {
+    
+  }
 
   class HeroViewController extends HeroElement {
     findViewByname(name, root) {
@@ -3394,7 +3374,7 @@
           if (view.in) {
             this.heroContent.appendChild(view);
             view.controller = this;
-            if (viewObject.frame);
+            if (viewObject.frame) ;
             view.in(viewObject);
           }
         }
@@ -3481,9 +3461,7 @@
             window.history.back();
           } else if (command.substring(0, 8) === 'present:') {
             var _data = {};
-            var params = (window.location.search.split('?')[1] || '').split(
-              '&'
-            );
+            var params = (window.location.search.split('?')[1] || '').split('&');
             for (var param in params) {
               if (params.hasOwnProperty(param)) {
                 var paramParts = params[param].split('=');
@@ -3493,10 +3471,7 @@
             if (_data.heropage) {
               window.presentedPage = _data.heropage;
             }
-            window.APP.gotoPage(
-              command.substring(8, command.length),
-              'present'
-            );
+            window.APP.gotoPage(command.substring(8, command.length), 'present');
           } else if (command.substring(0, 7) === 'dismiss') {
             if (window.presentedPage) {
               window.APP.gotoPage(window.presentedPage);
@@ -3504,7 +3479,7 @@
             } else {
               window.history.back();
             }
-          } else if (command.substring(0, 6) === 'submit');
+          } else if (command.substring(0, 6) === 'submit') ;
         } else if (command.hasOwnProperty('showMenu')) {
           var showMenu = command.showMenu;
           window.APP.showLeftmenu(showMenu);
@@ -4110,24 +4085,25 @@
   }
 
   var components = [
-    HeroElement,
-    HeroButton,
-    HeroLabel,
-    HeroPages,
-    HeroImageView,
-    HeroTableViewCell,
-    HeroTableViewSection,
-    HeroTableView,
-    HeroTextField,
-    HeroTextView,
-    HeroToast,
-    HeroToolbarItem,
-    HeroView,
-    HeroViewController,
-    HeroApp,
+      HeroElement,
+      HeroButton,
+      HeroLabel,
+      HeroPages,
+      HeroImageView,
+      HeroTableViewCell,
+      HeroTableViewSection,
+      HeroTableView,
+      HeroTextField,
+      HeroTextView,
+      HeroToast,
+      HeroToolbarItem,
+      HeroView,
+      HeroViewController,
+      HeroApp
   ];
 
-  for (var i = 0, len = components.length; i < len; i++) {
-    window.customElements.define(components[i].customName, components[i]);
+  for(var i=0, len=components.length;i<len;i++){
+      window.customElements.define(components[i].customName, components[i]);
   }
-})();
+
+}());
