@@ -2100,6 +2100,7 @@
         this.nextPage = this.selectedItem.parentElement;
       }
 
+      this.currPage.classList.remove('pt-page-current');
       this.nextPage.classList.add('pt-page-current');
 
       var outClass, inClass;
