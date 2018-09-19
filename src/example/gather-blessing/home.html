@@ -9,10 +9,10 @@
   <script src="../../hero.js"></script>
   <script>
     Hero.on = function(data) {
-      if (data.click === 'confirm') {
+      if (data.click === 'dialog') {
         Hero.datas({
-          name: 'confirm',
-          text: 'HeroConfirm'
+          name: 'dialog',
+          text: 'HeroDialog'
         })
       }
       // if (data.click === 'alert') {
@@ -131,12 +131,12 @@
           titleColor: 'eeeeee',
           cornerRadius: 6,
           click: {
-            click: 'confirm'
+            click: 'dialog'
           }
         },
         {
-          class: 'HeroConfirm',
-          name: 'confirm'
+          class: 'HeroDialog',
+          name: 'dialog'
         }
       ]
     };

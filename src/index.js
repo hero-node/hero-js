@@ -16,7 +16,7 @@ import HeroViewController from './components/hero-view-controller.js';
 import HeroApp from './components/hero-app.js';
 import HeroAlert from './components/hero-alert.js';
 import HeroConfirm from './components/hero-confirm.js';
-// import HeroDialog from './components/hero-dialog.js';
+import HeroDialog from './components/hero-dialog.js';
 var components = [
   HeroElement,
   HeroButton,
@@ -35,6 +35,7 @@ var components = [
   HeroApp,
   HeroAlert,
   HeroConfirm,
+  HeroDialog,
 ];
 
 for (var i = 0, len = components.length; i < len; i++) {
