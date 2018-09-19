@@ -33,6 +33,7 @@ export default class HeroConfirm extends HeroElement {
   }
 
   template(json) {
+    let that = this;
     return `
       <style type="text/css">
 
@@ -41,15 +42,42 @@ export default class HeroConfirm extends HeroElement {
         text-align: center;
         padding-left: 8px;
       }
-      .wpr{
-        position: absolute;
-        top: 0px;
-        width: 90%;
-        top: 50%;
-        transform: translateY(-50%);
-        display: none;
+      #confirm{
+          background:#80CB5C;
+          border-radius:8px;
+          border:solid 1px #F1F8EB;
+          color:#F1F8EB;
       }
-
+      #cancel{
+          background:#F99190;
+          border-radius:8px;
+          border:solid 1px #FEEFF0;
+          color:#FEEFF0;
+      }
+      .wpr{
+        position: fixed;
+        box-sizing: border-box;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        margin:auto;
+        width: 50%;
+        height:100px;
+        max-width:300px;
+        min-width:150px;
+        visibility:hidden;
+        border-radius:12px;
+        padding: 16px 24px;
+        background:#F1F8EB;
+        opacity:0;
+        transform:scale(0.8,0.8);
+        transition: all 0.5s;
+      }
+      p{
+        color:#80CB5C
+        text-align:center;
+      }
       </style>
       <div class="wpr">
         <p>${json.text}</p>
@@ -58,12 +86,14 @@ export default class HeroConfirm extends HeroElement {
           <button id="cancel">${this.btCancel}</button>
         </div>
       </div>
-    `;
+    `; //// BUG:
   }
 
   on(json) {
     if (json.text) {
       this.updateContent(this.$.text, json.text);
+      this.updateContent(this.$.confirm, this.btOk);
+      this.updateContent(this.$.cancel, this.btCancel);
       var that = this;
       setTimeout(function() {
         that.open();
@@ -71,10 +101,14 @@ export default class HeroConfirm extends HeroElement {
     }
   }
   open() {
-    this.$.wpr.style.display = 'block';
+    this.$.wpr.style.transform = 'scale(1,1)';
+    this.$.wpr.style.opacity = 1;
+    this.$.wpr.style.visibility = 'visible';
   }
   close() {
-    this.$.wpr.style.display = 'none';
+    this.$.wpr.style.transform = 'scale(0.8,0.8)';
+    this.$.wpr.style.opacity = 0;
+    this.$.wpr.style.visibility = 'hidden';
   }
   tapOk() {
     this.close();
