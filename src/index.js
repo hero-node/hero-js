@@ -14,25 +14,30 @@ import HeroToolbarItem from './components/hero-toolbar-item.js';
 import HeroView from './components/hero-view.js';
 import HeroViewController from './components/hero-view-controller.js';
 import HeroApp from './components/hero-app.js';
-
+import HeroAlert from './components/hero-alert.js';
+import HeroConfirm from './components/hero-confirm.js';
+import HeroDialog from './components/hero-dialog.js';
 var components = [
-    HeroElement,
-    HeroButton,
-    HeroLabel,
-    HeroPages,
-    HeroImageView,
-    HeroTableViewCell,
-    HeroTableViewSection,
-    HeroTableView,
-    HeroTextField,
-    HeroTextView,
-    HeroToast,
-    HeroToolbarItem,
-    HeroView,
-    HeroViewController,
-    HeroApp
+  HeroElement,
+  HeroButton,
+  HeroLabel,
+  HeroPages,
+  HeroImageView,
+  HeroTableViewCell,
+  HeroTableViewSection,
+  HeroTableView,
+  HeroTextField,
+  HeroTextView,
+  HeroToast,
+  HeroToolbarItem,
+  HeroView,
+  HeroViewController,
+  HeroApp,
+  HeroAlert,
+  HeroConfirm,
+  HeroDialog,
 ];
 
-for(var i=0, len=components.length;i<len;i++){
-    window.customElements.define(components[i].customName, components[i]);
+for (var i = 0, len = components.length; i < len; i++) {
+  window.customElements.define(components[i].customName, components[i]);
 }

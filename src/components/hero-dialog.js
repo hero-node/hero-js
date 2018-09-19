@@ -1,6 +1,6 @@
 import HeroElement from './hero-element';
 
-export default class HeroAlert extends HeroElement {
+export default class HeroDialog extends HeroElement {
   constructor() {
     super();
     var btOk = '确定';
@@ -15,6 +15,7 @@ export default class HeroAlert extends HeroElement {
       button: this.shadowDom.querySelector('button'),
       p: this.shadowDom.querySelector('p'),
       wpr: this.shadowDom.querySelector('.wpr'),
+      mask: this.shadowDom.querySelector('.mask'),
     };
 
     var callback = this.close.bind(this);
@@ -25,19 +26,17 @@ export default class HeroAlert extends HeroElement {
   template(json) {
     return `
     <style type="text/css">
-      .action {
-        display: block !important;
-        text-align: center;
-        padding-left: 8px;
-        margin-top:10px;
-      }
-      button{
-        background:#F99190;
-        border-radius:8px;
-        border:solid 1px #FEEFF0;
-        color:#FEEFF0;
+      .mask{
+        opacity:0;
+        position: fixed;
+        height:100%;
+        width:100%;
+        background:transparent;
+        transition:all 0.6s;
+        visibility:hidden;
       }
       .wpr{
+        opacity:0;
         position: fixed;
         box-sizing: border-box;
         top:0;
@@ -45,23 +44,31 @@ export default class HeroAlert extends HeroElement {
         left:0;
         right:0;
         margin:auto;
+        height: 300px;
         width: 50%;
-        height:100px;
-        max-width:300px;
-        min-width:150px;
+        min-width:300px;
         visibility:hidden;
         border-radius:12px;
         padding: 16px 24px;
-        background:#FEEFF0;
-        opacity:0;
+        border:1px solid rgb(57, 52, 54);
+        background:white;
         transform:scale(0.8,0.8);
-        transition: all 0.5s;
+        transition:all 0.5s;
+      }
+      button{
+        position:absolute;
+        background:#80CB5C;
+        border-radius:8px;
+        border:solid 1px #F1F8EB;
+        color:#F1F8EB;
+        right:15px;
+        bottom:15px;
       }
       p{
         text-align:center;
-        color:#F99190;
       }
     </style>
+    <div class="mask"></div>
     <div class="wpr">
       <p id='text'>${json.text}</p>
       <div class="action">
@@ -71,7 +78,6 @@ export default class HeroAlert extends HeroElement {
 
     `;
   }
-
   on(json) {
     if (json.text) {
       this.updateContent(this.$.p, json.text);
@@ -85,13 +91,19 @@ export default class HeroAlert extends HeroElement {
 
   open() {
     this.$.wpr.style.transform = 'scale(1,1)';
-    this.$.wpr.style.opacity = 1;
     this.$.wpr.style.visibility = 'visible';
+    this.$.mask.style.visibility = 'visible';
+    this.$.mask.style.background = 'rgba(12, 13, 12, 0.64)';
+    this.$.mask.style.opacity = 1;
+    this.$.wpr.style.opacity = 1;
   }
 
   close() {
     this.$.wpr.style.transform = 'scale(0.8,0.8)';
-    this.$.wpr.style.opacity = 0;
     this.$.wpr.style.visibility = 'hidden';
+    this.$.mask.style.visibility = 'hidden';
+    this.$.mask.style.background = 'transparent';
+    this.$.mask.style.opacity = 0;
+    this.$.wpr.style.opacity = 0;
   }
 }
