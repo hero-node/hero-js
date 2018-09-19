@@ -86,7 +86,7 @@ export default class HeroConfirm extends HeroElement {
           <button id="cancel">${this.btCancel}</button>
         </div>
       </div>
-    `; //// BUG:
+    `;
   }
 
   on(json) {
