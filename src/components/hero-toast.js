@@ -10,7 +10,7 @@ export default class HeroToast extends HeroElement {
 template() {
     return `
     <style type="text/css">
-    
+
     @keyframes bounceInLeft {
         from, 60%, 75%, 90%, to {animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);}
         0% {opacity: 0;transform: translate3d(-3000px, 0, 0);}
@@ -77,13 +77,11 @@ template() {
         opacity: 0;
     }
     </style>
-    <div id="hero-toast-wrap">
-    </div>
+    <div id="hero-toast-wrap"></div>
     `;
 }
 
 on(json) {
-
     // json.position : leftTop (default) || rightTop || leftBottom || rightBottom
     var position = json.position;
     if (json.text && json.text.length > 0) {
@@ -132,24 +130,19 @@ on(json) {
         for( var i in style) {
             this.$.div.style[i] = style[i];
         };
-        this.$ = { p: this.shadowDom.querySelector('.hero-toast-box')};
-        // write innerText
-        this.updateContent(this.$.p, json.text);
-        this.$.p.classList.remove('hidden');
-        var that = this;
-        setTimeout(function () {
-            that.$.p.classList.add('hidden');
-        }, 3000);
-
-        // btn only can click once
-        // let len = this.$.p.length;
-        // for (let i = len-1; i >= 0; i--) {
-        //     this.$.p[len-1].classList.remove('hidden');
-        //     var that = this;
-        //     setTimeout(function () {
-        //         that.$.p[len-i-1].classList.add('hidden');
-        //     }, 3000);
-        // }
+        // this.$.p = this.shadowDom.querySelector('.hero-toast-box');
+        // get childNodes Array
+        this.$.p = this.$.div.childNodes;
+        let len = this.$.p.length;
+        // show and hidden item 
+        for (let i = len-1; i >= 0; i--) {
+            this.updateContent(this.$.p[len-1], json.text);
+            this.$.p[len-1].classList.remove('hidden');
+            var that = this;
+            setTimeout(function () {
+                that.$.p[len-i-1].classList.add('hidden'); 
+            }, 3000);
+        }
         }
     }
 }
