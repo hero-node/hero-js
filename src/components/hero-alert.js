@@ -26,10 +26,12 @@ export default class HeroAlert extends HeroElement {
     return `
     <style type="text/css">
       .action {
+        position:absolute;
+        width:100%;
+        left:0;
+        bottom:10px;
         display: block !important;
         text-align: center;
-        padding-left: 8px;
-        margin-top:10px;
       }
       button{
         background:#F99190;
@@ -46,7 +48,7 @@ export default class HeroAlert extends HeroElement {
         right:0;
         margin:auto;
         width: 50%;
-        height:100px;
+        max-height:200px;
         max-width:300px;
         min-width:150px;
         visibility:hidden;
@@ -55,7 +57,7 @@ export default class HeroAlert extends HeroElement {
         background:#FEEFF0;
         opacity:0;
         transform:scale(0.8,0.8);
-        transition: all 0.5s;
+        transition: all 0.5s cubic-bezier(.25,.1,.3,1.5);
       }
       p{
         text-align:center;
