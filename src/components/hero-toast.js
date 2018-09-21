@@ -10,6 +10,10 @@ export default class HeroToast extends HeroElement {
 template() {
     return `
     <style type="text/css">
+    * {
+        width: 100%;
+        height: 100%;
+    }
 
     @keyframes bounceInLeft {
         from, 60%, 75%, 90%, to {animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);}
@@ -31,6 +35,7 @@ template() {
     #hero-toast-wrap {
         position: absolute;
         width: 330px;
+        height:auto;
     }
 
     .hero-toast-box {
@@ -83,7 +88,7 @@ template() {
 
 on(json) {
     // json.position : leftTop (default) || rightTop || leftBottom || rightBottom
-    var position = json.position;
+    var position = json.position ? json.position : "leftTop";
     if (json.text && json.text.length > 0) {
         let heroToastItem = document.createElement("div");
         this.$.div.appendChild(heroToastItem);
