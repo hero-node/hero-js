@@ -38,9 +38,12 @@ export default class HeroConfirm extends HeroElement {
       <style type="text/css">
 
       .buttons {
+        position:absolute;
+        width:100%;
+        left:0;
+        bottom:10px;
         display: block !important;
         text-align: center;
-        padding-left: 8px;
       }
       #confirm{
           background:#80CB5C;
@@ -63,7 +66,7 @@ export default class HeroConfirm extends HeroElement {
         right:0;
         margin:auto;
         width: 50%;
-        height:100px;
+        max-height:200px;
         max-width:300px;
         min-width:150px;
         visibility:hidden;
@@ -72,7 +75,7 @@ export default class HeroConfirm extends HeroElement {
         background:#F1F8EB;
         opacity:0;
         transform:scale(0.8,0.8);
-        transition: all 0.5s;
+        transition: all 0.5s cubic-bezier(.25,.1,.3,1.5);
       }
       p{
         color:#80CB5C

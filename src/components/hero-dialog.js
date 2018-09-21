@@ -53,7 +53,7 @@ export default class HeroDialog extends HeroElement {
         border:1px solid rgb(57, 52, 54);
         background:white;
         transform:scale(0.8,0.8);
-        transition:all 0.5s;
+        transition:all 0.5s cubic-bezier(.25,.1,.3,1.5);
       }
       button{
         position:absolute;
@@ -62,7 +62,7 @@ export default class HeroDialog extends HeroElement {
         border:solid 1px #F1F8EB;
         color:#F1F8EB;
         right:15px;
-        bottom:15px;
+        bottom:10px;
       }
       p{
         text-align:center;
