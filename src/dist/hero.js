@@ -1,24 +1,14 @@
-(function() {
+(function () {
   'use strict';
 
   String.prototype.endWith = function(str) {
-    if (
-      str == null ||
-      str == '' ||
-      this.length == 0 ||
-      str.length > this.length
-    )
+    if (str == null || str == '' || this.length == 0 || str.length > this.length)
       return false;
     if (this.substring(this.length - str.length) == str) return true;
     else return false;
   };
   String.prototype.startWith = function(str) {
-    if (
-      str == null ||
-      str == '' ||
-      this.length == 0 ||
-      str.length > this.length
-    )
+    if (str == null || str == '' || this.length == 0 || str.length > this.length)
       return false;
     if (this.substr(0, str.length) == str) return true;
     else return false;
@@ -231,13 +221,11 @@
         //   }
         // }
 
-        this.shadowDom
-          .querySelectorAll('#heroContent *')
-          .forEach(function(ele) {
-            if (ele.setController) {
-              ele.controller = controller;
-            }
-          });
+        this.shadowDom.querySelectorAll('#heroContent *').forEach(function(ele) {
+          if (ele.setController) {
+            ele.controller = controller;
+          }
+        });
       }
     }
 
@@ -292,8 +280,7 @@
             ? parseFloat(x2) * p
             : parseFloat(x2));
       } else {
-        xInt =
-          x.charAt(x.length - 1) === 'x' ? parseFloat(x) * p : parseFloat(x);
+        xInt = x.charAt(x.length - 1) === 'x' ? parseFloat(x) * p : parseFloat(x);
       }
       return xInt;
     }
@@ -444,8 +431,7 @@
               this.controller.heroContent
             );
             top =
-              top ||
-              this.controller.findViewByname(refName, this.parentElement);
+              top || this.controller.findViewByname(refName, this.parentElement);
             if (top) {
               heroContent = top.$.heroContent;
               if (heroContent.style.top && heroContent.style.top !== 'auto') {
@@ -474,8 +460,7 @@
               this.controller.heroContent
             );
             top =
-              top ||
-              this.controller.findViewByname(refName, this.parentElement);
+              top || this.controller.findViewByname(refName, this.parentElement);
             if (top) {
               heroContent = top.$.heroContent;
               if (heroContent.style.left && heroContent.style.left !== 'auto') {
@@ -633,11 +618,7 @@
         if (json.gradientBackgroundColor) {
           var colors = json.gradientBackgroundColor;
           this.$.heroContent.style.background =
-            '-webkit-linear-gradient(top,#' +
-            colors[0] +
-            ',#' +
-            colors[1] +
-            ')';
+            '-webkit-linear-gradient(top,#' + colors[0] + ',#' + colors[1] + ')';
         }
         // if (json.gesture) {
         // 	var gesture = json.gesture;
@@ -2820,12 +2801,8 @@
       if (json.textValue) {
         this.$.title.innerHTML = json.title;
         this.$.other.innerHTML = json.textValue;
-        this.$.title.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
-        this.$.other.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
+        this.$.title.style.lineHeight = json.height ? json.height + 'px' : '44px';
+        this.$.other.style.lineHeight = json.height ? json.height + 'px' : '44px';
         this.$.title.style.width = '50%';
         this.$.other.style.width = '50%';
         this.$.other.style.right = '15px';
@@ -2843,9 +2820,7 @@
         this.$.other.style.top = '16px';
       } else if (json.title) {
         this.$.title.innerHTML = json.title;
-        this.$.title.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
+        this.$.title.style.lineHeight = json.height ? json.height + 'px' : '44px';
       }
       if (json.bottomLine) {
         this.$.bottomLine.style.display = 'block';
@@ -3059,15 +3034,16 @@
     init() {
       this.$ = {
         div: this.shadowDom.querySelector('#hero-toast-wrap'),
-      };
-    }
+    };
+  }
 
-    template() {
+  template() {
       return `
     <style type="text/css">
     * {
         width: 100%;
         height: 100%;
+        pointer-events: none;
     }
 
     @keyframes bounceInLeft {
@@ -3139,71 +3115,65 @@
     </style>
     <div id="hero-toast-wrap"></div>
     `;
-    }
+  }
 
-    on(json) {
+  on(json) {
       // json.position : leftTop (default) || rightTop || leftBottom || rightBottom
-      var position = json.position ? json.position : 'leftTop';
+      var position = json.position ? json.position : "leftTop";
       if (json.text && json.text.length > 0) {
-        let heroToastItem = document.createElement('div');
-        this.$.div.appendChild(heroToastItem);
-        var style = {};
-        var toastPos = 'fit-left-top';
-        switch (position) {
-          case 'leftTop':
-            style = {
-              left: '10px',
-              top: 0,
-            };
-            break;
-          case 'rightTop':
-            toastPos = 'fit-right-top';
-            style = {
-              right: '10px',
-              top: 0,
-            };
-            break;
-          case 'leftBottom':
-            toastPos = 'fit-left-bottom';
-            style = {
-              left: '10px',
-              bottom: '10px',
-            };
-            break;
-          case 'rightBottom':
-            toastPos = 'fit-right-bottom';
-            style = {
-              right: '10px',
-              bottom: '10px',
-            };
-            break;
-          default:
-            style = {
-              left: '10px',
-              top: 0,
-            };
-            break;
-        }
-        // add className
-        heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
-        // change style
-        for (var i in style) {
-          this.$.div.style[i] = style[i];
-        } // this.$.p = this.shadowDom.querySelector('.hero-toast-box');
-        // get childNodes Array
-        this.$.p = this.$.div.childNodes;
-        let len = this.$.p.length;
-        // show and hidden item
-        for (let i = len - 1; i >= 0; i--) {
-          this.updateContent(this.$.p[len - 1], json.text);
-          this.$.p[len - 1].classList.remove('hidden');
-          var that = this;
-          setTimeout(function() {
-            that.$.p[len - i - 1].classList.add('hidden');
-          }, 3000);
-        }
+          let heroToastItem = document.createElement("div");
+          this.$.div.appendChild(heroToastItem);
+          var style = {};
+          var toastPos = "";
+          switch (position) {
+              case "leftTop":
+              toastPos = "fit-left-top";
+              style = {
+                  left: "10px",
+                  top: 0
+              };
+              break;
+              case "rightTop":
+              toastPos = "fit-right-top";
+              style = {
+                  right: "10px",
+                  top: 0
+              };
+              break;
+              case "leftBottom":
+              toastPos = "fit-left-bottom";
+              style = {
+                  left: "10px",
+                  bottom: "10px"
+              };
+              break;
+              case "rightBottom":
+              toastPos = "fit-right-bottom";
+              style = {
+                  right: "10px",
+                  bottom: "10px"
+              };
+              break;
+          }
+          // add className
+          heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
+          // change style
+          for( var i in style) {
+              this.$.div.style[i] = style[i];
+          }        // get childNodes Array
+          this.$.p = this.$.div.childNodes;
+          let len = this.$.p.length;
+          // show and hidden item 
+          for (let i = len-1; i >= 0; i--) {
+              this.updateContent(this.$.p[len-1], json.text);
+              this.$.p[len-1].classList.remove('hidden');
+              var that = this;
+              setTimeout(function () {
+                  that.$.p[len-i-1].classList.add('hidden'); 
+              }, 3000);
+          }
+          }
       }
-    }
   }
 
   class HeroToolbarItem extends HeroElement {
@@ -3319,7 +3289,9 @@
     }
   }
 
-  class HeroView extends HeroElement {}
+  class HeroView extends HeroElement {
+    
+  }
 
   class HeroViewController extends HeroElement {
     findViewByname(name, root) {
@@ -3508,7 +3480,7 @@
           if (view.in) {
             this.heroContent.appendChild(view);
             view.controller = this;
-            if (viewObject.frame);
+            if (viewObject.frame) ;
             view.in(viewObject);
           }
         }
@@ -3595,9 +3567,7 @@
             window.history.back();
           } else if (command.substring(0, 8) === 'present:') {
             var _data = {};
-            var params = (window.location.search.split('?')[1] || '').split(
-              '&'
-            );
+            var params = (window.location.search.split('?')[1] || '').split('&');
             for (var param in params) {
               if (params.hasOwnProperty(param)) {
                 var paramParts = params[param].split('=');
@@ -3607,10 +3577,7 @@
             if (_data.heropage) {
               window.presentedPage = _data.heropage;
             }
-            window.APP.gotoPage(
-              command.substring(8, command.length),
-              'present'
-            );
+            window.APP.gotoPage(command.substring(8, command.length), 'present');
           } else if (command.substring(0, 7) === 'dismiss') {
             if (window.presentedPage) {
               window.APP.gotoPage(window.presentedPage);
@@ -3618,7 +3585,7 @@
             } else {
               window.history.back();
             }
-          } else if (command.substring(0, 6) === 'submit');
+          } else if (command.substring(0, 6) === 'submit') ;
         } else if (command.hasOwnProperty('showMenu')) {
           var showMenu = command.showMenu;
           window.APP.showLeftmenu(showMenu);
@@ -4572,4 +4539,5 @@
   for (var i = 0, len = components.length; i < len; i++) {
     window.customElements.define(components[i].customName, components[i]);
   }
-})();
+
+}());

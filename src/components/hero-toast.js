@@ -13,6 +13,7 @@ template() {
     * {
         width: 100%;
         height: 100%;
+        pointer-events: none;
     }
 
     @keyframes bounceInLeft {
@@ -93,9 +94,10 @@ on(json) {
         let heroToastItem = document.createElement("div");
         this.$.div.appendChild(heroToastItem);
         var style = {};
-        var toastPos = "fit-left-top";
+        var toastPos = "";
         switch (position) {
             case "leftTop":
+            toastPos = "fit-left-top";
             style = {
                 left: "10px",
                 top: 0
@@ -122,12 +124,6 @@ on(json) {
                 bottom: "10px"
             };
             break;
-            default:
-            style = {
-                left: "10px",
-                top: 0
-            };
-            break;
         }
         // add className
         heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
@@ -135,7 +131,6 @@ on(json) {
         for( var i in style) {
             this.$.div.style[i] = style[i];
         };
-        // this.$.p = this.shadowDom.querySelector('.hero-toast-box');
         // get childNodes Array
         this.$.p = this.$.div.childNodes;
         let len = this.$.p.length;

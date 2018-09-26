@@ -3033,15 +3033,16 @@ class HeroToast extends HeroElement {
   init() {
     this.$ = {
       div: this.shadowDom.querySelector('#hero-toast-wrap'),
-    };
-  }
+  };
+}
 
-  template() {
+template() {
     return `
     <style type="text/css">
     * {
         width: 100%;
         height: 100%;
+        pointer-events: none;
     }
 
     @keyframes bounceInLeft {
@@ -3113,71 +3114,65 @@ class HeroToast extends HeroElement {
     </style>
     <div id="hero-toast-wrap"></div>
     `;
-  }
+}
 
-  on(json) {
+on(json) {
     // json.position : leftTop (default) || rightTop || leftBottom || rightBottom
-    var position = json.position ? json.position : 'leftTop';
+    var position = json.position ? json.position : "leftTop";
     if (json.text && json.text.length > 0) {
-      let heroToastItem = document.createElement('div');
-      this.$.div.appendChild(heroToastItem);
-      var style = {};
-      var toastPos = 'fit-left-top';
-      switch (position) {
-        case 'leftTop':
-          style = {
-            left: '10px',
-            top: 0,
-          };
-          break;
-        case 'rightTop':
-          toastPos = 'fit-right-top';
-          style = {
-            right: '10px',
-            top: 0,
-          };
-          break;
-        case 'leftBottom':
-          toastPos = 'fit-left-bottom';
-          style = {
-            left: '10px',
-            bottom: '10px',
-          };
-          break;
-        case 'rightBottom':
-          toastPos = 'fit-right-bottom';
-          style = {
-            right: '10px',
-            bottom: '10px',
-          };
-          break;
-        default:
-          style = {
-            left: '10px',
-            top: 0,
-          };
-          break;
-      }
-      // add className
-      heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
-      // change style
-      for (var i in style) {
-        this.$.div.style[i] = style[i];
-      } // this.$.p = this.shadowDom.querySelector('.hero-toast-box');
-      // get childNodes Array
-      this.$.p = this.$.div.childNodes;
-      let len = this.$.p.length;
-      // show and hidden item
-      for (let i = len - 1; i >= 0; i--) {
-        this.updateContent(this.$.p[len - 1], json.text);
-        this.$.p[len - 1].classList.remove('hidden');
-        var that = this;
-        setTimeout(function() {
-          that.$.p[len - i - 1].classList.add('hidden');
-        }, 3000);
-      }
+        let heroToastItem = document.createElement("div");
+        this.$.div.appendChild(heroToastItem);
+        var style = {};
+        var toastPos = "";
+        switch (position) {
+            case "leftTop":
+            toastPos = "fit-left-top";
+            style = {
+                left: "10px",
+                top: 0
+            };
+            break;
+            case "rightTop":
+            toastPos = "fit-right-top";
+            style = {
+                right: "10px",
+                top: 0
+            };
+            break;
+            case "leftBottom":
+            toastPos = "fit-left-bottom";
+            style = {
+                left: "10px",
+                bottom: "10px"
+            };
+            break;
+            case "rightBottom":
+            toastPos = "fit-right-bottom";
+            style = {
+                right: "10px",
+                bottom: "10px"
+            };
+            break;
+        }
+        // add className
+        heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
+        // change style
+        for( var i in style) {
+            this.$.div.style[i] = style[i];
+        }        // get childNodes Array
+        this.$.p = this.$.div.childNodes;
+        let len = this.$.p.length;
+        // show and hidden item 
+        for (let i = len-1; i >= 0; i--) {
+            this.updateContent(this.$.p[len-1], json.text);
+            this.$.p[len-1].classList.remove('hidden');
+            var that = this;
+            setTimeout(function () {
+                that.$.p[len-i-1].classList.add('hidden'); 
+            }, 3000);
+        }
+        }
     }
-  }
 }
 
 class HeroToolbarItem extends HeroElement {
@@ -3293,7 +3288,9 @@ class HeroToolbarItem extends HeroElement {
   }
 }
 
-class HeroView extends HeroElement {}
+class HeroView extends HeroElement {
+  
+}
 
 class HeroViewController extends HeroElement {
   findViewByname(name, root) {
@@ -3482,7 +3479,7 @@ class HeroViewController extends HeroElement {
         if (view.in) {
           this.heroContent.appendChild(view);
           view.controller = this;
-          if (viewObject.frame);
+          if (viewObject.frame) ;
           view.in(viewObject);
         }
       }
@@ -3587,7 +3584,7 @@ class HeroViewController extends HeroElement {
           } else {
             window.history.back();
           }
-        } else if (command.substring(0, 6) === 'submit');
+        } else if (command.substring(0, 6) === 'submit') ;
       } else if (command.hasOwnProperty('showMenu')) {
         var showMenu = command.showMenu;
         window.APP.showLeftmenu(showMenu);
