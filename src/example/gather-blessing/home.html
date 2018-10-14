@@ -10,11 +10,11 @@
 
     Hero.on = function(data){
       if (data.click === 'join') {
-        if (Hero.ui2Data.address.length === 42) {
-          localStorage.address = Hero.ui2Data.address;
-          Hero.command('goto:'+path+'zzsuperentry.html');
+        if (this.ui2Data.address.length === 42) {
+          localStorage.address = this.ui2Data.address;
+          this.command('goto:'+path+'zzsuperentry.html');
         }else{
-          Hero.datas({name:'toast',text:'erc20钱包地址是42位长度字符串'});
+          this.datas({name:'toast',text:'erc20钱包地址是42位长度字符串'});
         }
       };
     };

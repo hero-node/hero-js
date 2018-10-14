@@ -26,7 +26,7 @@ export default class HeroToolbarItem extends HeroElement {
         text-align:center;
         padding-top:4px;
         width: 100%;
-        height: 44px;
+        height: 100%;
       }
       #title{
         display: inline-block;
@@ -85,7 +85,7 @@ export default class HeroToolbarItem extends HeroElement {
     }
   }
   addSelectedClz() {
-    if (!this.selected) {
+    if (this.selected) {
       this.$.div.classList.add('selected');
     } else {
       this.$.div.classList.remove('selected');
@@ -95,11 +95,11 @@ export default class HeroToolbarItem extends HeroElement {
     if (json.title) {
       this.$.title.in({
         title: json.title,
+        titleColor:'000000',
         click: {
           command: 'load:' + json.url,
         },
       });
-      // this.updateContent(this.$.title, json.title);
     }
     if (json.image) {
       this.$.image.src = json.image;

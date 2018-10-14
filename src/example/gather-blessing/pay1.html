@@ -14,7 +14,7 @@
   Hero.on = function(json){
       if(json.click === 'pay'){
           localStorage.pageType = 'duihuan';
-          Hero.command('goto:'+path+'pay3.html');
+          this.command('goto:'+path+'pay3.html');
       }
       if (json.click === 'copy') {
           window.copyTextToClipboard(inpoutByteCode);

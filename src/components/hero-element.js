@@ -122,64 +122,125 @@ export default class HeroElement extends HTMLElement {
     this.on && this.on(json);
 
     if (json && json.ripple) {
-      this.$.heroContent.addEventListener(
-        'touchstart',
-        function(e) {
-          // Remove any old one
-          var effectHolder = this.shadowDom.querySelector('#ripple');
-          effectHolder && effectHolder.remove();
+      var mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
 
-          var boundingRect = this.$.heroContent.getBoundingClientRect();
-          // Setup
-          var posX = boundingRect.left,
-            posY = boundingRect.top,
-            buttonWidth = boundingRect.width,
-            buttonHeight = boundingRect.height;
+      if (mobile) {
+        this.$.heroContent.addEventListener(
+          'touchstart',
+          function(e) {
+            // Remove any old one
+            var effectHolder = this.shadowDom.querySelector('#ripple');
+            effectHolder && effectHolder.remove();
 
-          // Add the element
-          effectHolder = document.createElement('div');
-          effectHolder.id = 'ripple';
-          effectHolder.className = 'ripple';
-          this.$.heroContent.append(effectHolder);
+            var boundingRect = this.$.heroContent.getBoundingClientRect();
+            // Setup
+            var posX = boundingRect.left,
+              posY = boundingRect.top,
+              buttonWidth = boundingRect.width,
+              buttonHeight = boundingRect.height;
 
-          // Make it round!
-          if (buttonWidth < buttonHeight) {
-            buttonHeight = buttonWidth;
-          } else {
-            buttonWidth = buttonHeight;
-          }
-          var touchPositon = e.touches[0];
-          var x = 0,
-            y = 0;
-          if (touchPositon) {
-            var x =
-              (touchPositon.pageX || touchPositon.clientX) -
-              posX -
-              buttonWidth / 2;
-            var y =
-              (touchPositon.pageY || touchPositon.clientY) -
-              posY -
-              buttonHeight / 2;
-          }
-          // Get the center of the element
+            // Add the element
+            effectHolder = document.createElement('div');
+            effectHolder.id = 'ripple';
+            effectHolder.className = 'ripple';
+            this.$.heroContent.append(effectHolder);
 
-          var effectWave = document.createElement('div');
-          // Add the ripples CSS and start the animation
-          effectWave.style.cssText =
-            'width: ' +
-            buttonWidth +
-            'px;height: ' +
-            buttonHeight +
-            'px;top:' +
-            y +
-            'px;left: ' +
-            x +
-            'px';
-          effectWave.classList.add('rippleWave');
+            // Make it round!
+            if (buttonWidth < buttonHeight) {
+              buttonHeight = buttonWidth;
+            } else {
+              buttonWidth = buttonHeight;
+            }
+            var touchPositon = e.touches[0];
+            var x = 0,
+              y = 0;
+            if (touchPositon) {
+              var x =
+                (touchPositon.pageX || touchPositon.clientX) -
+                posX -
+                buttonWidth / 2;
+              var y =
+                (touchPositon.pageY || touchPositon.clientY) -
+                posY -
+                buttonHeight / 2;
+            }
+            // Get the center of the element
 
-          effectHolder.append(effectWave);
-        }.bind(this)
-      );
+            var effectWave = document.createElement('div');
+            // Add the ripples CSS and start the animation
+            effectWave.style.cssText =
+              'width: ' +
+              buttonWidth +
+              'px;height: ' +
+              buttonHeight +
+              'px;top:' +
+              y +
+              'px;left: ' +
+              x +
+              'px';
+            effectWave.classList.add('rippleWave');
+
+            effectHolder.append(effectWave);
+          }.bind(this));
+        }else{
+          this.$.heroContent.addEventListener(
+          'mousedown',
+          function(e) {
+            // Remove any old one
+            var effectHolder = this.shadowDom.querySelector('#ripple');
+            effectHolder && effectHolder.remove();
+
+            var boundingRect = this.$.heroContent.getBoundingClientRect();
+            // Setup
+            var posX = boundingRect.left,
+              posY = boundingRect.top,
+              buttonWidth = boundingRect.width,
+              buttonHeight = boundingRect.height;
+
+            // Add the element
+            effectHolder = document.createElement('div');
+            effectHolder.id = 'ripple';
+            effectHolder.className = 'ripple';
+            this.$.heroContent.append(effectHolder);
+
+            // Make it round!
+            if (buttonWidth < buttonHeight) {
+              buttonHeight = buttonWidth;
+            } else {
+              buttonWidth = buttonHeight;
+            }
+            var touchPositon = e;
+            var x = 0,
+              y = 0;
+            if (touchPositon) {
+              var x =
+                (touchPositon.pageX || touchPositon.clientX) -
+                posX -
+                buttonWidth / 2;
+              var y =
+                (touchPositon.pageY || touchPositon.clientY) -
+                posY -
+                buttonHeight / 2;
+            }
+            // Get the center of the element
+
+            var effectWave = document.createElement('div');
+            // Add the ripples CSS and start the animation
+            effectWave.style.cssText =
+              'width: ' +
+              buttonWidth +
+              'px;height: ' +
+              buttonHeight +
+              'px;top:' +
+              y +
+              'px;left: ' +
+              x +
+              'px';
+            effectWave.classList.add('rippleWave');
+
+            effectHolder.append(effectWave);
+          }.bind(this));
+        };
     }
   }
   _in(json) {

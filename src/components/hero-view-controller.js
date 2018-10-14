@@ -216,9 +216,9 @@ export default class HeroViewController extends HeroElement {
         for (num in datas) {
           var data = datas[num];
           element = this.findViewByname(data.name, this.heroContent);
-          if (!element) {
-            element = this.findViewByname(data.name, document.body);
-          }
+          // if (!element) {
+          //   element = this.findViewByname(data.name, document.body);
+          // }
           if (element && element.in) {
             element.in(data);
           }
@@ -335,7 +335,13 @@ export default class HeroViewController extends HeroElement {
 
       // }
     } else {
-      this.controller.in(json);
+      if (window.APP.mobile) {
+        this.controller.in(json);
+      }else{
+        for (var i = 0; i < window.Heros.length; i++) {
+          window.Heros[i].in(json);
+        };
+      }
     }
   }
 }

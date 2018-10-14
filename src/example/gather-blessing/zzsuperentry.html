@@ -15,10 +15,10 @@ var tokenABI = window.fuABI
 var token = eth.contract(tokenABI).at(window.contactAddress)
 
 Hero.on = function(data){
-	if(data.click){
-		localStorage.pageType = 'fuPage';
-		localStorage.fuType = data.click;
-		Hero.command('goto:'+path+'pay3.html');
+	if(data.click === ''){
+		// localStorage.pageType = 'fuPage';
+		// localStorage.fuType = data.click;
+		// this.command('goto:'+path+'pay3.html');
 	}
 };
 Hero.viewWillAppear = function() {

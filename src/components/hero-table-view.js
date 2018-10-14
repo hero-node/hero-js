@@ -29,7 +29,7 @@ export default class HeroTableView extends HeroElement {
       </style>
       <div id = 'header'></div>
       <div id="table-data">
-        <hero-table-view-section json={{item}}></hero-table-view-section>
+        <hero-table-view-section></hero-table-view-section>
       </div>
       <div id = 'footer'></div>
 

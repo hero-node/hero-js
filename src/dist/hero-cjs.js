@@ -291,65 +291,125 @@ class HeroElement extends HTMLElement {
     this.on && this.on(json);
 
     if (json && json.ripple) {
-      this.$.heroContent.addEventListener(
-        'touchstart',
-        function(e) {
-          // Remove any old one
-          var effectHolder = this.shadowDom.querySelector('#ripple');
-          effectHolder && effectHolder.remove();
+      var mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
 
-          var boundingRect = this.$.heroContent.getBoundingClientRect();
-          // Setup
-          var posX = boundingRect.left,
-            posY = boundingRect.top,
-            buttonWidth = boundingRect.width,
-            buttonHeight = boundingRect.height;
+      if (mobile) {
+        this.$.heroContent.addEventListener(
+          'touchstart',
+          function(e) {
+            // Remove any old one
+            var effectHolder = this.shadowDom.querySelector('#ripple');
+            effectHolder && effectHolder.remove();
 
-          // Add the element
-          effectHolder = document.createElement('div');
-          effectHolder.id = 'ripple';
-          effectHolder.className = 'ripple';
-          this.$.heroContent.append(effectHolder);
+            var boundingRect = this.$.heroContent.getBoundingClientRect();
+            // Setup
+            var posX = boundingRect.left,
+              posY = boundingRect.top,
+              buttonWidth = boundingRect.width,
+              buttonHeight = boundingRect.height;
 
-          // Make it round!
-          if (buttonWidth < buttonHeight) {
-            buttonHeight = buttonWidth;
-          } else {
-            buttonWidth = buttonHeight;
-          }
-          var touchPositon = e.touches[0];
-          var x = 0,
-            y = 0;
-          if (touchPositon) {
-            var x =
-              (touchPositon.pageX || touchPositon.clientX) -
-              posX -
-              buttonWidth / 2;
-            var y =
-              (touchPositon.pageY || touchPositon.clientY) -
-              posY -
-              buttonHeight / 2;
-          }
-          // Get the center of the element
+            // Add the element
+            effectHolder = document.createElement('div');
+            effectHolder.id = 'ripple';
+            effectHolder.className = 'ripple';
+            this.$.heroContent.append(effectHolder);
 
-          var effectWave = document.createElement('div');
-          // Add the ripples CSS and start the animation
-          effectWave.style.cssText =
-            'width: ' +
-            buttonWidth +
-            'px;height: ' +
-            buttonHeight +
-            'px;top:' +
-            y +
-            'px;left: ' +
-            x +
-            'px';
-          effectWave.classList.add('rippleWave');
+            // Make it round!
+            if (buttonWidth < buttonHeight) {
+              buttonHeight = buttonWidth;
+            } else {
+              buttonWidth = buttonHeight;
+            }
+            var touchPositon = e.touches[0];
+            var x = 0,
+              y = 0;
+            if (touchPositon) {
+              var x =
+                (touchPositon.pageX || touchPositon.clientX) -
+                posX -
+                buttonWidth / 2;
+              var y =
+                (touchPositon.pageY || touchPositon.clientY) -
+                posY -
+                buttonHeight / 2;
+            }
+            // Get the center of the element
 
-          effectHolder.append(effectWave);
-        }.bind(this)
-      );
-    }
+            var effectWave = document.createElement('div');
+            // Add the ripples CSS and start the animation
+            effectWave.style.cssText =
+              'width: ' +
+              buttonWidth +
+              'px;height: ' +
+              buttonHeight +
+              'px;top:' +
+              y +
+              'px;left: ' +
+              x +
+              'px';
+            effectWave.classList.add('rippleWave');
+
+            effectHolder.append(effectWave);
+          }.bind(this));
+        }else{
+          this.$.heroContent.addEventListener(
+          'mousedown',
+          function(e) {
+            // Remove any old one
+            var effectHolder = this.shadowDom.querySelector('#ripple');
+            effectHolder && effectHolder.remove();
+
+            var boundingRect = this.$.heroContent.getBoundingClientRect();
+            // Setup
+            var posX = boundingRect.left,
+              posY = boundingRect.top,
+              buttonWidth = boundingRect.width,
+              buttonHeight = boundingRect.height;
+
+            // Add the element
+            effectHolder = document.createElement('div');
+            effectHolder.id = 'ripple';
+            effectHolder.className = 'ripple';
+            this.$.heroContent.append(effectHolder);
+
+            // Make it round!
+            if (buttonWidth < buttonHeight) {
+              buttonHeight = buttonWidth;
+            } else {
+              buttonWidth = buttonHeight;
+            }
+            var touchPositon = e;
+            var x = 0,
+              y = 0;
+            if (touchPositon) {
+              var x =
+                (touchPositon.pageX || touchPositon.clientX) -
+                posX -
+                buttonWidth / 2;
+              var y =
+                (touchPositon.pageY || touchPositon.clientY) -
+                posY -
+                buttonHeight / 2;
+            }
+            // Get the center of the element
+
+            var effectWave = document.createElement('div');
+            // Add the ripples CSS and start the animation
+            effectWave.style.cssText =
+              'width: ' +
+              buttonWidth +
+              'px;height: ' +
+              buttonHeight +
+              'px;top:' +
+              y +
+              'px;left: ' +
+              x +
+              'px';
+            effectWave.classList.add('rippleWave');
+
+            effectHolder.append(effectWave);
+          }.bind(this));
+        }    }
   }
   _in(json) {
     this._json = Object.assign(this._json || {}, json);
@@ -2906,7 +2966,7 @@ class HeroTableView extends HeroElement {
       </style>
       <div id = 'header'></div>
       <div id="table-data">
-        <hero-table-view-section json={{item}}></hero-table-view-section>
+        <hero-table-view-section></hero-table-view-section>
       </div>
       <div id = 'footer'></div>
 
@@ -3201,7 +3261,7 @@ class HeroToolbarItem extends HeroElement {
         text-align:center;
         padding-top:4px;
         width: 100%;
-        height: 44px;
+        height: 100%;
       }
       #title{
         display: inline-block;
@@ -3260,7 +3320,7 @@ class HeroToolbarItem extends HeroElement {
     }
   }
   addSelectedClz() {
-    if (!this.selected) {
+    if (this.selected) {
       this.$.div.classList.add('selected');
     } else {
       this.$.div.classList.remove('selected');
@@ -3270,11 +3330,11 @@ class HeroToolbarItem extends HeroElement {
     if (json.title) {
       this.$.title.in({
         title: json.title,
+        titleColor:'000000',
         click: {
           command: 'load:' + json.url,
         },
       });
-      // this.updateContent(this.$.title, json.title);
     }
     if (json.image) {
       this.$.image.src = json.image;
@@ -3506,9 +3566,9 @@ class HeroViewController extends HeroElement {
         for (num in datas) {
           var data = datas[num];
           element = this.findViewByname(data.name, this.heroContent);
-          if (!element) {
-            element = this.findViewByname(data.name, document.body);
-          }
+          // if (!element) {
+          //   element = this.findViewByname(data.name, document.body);
+          // }
           if (element && element.in) {
             element.in(data);
           }
@@ -3623,7 +3683,12 @@ class HeroViewController extends HeroElement {
 
       // }
     } else {
-      this.controller.in(json);
+      if (window.APP.mobile) {
+        this.controller.in(json);
+      }else{
+        for (var i = 0; i < window.Heros.length; i++) {
+          window.Heros[i].in(json);
+        }      }
     }
   }
 }
@@ -3637,20 +3702,36 @@ class HeroApp extends HeroElement {
     this.pageStack = [];
     this.loadedPages = [];
     this.currentPage = [];
-
-    this.$ = {
-      tab: this.shadowDom.querySelector('#tab'),
-      bar: this.shadowDom.querySelector('#bar'),
-      title: this.shadowDom.querySelector('#title'),
-      pages: this.shadowDom.querySelector('#pages'),
-      menu: this.shadowDom.querySelector('#menu'),
-      cover: this.shadowDom.querySelector('#cover'),
-      leftMenu: this.shadowDom.querySelector('#leftMenu'),
-      rightMenu: this.shadowDom.querySelector('#rightMenu'),
-      backBtn: this.shadowDom.querySelector('#backBtn'),
-      leftBtn: this.shadowDom.querySelector('#leftBtn'),
-      rightBtn: this.shadowDom.querySelector('#rightBtn'),
-    };
+    if (this.mobile) {
+      this.$ = {
+        tab: this.shadowDom.querySelector('#tab'),
+        bar: this.shadowDom.querySelector('#bar'),
+        title: this.shadowDom.querySelector('#title'),
+        pages: this.shadowDom.querySelector('#pages'),
+        menu: this.shadowDom.querySelector('#menu'),
+        cover: this.shadowDom.querySelector('#cover'),
+        leftMenu: this.shadowDom.querySelector('#leftMenu'),
+        rightMenu: this.shadowDom.querySelector('#rightMenu'),
+        backBtn: this.shadowDom.querySelector('#backBtn'),
+        leftBtn: this.shadowDom.querySelector('#leftBtn'),
+        rightBtn: this.shadowDom.querySelector('#rightBtn'),
+      };
+    }else{
+      this.$ = {
+        tab: this.shadowDom.querySelector('#pad_tab'),
+        bar: this.shadowDom.querySelector('#pad_bar'),
+        title: this.shadowDom.querySelector('#title'),
+        rootPages: this.shadowDom.querySelector('#root_pages'),
+        contentPages: this.shadowDom.querySelector('#content_pages'),
+        menu: this.shadowDom.querySelector('#menu'),
+        cover: this.shadowDom.querySelector('#cover'),
+        leftMenu: this.shadowDom.querySelector('#leftMenu'),
+        rightMenu: this.shadowDom.querySelector('#rightMenu'),
+        backBtn: this.shadowDom.querySelector('#backBtn'),
+        leftBtn: this.shadowDom.querySelector('#leftBtn'),
+        rightBtn: this.shadowDom.querySelector('#rightBtn'),
+      };
+    }
 
     var localStorageTemp = {};
     var forceMem = false;
@@ -3667,167 +3748,346 @@ class HeroApp extends HeroElement {
   }
 
   template() {
-    return `
-    <style>
-      :host {
-        display: block;
-        position: absolute;
-        margin: 0px;
-        padding: 0px;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
-      #bar {
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        top: 0px;
-        width: 100%;
-        height: 43px;
-        background-color: #ffffff;
-        border-bottom:1px solid #ddd;
-      }
-      #tab {
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        bottom: 0px;
-        width: 100%;
-        height: 44px;
-        background-color: #fff;
-        border-top:1px solid #ddd;
-      }
-      #cover {
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        height: 100%;
-        width: 100%;
-        background: url(../../../images/cover.jpeg);
-        background-color: #fff;
-        background-size:cover;
-      }
-      #menu {
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        display: none;
-        height: 100%;
-        width: 100%;
-        background-color: rgba(0,0,0,0.4);
-      }
-      #leftMenu {
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        display: none;
-        height: 100%;
-        width: 66%;
-        background-color: #fff;
-      }
-      #rightMenu {
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        display: none;
-        height: 100%;
-        left: 34%;
-        width: 66%;
-        background-color: #fff;
-      }
-      #title {
-        display:inline-block;
-        position: absolute;
-        overflow:hidden;
-        width: 100%;
-        height: 100%;
-        color: #fff;
-        font-size: 20px;
-        text-align: center;
-        margin: 10px;
-        pointer-events:none;
-      }
-      #leftBtn {
-        display:none;
-        position: absolute;
-        overflow:hidden;
-        color: #fff;
-        width: 70px;
-        height: 25px;
-        left:10px;
-        top:12px;
-      }
-      #backBtn {
-        display:none;
-        position: absolute;
-        overflow:hidden;
-        width: 25px;
-        height: 25px;
-        left:10px;
-        top:12px;
-      }
-      #rightBtn {
-        display:none;
-        position: absolute;
-        overflow:hidden;
-        width: 70px;
-        height: 25px;
-        right:10px;
-        top:12px;
-      }
-      hero-pages{
-        display:block;
-        position: absolute;
-        overflow:hidden;
-        top: 44px;
-        bottom: 100%;
-        width: 100%;
-      }
-      @keyframes backBtnIn
-      {
-        from {opacity: 0;}
-        to {opacity: 1;}
-      }
-      @keyframes backBtnOut
-      {
-        from {opacity: 1;}
-        to {opacity: 0;}
-      }
-      @keyframes coverGo
-      {
-        from {opacity: 1;}
-        to {opacity: 0;}
-        from {transform:scale(1,1);}
-        to {transform:scale(1.1,1.1);}
-      }
-      @keyframes leftMenuIn
-      {
-        from {left: -66%;}
-        to {left: 0%;}
-      }
-      @keyframes leftMenuOut
-      {
-        from {left: 0%;}
-        to {left: -66%;}
-      }
-    </style>
+    this.mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
+    if (this.mobile) {
+      return `
+      <style>
+        :host {
+          display: block;
+          position: absolute;
+          margin: 0px;
+          padding: 0px;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+        #bar {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          top: 0px;
+          width: 100%;
+          height: 43px;
+          background-color: #ffffff;
+          border-bottom:1px solid #ddd;
+        }
+        #tab {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          bottom: 0px;
+          width: 100%;
+          height: 44px;
+          background-color: #fff;
+          border-top:1px solid #ddd;
+        }
+        #cover {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          height: 100%;
+          width: 100%;
+          background: url(../../../images/cover.jpeg);
+          background-color: #fff;
+          background-size:cover;
+        }
+        #menu {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          display: none;
+          height: 100%;
+          width: 100%;
+          background-color: rgba(0,0,0,0.4);
+        }
+        #leftMenu {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          display: none;
+          height: 100%;
+          width: 66%;
+          background-color: #fff;
+        }
+        #rightMenu {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          display: none;
+          height: 100%;
+          left: 34%;
+          width: 66%;
+          background-color: #fff;
+        }
+        #title {
+          display:inline-block;
+          position: absolute;
+          overflow:hidden;
+          width: 100%;
+          height: 100%;
+          color: #fff;
+          font-size: 20px;
+          text-align: center;
+          margin: 10px;
+          pointer-events:none;
+        }
+        #leftBtn {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          color: #fff;
+          width: 70px;
+          height: 25px;
+          left:10px;
+          top:12px;
+        }
+        #backBtn {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          width: 25px;
+          height: 25px;
+          left:10px;
+          top:12px;
+        }
+        #rightBtn {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          width: 70px;
+          height: 25px;
+          right:10px;
+          top:12px;
+        }
+        hero-pages{
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          top: 44px;
+          bottom: 100%;
+          width: 100%;
+        }
+        @keyframes backBtnIn
+        {
+          from {opacity: 0;}
+          to {opacity: 1;}
+        }
+        @keyframes backBtnOut
+        {
+          from {opacity: 1;}
+          to {opacity: 0;}
+        }
+        @keyframes coverGo
+        {
+          from {opacity: 1;}
+          to {opacity: 0;}
+          from {transform:scale(1,1);}
+          to {transform:scale(1.1,1.1);}
+        }
+        @keyframes leftMenuIn
+        {
+          from {left: -66%;}
+          to {left: 0%;}
+        }
+        @keyframes leftMenuOut
+        {
+          from {left: 0%;}
+          to {left: -66%;}
+        }
+      </style>
 
-    <div id='bar'>
-      <hero-button class='btn' id ='backBtn'></hero-button>
-      <hero-button class='btn' id ='leftBtn'></hero-button>
-      <hero-button class='btn' id ='rightBtn'></hero-button>
-      <p id='title'></p>
-    </div>
-    <hero-pages id='pages'></hero-pages>
-    <div id='tab'></div>
-    <div id='menu' on-tap='closeMenu'>
-      <div id='leftMenu'></div>
-      <div id='rightMenu'></div>
-    </div>
-    <div id='cover'></div>
+      <div id='bar'>
+        <hero-button class='btn' id ='backBtn'></hero-button>
+        <hero-button class='btn' id ='leftBtn'></hero-button>
+        <hero-button class='btn' id ='rightBtn'></hero-button>
+        <p id='title'></p>
+      </div>
+      <hero-pages id='pages'></hero-pages>
+      <div id='tab'></div>
+      <div id='menu' on-tap='closeMenu'>
+        <div id='leftMenu'></div>
+        <div id='rightMenu'></div>
+      </div>
+      <div id='cover'></div>
 
-    `;
+      `;
+      }else{
+        return `
+      <style>
+        :host {
+          display: block;
+          position: absolute;
+          margin: 0px;
+          padding: 0px;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+        #pad_bar {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          top: 0px;
+          left: 440px;
+          right: 0px;
+          height: 88px;
+          background-color: #ffffff;
+          border-bottom:1px solid #ddd;
+        }
+        #pad_tab {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          left:0px;
+          width:120px;
+          height: 100%;
+          background-color: #fff;
+          border-right:1px solid #ddd;
+        }
+        #root_pages{
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          top: 0px;
+          left: 121px;
+          width: 320px;
+          height: 100%;
+          border-right:1px solid #ddd;
+        }
+        #content_pages{
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          top: 0px;
+          left: 442px;
+          right: 0px;
+          height: 100%;
+        }
+        #cover {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          height: 100%;
+          width: 100%;
+          background: url(../../../images/cover.jpeg);
+          background-color: #fff;
+          background-size:cover;
+        }
+        #menu {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          display: none;
+          height: 100%;
+          width: 100%;
+          background-color: rgba(0,0,0,0.4);
+        }
+        #leftMenu {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          display: none;
+          height: 100%;
+          width: 66%;
+          background-color: #fff;
+        }
+        #rightMenu {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          display: none;
+          height: 100%;
+          left: 34%;
+          width: 66%;
+          background-color: #fff;
+        }
+        #title {
+          display:inline-block;
+          position: absolute;
+          overflow:hidden;
+          width: 100%;
+          height: 100%;
+          line-height:88px;
+          margin:0px;
+          color: #fff;
+          font-size: 20px;
+          text-align: center;
+          pointer-events:none;
+        }
+        #leftBtn {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          color: #fff;
+          width: 70px;
+          height: 25px;
+          left:10px;
+          top:12px;
+        }
+        #backBtn {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          width: 25px;
+          height: 25px;
+          left:10px;
+          top:12px;
+        }
+        #rightBtn {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          width: 70px;
+          height: 25px;
+          right:10px;
+          top:12px;
+        }
+
+        @keyframes backBtnIn
+        {
+          from {opacity: 0;}
+          to {opacity: 1;}
+        }
+        @keyframes backBtnOut
+        {
+          from {opacity: 1;}
+          to {opacity: 0;}
+        }
+        @keyframes coverGo
+        {
+          from {opacity: 1;}
+          to {opacity: 0;}
+          from {transform:scale(1,1);}
+          to {transform:scale(1.1,1.1);}
+        }
+        @keyframes leftMenuIn
+        {
+          from {left: -66%;}
+          to {left: 0%;}
+        }
+        @keyframes leftMenuOut
+        {
+          from {left: 0%;}
+          to {left: -66%;}
+        }
+      </style>
+      <div id='pad_bar'>
+        <hero-button class='btn' id ='backBtn'></hero-button>
+        <hero-button class='btn' id ='leftBtn'></hero-button>
+        <hero-button class='btn' id ='rightBtn'></hero-button>
+        <p id='title'></p>
+      </div>
+      <hero-pages id='root_pages'></hero-pages>
+      <hero-pages id='content_pages'></hero-pages>
+      <div id='pad_tab'></div>
+      <div id='pad_menu' on-tap='closeMenu'>
+        <div id='leftMenu'></div>
+        <div id='rightMenu'></div>
+      </div>
+      <div id='cover'></div>
+        `
+      }
+
   }
 
   on(json) {
@@ -3843,22 +4103,39 @@ class HeroApp extends HeroElement {
         this.$.tab.style.backgroundColor = '#' + tab.backgroundColor;
         this.$.tab.style.color = '#' + tab.color;
         item.setController(this);
-        item.in({
-          frame: {
-            x: i / json.tabs.length + 'x',
-            w: 1 / json.tabs.length + 'x',
-            y: '0',
-            h: '44',
-          },
-          image: tab.image,
-          title: tab.title,
-          selected: i == 0,
-          click: { select: i + 1 },
-        });
+        if (this.mobile) {
+          item.in({
+            frame: {
+              x: i / json.tabs.length + 'x',
+              w: 1 / json.tabs.length + 'x',
+              y: '0',
+              h: '44',
+            },
+            image: tab.image,
+            title: tab.title,
+            selected: i == 0,
+            click: { select: i + 1 },
+          });
+        }else{
+          item.in({
+            frame: {
+              x: '0',
+              w: '120',
+              y: i*120+(i+1)*10+'',
+              h: '120',
+            },
+            image: tab.image,
+            title: tab.title,
+            selected: i == 0,
+            click: { select: i + 1 },
+          });
+        }
       }
       if (this.tabs.length == 1) {
         this.$.tab.style.display = 'none';
-        this.$.pages.style.bottom = '0px';
+        if (this.mobile) {
+          this.$.pages.style.bottom = '0px';
+        }
       }
       this.gotoPage(json.tabs[0].url);
       if (json.loadPage) {
@@ -3978,7 +4255,9 @@ class HeroApp extends HeroElement {
     setTimeout(function() {
       that.$.cover.style.display = 'none';
     }, 2900);
+    window.Heros = [];
     window.__defineSetter__('Hero', function(v) {
+      window.Heros.push(v);
       window[window.location.href + '_Hero'] = v;
     });
 
@@ -4014,10 +4293,19 @@ class HeroApp extends HeroElement {
       }
       if (nav.navigationBarHidden || nav.navigationBarHiddenH5) {
         this.$.bar.style.height = '0px';
-        this.$.pages.style.top = '0px';
+        if (this.mobile) {
+          this.$.pages.style.top = '0px';
+        }else{
+          this.$.contentPages.style.top = '0px';
+        }
       } else {
-        this.$.bar.style.height = '43px';
-        this.$.pages.style.top = '44px';
+        if (this.mobile) {
+          this.$.bar.style.height = '43px';
+          this.$.pages.style.top = '44px';
+        }else{
+          this.$.bar.style.height = '88px';
+          this.$.contentPages.style.top = '89px';
+        }
       }
       if (nav.leftItems && nav.leftItems.length > 0) {
         this.$.backBtn.style.display = 'none';
@@ -4070,40 +4358,84 @@ class HeroApp extends HeroElement {
       // eslint-disable-next-line
       if (/[127\.0\.0\.0|localhost]/.test(page)) {
         if (page.endWith('html')) {
-          // page = page.replace(/.html$/, '.js')
           page = page + '?test=true';
         } else {
           page = page + '&test=true';
         }
       }
-      this.$.pages.on();
-      window.importHref(
-        page,
+      if (this.mobile) {
+        this.$.pages.on();
+      }else{
+        if (this.contain(this.rootPages,pageElement)) {
+          this.$.rootPages.on();
+        }else{
+          this.$.contentPages.on();
+        }
+      }
+      window.importHref(page,
         function() {
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
-          that.$.pages.addPage(that.currentPage);
+          if (that.mobile) {
+            that.$.pages.addPage(that.currentPage);
+          }else{
+            if (that.contain(that.rootPages,pageElement)) {
+              that.$.rootPages.addPage(that.currentPage);
+            }else{
+              that.$.contentPages.addPage(that.currentPage);
+            }
+          }
         },
         function() {
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
-          that.$.pages.addPage(that.currentPage);
+          if (that.mobile) {
+            that.$.pages.addPage(that.currentPage);
+          }else{
+            if (that.contain(that.rootPages,page)) {
+              that.$.rootPages.addPage(that.currentPage);
+            }else{
+              that.$.contentPages.addPage(that.currentPage);
+            }
+          }
         }
       );
     } else {
-      this.$.pages.on({
-        selected: pageElement,
-        callback: true,
-      });
-
-      const next = this.$.pages.selectedItem;
-
-      if (this.pageStack.indexOf(pageElement) === -1) {
-        next.viewDidLoad();
+      if (this.mobile) {
+        this.$.pages.on({
+          selected: pageElement,
+          callback: true,
+        });
+        const next = this.$.pages.selectedItem;
+        if (this.pageStack.indexOf(pageElement) === -1) {
+          next.viewDidLoad();
+        }
+        next.viewWillAppear();
+      }else{
+        if (this.contain(this.rootPages,pageElement)) {
+          this.$.rootPages.on({
+            selected: pageElement,
+            callback: true,
+          });
+          const next = this.$.rootPages.selectedItem;
+          if (this.pageStack.indexOf(pageElement) === -1) {
+            next.viewDidLoad();
+          }
+          next.viewWillAppear();
+        }else{
+          this.$.contentPages.on({
+            selected: pageElement,
+            callback: true,
+          });
+          const next = this.$.contentPages.selectedItem;
+          if (this.pageStack.indexOf(pageElement) === -1) {
+            next.viewDidLoad();
+          }
+          next.viewWillAppear();
+        }
       }
-      next.viewWillAppear();
     }
   }
   gotoPage(page, option) {
@@ -4121,9 +4453,17 @@ class HeroApp extends HeroElement {
     );
 
     if (isInRootStack && this.rootPages.length > 1) {
-      this.$.tab.style.display = 'block';
-      this.$.pages.style.bottom = '44px';
-      this.$.backBtn.style.display = 'none';
+      if (this.mobile) {
+        this.$.tab.style.display = 'block';
+        this.$.pages.style.bottom = '44px';
+        this.$.backBtn.style.display = 'none';
+      }
+
+    } else {
+      if (this.mobile) {
+        this.$.tab.style.display = 'none';
+        this.$.pages.style.bottom = '0px';
+      }
     }
     var animationType = '';
 
@@ -4132,31 +4472,22 @@ class HeroApp extends HeroElement {
         animationType = 10;
       }
     } else if (!isInRootStack) {
-      // this.$.pages.entryAnimation = 'slide-from-right-animation';
-      // this.$.pages.exitAnimation = 'fade-out-animation';
       animationType = 9;
     }
     if (option == 'present') {
-      // this.$.pages.entryAnimation = 'slide-from-bottom-animation';
-      // this.$.pages.exitAnimation = 'fade-out-animation';
       animationType = 3;
     } else if (option == 'dissmiss') {
-      // this.$.pages.entryAnimation = 'slide-from-top-animation';
-      // this.$.pages.exitAnimation = 'fade-out-animation';
       animationType = 4;
     } else if (option == 'load') {
-      // this.$.pages.entryAnimation = 'fade-in-animation';
-      // this.$.pages.exitAnimation = 'fade-out-animation';
-      // this.$.pages.on({
-      //   animation: 1
-      // })
       animationType = 9;
     }
-    this.$.pages.setEffect(animationType);
-
-    if (this.$.pages.selectedItem) {
-      this.$.pages.selectedItem.viewWillDisappear();
+    if (this.mobile) {
+      this.$.pages.setEffect(animationType);
+      if (this.$.pages.selectedItem) {
+        this.$.pages.selectedItem.viewWillDisappear();
+      }
     }
+
     if (
       !history.state ||
       (history.state.state || history.state.heropage) === page ||
