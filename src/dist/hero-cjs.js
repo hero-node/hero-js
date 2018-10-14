@@ -3790,6 +3790,7 @@ class HeroApp extends HeroElement {
           background: url(../../../images/cover.jpeg);
           background-color: #fff;
           background-size:cover;
+          z-index:1
         }
         #menu {
           display:block;
@@ -3972,6 +3973,7 @@ class HeroApp extends HeroElement {
           background: url(../../../images/cover.jpeg);
           background-color: #fff;
           background-size:cover;
+          z-index:1;
         }
         #menu {
           display:block;
