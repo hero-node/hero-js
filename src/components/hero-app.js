@@ -561,7 +561,7 @@ export default class HeroApp extends HeroElement {
     this.$.rightBtn.in({ title: ' ', titleColor: 'ffffff' });
     this.$.leftMenu.style.width = parseInt(window.innerWidth) * 2 / 3 + 'px';
     var that = this;
-    if (/[127\.0\.0\.0|localhost]/.test(page)) {
+    if (/[127\.0\.0\.0|localhost]/.test(window.location.host)) {
         this.$.cover.style.display = 'none';
     }else{
       setTimeout(function() {
