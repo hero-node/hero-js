@@ -4265,12 +4265,16 @@ class HeroApp extends HeroElement {
     this.$.rightBtn.in({ title: ' ', titleColor: 'ffffff' });
     this.$.leftMenu.style.width = parseInt(window.innerWidth) * 2 / 3 + 'px';
     var that = this;
-    setTimeout(function() {
-      that.$.cover.style.animation = 'coverGo 1s';
-    }, 2000);
-    setTimeout(function() {
-      that.$.cover.style.display = 'none';
-    }, 2900);
+    if (/[127\.0\.0\.0|localhost]/.test(page)) {
+        this.$.cover.style.display = 'none';
+    }else{
+      setTimeout(function() {
+        that.$.cover.style.animation = 'coverGo 1s';
+      }, 2000);
+      setTimeout(function() {
+        that.$.cover.style.display = 'none';
+      }, 2900);
+    }
     window.Heros = [];
     window.__defineSetter__('Hero', function(v) {
       window.Heros.push(v);
