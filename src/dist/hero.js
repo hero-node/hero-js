@@ -349,6 +349,11 @@
                 x +
                 'px';
               effectWave.classList.add('rippleWave');
+              if (json.backgroundColor === 'fff' || json.backgroundColor === 'ffffff') {
+                effectWave.classList.add('rippleWaveDark');
+              }else{
+                effectWave.classList.add('rippleWaveLight');
+              }
 
               effectHolder.append(effectWave);
             }.bind(this));
@@ -407,6 +412,11 @@
                 x +
                 'px';
               effectWave.classList.add('rippleWave');
+              if (json.backgroundColor === 'fff' || json.backgroundColor === 'ffffff') {
+                effectWave.classList.add('rippleWaveDark');
+              }else{
+                effectWave.classList.add('rippleWaveLight');
+              }
 
               effectHolder.append(effectWave);
             }.bind(this));
@@ -751,10 +761,15 @@
           position: absolute;
           border-radius: 50%;
           transform: scale(0.7); -webkit-transform: scale(0.7);
-          background: rgba(255,255,255, 1);
           opacity: 0.45;
                   animation: ripple 2s forwards;
           -webkit-animation: ripple 2s forwards;
+        }
+        .rippleWaveLight{
+          background: rgba(255,255,255, 1);
+        }
+        .rippleWaveDark{
+          background: rgba(200,200,200, 1);
         }
         @keyframes ripple {
           to {transform: scale(24); opacity:0;}
