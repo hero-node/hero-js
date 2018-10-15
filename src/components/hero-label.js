@@ -2,6 +2,7 @@ import HeroElement from './hero-element';
 
 export default class HeroLabel extends HeroElement {
   init() {
+    this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
     this.$ = {
       span: this.shadowDom.querySelector('span'),
     };
@@ -12,7 +13,7 @@ export default class HeroLabel extends HeroElement {
       this.updateContent(this.$.span, json.text);
     }
     if (!json.hasOwnProperty("numberOfLines") ) {
-      this.$.text.style.lineHeight = this.$.heroContent.style.height;
+      this.$.span.style.lineHeight = this.$.heroContent.style.height;
     };
     if (json.size) {
       this.$.span.style.fontSize = json.size + 'px';
@@ -33,7 +34,6 @@ export default class HeroLabel extends HeroElement {
          <style>
             span{
               display: block;
-              pointer-events:none;
             }
           </style>
           <span></span>

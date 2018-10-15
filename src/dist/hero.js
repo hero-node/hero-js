@@ -2461,7 +2461,6 @@
       this.$ = {
         button: this.shadowDom.querySelector('button'),
       };
-
       this.$.button.addEventListener('tap', this.onClick.bind(this));
       this.$.button.addEventListener('click', this.onClick.bind(this));
     }
@@ -2533,6 +2532,7 @@
 
   class HeroLabel extends HeroElement {
     init() {
+      this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
       this.$ = {
         span: this.shadowDom.querySelector('span'),
       };
@@ -2542,7 +2542,9 @@
       if (json.text !== undefined) {
         this.updateContent(this.$.span, json.text);
       }
-      if (json.size) {
+      if (!json.hasOwnProperty("numberOfLines") ) {
+        this.$.span.style.lineHeight = this.$.heroContent.style.height;
+      }    if (json.size) {
         this.$.span.style.fontSize = json.size + 'px';
       }
       if (json.alignment) {
@@ -2560,7 +2562,7 @@
       return `
          <style>
             span{
-                display: block;
+              display: block;
             }
           </style>
           <span></span>
@@ -2570,6 +2572,7 @@
 
   class HeroImageView extends HeroElement {
     init() {
+      this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
       this.$ = {
         img: this.shadowDom.querySelector('img'),
       };
@@ -2578,7 +2581,11 @@
     template() {
       return `
       <style type="text/css">
-        img {margin: 0px;padding: 0px;width: 100%;height: 100%;border: 0px;}
+        img {
+          margin: 0px;padding: 0px;
+          width: 100%;height: 100%;border: 0px;
+          pointer-events:none;
+        }
       </style>    
       <img />
     `;

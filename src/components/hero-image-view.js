@@ -2,6 +2,7 @@ import HeroElement from './hero-element';
 
 export default class HeroImageView extends HeroElement {
   init() {
+    this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
     this.$ = {
       img: this.shadowDom.querySelector('img'),
     };
