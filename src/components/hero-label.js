@@ -11,6 +11,9 @@ export default class HeroLabel extends HeroElement {
     if (json.text !== undefined) {
       this.updateContent(this.$.span, json.text);
     }
+    if (!json.hasOwnProperty("numberOfLines") ) {
+      this.$.text.style.lineHeight = this.$.heroContent.style.height;
+    };
     if (json.size) {
       this.$.span.style.fontSize = json.size + 'px';
     }
@@ -29,7 +32,8 @@ export default class HeroLabel extends HeroElement {
     return `
          <style>
             span{
-                display: block;
+              display: block;
+              pointer-events:none;
             }
           </style>
           <span></span>

@@ -10,7 +10,11 @@ export default class HeroImageView extends HeroElement {
   template() {
     return `
       <style type="text/css">
-        img {margin: 0px;padding: 0px;width: 100%;height: 100%;border: 0px;}
+        img {
+          margin: 0px;padding: 0px;
+          width: 100%;height: 100%;border: 0px;
+          pointer-events:none;
+        }
       </style>    
       <img />
     `;
