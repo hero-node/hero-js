@@ -3,14 +3,11 @@ import HeroElement from './hero-element';
 export default class HeroToolbarItem extends HeroElement {
   init() {
     this.$ = {
-      title: this.shadowDom.querySelector('#title'),
-      button: this.shadowDom.querySelector('hero-button'),
+      button: this.shadowDom.querySelector('#btn'),
       div: this.shadowDom.querySelector('#wpr'),
       icon: this.shadowDom.querySelector('img'),
       span: this.shadowDom.querySelector('#wpr span'),
     };
-    this.$.button.setController(this.controller);
-
     var onTapCallback = this.onTap.bind(this);
     this.$.button.addEventListener('touchstart', onTapCallback);
     this.$.button.addEventListener('click', onTapCallback);
@@ -24,55 +21,49 @@ export default class HeroToolbarItem extends HeroElement {
         position: absolute;
         overflow: hidden;
         text-align:center;
-        padding-top:4px;
         width: 100%;
         height: 100%;
       }
-      #title{
+      #btn{
         display: inline-block;
         position: absolute;
         overflow: hidden;
-        color: #999999;
-        text-align: center;
-      }
-      #title.hasIcon{
-        top:30px;
-        left:0px;
-        font-size: 11px;
-        width: 100%;
-        line-height: 14px;
-      }
-      img{
-        display: inline-block;
-        overflow: hidden;
-        text-align: center;
-        width: 22px;
-        height: 22px;
-      }
-      #wpr.selected hero-button{
-        background: rgba(0, 0, 0, 0.08);
-      }
-
-      hero-button{
-        display: inline-block;
-        position: absolute;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
         left:0px;
         top:0px;
+        height:100%;
+        width:100%;
       }
-      #title{
-        color: #999;
+      #span{
+        display: block;
+        overflow: hidden;
+        position:absolute;
+        text-align: center;
+        width:100%;
+        height:100%;
+        line-height:100%;
+        pointer-events:none;
       }
-      #wpr.selected #title{
+      img{
+        display: none;
+        position:absolute;
+        overflow: hidden;
+        left:30%;
+        width:40%;
+        top:10%;
+        height:40%;
+        pointer-events:none;
+      }
+      #wpr.selected #btn{
+        background: rgba(0, 0, 0, 0.08);
+      }
+      #wpr.selected #span{
         color: #00BC8D;
       }
       </style>
       <div id="wpr">
         <img id="icon" />
         <span id="span"></span>
-        <hero-button id="title"></hero-button>
+        <div id="btn"></div>
       </div>
     `;
   }
@@ -93,21 +84,22 @@ export default class HeroToolbarItem extends HeroElement {
   }
   on(json) {
     if (json.title) {
-      this.$.title.in({
-        title: json.title,
-        titleColor:'000000',
-        click: {
-          command: 'load:' + json.url,
-        },
-      });
+      this.$.span.innerHTML = json.title;
     }
     if (json.image) {
-      this.$.image.src = json.image;
-      this.$.title.classList.add('hasIcon');
-    } else {
-      this.$.span && this.$.span.remove();
-      this.$.icon && this.$.icon.remove();
+      this.$.icon.style.display = 'block';
+      this.$.icon.src = json.image;
+      this.$.span.style.top = '50%';
+      this.$.span.style.height = '50%';
     }
+    var that = this;
+    setTimeout(function(){
+      if (json.image) {
+        that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
+      }else{
+        that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
+      }
+    },400);
     this.selected = this._json.selected;
     this.addSelectedClz();
   }

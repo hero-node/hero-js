@@ -16,6 +16,8 @@
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/webcomponents-loader.js"></script> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/custom-elements-es5-adapter.js"></script> -->
   <!-- <script src="./@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
   <script src="./app/config.js"></script>
   <script src="./app/shareViews.js"></script>
   <script src="./app/herohelper.js"></script>
@@ -29,7 +31,7 @@
   var loadPage = window.location.search.split('=').pop();
 
   var app = {tabs:[
-    {url:path+'home.html', title: 'Home'},
+    {url:path+'home.html', title: 'Home',image:path+'images/fu.png'},
     {url:path+'dalao.html', title: 'dalao'}
   ]};
   console.log(app);
