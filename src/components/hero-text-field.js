@@ -76,13 +76,14 @@ export default class HeroTextField extends HeroElement {
             input{
                 font-size: 16px;
                 width: 100%;
-                border: 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
                 outline: 0;
+                padding-left: 5px;
                 position: absolute;
                 left: 0;
                 bottom: 1px;
                 height: 100%;
-                border-bottom: 1px solid #212121;
             }
             div{
                 position: relative;
