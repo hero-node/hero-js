@@ -99,7 +99,7 @@ export default class HeroToolbarItem extends HeroElement {
       }else{
         that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
       }
-    },400);
+    },100);
     this.selected = this._json.selected;
     this.addSelectedClz();
   }

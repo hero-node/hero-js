@@ -291,9 +291,7 @@ class HeroElement extends HTMLElement {
     this.on && this.on(json);
 
     if (json && json.ripple) {
-      var mobile = /iphone|ipad|ipod|android|blackberry|mini|palm/i.test(
-        navigator.userAgent.toLowerCase()
-      );
+      var mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
 
       if (mobile) {
         this.$.heroContent.addEventListener(
@@ -350,20 +348,16 @@ class HeroElement extends HTMLElement {
               x +
               'px';
             effectWave.classList.add('rippleWave');
-            if (
-              json.backgroundColor === 'fff' ||
-              json.backgroundColor === 'ffffff'
-            ) {
+            if (json.backgroundColor === 'fff' || json.backgroundColor === 'ffffff') {
               effectWave.classList.add('rippleWaveDark');
-            } else {
+            }else{
               effectWave.classList.add('rippleWaveLight');
             }
 
             effectHolder.append(effectWave);
-          }.bind(this)
-        );
-      } else {
-        this.$.heroContent.addEventListener(
+          }.bind(this));
+        }else{
+          this.$.heroContent.addEventListener(
           'mousedown',
           function(e) {
             // Remove any old one
@@ -417,20 +411,15 @@ class HeroElement extends HTMLElement {
               x +
               'px';
             effectWave.classList.add('rippleWave');
-            if (
-              json.backgroundColor === 'fff' ||
-              json.backgroundColor === 'ffffff'
-            ) {
+            if (json.backgroundColor === 'fff' || json.backgroundColor === 'ffffff') {
               effectWave.classList.add('rippleWaveDark');
-            } else {
+            }else{
               effectWave.classList.add('rippleWaveLight');
             }
 
             effectHolder.append(effectWave);
-          }.bind(this)
-        );
-      }
-    }
+          }.bind(this));
+        }    }
   }
   _in(json) {
     this._json = Object.assign(this._json || {}, json);
@@ -2557,7 +2546,7 @@ class HeroButton extends HeroElement {
 
 class HeroLabel extends HeroElement {
   init() {
-    this.shadowDom.querySelector('#heroContent').style.pointerEvents = 'none';
+    this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
     this.$ = {
       span: this.shadowDom.querySelector('span'),
     };
@@ -2567,10 +2556,9 @@ class HeroLabel extends HeroElement {
     if (json.text !== undefined) {
       this.updateContent(this.$.span, json.text);
     }
-    if (!json.hasOwnProperty('numberOfLines')) {
+    if (!json.hasOwnProperty("numberOfLines") ) {
       this.$.span.style.lineHeight = this.$.heroContent.style.height;
-    }
-    if (json.size) {
+    }    if (json.size) {
       this.$.span.style.fontSize = json.size + 'px';
     }
     if (json.alignment) {
@@ -2598,7 +2586,7 @@ class HeroLabel extends HeroElement {
 
 class HeroImageView extends HeroElement {
   init() {
-    this.shadowDom.querySelector('#heroContent').style.pointerEvents = 'none';
+    this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
     this.$ = {
       img: this.shadowDom.querySelector('img'),
     };
@@ -2699,15 +2687,13 @@ class HeroTextField extends HeroElement {
          <style>
             input{
                 font-size: 16px;
+                padding:0px;
+                margin:0px;
                 width: 100%;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                outline: 0;
-                padding-left: 5px;
                 position: absolute;
-                left: 0;
-                bottom: 1px;
                 height: 100%;
+                border:none;
+                background-color:transparent;
             }
             div{
                 position: relative;
@@ -3128,10 +3114,10 @@ class HeroToast extends HeroElement {
   init() {
     this.$ = {
       div: this.shadowDom.querySelector('#hero-toast-wrap'),
-    };
-  }
+  };
+}
 
-  template() {
+template() {
     return `
     <style type="text/css">
     * {
@@ -3209,65 +3195,65 @@ class HeroToast extends HeroElement {
     </style>
     <div id="hero-toast-wrap"></div>
     `;
-  }
+}
 
-  on(json) {
+on(json) {
     // json.position : leftTop (default) || rightTop || leftBottom || rightBottom
-    var position = json.position ? json.position : 'leftTop';
+    var position = json.position ? json.position : "leftTop";
     if (json.text && json.text.length > 0) {
-      let heroToastItem = document.createElement('div');
-      this.$.div.appendChild(heroToastItem);
-      var style = {};
-      var toastPos = '';
-      switch (position) {
-        case 'leftTop':
-          toastPos = 'fit-left-top';
-          style = {
-            left: '10px',
-            top: 0,
-          };
-          break;
-        case 'rightTop':
-          toastPos = 'fit-right-top';
-          style = {
-            right: '10px',
-            top: 0,
-          };
-          break;
-        case 'leftBottom':
-          toastPos = 'fit-left-bottom';
-          style = {
-            left: '10px',
-            bottom: '10px',
-          };
-          break;
-        case 'rightBottom':
-          toastPos = 'fit-right-bottom';
-          style = {
-            right: '10px',
-            bottom: '10px',
-          };
-          break;
-      }
-      // add className
-      heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
-      // change style
-      for (var i in style) {
-        this.$.div.style[i] = style[i];
-      } // get childNodes Array
-      this.$.p = this.$.div.childNodes;
-      let len = this.$.p.length;
-      // show and hidden item
-      for (let i = len - 1; i >= 0; i--) {
-        this.updateContent(this.$.p[len - 1], json.text);
-        this.$.p[len - 1].classList.remove('hidden');
-        var that = this;
-        setTimeout(function() {
-          that.$.p[len - i - 1].classList.add('hidden');
-        }, 3000);
-      }
+        let heroToastItem = document.createElement("div");
+        this.$.div.appendChild(heroToastItem);
+        var style = {};
+        var toastPos = "";
+        switch (position) {
+            case "leftTop":
+            toastPos = "fit-left-top";
+            style = {
+                left: "10px",
+                top: 0
+            };
+            break;
+            case "rightTop":
+            toastPos = "fit-right-top";
+            style = {
+                right: "10px",
+                top: 0
+            };
+            break;
+            case "leftBottom":
+            toastPos = "fit-left-bottom";
+            style = {
+                left: "10px",
+                bottom: "10px"
+            };
+            break;
+            case "rightBottom":
+            toastPos = "fit-right-bottom";
+            style = {
+                right: "10px",
+                bottom: "10px"
+            };
+            break;
+        }
+        // add className
+        heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
+        // change style
+        for( var i in style) {
+            this.$.div.style[i] = style[i];
+        }        // get childNodes Array
+        this.$.p = this.$.div.childNodes;
+        let len = this.$.p.length;
+        // show and hidden item 
+        for (let i = len-1; i >= 0; i--) {
+            this.updateContent(this.$.p[len-1], json.text);
+            this.$.p[len-1].classList.remove('hidden');
+            var that = this;
+            setTimeout(function () {
+                that.$.p[len-i-1].classList.add('hidden'); 
+            }, 3000);
+        }
+        }
     }
-  }
 }
 
 class HeroToolbarItem extends HeroElement {
@@ -3363,21 +3349,21 @@ class HeroToolbarItem extends HeroElement {
       this.$.span.style.height = '50%';
     }
     var that = this;
-    setTimeout(function() {
+    setTimeout(function(){
       if (json.image) {
-        that.$.span.style.lineHeight =
-          that.$.span.getBoundingClientRect().height + 'px';
-      } else {
-        that.$.span.style.lineHeight =
-          that.$.span.getBoundingClientRect().height + 'px';
+        that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
+      }else{
+        that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
       }
-    }, 400);
+    },100);
     this.selected = this._json.selected;
     this.addSelectedClz();
   }
 }
 
-class HeroView extends HeroElement {}
+class HeroView extends HeroElement {
+  
+}
 
 class HeroViewController extends HeroElement {
   findViewByname(name, root) {
@@ -3566,7 +3552,7 @@ class HeroViewController extends HeroElement {
         if (view.in) {
           this.heroContent.appendChild(view);
           view.controller = this;
-          if (viewObject.frame);
+          if (viewObject.frame) ;
           view.in(viewObject);
         }
       }
@@ -3671,7 +3657,7 @@ class HeroViewController extends HeroElement {
           } else {
             window.history.back();
           }
-        } else if (command.substring(0, 6) === 'submit');
+        } else if (command.substring(0, 6) === 'submit') ;
       } else if (command.hasOwnProperty('showMenu')) {
         var showMenu = command.showMenu;
         window.APP.showLeftmenu(showMenu);
@@ -3712,11 +3698,10 @@ class HeroViewController extends HeroElement {
     } else {
       if (window.APP.mobile) {
         this.controller.in(json);
-      } else {
+      }else{
         for (var i = 0; i < window.Heros.length; i++) {
           window.Heros[i].in(json);
-        }
-      }
+        }      }
     }
   }
 }
@@ -3744,7 +3729,7 @@ class HeroApp extends HeroElement {
         leftBtn: this.shadowDom.querySelector('#leftBtn'),
         rightBtn: this.shadowDom.querySelector('#rightBtn'),
       };
-    } else {
+    }else{
       this.$ = {
         tab: this.shadowDom.querySelector('#pad_tab'),
         bar: this.shadowDom.querySelector('#pad_bar'),
@@ -3776,9 +3761,7 @@ class HeroApp extends HeroElement {
   }
 
   template() {
-    this.mobile = /iphone|ipad|ipod|android|blackberry|mini|palm/i.test(
-      navigator.userAgent.toLowerCase()
-    );
+    this.mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
     if (this.mobile) {
       return `
       <style>
@@ -3942,8 +3925,8 @@ class HeroApp extends HeroElement {
       <div id='cover'></div>
 
       `;
-    } else {
-      return `
+      }else{
+        return `
       <style>
         :host {
           display: block;
@@ -4117,8 +4100,9 @@ class HeroApp extends HeroElement {
         <div id='rightMenu'></div>
       </div>
       <div id='cover'></div>
-        `;
-    }
+        `
+      }
+
   }
 
   on(json) {
@@ -4147,12 +4131,12 @@ class HeroApp extends HeroElement {
             selected: i == 0,
             click: { select: i + 1 },
           });
-        } else {
+        }else{
           item.in({
             frame: {
               x: '0',
               w: '120',
-              y: i * 120 + (i + 1) * 10 + '',
+              y: i*120+(i+1)*10+'',
               h: '120',
             },
             image: tab.image,
@@ -4281,8 +4265,8 @@ class HeroApp extends HeroElement {
     this.$.leftMenu.style.width = parseInt(window.innerWidth) * 2 / 3 + 'px';
     var that = this;
     if (/[127\.0\.0\.0|localhost]/.test(window.location.host)) {
-      this.$.cover.style.display = 'none';
-    } else {
+        this.$.cover.style.display = 'none';
+    }else{
       setTimeout(function() {
         that.$.cover.style.animation = 'coverGo 1s';
       }, 2000);
@@ -4330,14 +4314,14 @@ class HeroApp extends HeroElement {
         this.$.bar.style.height = '0px';
         if (this.mobile) {
           this.$.pages.style.top = '0px';
-        } else {
+        }else{
           this.$.contentPages.style.top = '0px';
         }
       } else {
         if (this.mobile) {
           this.$.bar.style.height = '43px';
           this.$.pages.style.top = '44px';
-        } else {
+        }else{
           this.$.bar.style.height = '88px';
           this.$.contentPages.style.top = '89px';
         }
@@ -4400,25 +4384,24 @@ class HeroApp extends HeroElement {
       }
       if (this.mobile) {
         this.$.pages.on();
-      } else {
-        if (this.contain(this.rootPages, pageElement)) {
+      }else{
+        if (this.contain(this.rootPages,pageElement)) {
           this.$.rootPages.on();
-        } else {
+        }else{
           this.$.contentPages.on();
         }
       }
-      window.importHref(
-        page,
+      window.importHref(page,
         function() {
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
           if (that.mobile) {
             that.$.pages.addPage(that.currentPage);
-          } else {
-            if (that.contain(that.rootPages, pageElement)) {
+          }else{
+            if (that.contain(that.rootPages,pageElement)) {
               that.$.rootPages.addPage(that.currentPage);
-            } else {
+            }else{
               that.$.contentPages.addPage(that.currentPage);
             }
           }
@@ -4429,10 +4412,10 @@ class HeroApp extends HeroElement {
           that.currentPage.url = page;
           if (that.mobile) {
             that.$.pages.addPage(that.currentPage);
-          } else {
-            if (that.contain(that.rootPages, page)) {
+          }else{
+            if (that.contain(that.rootPages,page)) {
               that.$.rootPages.addPage(that.currentPage);
-            } else {
+            }else{
               that.$.contentPages.addPage(that.currentPage);
             }
           }
@@ -4449,8 +4432,8 @@ class HeroApp extends HeroElement {
           next.viewDidLoad();
         }
         next.viewWillAppear();
-      } else {
-        if (this.contain(this.rootPages, pageElement)) {
+      }else{
+        if (this.contain(this.rootPages,pageElement)) {
           this.$.rootPages.on({
             selected: pageElement,
             callback: true,
@@ -4460,7 +4443,7 @@ class HeroApp extends HeroElement {
             next.viewDidLoad();
           }
           next.viewWillAppear();
-        } else {
+        }else{
           this.$.contentPages.on({
             selected: pageElement,
             callback: true,
@@ -4494,6 +4477,7 @@ class HeroApp extends HeroElement {
         this.$.pages.style.bottom = '44px';
         this.$.backBtn.style.display = 'none';
       }
+
     } else {
       if (this.mobile) {
         this.$.tab.style.display = 'none';
