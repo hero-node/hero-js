@@ -19,6 +19,7 @@ var token = eth.contract(tokenABI).at(window.contactAddress)
 
 function getlist(list,j) {
     token.sponsors(j).then(function(data){
+        console.log(data);
         if (data.spo == '0x') {
             Hero.rows = [];
             for (var i = 0; i < list.length; i++) {
