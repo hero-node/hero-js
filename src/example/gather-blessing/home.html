@@ -17,6 +17,10 @@
           this.datas({name:'toast',text:'erc20钱包地址是42位长度字符串'});
         }
       };
+      if (data.click === 'abc') {
+        console.log('abc');
+      }
+        
     };
     Hero.viewWillAppear = function() {
 
@@ -33,8 +37,9 @@
       nav:{
         title:"区块链-集五福",
         titleColor: 'ffffff',
-        navigationBarHidden:true
+        navigationBarHidden:false,
       },
+
       views:
       [
         {
