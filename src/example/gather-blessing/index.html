@@ -17,6 +17,13 @@
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.2.0/custom-elements-es5-adapter.js"></script> -->
   <!-- <script src="./@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
   <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/her.js"></script>
+  <script src="./app/trade.js"></script>
+  <script src="./app/otc.js"></script>
+  <!-- <script src="./app/fu.js"></script> -->
   <script src="../../dist/hero.js"></script>
 </head>
 <body>
@@ -25,8 +32,8 @@
   var loadPage = window.location.search.split('=').pop();
 
   var app = {tabs:[
-    {url:path+'home.html', title: 'Home',image:path+'images/fu.png'},
-    {url:path+'dalao.html', title: 'dalao'}
+    {url:path+'trade.html', title: 'DTrade'},
+    {url:path+'otc.html', title: 'DOTC'}
   ]};
   console.log(app);
   document.write('<hero-app json='+JSON.stringify(app)+'></hero-app>');
