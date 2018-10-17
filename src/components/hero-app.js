@@ -23,8 +23,10 @@ export default class HeroApp extends HeroElement {
         backBtn: this.shadowDom.querySelector('#backBtn'),
         leftBtn: this.shadowDom.querySelector('#leftBtn'),
         rightBtn: this.shadowDom.querySelector('#rightBtn'),
+        leftBtn2: this.shadowDom.querySelector('#leftBtn2'),
+        rightBtn2: this.shadowDom.querySelector('#rightBtn2'),
       };
-    }else{
+    } else {
       this.$ = {
         tab: this.shadowDom.querySelector('#pad_tab'),
         bar: this.shadowDom.querySelector('#pad_bar'),
@@ -56,7 +58,9 @@ export default class HeroApp extends HeroElement {
   }
 
   template() {
-    this.mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
+    this.mobile = /iphone|ipad|ipod|android|blackberry|mini|palm/i.test(
+      navigator.userAgent.toLowerCase()
+    );
     if (this.mobile) {
       return `
       <style>
@@ -137,7 +141,7 @@ export default class HeroApp extends HeroElement {
           color: #fff;
           font-size: 20px;
           text-align: center;
-          margin: 10px;
+          top:-10px;
           pointer-events:none;
         }
         #leftBtn {
@@ -145,10 +149,20 @@ export default class HeroApp extends HeroElement {
           position: absolute;
           overflow:hidden;
           color: #fff;
-          width: 70px;
-          height: 25px;
+          width: 30px;
+          height: 30px;
           left:10px;
-          top:12px;
+          top:7px;
+        }
+        #leftBtn2 {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          color: #fff;
+          width: 30px;
+          height: 30px;
+          left:60px;
+          top:7px;
         }
         #backBtn {
           display:none;
@@ -163,10 +177,19 @@ export default class HeroApp extends HeroElement {
           display:none;
           position: absolute;
           overflow:hidden;
-          width: 70px;
-          height: 25px;
+          width: 30px;
+          height: 30px;
           right:10px;
-          top:12px;
+          top:7px;
+        }
+        #rightBtn2 {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          width: 30px;
+          height: 30px;
+          right:60px;
+          top:7px;
         }
         hero-pages{
           display:block;
@@ -208,7 +231,9 @@ export default class HeroApp extends HeroElement {
       <div id='bar'>
         <hero-button class='btn' id ='backBtn'></hero-button>
         <hero-button class='btn' id ='leftBtn'></hero-button>
+        <hero-button class='btn' id ='leftBtn2'></hero-button>
         <hero-button class='btn' id ='rightBtn'></hero-button>
+        <hero-button class='btn' id ='rightBtn2'></hero-button>
         <p id='title'></p>
       </div>
       <hero-pages id='pages'></hero-pages>
@@ -220,8 +245,8 @@ export default class HeroApp extends HeroElement {
       <div id='cover'></div>
 
       `;
-      }else{
-        return `
+    } else {
+      return `
       <style>
         :host {
           display: block;
@@ -395,9 +420,8 @@ export default class HeroApp extends HeroElement {
         <div id='rightMenu'></div>
       </div>
       <div id='cover'></div>
-        `
-      }
-
+        `;
+    }
   }
 
   on(json) {
@@ -426,12 +450,12 @@ export default class HeroApp extends HeroElement {
             selected: i == 0,
             click: { select: i + 1 },
           });
-        }else{
+        } else {
           item.in({
             frame: {
               x: '0',
               w: '120',
-              y: i*120+(i+1)*10+'',
+              y: i * 120 + (i + 1) * 10 + '',
               h: '120',
             },
             image: tab.image,
@@ -445,8 +469,7 @@ export default class HeroApp extends HeroElement {
         this.$.tab.style.display = 'none';
         if (this.mobile) {
           this.$.pages.style.bottom = '0px';
-        }else{
-
+        } else {
         }
       }
       this.gotoPage(json.tabs[0].url);
@@ -562,8 +585,8 @@ export default class HeroApp extends HeroElement {
     this.$.leftMenu.style.width = parseInt(window.innerWidth) * 2 / 3 + 'px';
     var that = this;
     if (/[127\.0\.0\.0|localhost]/.test(window.location.host)) {
-        this.$.cover.style.display = 'none';
-    }else{
+      this.$.cover.style.display = 'none';
+    } else {
       setTimeout(function() {
         that.$.cover.style.animation = 'coverGo 1s';
       }, 2000);
@@ -611,14 +634,14 @@ export default class HeroApp extends HeroElement {
         this.$.bar.style.height = '0px';
         if (this.mobile) {
           this.$.pages.style.top = '0px';
-        }else{
+        } else {
           this.$.contentPages.style.top = '0px';
         }
       } else {
         if (this.mobile) {
           this.$.bar.style.height = '43px';
           this.$.pages.style.top = '44px';
-        }else{
+        } else {
           this.$.bar.style.height = '88px';
           this.$.contentPages.style.top = '89px';
         }
@@ -627,10 +650,17 @@ export default class HeroApp extends HeroElement {
         this.$.backBtn.style.display = 'none';
         this.$.backBtn.style.animation = 'backBtnOut 0.25s';
         this.$.leftBtn.style.display = 'inline-block';
-        this.$.leftBtn.on(nav.leftItems[0]);
+        this.$.leftBtn.in(nav.leftItems[0]);
         this.$.leftBtn.setController(this.currentPage);
+        //second leftItem
+        if (nav.leftItems[1]) {
+          this.$.leftBtn2.style.display = 'inline-block';
+          this.$.leftBtn2.in(nav.leftItems[1]);
+          this.$.leftBtn2.setController(this.currentPage);
+        }
       } else {
         this.$.leftBtn.style.display = 'none';
+        this.$.leftBtn2.style.display = 'none';
         if (this.contain(this.rootPages, this.currentPage.name)) {
           this.$.backBtn.style.display = 'none';
           this.$.backBtn.style.animation = 'backBtnOut 0.25s';
@@ -640,11 +670,18 @@ export default class HeroApp extends HeroElement {
         }
       }
       if (nav.rightItems && nav.rightItems.length > 0) {
-        this.$.rightBtn.on(nav.rightItems[0]);
+        this.$.rightBtn.in(nav.rightItems[0]);
         this.$.rightBtn.setController(this.currentPage);
         this.$.rightBtn.style.display = 'inline-block';
+        //second rightItem
+        if (nav.rightItems[1]) {
+          this.$.rightBtn2.style.display = 'inline-block';
+          this.$.rightBtn2.in(nav.rightItems[1]);
+          this.$.rightBtn2.setController(this.currentPage);
+        }
       } else {
         this.$.rightBtn.style.display = 'none';
+        this.$.rightBtn2.style.display = 'none';
       }
     }
   }
@@ -681,24 +718,25 @@ export default class HeroApp extends HeroElement {
       }
       if (this.mobile) {
         this.$.pages.on();
-      }else{
-        if (this.contain(this.rootPages,pageElement)) {
+      } else {
+        if (this.contain(this.rootPages, pageElement)) {
           this.$.rootPages.on();
-        }else{
+        } else {
           this.$.contentPages.on();
         }
       }
-      window.importHref(page,
+      window.importHref(
+        page,
         function() {
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
           if (that.mobile) {
             that.$.pages.addPage(that.currentPage);
-          }else{
-            if (that.contain(that.rootPages,pageElement)) {
+          } else {
+            if (that.contain(that.rootPages, pageElement)) {
               that.$.rootPages.addPage(that.currentPage);
-            }else{
+            } else {
               that.$.contentPages.addPage(that.currentPage);
             }
           }
@@ -709,10 +747,10 @@ export default class HeroApp extends HeroElement {
           that.currentPage.url = page;
           if (that.mobile) {
             that.$.pages.addPage(that.currentPage);
-          }else{
-            if (that.contain(that.rootPages,page)) {
+          } else {
+            if (that.contain(that.rootPages, page)) {
               that.$.rootPages.addPage(that.currentPage);
-            }else{
+            } else {
               that.$.contentPages.addPage(that.currentPage);
             }
           }
@@ -729,8 +767,8 @@ export default class HeroApp extends HeroElement {
           next.viewDidLoad();
         }
         next.viewWillAppear();
-      }else{
-        if (this.contain(this.rootPages,pageElement)) {
+      } else {
+        if (this.contain(this.rootPages, pageElement)) {
           this.$.rootPages.on({
             selected: pageElement,
             callback: true,
@@ -740,7 +778,7 @@ export default class HeroApp extends HeroElement {
             next.viewDidLoad();
           }
           next.viewWillAppear();
-        }else{
+        } else {
           this.$.contentPages.on({
             selected: pageElement,
             callback: true,
@@ -773,16 +811,13 @@ export default class HeroApp extends HeroElement {
         this.$.tab.style.display = 'block';
         this.$.pages.style.bottom = '44px';
         this.$.backBtn.style.display = 'none';
-      }else{
-
+      } else {
       }
-
     } else {
       if (this.mobile) {
         this.$.tab.style.display = 'none';
         this.$.pages.style.bottom = '0px';
-      }else{
-        
+      } else {
       }
     }
     var animationType = '';
@@ -806,8 +841,7 @@ export default class HeroApp extends HeroElement {
       if (this.$.pages.selectedItem) {
         this.$.pages.selectedItem.viewWillDisappear();
       }
-    }else{
-
+    } else {
     }
 
     if (
