@@ -788,7 +788,7 @@ class HeroElement extends HTMLElement {
           to {-webkit-transform: scale(24); opacity:0;}
         }
       </style>
-      <div id="heroContent" style="position:absolute">${html}</div>
+      <div id="heroContent" style="position:absolute;overflow:hidden;">${html}</div>
     `;
   }
 }
@@ -2720,6 +2720,8 @@ class HeroTextField extends HeroElement {
                 position: absolute;
                 height: 100%;
                 border:none;
+                outline:none;
+                padding-left:15px;
                 background-color:transparent;
             }
             div{

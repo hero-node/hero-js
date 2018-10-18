@@ -122,7 +122,9 @@ export default class HeroElement extends HTMLElement {
     this.on && this.on(json);
 
     if (json && json.ripple) {
-      var mobile = (/iphone|ipad|ipod|android|blackberry|mini|palm/i.test(navigator.userAgent.toLowerCase()));
+      var mobile = /iphone|ipad|ipod|android|blackberry|mini|palm/i.test(
+        navigator.userAgent.toLowerCase()
+      );
 
       if (mobile) {
         var that = this;
@@ -180,16 +182,20 @@ export default class HeroElement extends HTMLElement {
               x +
               'px';
             effectWave.classList.add('rippleWave');
-            if (json.backgroundColor === 'fff' || json.backgroundColor === 'ffffff') {
+            if (
+              json.backgroundColor === 'fff' ||
+              json.backgroundColor === 'ffffff'
+            ) {
               effectWave.classList.add('rippleWaveDark');
-            }else{
+            } else {
               effectWave.classList.add('rippleWaveLight');
             }
 
             effectHolder.append(effectWave);
-          }.bind(this));
-        }else{
-          this.$.heroContent.addEventListener(
+          }.bind(this)
+        );
+      } else {
+        this.$.heroContent.addEventListener(
           'mousedown',
           function(e) {
             // Remove any old one
@@ -243,15 +249,19 @@ export default class HeroElement extends HTMLElement {
               x +
               'px';
             effectWave.classList.add('rippleWave');
-            if (json.backgroundColor === 'fff' || json.backgroundColor === 'ffffff') {
+            if (
+              json.backgroundColor === 'fff' ||
+              json.backgroundColor === 'ffffff'
+            ) {
               effectWave.classList.add('rippleWaveDark');
-            }else{
+            } else {
               effectWave.classList.add('rippleWaveLight');
             }
 
             effectHolder.append(effectWave);
-          }.bind(this));
-        };
+          }.bind(this)
+        );
+      }
     }
   }
   _in(json) {
@@ -610,7 +620,7 @@ export default class HeroElement extends HTMLElement {
           to {-webkit-transform: scale(24); opacity:0;}
         }
       </style>
-      <div id="heroContent" style="position:absolute">${html}</div>
+      <div id="heroContent" style="position:absolute;overflow:hidden;">${html}</div>
     `;
   }
 }
