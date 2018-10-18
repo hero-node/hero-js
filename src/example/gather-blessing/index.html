@@ -27,9 +27,24 @@
   <script src="../../dist/hero.js"></script>
 </head>
 <body>
+  <div class="ui negative message without-metamask" id="without-metamask" style="display:none">
+  <a target="_blank" href="https://metamask.io/" class="header">You need to install MetaMask to use this feature</a>
+</div>
 </body>
+
 <script>
   var loadPage = window.location.search.split('=').pop();
+
+  function checkMetamask() {
+    if (typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+      document.getElementById("without-metamask").style.display = 'block';
+    }
+  }
+
+  checkMetamask();
 
   var app = {tabs:[
     {url:path+'trade.html', title: 'DTrade'},

@@ -1,333 +1,389 @@
 <!doctype html>
 <html>
 <head>
-  <script src="../../hero.js"></script>
-  <script>
+    <script src="../../hero.js"></script>
+    <script>
 
-    var eth = new Eth(new Eth.HttpProvider(window.ethProvider))
-    // const her = eth.contract(window.herABI).at(window.herAddress)
-    var trade = eth.contract(window.tradeABI).at(window.tradeAddress)
+        var eth = window.eth;
+        // const her = eth.contract(window.herABI).at(window.herAddress)
+        var trade = window.eth.contract(window.tradeABI).at(window.tradeAddress)
 
-    function update() {
-      eth.blockNumber().then(function(data){ 
-        Hero.ui2Data.currentHeight = '当前区块高度: '+data;
-        // Hero.datas({name:'currentHeight',text:'当前区块高度: '+data});
-      })
-      // trade.update().then(function(data){
-        trade.rate().then(function(data){
-          console.log(data[0].toString());
-        })
-      // })
-    }
+        function update() {
+            eth.blockNumber().then(function(data){ 
+                Hero.ui2Data.currentHeight = '当前区块高度: '+data;
+            })
 
-    var joinView = {
-      class: 'HeroView',
-      frame: {w:'1x', h:'1x'},
-      hidden: true,
-      name: 'joinView',
-      subViews: [
-      {
-        class: 'HeroView',
-        frame: {w:'1x', h:'1x'},
-        backgroundColor: '1E2027',
-        alpha: 0.7
-      },  
-      {
-        class: 'HeroView',
-        frame: {w:'300', h:'240'},
-        backgroundColor: '222e3c',
-        center: {x:'0.5x', y:'0.5x'},
-        cornerRadius: 6,
-        subViews: [
-          {
-            class: 'HeroLabel',
-            frame: {x:'15', y:'10'},
-            text: 'Join',
-            size: 15,
-            textColor: 'ffffff'
-          },
-          {
-            class: 'HeroImageView',
-            frame: {y:'12', r:'12', w:'25', h:'25'},
-            image: path+'images/close.png'
-          },
-          {
-            class: 'HeroButton',
-            frame: {y:'12', r:'12', w:'25', h:'25'},
-            click: {click: 'joinClose'}
-          },
-          {
-            class: 'HeroLabel',
-            frame: {x:'15', y:'40'},
-            text: '存入eth数量',
-            size: 14,
-            textColor: '898989',
-          },
-          {
-            class: 'HeroTextField',
-            frame: {x:'15', y:'70', w:'260', h:'30'},
-            cornerRadius: '4',
-            backgroundColor: '222e3c',
-          },
-          {
-            class: 'HeroLabel',
-            frame: {x:'15', y:'110'},
-            text: '可获得HER数量',
-            size: 14,
-            textColor: '898989'
-          },
-          {
-            class: 'HeroTextField',
-            frame: {x:'15', y:'140', w:'260', h:'30'},
-            cornerRadius: '4',
-            backgroundColor: '222e3c',
-          },
-          {
-            class: 'HeroButton',
-            frame: {b:'20', w:'100', h:'30'},
-            center: {x:'0.5x'},
-            ripple: true,
-            title:'确认',
-            backgroundColor:'47b3ea',
-            titleColor:'ffffff',
-            cornerRadius:16,
-            click:{click:'confirmJoin'}
-          },
-        ]
-      }]
-    }
+            trade.nextRound().catch(function(error){
+                alert(error);
+            }).then(function(data){
+                Hero.ui2Data.nextRoundHeight = '下回合区块高度: '+data[0].toString();
+            })
 
-    var leaveView = {
-      class: 'HeroView',
-      frame: {w:'1x', h:'1x'},
-      hidden: true,
-      name: 'leaveView',
-      subViews: [
-      {
-        class: 'HeroView',
-        frame: {w:'1x', h:'1x'},
-        backgroundColor: '1E2027',
-        alpha: 0.7,
-      },  
-      {
-        class: 'HeroView',
-        frame: {w:'300', h:'240'},
-        backgroundColor: '222e3c',
-        center: {x:'0.5x', y:'0.5x'},
-        cornerRadius: 6,
-        subViews: [
-          {
-            class: 'HeroLabel',
-            frame: {x:'15', y:'10'},
-            text: 'Leave',
-            size: 15,
-            textColor: 'ffffff'
-          },
-          {
-            class: 'HeroImageView',
-            frame: {y:'12', r:'12', w:'25', h:'25'},
-            image: path+'images/close.png'
-          },
-          {
-            class: 'HeroButton',
-            frame: {y:'12', r:'12', w:'25', h:'25'},
-            click: {click: 'leaveClose'}
-          },
-          {
-            class: 'HeroLabel',
-            frame: {x:'15', y:'40'},
-            text: '存入HER数量',
-            size: 14,
-            textColor: '898989',
-          },
-          {
-            class: 'HeroTextField',
-            frame: {x:'15', y:'70', w:'260', h:'30'},
-            cornerRadius: '4',
-            backgroundColor: '222e3c',
-          },
-          {
-            class: 'HeroLabel',
-            frame: {x:'15', y:'110'},
-            text: '可获得ETH数量（当前回合剩余 1 eth）',
-            size: 14,
-            textColor: '898989'
-          },
-          {
-            class: 'HeroTextField',
-            frame: {x:'15', y:'140', w:'260', h:'30'},
-            cornerRadius: '4',
-            backgroundColor: '222e3c',
-          },
-          {
-            class: 'HeroButton',
-            frame: {b:'20', w:'100', h:'30'},
-            center: {x:'0.5x'},
-            ripple: true,
-            title:'确认',
-            backgroundColor:'47b3ea',
-            titleColor:'ffffff',
-            cornerRadius:16,
-            click:{click:'confirmLeave'}
-          },
-        ]
-      }]
-    }
+            trade.rate().catch(function(error){
+                alert(error);
+            }).then(function(data){
+                var rate = data[0].toNumber();
+                var price = 1.0 / rate;
+                Hero.ui2Data.currentPrice = '当前价格: ' + parseFloat(price.toFixed(8)) + ' eth';
 
-    Hero.on = function(data){
-      if (data.click === 'join') {
-        this.datas({name:'joinView', hidden:false});
-      } else if (data.click === 'leave') {
-        this.datas({name:'leaveView', hidden:false});
-      } else if (data.click === 'joinClose') {
-        this.datas({name:'joinView', hidden:true});
-      } else if (data.click === 'leaveClose') {
-        this.datas({name:'leaveView', hidden:true});
-      }
-    };
-    Hero.viewWillAppear = function() {
-      update();
-      setInterval('update()', 1000 * 10);
-    };
-    Hero.viewWillDisAppear = function() {
+                trade.coefficient().catch(function(error){
+                    alert(error);
+                }).then(function(data){
+                    var coefficient = data[0].toNumber();
+                    var nextRate = rate + coefficient;
+                    var nextPrice = 1.0 / nextRate;
+                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + parseFloat(nextPrice.toFixed(8)) + ' eth'
 
-    };
-    Hero.viewDidload = function() {
-      
+                    eth.getBalance(window.tradeAddress).then(function(data){
+                        var ethBalance = Eth.fromWei(data, 'ether');
 
-    };
+                        trade.limitPerRound().catch(function(error){
+                            alert(error);
+                        }).then(function(data){
+                            var limit = Eth.fromWei(data[0].toString(), 'ether');         
+                            // ethBalance = 500;
+                            var _rate = rate;
+                            var rounds = ethBalance / limit;
+                            _rate = _rate + (coefficient * rounds);
+                            var maxPrice = 1.0 / _rate;
+                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + parseFloat(maxPrice.toFixed(8)) + ' eth'
 
-    Hero.ui = {
-      version:-1,
-      tintColor:'4b5764',
-      nav:{
-        title:"去中心化交易",
-        titleColor: 'ffffff',
-        navigationBarHidden:true
-      },
-      views:
-      [
-        {
-          class:'HeroView',
-          frame:{w:'1x', h:'1x'},
-          backgroundColor: '4b5764'
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'30', y:'10'},
-          text:'当前区块高度: 0',
-          name:'currentHeight',
-          size: 14,
-          textColor:'ffffff'
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'30', y:'30'},
-          text:'下回合区块高度: 532324',
-          size: 14,
-          textColor:'ffffff'
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'5', y:'50', r:'5', w:'1x', h:'200'},
-          image:path+'images/top.png'
-        },
-        {
-          class:'HeroView',
-          frame:{x:'0', y:'250', w:'1x', h:'320'},
-          subViews: [
-            {
-              class:'HeroView',
-              frame: {x:'10', y:'15', w:'8', h:'8'},
-              backgroundColor: '52f6ff',
-              cornerRadius: '4'
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'22', y:'10'},
-              text: '当前价格：0.0000345 eth',
-              size:14,
-              textColor:'ffffff'
-            },
-            {
-              class:'HeroView',
-              frame: {x:'10', y:'43', w:'8', h:'8'},
-              backgroundColor: 'ff9337',
-              cornerRadius: '4'
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'22', y:'38'},
-              size:14,
-              textColor:'ffffff',
-              text: '下回合价格：0.0000346 eth'
-            },
-            {
-              class:'HeroView',
-              frame: {x:'10', y:'71', w:'8', h:'8'},
-              backgroundColor: 'ff4b44',
-              cornerRadius: '4'
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'22', y:'66'},
-              size:14,
-              textColor:'ffffff',
-              text: '已保证的目标价：1 eth'
-            },
-            {
-              class:'HeroView',
-              frame: {x:'10', y:'99', w:'8', h:'8'},
-              backgroundColor: '59d051',
-              cornerRadius: '4'
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'22', y:'94'},
-              size:14,
-              textColor:'ffffff',
-              text: '当前Leave交易量：12324343 HER'
-            },
-            {
-              class:'HeroView',
-              frame: {x:'10', y:'127', w:'8', h:'8'},
-              backgroundColor: 'dd74d5',
-              cornerRadius: '4'
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'22', y:'122'},
-              size:14,
-              textColor:'ffffff',
-              text: '剩余Leave交易量：1232000 HER'
-            },
-          ]
-        },
-        {
-          class:'HeroButton',
-          frame:{x:'30',y:'410',w:'100',h:'30'},
-          ripple: true,
-          title:'Leave',
-          backgroundColor:'47b3ea',
-          titleColor:'ffffff',
-          cornerRadius:16,
-          click:{click:'leave'}
-        },
-        {
-          class:'HeroButton',
-          frame:{r:'30',y:'410',w:'100',h:'30'},
-          ripple: true,
-          title:'Join',
-          backgroundColor:'47b3ea',
-          titleColor:'ffffff',
-          cornerRadius:16,
-          click:{click:'join'}
-        },
-        joinView,
-        leaveView
-      ]
-    };
+                            trade.volumn().catch(function(error){
+                                alert(error);
+                            }).then(function(data){
+                                var volumn = Eth.fromWei(data[0].toString(), 'ether')
+                                Hero.ui2Data.volumn = '当前Leave交易量: ' + parseInt(volumn) + ' HER';
 
-  </script>
+                                var limitHER = limit * rate;
+                                var leftVolumn = limitHER - volumn;
+                                Hero.ui2Data.volumnLeft = '剩余Leave交易量: ' + parseInt(leftVolumn) + ' HER';
+                            })
+                        })
+                    })
+                });
+            })
+        }
+
+        var joinView = {
+            class: 'HeroView',
+            frame: {w:'1x', h:'1x'},
+            hidden: true,
+            name: 'joinView',
+            subViews: [
+            {
+                class: 'HeroView',
+                frame: {w:'1x', h:'1x'},
+                backgroundColor: '1E2027',
+                alpha: 0.7
+            },  
+            {
+                class: 'HeroView',
+                frame: {w:'300', h:'240'},
+                backgroundColor: '222e3c',
+                center: {x:'0.5x', y:'0.5x'},
+                cornerRadius: 6,
+                subViews: [
+                    {
+                        class: 'HeroLabel',
+                        frame: {x:'15', y:'10'},
+                        text: 'Join',
+                        size: 15,
+                        textColor: 'ffffff'
+                    },
+                    {
+                        class: 'HeroImageView',
+                        frame: {y:'12', r:'12', w:'25', h:'25'},
+                        image: path+'images/close.png'
+                    },
+                    {
+                        class: 'HeroButton',
+                        frame: {y:'12', r:'12', w:'25', h:'25'},
+                        click: {click: 'joinClose'}
+                    },
+                    {
+                        class: 'HeroLabel',
+                        frame: {x:'15', y:'40'},
+                        text: '存入eth数量',
+                        size: 14,
+                        textColor: '898989',
+                    },
+                    {
+                        class: 'HeroTextField',
+                        frame: {x:'15', y:'70', w:'260', h:'30'},
+                        cornerRadius: '4',
+                        backgroundColor: '1d2630',
+                    },
+                    {
+                        class: 'HeroLabel',
+                        frame: {x:'15', y:'110'},
+                        text: '可获得HER数量',
+                        size: 14,
+                        textColor: '898989'
+                    },
+                    {
+                        class: 'HeroTextField',
+                        frame: {x:'15', y:'140', w:'260', h:'30'},
+                        cornerRadius: '4',
+                        backgroundColor: '1d2630',
+                    },
+                    {
+                        class: 'HeroButton',
+                        frame: {b:'20', w:'100', h:'30'},
+                        center: {x:'0.5x'},
+                        ripple: true,
+                        title:'确认',
+                        backgroundColor:'47b3ea',
+                        titleColor:'ffffff',
+                        cornerRadius:16,
+                        click:{click:'confirmJoin'}
+                    }
+                ]
+            }]
+        }
+
+        var leaveView = {
+            class: 'HeroView',
+            frame: {w:'1x', h:'1x'},
+            hidden: true,
+            name: 'leaveView',
+            subViews: [
+            {
+                class: 'HeroView',
+                frame: {w:'1x', h:'1x'},
+                backgroundColor: '1E2027',
+                alpha: 0.7,
+            },  
+            {
+                class: 'HeroView',
+                frame: {w:'300', h:'240'},
+                backgroundColor: '222e3c',
+                center: {x:'0.5x', y:'0.5x'},
+                cornerRadius: 6,
+                subViews: [
+                    {
+                        class: 'HeroLabel',
+                        frame: {x:'15', y:'10'},
+                        text: 'Leave',
+                        size: 15,
+                        textColor: 'ffffff'
+                    },
+                    {
+                        class: 'HeroImageView',
+                        frame: {y:'12', r:'12', w:'25', h:'25'},
+                        image: path+'images/close.png'
+                    },
+                    {
+                        class: 'HeroButton',
+                        frame: {y:'12', r:'12', w:'25', h:'25'},
+                        click: {click: 'leaveClose'}
+                    },
+                    {
+                        class: 'HeroLabel',
+                        frame: {x:'15', y:'40'},
+                        text: '存入HER数量',
+                        size: 14,
+                        textColor: '898989',
+                    },
+                    {
+                        class: 'HeroTextField',
+                        frame: {x:'15', y:'70', w:'260', h:'30'},
+                        cornerRadius: '4',
+                        backgroundColor: '1d2630',
+                    },
+                    {
+                        class: 'HeroLabel',
+                        frame: {x:'15', y:'110'},
+                        text: '可获得ETH数量（当前回合剩余 1 eth）',
+                        size: 14,
+                        textColor: '898989'
+                    },
+                    {
+                        class: 'HeroTextField',
+                        frame: {x:'15', y:'140', w:'260', h:'30'},
+                        cornerRadius: '4',
+                        backgroundColor: '1d2630',
+                    },
+                    {
+                        class: 'HeroButton',
+                        frame: {b:'20', w:'100', h:'30'},
+                        center: {x:'0.5x'},
+                        ripple: true,
+                        title:'确认',
+                        backgroundColor:'47b3ea',
+                        titleColor:'ffffff',
+                        cornerRadius:16,
+                        click:{click:'confirmLeave'}
+                    },
+                ]
+            }]
+        }
+
+        Hero.on = function(data){
+            if (data.click === 'join') {
+                eth.accounts().then(function(accounts){
+                    trade.update({from:accounts[0]}).then(function(data){
+                        this.datas({name:'joinView', hidden:false});
+                    })
+                })
+                
+                
+            } else if (data.click === 'leave') {
+                this.datas({name:'leaveView', hidden:false});
+            } else if (data.click === 'joinClose') {
+                this.datas({name:'joinView', hidden:true});
+            } else if (data.click === 'leaveClose') {
+                this.datas({name:'leaveView', hidden:true});
+            }
+        };
+        Hero.viewWillAppear = function() {
+            update();
+            setInterval('update()', 1000 * 10);
+        };
+        Hero.viewWillDisAppear = function() {
+
+        };
+        Hero.viewDidload = function() {
+            
+
+        };
+
+        Hero.ui = {
+            version: -1,
+            tintColor: '4b5764',
+            nav:{
+                title: '去中心化交易',
+                titleColor: 'ffffff',
+                navigationBarHidden: true
+            },
+            views:
+            [
+                {
+                    class: 'HeroView',
+                    frame: {w:'1x', h:'1x'},
+                    backgroundColor: '4b5764'
+                },
+                {
+                    class: 'HeroLabel',
+                    frame: {x:'30', y:'10'},
+                    text: '当前区块高度: 0',
+                    name: 'currentHeight',
+                    size: 14,
+                    textColor: 'ffffff'
+                },
+                {
+                    class: 'HeroLabel',
+                    frame: {x:'30', y:'30'},
+                    text: '下回合区块高度: 0',
+                    name: 'nextRoundHeight',
+                    size: 14,
+                    textColor: 'ffffff'
+                },
+                {
+                    class: 'HeroImageView',
+                    frame: {x:'5', y:'50', r:'5', w:'1x', h:'200'},
+                    image: path+'images/top.png'
+                },
+                {
+                    class: 'HeroView',
+                    frame: {x:'0', y:'250', w:'1x', h:'320'},
+                    subViews: [
+                        {
+                            class: 'HeroView',
+                            frame: {x:'10', y:'15', w:'8', h:'8'},
+                            backgroundColor: '52f6ff',
+                            cornerRadius: '4'
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'22', y:'10'},
+                            text: '当前价格: 0 eth',
+                            size: 14,
+                            name: 'currentPrice',
+                            textColor: 'ffffff'
+                        },
+                        {
+                            class: 'HeroView',
+                            frame: {x:'10', y:'43', w:'8', h:'8'},
+                            backgroundColor: 'ff9337',
+                            cornerRadius: '4'
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'22', y:'38'},
+                            size: 14,
+                            textColor: 'ffffff',
+                            text: '下回合价格: 0 eth',
+                            name: 'nextRoundPrice'
+                        },
+                        {
+                            class: 'HeroView',
+                            frame: {x:'10', y:'71', w:'8', h:'8'},
+                            backgroundColor: 'ff4b44',
+                            cornerRadius: '4'
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'22', y:'66'},
+                            size: 14,
+                            textColor: 'ffffff',
+                            text: '已保证的目标价: 0 eth',
+                            name: 'ensuredPrice'
+                        },
+                        {
+                            class: 'HeroView',
+                            frame: {x:'10', y:'99', w:'8', h:'8'},
+                            backgroundColor: '59d051',
+                            cornerRadius: '4'
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'22', y:'94'},
+                            size: 14,
+                            textColor:'ffffff',
+                            text: '当前Leave交易量: 0 HER',
+                            name: 'volumn'
+                        },
+                        {
+                            class: 'HeroView',
+                            frame: {x:'10', y:'127', w:'8', h:'8'},
+                            backgroundColor: 'dd74d5',
+                            cornerRadius: '4'
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'22', y:'122'},
+                            size: 14,
+                            textColor: 'ffffff',
+                            text: '剩余Leave交易量: 0 HER',
+                            name: 'volumnLeft'
+                        },
+                    ]
+                },
+                {
+                    class: 'HeroButton',
+                    frame: {x:'30',y:'410',w:'100',h:'30'},
+                    ripple: true,
+                    title: 'Leave',
+                    backgroundColor: '47b3ea',
+                    titleColor: 'ffffff',
+                    cornerRadius: 16,
+                    click: {click:'leave'}
+                },
+                {
+                    class: 'HeroButton',
+                    frame: {r:'30',y:'410',w:'100',h:'30'},
+                    ripple: true,
+                    title: 'Join',
+                    backgroundColor: '47b3ea',
+                    titleColor: 'ffffff',
+                    cornerRadius: 16,
+                    click: {click:'join'}
+                },
+                joinView,
+                leaveView
+            ]
+        };
+
+    </script>
 </body>
 </html>
