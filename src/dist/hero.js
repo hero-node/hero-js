@@ -3913,7 +3913,7 @@
           position: absolute;
           overflow:hidden;
           color: #fff;
-          width: 30px;
+          width: 35px;
           height: 30px;
           left:10px;
           top:7px;
@@ -3923,7 +3923,7 @@
           position: absolute;
           overflow:hidden;
           color: #fff;
-          width: 30px;
+          width: 35px;
           height: 30px;
           left:60px;
           top:7px;
@@ -3941,7 +3941,7 @@
           display:none;
           position: absolute;
           overflow:hidden;
-          width: 30px;
+          width: 35px;
           height: 30px;
           right:10px;
           top:7px;
@@ -3950,7 +3950,7 @@
           display:none;
           position: absolute;
           overflow:hidden;
-          width: 30px;
+          width: 35px;
           height: 30px;
           right:60px;
           top:7px;

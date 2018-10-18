@@ -149,7 +149,7 @@ export default class HeroApp extends HeroElement {
           position: absolute;
           overflow:hidden;
           color: #fff;
-          width: 30px;
+          width: 35px;
           height: 30px;
           left:10px;
           top:7px;
@@ -159,7 +159,7 @@ export default class HeroApp extends HeroElement {
           position: absolute;
           overflow:hidden;
           color: #fff;
-          width: 30px;
+          width: 35px;
           height: 30px;
           left:60px;
           top:7px;
@@ -177,7 +177,7 @@ export default class HeroApp extends HeroElement {
           display:none;
           position: absolute;
           overflow:hidden;
-          width: 30px;
+          width: 35px;
           height: 30px;
           right:10px;
           top:7px;
@@ -186,7 +186,7 @@ export default class HeroApp extends HeroElement {
           display:none;
           position: absolute;
           overflow:hidden;
-          width: 30px;
+          width: 35px;
           height: 30px;
           right:60px;
           top:7px;
