@@ -4416,14 +4416,14 @@
           this.$.leftBtn.in(nav.leftItems[0]);
           this.$.leftBtn.setController(this.currentPage);
           //second leftItem
-          if (nav.leftItems[1]) {
+          if (this.mobile && nav.leftItems[1]) {
             this.$.leftBtn2.style.display = 'inline-block';
             this.$.leftBtn2.in(nav.leftItems[1]);
             this.$.leftBtn2.setController(this.currentPage);
           }
         } else {
           this.$.leftBtn.style.display = 'none';
-          if (nav.leftItems[1]) {
+          if (this.mobile) {
             this.$.leftBtn2.style.display = 'none';
           }
           if (this.contain(this.rootPages, this.currentPage.name)) {
@@ -4439,14 +4439,14 @@
           this.$.rightBtn.setController(this.currentPage);
           this.$.rightBtn.style.display = 'inline-block';
           //second rightItem
-          if (nav.rightItems[1]) {
+          if (this.mobile && nav.rightItems[1]) {
             this.$.rightBtn2.style.display = 'inline-block';
             this.$.rightBtn2.in(nav.rightItems[1]);
             this.$.rightBtn2.setController(this.currentPage);
           }
         } else {
           this.$.rightBtn.style.display = 'none';
-          if (nav.rightItems[1]) {
+          if (this.mobile) {
             this.$.rightBtn2.style.display = 'none';
           }
         }
