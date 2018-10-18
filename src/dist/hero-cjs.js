@@ -4392,7 +4392,9 @@ class HeroApp extends HeroElement {
         }
       } else {
         this.$.leftBtn.style.display = 'none';
-        this.$.leftBtn2.style.display = 'none';
+        if (nav.leftItems[1]) {
+          this.$.leftBtn2.style.display = 'none';
+        }
         if (this.contain(this.rootPages, this.currentPage.name)) {
           this.$.backBtn.style.display = 'none';
           this.$.backBtn.style.animation = 'backBtnOut 0.25s';
@@ -4413,7 +4415,9 @@ class HeroApp extends HeroElement {
         }
       } else {
         this.$.rightBtn.style.display = 'none';
-        this.$.rightBtn2.style.display = 'none';
+        if (nav.rightItems[1]) {
+          this.$.rightBtn2.style.display = 'none';
+        }
       }
     }
   }
