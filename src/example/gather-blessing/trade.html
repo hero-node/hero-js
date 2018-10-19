@@ -5,8 +5,19 @@
     <script>
 
         var eth = window.eth;
-        // const her = eth.contract(window.herABI).at(window.herAddress)
+        const her = window.eth.contract(window.herABI).at(window.herAddress)
         var trade = window.eth.contract(window.tradeABI).at(window.tradeAddress)
+
+        function startCheckTx(txid, callback) {
+            var txInterval = setInterval(async function() { 
+                eth.getTransactionReceipt(txid).then(function(result){
+                    if (result) {
+                        callback(result.status == '0x1');
+                        clearInterval(txInterval);
+                    }
+                })
+            }, 2000);
+        }
 
         function update() {
             eth.blockNumber().then(function(data){ 
@@ -24,15 +35,16 @@
             }).then(function(data){
                 var rate = data[0].toNumber();
                 var price = 1.0 / rate;
-                Hero.ui2Data.currentPrice = '当前价格: ' + parseFloat(price.toFixed(8)) + ' eth';
+                Hero.ui2Data.currentPrice = '当前价格: ' + price.toFixed(8) + ' eth';
 
+                localStorage.rate = rate;
                 trade.coefficient().catch(function(error){
                     alert(error);
                 }).then(function(data){
                     var coefficient = data[0].toNumber();
                     var nextRate = rate + coefficient;
                     var nextPrice = 1.0 / nextRate;
-                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + parseFloat(nextPrice.toFixed(8)) + ' eth'
+                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + nextPrice.toFixed(8) + ' eth'
 
                     eth.getBalance(window.tradeAddress).then(function(data){
                         var ethBalance = Eth.fromWei(data, 'ether');
@@ -46,17 +58,18 @@
                             var rounds = ethBalance / limit;
                             _rate = _rate + (coefficient * rounds);
                             var maxPrice = 1.0 / _rate;
-                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + parseFloat(maxPrice.toFixed(8)) + ' eth'
+                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + maxPrice.toFixed(8) + ' eth'
 
                             trade.volumn().catch(function(error){
                                 alert(error);
                             }).then(function(data){
                                 var volumn = Eth.fromWei(data[0].toString(), 'ether')
-                                Hero.ui2Data.volumn = '当前Leave交易量: ' + parseInt(volumn) + ' HER';
+                                var herVolumn = volumn * rate;
+                                Hero.ui2Data.volumn = '当前Leave交易量: ' + herVolumn + ' HER';
 
                                 var limitHER = limit * rate;
-                                var leftVolumn = limitHER - volumn;
-                                Hero.ui2Data.volumnLeft = '剩余Leave交易量: ' + parseInt(leftVolumn) + ' HER';
+                                var leftVolumn = limitHER - herVolumn;
+                                Hero.ui2Data.volumnLeft = '剩余Leave交易量: ' + leftVolumn + ' HER';
                             })
                         })
                     })
@@ -112,6 +125,9 @@
                         frame: {x:'15', y:'70', w:'260', h:'30'},
                         cornerRadius: '4',
                         backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        name: 'joinSaveETH',
+                        textFieldDidEditing:{textfield:'joinSaveETH'}
                     },
                     {
                         class: 'HeroLabel',
@@ -125,6 +141,9 @@
                         frame: {x:'15', y:'140', w:'260', h:'30'},
                         cornerRadius: '4',
                         backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        textFieldDidEditing:{textfield:'joinGetHER'},
+                        name: 'joinGetHER'
                     },
                     {
                         class: 'HeroButton',
@@ -189,12 +208,16 @@
                         frame: {x:'15', y:'70', w:'260', h:'30'},
                         cornerRadius: '4',
                         backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        textFieldDidEditing:{textfield:'leaveSaveHER'},
+                        name: 'leaveSaveHER'
                     },
                     {
                         class: 'HeroLabel',
                         frame: {x:'15', y:'110'},
                         text: '可获得ETH数量（当前回合剩余 1 eth）',
                         size: 14,
+                        name: 'leftVomumnInDialog',
                         textColor: '898989'
                     },
                     {
@@ -202,6 +225,9 @@
                         frame: {x:'15', y:'140', w:'260', h:'30'},
                         cornerRadius: '4',
                         backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        textFieldDidEditing:{textfield:'leaveGetETH'},
+                        name: 'leaveGetETH'
                     },
                     {
                         class: 'HeroButton',
@@ -220,20 +246,72 @@
 
         Hero.on = function(data){
             if (data.click === 'join') {
-                eth.accounts().then(function(accounts){
-                    trade.update({from:accounts[0]}).then(function(data){
-                        this.datas({name:'joinView', hidden:false});
-                    })
-                })
-                
-                
+                this.datas({name:'joinView', hidden:false});
             } else if (data.click === 'leave') {
                 this.datas({name:'leaveView', hidden:false});
             } else if (data.click === 'joinClose') {
                 this.datas({name:'joinView', hidden:true});
             } else if (data.click === 'leaveClose') {
                 this.datas({name:'leaveView', hidden:true});
+            } else if (data.click === 'confirmJoin') {
+                var ethAmount = parseFloat(this.ui2Data.joinSaveETH);
+                var ethWei = Eth.toWei(ethAmount, 'ether');
+
+                eth.accounts().then(function(accounts){
+                    trade.join({from:accounts[0], value:ethWei}).then(function(txhash){
+                        startCheckTx(txhash, function(success){
+                            if (success) {
+                                console.log('Join Success');
+                            }
+                        });
+                    });
+                });
+            } else if (data.click === 'confirmLeave') {
+                var herAmount = parseFloat(this.ui2Data.leaveSaveHER);
+                var herAmountWei = Eth.toWei(herAmount, 'ether');
+
+                // approve
+                eth.accounts().then(function(accounts){
+                    her.approve(window.tradeAddress, herAmountWei, {from: accounts[0]}).then(function(txhash){
+                        startCheckTx(txhash, function(success){
+                            if (success) {
+                                trade.leave(herAmountWei, {from: accounts[0]}).then(function(data){
+                                    console.log('leave success');
+                                });
+                            }
+                        });
+                    });
+                })
             }
+            
+            if (data.textfield === 'joinSaveETH') {
+                var ethAmount = parseFloat(this.ui2Data.joinSaveETH);
+                if (!isNaN(ethAmount)) {
+                    var herAmount = ethAmount * localStorage.rate;
+                    this.datas({name:'joinGetHER', text:herAmount.toFixed(8)});
+                }
+            } else if (data.textfield === 'joinGetHER') {
+                var herAmount = parseFloat(this.ui2Data.joinGetHER);
+                if (!isNaN(herAmount)) {
+                    var ethAmount = herAmount / localStorage.rate;
+                    this.datas({name:'joinSaveETH', text:ethAmount.toFixed(8)});
+                }
+                
+            } else if (data.textfield === 'leaveSaveHER') {
+                var herAmount = parseFloat(this.ui2Data.leaveSaveHER);
+                if (!isNaN(herAmount)) {
+                    var ethAmount = herAmount / localStorage.rate;
+                    this.datas({name:'leaveGetETH', text:ethAmount.toFixed(8)});
+                }
+
+            } else if (data.textfield === 'leaveGetETH') {
+                var ethAmount = parseFloat(this.ui2Data.leaveGetETH);
+                if (!isNaN(ethAmount)) {
+                    var herAmount = ethAmount * localStorage.rate;
+                    this.datas({name:'leaveSaveHER', text:herAmount.toFixed(8)});
+                }
+            }
+            
         };
         Hero.viewWillAppear = function() {
             update();
@@ -296,7 +374,7 @@
                         {
                             class: 'HeroLabel',
                             frame: {x:'22', y:'10'},
-                            text: '当前价格: 0 eth',
+                            text: '当前价格: - eth',
                             size: 14,
                             name: 'currentPrice',
                             textColor: 'ffffff'
@@ -312,7 +390,7 @@
                             frame: {x:'22', y:'38'},
                             size: 14,
                             textColor: 'ffffff',
-                            text: '下回合价格: 0 eth',
+                            text: '下回合价格: - eth',
                             name: 'nextRoundPrice'
                         },
                         {
@@ -326,7 +404,7 @@
                             frame: {x:'22', y:'66'},
                             size: 14,
                             textColor: 'ffffff',
-                            text: '已保证的目标价: 0 eth',
+                            text: '已保证的目标价: - eth',
                             name: 'ensuredPrice'
                         },
                         {
@@ -340,7 +418,7 @@
                             frame: {x:'22', y:'94'},
                             size: 14,
                             textColor:'ffffff',
-                            text: '当前Leave交易量: 0 HER',
+                            text: '当前Leave交易量: - HER',
                             name: 'volumn'
                         },
                         {
@@ -354,7 +432,7 @@
                             frame: {x:'22', y:'122'},
                             size: 14,
                             textColor: 'ffffff',
-                            text: '剩余Leave交易量: 0 HER',
+                            text: '剩余Leave交易量: - HER',
                             name: 'volumnLeft'
                         },
                     ]

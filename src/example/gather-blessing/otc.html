@@ -168,31 +168,31 @@
 
 
     function getList(list, j) {
-        contract.orderIDs(j).then(function(data){
-            orderID = data;
-            contract.orders(orderID).then(function(data) {
-                order = JSON.parse(data);
-                tokenContract = eth.contract(erc20ABI).at(order.token);
-                tokenName = tokenContract.symbol.then(function(data));
-                if (order.orderID == '0x') {
-                    Hero.rows = []
-                for (var i = 0; i < list.length; i++) {
-                    Hero.rows.push({
-                        class: 'HeroView',
-                        frame: {w:'1x', h:'50'},
-                        subViews: [
-                            // {
-                            //     class: 'HeroLabel',
-                            //     text: order.
-                            // }
-                        ]
-                    })
-                }
-                } else {
+        // contract.orderIDs(j).then(function(data){
+        //     orderID = data;
+        //     contract.orders(orderID).then(function(data) {
+        //         order = JSON.parse(data);
+        //         tokenContract = eth.contract(erc20ABI).at(order.token);
+        //         tokenName = tokenContract.symbol.then(function(data));
+        //         if (order.orderID == '0x') {
+        //             Hero.rows = []
+        //         for (var i = 0; i < list.length; i++) {
+        //             Hero.rows.push({
+        //                 class: 'HeroView',
+        //                 frame: {w:'1x', h:'50'},
+        //                 subViews: [
+        //                     // {
+        //                     //     class: 'HeroLabel',
+        //                     //     text: order.
+        //                     // }
+        //                 ]
+        //             })
+        //         }
+        //         } else {
 
-                }
-            });
-        })
+        //         }
+        //     });
+        // })
     }
 
     Hero.on = function(data){
