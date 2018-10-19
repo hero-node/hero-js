@@ -13,9 +13,9 @@
 
 // -----------------------------------------------
 
-var eth = new Eth(new Eth.HttpProvider(window.ethProvider))
+var eth = window.eth
 var tokenABI = window.fuABI
-var token = eth.contract(tokenABI).at(window.contactAddress)
+var token = window.eth.contract(tokenABI).at(window.contactAddress)
 
 function getlist(list,j) {
     token.sponsors(j).then(function(data){
