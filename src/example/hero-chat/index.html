@@ -25,8 +25,9 @@
   var loadPage = window.location.search.split('=').pop();
 
   var app = {tabs:[
-    {url:path+'home.html', title: 'Home',image:path+'images/fu.png'},
-    {url:path+'dalao.html', title: 'dalao'}
+    {url:path+'message.html', title: 'Message'},
+    {url:path+'contacts.html', title: 'contacts'},
+    {url:path+'me.html', title: 'mine'}
   ]};
   console.log(app);
   document.write('<hero-app json='+JSON.stringify(app)+'></hero-app>');

@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/fu.js"></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+
+    };
+    Hero.viewWillAppear = function() {
+      var datas = [
+        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+      ]
+      var rows = [{rows:[]}];
+      for (var i = 0; i < datas.length; i++) {
+        var item = datas[i];
+        rows[0].rows.push(item);
+      };
+      var that = this;
+      setTimeout(function(){
+        that.datas({name:'msgTableView',data:rows});
+      },100);
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      version:-1,
+      tintColor:'bd3a53',
+      nav:{
+        title:"Message",
+        navigationBarHidden:false
+      },
+      views:
+      [
+        {
+          class:'HeroTableView',
+          frame:{w:'1x',h:'1x'},
+          name:'msgTableView',
+
+        },
+        {
+          class:'HeroToast',
+          name:'toast'
+        }
+      ]
+    };
+
+  </script>
+</body>
+</html>
