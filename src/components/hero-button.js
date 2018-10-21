@@ -36,6 +36,21 @@ export default class HeroButton extends HeroElement {
     if (json.cornerRadius) {
       this.$.button.style.borderRadius = json.cornerRadius + 'px';
     }
+    if (json.image) {
+      var url;
+      // this.$.title.innerHTML = '';
+      if (json.image.startWith('http')) {
+        url = json.image;
+      } else if (json.image.search(/\./) > 0) {
+        url = 'images/' + json.image;
+      } else {
+        url = 'images/' + json.image + '.png';
+      }
+      this.$.button.style.backgroundImage = 'url(' + url + ')';
+      this.$.button.style.backgroundRepeat = 'no-repeat';
+      this.$.button.style.backgroundPosition = 'center';
+      this.$.button.style.backgroundSize = 'contain';
+    }
   }
 
   onClick() {

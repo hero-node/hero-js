@@ -81,6 +81,8 @@ export default class HeroTextField extends HeroElement {
                 position: absolute;
                 height: 100%;
                 border:none;
+                outline:none;
+                padding-left:15px;
                 background-color:transparent;
             }
             div{
