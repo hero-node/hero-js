@@ -3888,6 +3888,8 @@
           backBtn: this.shadowDom.querySelector('#backBtn'),
           leftBtn: this.shadowDom.querySelector('#leftBtn'),
           rightBtn: this.shadowDom.querySelector('#rightBtn'),
+          leftBtn2: this.shadowDom.querySelector('#leftBtn2'),
+          rightBtn2: this.shadowDom.querySelector('#rightBtn2'),
         };
       }
 
@@ -4202,10 +4204,20 @@
           position: absolute;
           overflow:hidden;
           color: #fff;
-          width: 70px;
-          height: 25px;
-          left:10px;
-          top:12px;
+          width: 40px;
+          height: 30px;
+          left:20px;
+          top:29px;
+        }
+        #leftBtn2 {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          color: #fff;
+          width: 40px;
+          height: 30px;
+          left:80px;
+          top:29px;
         }
         #backBtn {
           display:none;
@@ -4220,12 +4232,20 @@
           display:none;
           position: absolute;
           overflow:hidden;
-          width: 70px;
-          height: 25px;
-          right:10px;
-          top:12px;
+          width: 40px;
+          height: 30px;
+          right:20px;
+          top:29px;
         }
-
+        #rightBtn2 {
+          display:none;
+          position: absolute;
+          overflow:hidden;
+          width: 40px;
+          height: 30px;
+          right:80px;
+          top:29px;
+        }
         @keyframes backBtnIn
         {
           from {opacity: 0;}
@@ -4257,7 +4277,9 @@
       <div id='pad_bar'>
         <hero-button class='btn' id ='backBtn'></hero-button>
         <hero-button class='btn' id ='leftBtn'></hero-button>
+        <hero-button class='btn' id ='leftBtn2'></hero-button>
         <hero-button class='btn' id ='rightBtn'></hero-button>
+        <hero-button class='btn' id ='rightBtn2'></hero-button>
         <p id='title'></p>
       </div>
       <hero-pages id='root_pages'></hero-pages>
@@ -4500,16 +4522,16 @@
           this.$.leftBtn.in(nav.leftItems[0]);
           this.$.leftBtn.setController(this.currentPage);
           //second leftItem
-          if (this.mobile && nav.leftItems[1]) {
+          if (nav.leftItems[1]) {
             this.$.leftBtn2.style.display = 'inline-block';
             this.$.leftBtn2.in(nav.leftItems[1]);
             this.$.leftBtn2.setController(this.currentPage);
           }
         } else {
           this.$.leftBtn.style.display = 'none';
-          if (this.mobile) {
-            this.$.leftBtn2.style.display = 'none';
-          }
+
+          this.$.leftBtn2.style.display = 'none';
+
           if (this.contain(this.rootPages, this.currentPage.name)) {
             this.$.backBtn.style.display = 'none';
             this.$.backBtn.style.animation = 'backBtnOut 0.25s';
@@ -4523,16 +4545,15 @@
           this.$.rightBtn.setController(this.currentPage);
           this.$.rightBtn.style.display = 'inline-block';
           //second rightItem
-          if (this.mobile && nav.rightItems[1]) {
+          if (nav.rightItems[1]) {
             this.$.rightBtn2.style.display = 'inline-block';
             this.$.rightBtn2.in(nav.rightItems[1]);
             this.$.rightBtn2.setController(this.currentPage);
           }
         } else {
           this.$.rightBtn.style.display = 'none';
-          if (this.mobile) {
-            this.$.rightBtn2.style.display = 'none';
-          }
+
+          this.$.rightBtn2.style.display = 'none';
         }
       }
     }
