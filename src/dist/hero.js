@@ -4021,7 +4021,7 @@
           width: 25px;
           height: 25px;
           left:10px;
-          top:12px;
+          top:9.5px;
         }
         #rightBtn {
           display:none;
@@ -4226,7 +4226,7 @@
           width: 25px;
           height: 25px;
           left:10px;
-          top:12px;
+          top:32px;
         }
         #rightBtn {
           display:none;
