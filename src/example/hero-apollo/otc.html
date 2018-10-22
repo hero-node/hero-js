@@ -6,6 +6,11 @@
 
     var eth = window.eth;
     var contract = window.eth.contract(window.otcABI).at(window.otcAddress);
+    const cellHeight = '40'
+
+    var wantOrderType = 0;
+    var buyList = []
+    var sellList = []
 
     function startCheckTx(txid, callback) {
         var txInterval = setInterval(async function() { 
@@ -71,17 +76,20 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'170', y:'50'},
+                        frame: {x:'150', y:'50'},
                         text: '数量',
                         textColor: '898989',
                         size: 12
                     },
                     {
                         class: 'HeroTextField',
-                        frame: {x:'170', y:'75', w:'100', h:'20'},
+                        frame: {x:'150', y:'75', w:'110', h:'20'},
                         cornerRadius: '4',
-                        backgroundColor: '222e3c',
-                        name: 'amountTextField'
+                        backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        size: 12,
+                        name: 'amountTextField',
+                        textFieldDidEditing:{textfield:'amountTextField'}
                     },
                     {
                         class: 'HeroLabel',
@@ -92,39 +100,45 @@
                     },
                     {
                         class: 'HeroTextField',
-                        frame: {x:'15', y:'125', w:'100', h:'20'},
+                        frame: {x:'15', y:'125', w:'110', h:'20'},
                         cornerRadius: '4',
-                        backgroundColor: '222e3c',
-                        name: 'priceTextField'
+                        backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        name: 'priceTextField',
+                        size: 12,
+                        textFieldDidEditing:{textfield:'priceTextField'}
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'170', y:'100'},
+                        frame: {x:'150', y:'100'},
                         text: '总价',
                         textColor: '898989',
                         size: 12
                     },
                     {
                         class: 'HeroTextField',
-                        frame: {x:'170', y:'125', w:'100', h:'20'},
+                        frame: {x:'150', y:'125', w:'110', h:'20'},
                         cornerRadius: 4,
-                        backgroundColor: '22e3c',
-                        name: 'totalTextField'
+                        backgroundColor: '1d2630',
+                        textColor: 'ffffff',
+                        size: 12,
+                        name: 'totalTextField',
+                        textFieldDidEditing:{textfield:'totalTextField'}
                     },
                     {
                         class: 'HeroImageView',
-                        frame: {x:'15', y:'160', w:'15', h:'15'},
+                        frame: {x:'15', y:'160', w:'17', h:'17'},
                         image: path+'images/dotSelect.png',
                         name: 'wantBuyImage'
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'15', y:'160', w:'15', h:'15'},
+                        frame: {x:'15', y:'160', w:'15', h:'20'},
                         click: {click: 'wantBuy'}
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'28', y:'157', w:'50', h:'15'},
+                        frame: {x:'28', y:'156', w:'50', h:'20'},
                         click: {click: 'wantBuy'},
                         title: '我想买',
                         titleColor: 'ffffff'
@@ -134,22 +148,22 @@
                         text: '(锁定ETH)',
                         size: 7,
                         textColor: '999999',
-                        frame: {x:'72', y:'162'}
+                        frame: {x:'72', y:'161'}
                     },
                     {
                         class: 'HeroImageView',
-                        frame: {x:'140', y:'160', w:'15', h:'15'},
+                        frame: {x:'140', y:'160', w:'17', h:'17'},
                         image: path+'images/dot.png',
                         name: 'wantSellImage'
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'140', y:'160', w:'15', h:'15'},
+                        frame: {x:'140', y:'160', w:'15', h:'20'},
                         click: {click: 'wantSell'},
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'153', y:'157', w:'50', h:'15'},
+                        frame: {x:'153', y:'156', w:'50', h:'20'},
                         click: {click: 'wantSell'},
                         title: '我想卖',
                         titleColor: 'ffffff'
@@ -159,7 +173,7 @@
                         text: '(锁定HER)',
                         size: 7,
                         textColor: '999999',
-                        frame: {x:'197', y:'162'},
+                        frame: {x:'197', y:'161'},
                         name: 'lockTokenLabel'
                     },
                     {
@@ -178,42 +192,157 @@
     }
 
 
-    function getList(list, j) {
-        contract.orderIDs(j).then(function(orderID){
-            contract.orders(orderID).then(function(data) {
-                order = JSON.parse(data);
+    function getList(buyList, sellList, j) {
+        contract.orderIDs(j).then(function(data){
+            contract.orders(data[0].toString()).then(function(order) {
                 console.log(order);
-
-                if (order.orderID == '0x') {
+                if (order.orderOwner === '0x0000000000000000000000000000000000000000') {
                     // No more data
-                    Hero.rows = []
-                    for (var i = 0; i < list.length; i++) {
-                        var orderInList = list[i];
-                        Hero.rows.push({
+                    Hero.buyRows = []
+                    Hero.sellRows = []
+
+                    // buyList
+                    for (var i = 0; i < buyList.length; i++) {
+                        var orderInList = buyList[i];
+                        Hero.buyRows.push({
                             class: 'HeroView',
-                            frame: {w:'1x', h:'50'},
+                            frame: {w:'1x', h:cellHeight},
+                            backgroundColor: '272e35',
                             subViews: [
                                 {
+                                    class: 'HeroView',
+                                    backgroundColor: '414d53',
+                                    frame: {w:'1x', h:'1x'}
+                                },
+                                {
                                     class: 'HeroLabel',
-                                    text: orderInList.tokenName,
-                                    
-                                }
+                                    text: orderInList.symbol,
+                                    frame: {x:'25', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: orderInList.amountToken + ' ' + orderInList.symbol,
+                                    frame: {x:'70', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: heroFix(orderInList.amountETH / orderInList.amountToken, 6) + 'eth',
+                                    frame: {x:'140', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: orderInList.amountETH + 'eth',
+                                    frame: {x:'210', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroButton',
+                                    title: '购买',
+                                    frame: {x:'270', h:'1x', w:'50'},
+                                    titleColor: '47b3ea',
+                                    size: 12,
+                                    name: 'CellBuy' + i,
+                                    click: {click: 'CellBuy'}
+                                },
                             ]
                         })
-                }
+                    }
+                    // sell list
+                    for (var i = 0; i < sellList.length; i++) {
+                        var orderInList = sellList[i];
+                        Hero.sellRows.push({
+                            class: 'HeroView',
+                            frame: {w:'1x', h:cellHeight},
+                            backgroundColor: '272e35',
+                            subViews: [
+                                {
+                                    class: 'HeroView',
+                                    backgroundColor: '414d53',
+                                    frame: {w:'1x', h:'1'}
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: orderInList.symbol,
+                                    frame: {x:'25', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: orderInList.amountToken + ' ' + orderInList.symbol,
+                                    frame: {x:'70', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: heroFix(orderInList.amountETH / orderInList.amountToken, 6) + 'eth',
+                                    frame: {x:'140', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    text: orderInList.amountETH + 'eth',
+                                    frame: {x:'210', h:'1x'},
+                                    textColor: 'ffffff',
+                                    size: 12
+                                },
+                                {
+                                    class: 'HeroButton',
+                                    title: '出售',
+                                    frame: {x:'270', h:'1x', w:'50'},
+                                    titleColor: '47b3ea',
+                                    size: 12,
+                                    name: 'CellSell' + i,
+                                    click: {click: 'CellSell'}
+                                },
+                            ]
+                        })
+                    }
+                    
+                    setTimeout(function(){
+                        Hero.datas({name:'buylist', data:[{rows: Hero.buyRows}]});
+                        Hero.datas({name:'selllist', data:[{rows: Hero.sellRows}]});
+                    }, 200);
                 } else {
                     // add order to list
                     tokenContract = eth.contract(erc20ABI).at(order.token);
-                    tokenContract.symbol.then(function(tokenName){
-                        list.push({
-                            symbol: tokenName,
-                            amountToken: order.amountToken,
-                            price: order.amountETH / order.amountToken,
-                            totalPrice: order.amountETH,
-                            type: order.type,
-                            orderID: order.orderID
-                        })
-                    });
+                    if (order.status.toNumber() == 0) {
+                        tokenContract.symbol().then(function(data){
+                            var tokenName = data[0];
+                            var amountToken = Eth.fromWei(order.amountToken, 'ether');
+                            var amountETH = Eth.fromWei(order.amountETH, 'ether');
+                            var price = amountETH / amountToken;
+                            var totalPrice = amountETH;
+                            
+                            var o = {
+                                symbol: tokenName,
+                                amountToken: amountToken,
+                                amountETH: amountETH,
+                                price: price,
+                                totalPrice: totalPrice,
+                                type: order.tradeType.toNumber(),
+                                orderID: order.ID
+                            }
+
+                            if (order.tradeType.toNumber() === 0) {
+                                // buy order, so here is sellList
+                                sellList.push(o)
+                            } else {
+                                // sell order, so here is buyList
+                                buyList.push(o)
+                            }
+                            getList(buyList, sellList, j+1);
+                        });
+                    }
                 }
                 
             });
@@ -225,10 +354,66 @@
             this.datas({name:'addOrderView', hidden:false});
         } else if (data.click === 'closeOrderView') {
             this.datas({name:'addOrderView', hidden:true});
+        } else if (data.click === 'switchBuy') {
+            this.datas({name:'buylist', hidden:false});
+            this.datas({name:'selllist', hidden:true});
+            this.datas({name:'switchBuy', backgroundColor: '3c4d56'});
+            this.datas({name:'switchSell', backgroundColor: '767676'});
+        } else if (data.click === 'switchSell') {
+            this.datas({name:'selllist', hidden:false});
+            this.datas({name:'buylist', hidden:true});
+            this.datas({name:'switchBuy', backgroundColor: '767676'});
+            this.datas({name:'switchSell', backgroundColor: '3c4d56'});
+        } else if (data.click === 'wantBuy') {
+            wantOrderType = 0;
+            this.datas({name:'wantBuyImage', image: path+'images/dotSelect.png'});
+            this.datas({name:'wantSellImage', image: path+'images/dot.png'});
+        } else if (data.click === 'wantSell') {
+            wantOrderType = 1;
+            this.datas({name:'wantBuyImage', image: path+'images/dot.png'});
+            this.datas({name:'wantSellImage', image: path+'images/dotSelect.png'});
+        } else if (data.click === 'confirmOrder') {
+            var amountText = this.ui2Data.amountTextField;
+            var priceText = this.ui2Data.priceTextField;
+            var totalText = this.ui2Data.totalTextField;
+
+        } else if (data.click === 'cellBuy') {
+
+        } else if (data.click === 'cellSell') {
+
+        }
+
+        if (data.textfield === 'amountTextField') {
+            var amountText = this.ui2Data.amountTextField;
+            var amount = parseFloat(amountText);
+            var priceText = this.ui2Data.priceTextField;
+            var price = parseFloat(priceText);
+            if (!isNaN(price) && !isNaN(amount)) {
+                var total = amount * price;
+                this.datas({name:'totalTextField', text: heroFix(total, 6)});
+            }
+        } else if (data.textfield === 'priceTextField') {
+            var amountText = this.ui2Data.amountTextField;
+            var amount = parseFloat(amountText);
+            var priceText = this.ui2Data.priceTextField;
+            var price = parseFloat(priceText);
+            if (!isNaN(price) && !isNaN(amount)) {
+                var total = amount * price;
+                this.datas({name:'totalTextField', text: heroFix(total, 6)});
+            }
+        } else if (data.textfield === 'totalTextField') {
+            var priceText = this.ui2Data.priceTextField;
+            var price = parseFloat(priceText);
+            var totalText = this.ui2Data.totalTextField;
+            var total = parseFloat(totalText);
+            if (!isNaN(price) && !isNaN(total)) {
+                var amount = total / price;
+                this.datas({name:'amountTextField', text: heroFix(amount, 6)});
+            }
         }
     };
     Hero.viewWillAppear = function() {
-
+        getList(buyList, sellList, 0);
     };
     Hero.viewWillDisAppear = function() {
 
@@ -242,6 +427,7 @@
     Hero.ui = {
         version:-1,
         tintColor:'4b5764',
+        backgroundColor: '272e35',
         nav:{
             title:"去中心化交易",
             titleColor: 'ffffff',
@@ -272,20 +458,115 @@
                         frame: {x:'0.5x-80', w:'80', h:'40'},
                         center: {y:'0.5x'},
                         title: '购买',
-                        click: {click:'naviBuy'},
-                        backgroundColor: '767676',
-                        ripple: true
+                        name: 'switchBuy',
+                        click: {click:'switchBuy'},
+                        backgroundColor: '3c4d56',
                     },
                     {
                         class: 'HeroButton',
                         frame: {x:'0.5x',w:'80', h:'40'},
                         center: {y:'0.5x'},
+                        name: 'switchSell',
                         title: '出售',
-                        click: {click:'naviSell'},
-                        backgroundColor: '3c4d56',
-                        ripple: true
+                        click: {click:'switchSell'},
+                        backgroundColor: '767676',
                     },
                 ]
+            },
+            {
+                class: 'HeroTableView',
+                name: 'buylist',
+                backgroundColor: '272e35',
+                frame: {y:'40', w:'1x', h:'1x-40'},
+                header: {
+                    class: 'HeroView',
+                    frame: {w:'1x', h:cellHeight},
+                    subViews: [
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'30', h:'1x'},
+                            text: '币种',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'90', h:'1x'},
+                            text: '数量',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'150', h:'1x'},
+                            text: '单价',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'210', h:'1x'},
+                            text: '总价',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'270', h:'1x'},
+                            text: '交易',
+                            textColor: '999999',
+                            size: 14
+                        }
+                    ]
+                }
+            },
+            {
+                class: 'HeroTableView',
+                name: 'selllist',
+                hidden: 'true',
+                backgroundColor: '272e35',
+                frame: {y:'40', w:'1x', h:'1x-40'},
+                header: {
+                    class: 'HeroView',
+                    frame: {w:'1x', h:cellHeight},
+                    subViews: [
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'30', h:'1x'},
+                            text: '币种',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'90', h:'1x'},
+                            text: '数量',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'150', h:'1x'},
+                            text: '单价',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'210', h:'1x'},
+                            text: '总价',
+                            textColor: '999999',
+                            size: 14
+                        },
+                        {
+                            class: 'HeroLabel',
+                            frame: {x:'270', h:'1x'},
+                            text: '交易',
+                            textColor: '999999',
+                            size: 14
+                        }
+                    ]
+                }
             },
             addOrderView
         ]
