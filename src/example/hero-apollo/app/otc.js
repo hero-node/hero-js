@@ -1,0 +1,3 @@
+window.otcABI = [];
+
+window.otcAddress = '';

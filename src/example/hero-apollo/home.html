@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/fu.js"></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+      if (data.click === 'join') {
+        if (this.ui2Data.address.length === 42) {
+          localStorage.address = this.ui2Data.address;
+          this.command('goto:'+path+'zzsuperentry.html');
+        }else{
+          this.datas({name:'toast',text:'erc20钱包地址是42位长度字符串'});
+        }
+      };
+        
+    };
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      version:-1,
+      tintColor:'bd3a53',
+      nav:{
+        title:"区块链-集五福",
+        titleColor: 'ffffff',
+        navigationBarHidden:false,
+        leftItems:[{title:'back'},{image:'fu'}]
+      },
+
+      views:
+      [
+        {
+          class:'HeroImageView',
+          frame:{w:'1x',h:'200'},
+          ripple: true,
+          image:path+'images/background.jpg'
+        },
+        {
+          class:'HeroImageView',
+          ripple: true,
+          frame:{x:'0.5x-150',y:'40',w:'300',h:'90'},
+          image:path+'images/2018.png'
+        },
+        {
+          class:'HeroLabel',
+          frame:{x:'16',w:'300',y:'0.5x+32',h:'20'},
+          textColor:'999999',
+          size:12,
+          text:'只需输入钱包地址即可，安全放心'
+        },
+        {
+          class:'HeroButton',
+          ripple: true,
+          title:'查看奖池',
+          titleColor:'999999',
+          size:12,
+          frame:{r:'10',w:'80',y:'0.5x+32',h:'30'},
+          click:{command:'goto:'+path+'dalao.html'}
+        },
+        {
+          class:'HeroTextField',
+          name:'address',
+          borderColor:'eeeeee',
+          cornerRadius:10,
+          backgroundColor:'f3f3f3',
+          text:localStorage.address,
+          frame:{x:'16',y:'0.5x-22',r:'16',h:'44'},
+          placeHolder:'我的钱包地址',
+          color:'ffffff',
+          textColor:'ffffff',
+          tintColor:'ffffff',
+          textFieldDidEditing:{textfield:'change'},
+        },
+        {
+          class:'HeroButton',
+          frame:{r:'16',x:'16',y:'0.5x+80',h:'44'},
+          ripple: true,
+          title:'参与集福 瓜分大奖',
+          backgroundColor:'bd3a53',
+          titleColor:'eeeeee',
+          cornerRadius:6,
+          click:{click:'join'}
+        },
+        {
+          class:'HeroToast',
+          name:'toast'
+        }
+      ]
+    };
+
+  </script>
+</body>
+</html>
