@@ -7,6 +7,7 @@
         var eth = window.eth;
         const her = window.eth.contract(window.herABI).at(window.herAddress)
         var trade = window.eth.contract(window.tradeABI).at(window.tradeAddress)
+        const decimal = 10000000;
 
         function startCheckTx(txid, callback) {
             var txInterval = setInterval(async function() { 
@@ -35,7 +36,7 @@
             }).then(function(data){
                 var rate = data[0].toNumber();
                 var price = 1.0 / rate;
-                Hero.ui2Data.currentPrice = '当前价格: ' + price.toFixed(8) + ' eth';
+                Hero.ui2Data.currentPrice = '当前价格: ' + heroFix(price) + ' eth';
 
                 localStorage.rate = rate;
                 trade.coefficient().catch(function(error){
@@ -44,7 +45,7 @@
                     var coefficient = data[0].toNumber();
                     var nextRate = rate + coefficient;
                     var nextPrice = 1.0 / nextRate;
-                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + nextPrice.toFixed(8) + ' eth'
+                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + heroFix(nextPrice) + ' eth'
 
                     eth.getBalance(window.tradeAddress).then(function(data){
                         var ethBalance = Eth.fromWei(data, 'ether');
@@ -58,7 +59,7 @@
                             var rounds = ethBalance / limit;
                             _rate = _rate + (coefficient * rounds);
                             var maxPrice = 1.0 / _rate;
-                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + maxPrice.toFixed(8) + ' eth'
+                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + heroFix(maxPrice) + ' eth'
 
                             trade.volumn().catch(function(error){
                                 alert(error);
@@ -288,27 +289,27 @@
                 var ethAmount = parseFloat(this.ui2Data.joinSaveETH);
                 if (!isNaN(ethAmount)) {
                     var herAmount = ethAmount * localStorage.rate;
-                    this.datas({name:'joinGetHER', text:herAmount.toFixed(8)});
+                    this.datas({name:'joinGetHER', text:heroFix(herAmount)});
                 }
             } else if (data.textfield === 'joinGetHER') {
                 var herAmount = parseFloat(this.ui2Data.joinGetHER);
                 if (!isNaN(herAmount)) {
                     var ethAmount = herAmount / localStorage.rate;
-                    this.datas({name:'joinSaveETH', text:ethAmount.toFixed(8)});
+                    this.datas({name:'joinSaveETH', text:heroFix(ethAmount)});
                 }
                 
             } else if (data.textfield === 'leaveSaveHER') {
                 var herAmount = parseFloat(this.ui2Data.leaveSaveHER);
                 if (!isNaN(herAmount)) {
                     var ethAmount = herAmount / localStorage.rate;
-                    this.datas({name:'leaveGetETH', text:ethAmount.toFixed(8)});
+                    this.datas({name:'leaveGetETH', text:heroFix(ethAmount)});
                 }
 
             } else if (data.textfield === 'leaveGetETH') {
                 var ethAmount = parseFloat(this.ui2Data.leaveGetETH);
                 if (!isNaN(ethAmount)) {
                     var herAmount = ethAmount * localStorage.rate;
-                    this.datas({name:'leaveSaveHER', text:herAmount.toFixed(8)});
+                    this.datas({name:'leaveSaveHER', text:heroFixed(herAmount)});
                 }
             }
             

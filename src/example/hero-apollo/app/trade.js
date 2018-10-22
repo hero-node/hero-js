@@ -347,3 +347,11 @@ window.tradeABI = [
   },
 ];
 window.tradeAddress = '0x92A22F0c9811e94BbCafb3183BF9A2BC4D6Ba5B0';
+
+function heroFix(number, decimal = 8) {
+  var p = 10;
+  for (var i = 0; i < decimal; i++) {
+    p = p * 10;
+  }
+  return number.toFixed(decimal) * p / p;
+}
