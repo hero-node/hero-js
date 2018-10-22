@@ -2950,6 +2950,10 @@
     }
 
     on(json) {
+      if (json.height) {
+        this.$.heroContent.style.height = json.height + 'px';
+      }
+
       if (json.textValue) {
         this.$.title.innerHTML = json.title;
         this.$.other.innerHTML = json.textValue;
@@ -3001,31 +3005,48 @@
       if (json.hasOwnProperty('valueDelete')) {
         this.$.other.style.textDecoration = 'line-through';
       }
-      if (json.height) {
-        this.$.heroContent.style.height = json.height + 'px';
-      }
 
       if (json.image) {
         this.$.icon.style.display = 'block';
         this.$.icon.src = json.image;
-        this.$.icon.style.top = json.height / 4 + 'px';
+        this.$.icon.style.top = json.height ? json.height / 4 + 'px' : '11px';
         this.$.icon.style.left = '30px';
-        this.$.icon.style.width = json.height * 2 / 4 + 'px';
-        this.$.icon.style.height = json.height * 2 / 4 + 'px';
+        this.$.icon.style.width = json.height
+          ? json.height * 2 / 4 + 'px'
+          : '22px';
+        this.$.icon.style.height = json.height
+          ? json.height * 2 / 4 + 'px'
+          : '22px';
         if (json.detailText) {
-          this.$.title.style.left = 15 + 8 + json.height + 'px';
-          this.$.title.style.top = json.height / 4 + 'px';
-          this.$.title.style.fontSize = json.height / 4 + 2 + 'px';
+          this.$.title.style.left = json.height
+            ? json.height + 15 + 8 + 'px'
+            : '67px';
+          this.$.title.style.top = json.height
+            ? json.height / 4 + 'px'
+            : '11px';
+          this.$.title.style.fontSize = json.height
+            ? json.height / 4 + 2 + 'px'
+            : '13px';
 
-          this.$.other.style.top = json.height / 3 + 4 + 'px';
-          this.$.other.style.left = 15 + 8 + json.height + 'px';
-          this.$.other.style.fontSize = json.height / 6 + 2 + 'px';
+          this.$.other.style.top = json.height
+            ? json.height / 3 + 4 + 'px'
+            : '18px';
+          this.$.other.style.left = json.height
+            ? json.height + 15 + 8 + 'px'
+            : '67px';
+          this.$.other.style.fontSize = json.height
+            ? json.height / 6 + 2 + 'px'
+            : '9px';
           this.$.other.style.color = '#aaa';
         } else {
-          this.$.title.style.left = json.height * 2 / 3 + 40 + 'px';
+          this.$.title.style.left = json.height
+            ? json.height * 2 / 3 + 40 + 'px'
+            : '69px';
           this.$.title.style.top = '0px';
-          this.$.title.style.height = json.height + 'px';
-          this.$.title.style.lineHeight = json.height + 'px';
+          this.$.title.style.height = json.height ? json.height + 'px' : '44px';
+          this.$.title.style.lineHeight = json.height
+            ? json.height + 'px'
+            : '44px';
         }
       }
 
@@ -3043,9 +3064,15 @@
           this.$.Checkmark.style.display = 'block';
         }
         this.$.rightIconWrap.style.display = 'block';
-        this.$.rightIconWrap.style.top = json.height / 3 + 'px';
-        this.$.rightIconWrap.style.width = json.height * 2 / 6 + 'px';
-        this.$.rightIconWrap.style.height = json.height * 2 / 6 + 'px';
+        this.$.rightIconWrap.style.top = json.height
+          ? json.height / 3 + 'px'
+          : '15px';
+        this.$.rightIconWrap.style.width = json.height
+          ? json.height * 2 / 6 + 'px'
+          : '15px';
+        this.$.rightIconWrap.style.height = json.height
+          ? json.height * 2 / 6 + 'px'
+          : '15px';
       }
 
       // titleXoffset
