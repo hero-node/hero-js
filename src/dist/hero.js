@@ -3902,6 +3902,10 @@
           leftBtn2: this.shadowDom.querySelector('#leftBtn2'),
           rightBtn2: this.shadowDom.querySelector('#rightBtn2'),
         };
+        var backSVG = document.createElement('div');
+        backSVG.innerHTML =
+          '<svg class="icon" width="100%" height="100%" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#333333" d="M268.896 476.032 622.24 125.92c18.848-18.656 49.216-18.528 67.872 0.32 18.656 18.816 18.528 49.216-0.32 67.872l-319.456 316.576 318.176 321.056c18.656 18.816 18.528 49.216-0.32 67.872-9.344 9.28-21.568 13.92-33.792 13.92-12.352 0-24.704-4.736-34.08-14.208L270.208 545.984c-0.512-0.512-0.672-1.248-1.184-1.792-0.128-0.128-0.288-0.16-0.416-0.288C249.952 525.088 250.08 494.688 268.896 476.032z" /></svg>';
+        this.$.backBtn.shadowDom.appendChild(backSVG);
       }
 
       var localStorageTemp = {};
@@ -4460,7 +4464,7 @@
         }
       });
       this.$.backBtn.setController(this);
-      this.$.backBtn.in({ image: 'back.png', click: { goBack: true } });
+      this.$.backBtn.in({ click: { goBack: true } });
       this.$.rightBtn.in({ title: ' ', titleColor: 'ffffff' });
       this.$.leftMenu.style.width = parseInt(window.innerWidth) * 2 / 3 + 'px';
       var that = this;
