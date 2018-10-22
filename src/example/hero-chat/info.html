@@ -1,7 +1,6 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
   <script src="./app/autoRefresh.js"></script>
   <script src='/socket.io/socket.io.js'></script>
   <script src="./app/config.js"></script>
@@ -13,11 +12,30 @@
   <script>
 
     Hero.on = function(data){
-      if (data.click === 'info') {
-        this.command('goto:'+path+'info.html')
-      }
+
     };
     Hero.viewWillAppear = function() {
+      var rows = [{sectionTitle:'base info',rows:[
+        {title:"APP HASH",detailText:'Qlsd0980980s80d980s8d0f80sd80fds',accessoryType:'DisclosureIndicator',
+              image:path+'./images/menu_merchant_icon1@2x.png'},
+        {title:"App Maker",detailText:'Qlsd0980980s80d980s8d0f80sd80fds',accessoryType:'DisclosureIndicator'},
+        {title:"APP name",valueText:'Hero chat'},
+        {title:"APP description",detailText:'a securit chat app'},
+        {title:"key words",detailText:'chat,social'},
+        {title:"logo",imageVlaue:'https://ipfs.io/ipfs/q98989797979sdf9sd87f9sd98i'},
+        {title:"Color",imageVlaue:'8f7954'},
+      ]},{sectionTitle:'Acount Info',rows:[
+        {title:"Acount balance",valueText:'10000'},
+        {title:"Node status",valueText:'72'},
+      ]},{sectionTitle:'APPs',rows:[
+        {title:"H5"},
+        {title:"iOS"},
+        {title:"android"},
+      ]}];
+      var that = this;
+      setTimeout(function(){
+        that.datas({name:'infoTableView',data:rows});
+      },100);
 
     };
     Hero.viewWillDisAppear = function() {
@@ -30,9 +48,8 @@
       version:-1,
       tintColor:'bd3a53',
       nav:{
-        title:"Me",
+        title:"Info",
         titleColor: 'ffffff',
-        rightItems: [{title:'Info',click:{click:'info'}},{title:'Info',click:{click:'info'}}],
         navigationBarHidden:false
       },
       views:
@@ -40,7 +57,7 @@
         {
           class:'HeroTableView',
           frame:{w:'1x',h:'1x'},
-          name:'meTableView',
+          name:'infoTableView',
           data:[{rows:[
             {
               height:60,
