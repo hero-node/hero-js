@@ -810,6 +810,9 @@ class HeroPages extends HeroElement {
 				visibility: visible;
 				z-index: 1;
 			}
+			.pt-page::-webkit-scrollbar{
+				display:none;
+			}
 			.pt-page {
 				width: 100%;
 				height: 100%;
