@@ -2901,6 +2901,17 @@ class HeroTableViewCell extends HeroElement {
       }
       #heroContent{
         height: 44px;
+        z-index: 1;
+      }
+      #ripple {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+      }
+      #ripple:active {
+        background-color: #aaa;
+        opacity: 0.1;
       }
       </style>
       <div id='heroContent' on-Tap='onTap' >
