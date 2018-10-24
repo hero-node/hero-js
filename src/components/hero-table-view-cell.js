@@ -127,9 +127,9 @@ export default class HeroTableViewCell extends HeroElement {
       this.$.other.style.width = '50%';
       this.$.other.style.right = '15px';
       this.$.other.style.textAlign = 'right';
-    } else if (json.detailText) {
+    } else if (json.detail) {
       this.$.title.innerHTML = json.title;
-      this.$.other.innerHTML = json.detailText;
+      this.$.other.innerHTML = json.detail;
 
       this.$.title.style.top = json.height ? json.height / 5 + 'px' : '4px';
       this.$.title.style.left = json.height ? json.height / 2 + 'px' : '30px';
@@ -182,7 +182,7 @@ export default class HeroTableViewCell extends HeroElement {
       this.$.icon.style.height = json.height
         ? json.height * 2 / 4 + 'px'
         : '22px';
-      if (json.detailText) {
+      if (json.detail) {
         this.$.title.style.left = json.height
           ? json.height + 15 + 8 + 'px'
           : '67px';
