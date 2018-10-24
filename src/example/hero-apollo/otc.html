@@ -4,13 +4,14 @@
     <script src="../../hero.js"></script>
     <script>
 
-    var eth = window.eth;
     var contract = window.eth.contract(window.otcABI).at(window.otcAddress);
     const cellHeight = '40'
 
     var wantOrderType = 0;
-    var buyList = []
-    var sellList = []
+    var buyList = [];
+    var sellList = [];
+    var myList = [];
+    var amount, price, total;
 
     function startCheckTx(txid, callback) {
         var txInterval = setInterval(async function() { 
@@ -21,6 +22,20 @@
                 }
             })
         }, 2000);
+    }
+
+    function refresh() {
+        buyList = [];
+        sellList = [];
+        myList = [];
+        getList(buyList, sellList, 0);
+        eth.accounts().then(function(accounts){
+            getMyList(accounts[0], myList, 0);
+        });
+    }
+
+    function delayRefresh() {
+        setTimeout(refresh, 1000);
     }
     
     var addOrderView = 
@@ -191,6 +206,179 @@
         ]
     }
 
+    var myOrderView = {
+        class: 'HeroView',
+        frame: {w:'1x', h:'1x'},
+        name: 'myOrderView',
+        hidden: true,
+        subViews: [
+            {
+                class: 'HeroView',
+                frame: {w:'1x', h:'1x'},
+                backgroundColor: '1E2027',
+                alpha: 0.7
+            },
+            {
+                class: 'HeroView',
+                frame: {w:'0.9x', h:'0.9x'},
+                center: {x:'0.5x', y:'0.5x'},
+                backgroundColor: '222e3c',
+                cornerRadius: 6,
+                subViews: [
+                    {
+                        class: 'HeroImageView',
+                        frame: {y:'12', r:'12', w:'25', h:'25'},
+                        image: path+'images/close.png'
+                    },
+                    {
+                        class: 'HeroButton',
+                        frame: {y:'12', r:'12', w:'25', h:'25'},
+                        click: {click: 'closeMyOrderView'}
+                    },
+                    {
+                        class: 'HeroTableView',
+                        name: 'myOrderTableView',
+                        frame: {w:'1x', h:'1x-40', y:'40'},
+                        backgroundColor: '272e35',
+                        header: {
+                            class: 'HeroView',
+                            frame: {w:'1x', h:cellHeight},
+                            subViews: [
+                                {
+                                    class: 'HeroLabel',
+                                    frame: {x:'10', h:'1x'},
+                                    text: '类型',
+                                    textColor: '999999',
+                                    size: 14
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    frame: {x:'60', h:'1x'},
+                                    text: '币种',
+                                    textColor: '999999',
+                                    size: 14
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    frame: {x:'120', h:'1x'},
+                                    text: '数量',
+                                    textColor: '999999',
+                                    size: 14
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    frame: {x:'180', h:'1x'},
+                                    text: '总价',
+                                    textColor: '999999',
+                                    size: 14
+                                },
+                                {
+                                    class: 'HeroLabel',
+                                    frame: {x:'240', h:'1x'},
+                                    text: '操作',
+                                    textColor: '999999',
+                                    size: 14
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+
+    function getMyList(address, mylist, j) {
+        contract.getUserOrderID(address, j).then(function(data){
+            var orderID = data[0];
+            if (orderID === '0x') {
+                Hero.myRows = [];
+                
+                for (var i = 0; i < myList.length; i++) {
+                    var orderInList = myList[i];
+                    Hero.myRows.push({
+                        class: 'HeroView',
+                        frame: {w:'1x', h:cellHeight},
+                        backgroundColor: '272e35',
+                        subViews: [
+                            {
+                                class: 'HeroView',
+                                backgroundColor: '414d53',
+                                frame: {w:'1x', h:'1x'},
+                            },
+                            {
+                                class: 'HeroLabel',
+                                text: orderInList.type == 0 ? '买单' : '卖单',
+                                frame: {x:'20', h:'1x'},
+                                textColor: 'ffffff',
+                                size: 12
+                            },
+                            {
+                                class: 'HeroLabel',
+                                text: orderInList.symbol,
+                                frame: {x:'60', h:'1x'},
+                                textColor: 'ffffff',
+                                size: 12
+                            },
+                            {
+                                class: 'HeroLabel',
+                                text: orderInList.amountToken + ' ' + orderInList.symbol,
+                                frame: {x:'115', h:'1x'},
+                                textColor: 'ffffff',
+                                size: 12
+                            },
+                            {
+                                class: 'HeroLabel',
+                                text: heroFix(orderInList.amountETH / 1, 6) + 'eth',
+                                frame: {x:'180', h:'1x'},
+                                textColor: 'ffffff',
+                                size: 12
+                            },
+                            {
+                                class: 'HeroButton',
+                                title: orderInList.status == 1 ? '已成交' : '撤销',
+                                disabled: orderInList.status == 1 ? true : false,
+                                frame: {x:'230', h:'1x', w:'50', h:'1x'},
+                                titleColor: '47b3ea',
+                                size: 12,
+                                click: {click: 'CellCancel' + i}
+                            }
+                        ]
+                    })
+                }
+                setTimeout(function(){
+                        Hero.datas({name:'myOrderTableView', data:[{rows: Hero.myRows}]});
+                }, 200);
+            } else {
+                contract.orders(orderID).then(function(order){
+                    tokenContract = eth.contract(erc20ABI).at(order.token);
+                    if (order.status != 2) {
+                        // 包括未成交和已成交的
+                        tokenContract.symbol().then(function(data){
+                            var tokenName = data[0];
+                            var amountToken = Eth.fromWei(order.amountToken, 'ether');
+                            var amountETH = Eth.fromWei(order.amountETH, 'ether');
+                            var totalPrice = amountETH;
+
+                            var o = {
+                                symbol: tokenName,
+                                amountToken: amountToken,
+                                amountETH: amountETH,
+                                totalPrice: totalPrice,
+                                type: order.tradeType.toNumber(),
+                                orderID: order.orderID,
+                                status: order.status.toNumber()
+                            };
+
+                            mylist.push(o);
+                            getMyList(address, mylist, j+1);
+                        });
+                    }
+                });
+            }
+        }).catch(function(err){
+            console.log(err);
+        });
+    }
 
     function getList(buyList, sellList, j) {
         contract.orderIDs(j).then(function(data){
@@ -198,8 +386,8 @@
                 console.log(order);
                 if (order.orderOwner === '0x0000000000000000000000000000000000000000') {
                     // No more data
-                    Hero.buyRows = []
-                    Hero.sellRows = []
+                    Hero.buyRows = [];
+                    Hero.sellRows = [];
 
                     // buyList
                     for (var i = 0; i < buyList.length; i++) {
@@ -237,7 +425,7 @@
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    text: orderInList.amountETH + 'eth',
+                                    text: heroFix(orderInList.amountETH / 1, 6) + 'eth',
                                     frame: {x:'210', h:'1x'},
                                     textColor: 'ffffff',
                                     size: 12
@@ -249,7 +437,7 @@
                                     titleColor: '47b3ea',
                                     size: 12,
                                     name: 'CellBuy' + i,
-                                    click: {click: 'CellBuy'}
+                                    click: {click: 'CellBuy' + i}
                                 },
                             ]
                         })
@@ -290,7 +478,7 @@
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    text: orderInList.amountETH + 'eth',
+                                    text: heroFix(orderInList.amountETH / 1, 6) + 'eth',
                                     frame: {x:'210', h:'1x'},
                                     textColor: 'ffffff',
                                     size: 12
@@ -302,7 +490,7 @@
                                     titleColor: '47b3ea',
                                     size: 12,
                                     name: 'CellSell' + i,
-                                    click: {click: 'CellSell'}
+                                    click: {click: 'CellSell' + i}
                                 },
                             ]
                         })
@@ -330,7 +518,7 @@
                                 price: price,
                                 totalPrice: totalPrice,
                                 type: order.tradeType.toNumber(),
-                                orderID: order.ID
+                                orderID: order.orderID 
                             }
 
                             if (order.tradeType.toNumber() === 0) {
@@ -373,53 +561,165 @@
             this.datas({name:'wantBuyImage', image: path+'images/dot.png'});
             this.datas({name:'wantSellImage', image: path+'images/dotSelect.png'});
         } else if (data.click === 'confirmOrder') {
-            var amountText = this.ui2Data.amountTextField;
-            var priceText = this.ui2Data.priceTextField;
-            var totalText = this.ui2Data.totalTextField;
+            if (isNaN(amount) || isNaN(price) || isNaN(total)) {
+                alert("请合法输入");
+                return;
+            }
+            if (amount <= 0 || price <= 0 || total <= 0) {
+                alert("请合法输入");
+                return;
+            }
+            var amountWei = Eth.toWei(amount, 'ether');
+            var totalWei = Eth.toWei(total, 'ether');
+            var that = this;
+            eth.accounts().then(function(accounts){
+                if (wantOrderType == 0) {
+                    // 我想买
+                    contract.createOrder(0, window.herAddress, amountWei, totalWei, {from: accounts[0], value: totalWei}).then(function(txhash){
+                        startCheckTx(txhash, function(success){
+                            if (success) {
+                                alert('下单成功!');
+                                delayRefresh();
+                                that.datas({name:'addOrderView', hidden:true});
+                            }
+                        });
+                    });
+                } else {
+                    // 我想卖
+                    her.approve(window.otcAddress, amountWei, {from: accounts[0]}).then(function(txhash){
+                        startCheckTx(txhash, function(success){
+                            if (success) {
+                                contract.createOrder(1, window.herAddress, amountWei, totalWei, {from: accounts[0]}).then(function(txhash){
+                                    startCheckTx(txhash, function(success){
+                                        if (success) {
+                                            alert('下单成功');
+                                            delayRefresh();
+                                            that.datas({name:'addOrderView', hidden:true});
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            })
+        } else if (data.click === 'myOrder') {
+            this.datas({name:'myOrderView', hidden: false});
+        } else if (data.click === 'closeMyOrderView') {
+            this.datas({name:'myOrderView', hidden: true});
+        }
 
-        } else if (data.click === 'cellBuy') {
+        if (typeof data.click === 'string') {
+            if (data.click.startsWith('CellBuy')) {
+                var i = data.click.slice(-1);
+                var order = buyList[i];
+                var id = order.orderID;
+                contract.orders(id).then(function(o){
+                    if (o.orderOwner === '0x0000000000000000000000000000000000000000') {
+                        alert('该订单不存在');
+                    }
+                    if (o.status != 0) {
+                        alert('该订单已被交易');
+                        delayRefresh();
+                        return;
+                    }
+                    eth.accounts().then(function(accounts){
+                        contract.trade(id, {from: accounts[0], value: o.amountETH}).then(function(txhash){
+                            startCheckTx(txhash, function(success){
+                                if (success) {
+                                    alert('购买成功!');
+                                    delayRefresh();
+                                }
+                            });
+                        });
+                    });
+                });
+            } else if (data.click.startsWith('CellSell')) {
+                var i = data.click.slice(-1);
+                var order = sellList[i];
+                var id = order.orderID;
+                contract.orders(id).then(function(o){
+                    if (o.orderOwner === '0x0000000000000000000000000000000000000000') {
+                        alert('该订单不存在');
+                    }
+                    if (o.status != 0) {
+                        alert('该订单已被交易');
+                        delayRefresh();
+                        return;
+                    }
 
-        } else if (data.click === 'cellSell') {
-
+                    eth.accounts().then(function(accounts){
+                        var token = window.eth.contract(window.erc20ABI).at(o.token);
+                        token.approve(o.orderOwner, o.amountToken, {from: accounts[0]}).then(function(txdata){
+                            startCheckTx(txhash, function(success){
+                                if (success) {
+                                    contract.trade(id, {from: accounts[0]}).then(function(txhash){
+                                        startCheckTx(txhash, function(success){
+                                            if (success) {
+                                                alert('出售成功!');
+                                                delayRefresh();
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        });
+                        
+                    });
+                });
+            } else if (data.click.startsWith('CellCancel')) {
+                var i = data.click.slice(-1);
+                var order = myList[i];
+                var id = order.orderID;
+                eth.accounts().then(function(accounts){
+                    contract.cancelOrder(id, {from: accounts[0]}).then(function(txhash){
+                        startCheckTx(txhash, function(success){
+                            if (success) {
+                                alert('撤销成功');
+                                delayRefresh();
+                            }
+                        })
+                    });
+                });
+            }
         }
 
         if (data.textfield === 'amountTextField') {
             var amountText = this.ui2Data.amountTextField;
-            var amount = parseFloat(amountText);
+            amount = parseFloat(amountText);
             var priceText = this.ui2Data.priceTextField;
-            var price = parseFloat(priceText);
+            price = parseFloat(priceText);
             if (!isNaN(price) && !isNaN(amount)) {
-                var total = amount * price;
+                total = amount * price;
                 this.datas({name:'totalTextField', text: heroFix(total, 6)});
             }
         } else if (data.textfield === 'priceTextField') {
             var amountText = this.ui2Data.amountTextField;
-            var amount = parseFloat(amountText);
+            amount = parseFloat(amountText);
             var priceText = this.ui2Data.priceTextField;
-            var price = parseFloat(priceText);
+            price = parseFloat(priceText);
             if (!isNaN(price) && !isNaN(amount)) {
-                var total = amount * price;
+                total = amount * price;
                 this.datas({name:'totalTextField', text: heroFix(total, 6)});
             }
         } else if (data.textfield === 'totalTextField') {
             var priceText = this.ui2Data.priceTextField;
-            var price = parseFloat(priceText);
+            price = parseFloat(priceText);
             var totalText = this.ui2Data.totalTextField;
-            var total = parseFloat(totalText);
+            total = parseFloat(totalText);
             if (!isNaN(price) && !isNaN(total)) {
-                var amount = total / price;
+                amount = total / price;
                 this.datas({name:'amountTextField', text: heroFix(amount, 6)});
             }
         }
     };
     Hero.viewWillAppear = function() {
-        getList(buyList, sellList, 0);
+        refresh();
     };
     Hero.viewWillDisAppear = function() {
 
     };
     Hero.viewDidload = function() {
-      
 
     };
 
@@ -441,6 +741,14 @@
                 frame: {w:'1x', h:'44'},
                 backgroundColor: '000000',
                 subViews:[
+                    {
+                        class: 'HeroButton',
+                        frame: {x:'3', h:'1x', w:'80'},
+                        title: '我的订单',
+                        size: 14,
+                        titleColor: 'fffff',
+                        click: {click: 'myOrder'}
+                    },
                     {
                         class: 'HeroImageView',
                         frame: {r:'8', w:'20', h:'20'},
@@ -568,7 +876,8 @@
                     ]
                 }
             },
-            addOrderView
+            addOrderView,
+            myOrderView
         ]
     };
 

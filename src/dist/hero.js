@@ -2681,11 +2681,11 @@
 
     on(json) {
       if (json.size) {
-        this.$.div.style.fontSize = json.size + 'px';
+        this.$.input.style.fontSize = json.size + 'px';
       }
 
       if (json.textColor) {
-        this.$.div.style.color = '#' + json.textColor;
+        this.$.input.style.color = '#' + json.textColor;
       }
       if (json.clear) {
         json.text = '';
