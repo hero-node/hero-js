@@ -1,8 +1,44 @@
 window.otcABI = [
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'previousOwner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnershipTransferred',
+    type: 'event',
+  },
+  {
     constant: false,
-    inputs: [],
-    name: 'ownerWithdrawEth',
+    inputs: [
+      {
+        name: '_token',
+        type: 'address',
+      },
+    ],
+    name: 'addToken',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: 'orderID',
+        type: 'bytes32',
+      },
+    ],
+    name: 'cancelOrder',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
@@ -36,6 +72,29 @@ window.otcABI = [
   },
   {
     constant: false,
+    inputs: [],
+    name: 'ownerWithdrawEth',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: 'token',
+        type: 'address',
+      },
+    ],
+    name: 'ownerWithdrawToken',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    constant: false,
     inputs: [
       {
         name: '_token',
@@ -58,6 +117,28 @@ window.otcABI = [
     type: 'function',
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'target',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        name: 'value',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        name: 'token',
+        type: 'address',
+      },
+    ],
+    name: 'WithdrawByOwner',
+    type: 'event',
+  },
+  {
     constant: false,
     inputs: [
       {
@@ -65,20 +146,154 @@ window.otcABI = [
         type: 'bytes32',
       },
     ],
-    name: 'cancelOrder',
+    name: 'trade',
+    outputs: [],
+    payable: true,
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        name: 'orderID',
+        type: 'bytes32',
+      },
+    ],
+    name: 'Trade',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'previousOwner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnershipRenounced',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        name: '_type',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        name: '_token',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        name: 'amountToken',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        name: 'amountETH',
+        type: 'uint256',
+      },
+    ],
+    name: 'CreateOrder',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        name: 'orderID',
+        type: 'bytes32',
+      },
+    ],
+    name: 'CacelOrder',
+    type: 'event',
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    constant: true,
     inputs: [],
-    name: 'owner',
-    outputs: [
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    constant: true,
+    inputs: [
       {
         name: '',
         type: 'address',
+      },
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'addr2orderID',
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: 'user',
+        type: 'address',
+      },
+      {
+        name: 'index',
+        type: 'uint256',
+      },
+    ],
+    name: 'getUserOrderID',
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'orderIDs',
+    outputs: [
+      {
+        name: '',
+        type: 'bytes32',
       },
     ],
     payable: false,
@@ -130,68 +345,16 @@ window.otcABI = [
   },
   {
     constant: true,
-    inputs: [
+    inputs: [],
+    name: 'owner',
+    outputs: [
       {
         name: '',
         type: 'address',
       },
     ],
-    name: 'addr2orderID',
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-      },
-    ],
     payable: false,
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: '_token',
-        type: 'address',
-      },
-    ],
-    name: 'addToken',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'orderIDs',
-    outputs: [
-      {
-        name: '',
-        type: 'bytes32',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'orderID',
-        type: 'bytes32',
-      },
-    ],
-    name: 'trade',
-    outputs: [],
-    payable: true,
-    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -213,142 +376,6 @@ window.otcABI = [
     stateMutability: 'view',
     type: 'function',
   },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'token',
-        type: 'address',
-      },
-    ],
-    name: 'ownerWithdrawToken',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: '_type',
-        type: 'uint256',
-      },
-      {
-        indexed: true,
-        name: '_token',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        name: 'amountToken',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        name: 'amountETH',
-        type: 'uint256',
-      },
-    ],
-    name: 'CreateOrder',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'orderID',
-        type: 'bytes32',
-      },
-    ],
-    name: 'Trade',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'target',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        name: 'value',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        name: 'token',
-        type: 'address',
-      },
-    ],
-    name: 'WithdrawByOwner',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'orderID',
-        type: 'bytes32',
-      },
-    ],
-    name: 'CacelOrder',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'previousOwner',
-        type: 'address',
-      },
-    ],
-    name: 'OwnershipRenounced',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'previousOwner',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'OwnershipTransferred',
-    type: 'event',
-  },
 ];
 
-window.otcAddress = '0x9071e067cef783cd31addfc7c9c9760ff88b2ab1';
+window.otcAddress = '0x64d93885087c3b765591b6e172e501a7c0d1d6f8';
