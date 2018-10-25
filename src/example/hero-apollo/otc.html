@@ -650,7 +650,7 @@
 
                     eth.accounts().then(function(accounts){
                         var token = window.eth.contract(window.erc20ABI).at(o.token);
-                        token.approve(o.orderOwner, o.amountToken, {from: accounts[0]}).then(function(txdata){
+                        token.approve(o.orderOwner, o.amountToken, {from: accounts[0]}).then(function(txhash){
                             startCheckTx(txhash, function(success){
                                 if (success) {
                                     contract.trade(id, {from: accounts[0]}).then(function(txhash){
