@@ -1,8 +1,22 @@
 <!doctype html>
 <html>
 <head>
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/her.js"></script>
+  <script src="./app/trade.js"></script>
+  <script src="./app/otc.js"></script>
     <script src="../../hero.js"></script>
     <script>
+        if (typeof web3 !== 'undefined') {
+          window.eth = new Eth(web3.currentProvider);
+        } else {
+          window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+        }
 
         var eth = window.eth;
         const her = window.eth.contract(window.herABI).at(window.herAddress)
@@ -99,7 +113,7 @@
                 subViews: [
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'10'},
+                        frame: {x:'15', y:'10',w:'200',h:'20'},
                         text: 'Join',
                         size: 15,
                         textColor: 'ffffff'
@@ -116,7 +130,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'40'},
+                        frame: {x:'15', y:'40',w:'200',h:'20'},
                         text: '存入eth数量',
                         size: 14,
                         textColor: '898989',
@@ -132,7 +146,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'110'},
+                        frame: {x:'15', y:'110',w:'200',h:'20'},
                         text: '可获得HER数量',
                         size: 14,
                         textColor: '898989'
@@ -148,8 +162,7 @@
                     },
                     {
                         class: 'HeroButton',
-                        frame: {b:'20', w:'100', h:'30'},
-                        center: {x:'0.5x'},
+                        frame: {x:'0.5x-50',b:'20', w:'100', h:'30'},
                         ripple: true,
                         title:'确认',
                         backgroundColor:'47b3ea',
@@ -182,7 +195,7 @@
                 subViews: [
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'10'},
+                        frame: {x:'15', y:'10',w:'200',h:'20'},
                         text: 'Leave',
                         size: 15,
                         textColor: 'ffffff'
@@ -199,7 +212,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'40'},
+                        frame: {x:'15', y:'40',w:'200',h:'20'},
                         text: '存入HER数量',
                         size: 14,
                         textColor: '898989',
@@ -215,7 +228,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'110'},
+                        frame: {x:'15', y:'110',w:'260',h:'20'},
                         text: '可获得ETH数量（当前回合剩余 1 eth）',
                         size: 14,
                         name: 'leftVomumnInDialog',
@@ -232,8 +245,7 @@
                     },
                     {
                         class: 'HeroButton',
-                        frame: {b:'20', w:'100', h:'30'},
-                        center: {x:'0.5x'},
+                        frame: {x:'0.5x-50',b:'20', w:'100', h:'30'},
                         ripple: true,
                         title:'确认',
                         backgroundColor:'47b3ea',
@@ -315,8 +327,8 @@
             
         };
         Hero.viewWillAppear = function() {
-            update();
-            setInterval('update()', 1000 * 10);
+            // update();
+            // setInterval('update()', 1000 * 10);
         };
         Hero.viewWillDisAppear = function() {
 
@@ -330,8 +342,6 @@
             version: -1,
             tintColor: '4b5764',
             nav:{
-                title: '去中心化交易',
-                titleColor: 'ffffff',
                 navigationBarHidden: true
             },
             views:
@@ -343,7 +353,7 @@
                 },
                 {
                     class: 'HeroLabel',
-                    frame: {x:'30', y:'10'},
+                    frame: {x:'30', y:'90',w:'200',h:'20'},
                     text: '当前区块高度: 0',
                     name: 'currentHeight',
                     size: 14,
@@ -351,7 +361,7 @@
                 },
                 {
                     class: 'HeroLabel',
-                    frame: {x:'30', y:'30'},
+                    frame: {x:'30', y:'110',w:'200',h:'20'},
                     text: '下回合区块高度: 0',
                     name: 'nextRoundHeight',
                     size: 14,
@@ -359,12 +369,12 @@
                 },
                 {
                     class: 'HeroImageView',
-                    frame: {x:'5', y:'50', r:'5', w:'1x', h:'200'},
+                    frame: {x:'0', y:'140', r:'0', w:'1x', h:'200'},
                     image: path+'images/top.png'
                 },
                 {
                     class: 'HeroView',
-                    frame: {x:'0', y:'250', w:'1x', h:'320'},
+                    frame: {x:'0', y:'340', w:'1x', h:'320'},
                     subViews: [
                         {
                             class: 'HeroView',
@@ -374,7 +384,7 @@
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'22', y:'10'},
+                            frame: {x:'22', y:'10',w:'200',h:'20'},
                             text: '当前价格: - eth',
                             size: 14,
                             name: 'currentPrice',
@@ -388,7 +398,7 @@
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'22', y:'38'},
+                            frame: {x:'22', y:'38',w:'200',h:'20'},
                             size: 14,
                             textColor: 'ffffff',
                             text: '下回合价格: - eth',
@@ -402,7 +412,7 @@
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'22', y:'66'},
+                            frame: {x:'22', y:'66',w:'200',h:'20'},
                             size: 14,
                             textColor: 'ffffff',
                             text: '已保证的目标价: - eth',
@@ -416,7 +426,7 @@
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'22', y:'94'},
+                            frame: {x:'22', y:'94',w:'200',h:'20'},
                             size: 14,
                             textColor:'ffffff',
                             text: '当前Leave交易量: - HER',
@@ -430,7 +440,7 @@
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'22', y:'122'},
+                            frame: {x:'22', y:'122',w:'200',h:'20'},
                             size: 14,
                             textColor: 'ffffff',
                             text: '剩余Leave交易量: - HER',
@@ -440,7 +450,7 @@
                 },
                 {
                     class: 'HeroButton',
-                    frame: {x:'30',y:'410',w:'100',h:'30'},
+                    frame: {x:'30',y:'500',w:'100',h:'30'},
                     ripple: true,
                     title: 'Leave',
                     backgroundColor: '47b3ea',
@@ -450,7 +460,7 @@
                 },
                 {
                     class: 'HeroButton',
-                    frame: {r:'30',y:'410',w:'100',h:'30'},
+                    frame: {r:'30',y:'500',w:'100',h:'30'},
                     ripple: true,
                     title: 'Join',
                     backgroundColor: '47b3ea',

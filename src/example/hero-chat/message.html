@@ -17,12 +17,11 @@
     };
     Hero.viewWillAppear = function() {
       var datas = [
-        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
-        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
-        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
-        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
-        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
-        {height:60,title:'创建商户',image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'},
+        {height:60,title:'Vtalik',image:path+'./images/menu_merchant_icon1@2x.png',detail:'Nerver give up eth'},
+        {height:60,title:'sotoshi',image:path+'./images/menu_merchant_icon1@2x.png',detail:'bitcoin is best'},
+        {height:60,title:'Patrick Dai',image:path+'./images/menu_merchant_icon1@2x.png',detail:'POS is future'},
+        {height:60,title:'Neo',image:path+'./images/menu_merchant_icon1@2x.png',detail:'to the moon'},
+        {height:60,title:'Hero Node',image:path+'./images/menu_merchant_icon1@2x.png',detail:'Dapp is the next decade'},
       ]
       var rows = [{rows:[]}];
       for (var i = 0; i < datas.length; i++) {
@@ -43,9 +42,11 @@
     };
     Hero.ui = {
       version:-1,
-      tintColor:'bd3a53',
+      tintColor:'ff0000',
+      backgroundColor:'ffffff',
       nav:{
         title:"Message",
+        titleColor:'333333',
         navigationBarHidden:false
       },
       views:
@@ -54,7 +55,6 @@
           class:'HeroTableView',
           frame:{w:'1x',h:'1x'},
           name:'msgTableView',
-
         },
         {
           class:'HeroToast',
