@@ -50,7 +50,7 @@
             }).then(function(data){
                 var rate = data[0].toNumber();
                 var price = 1.0 / rate;
-                Hero.ui2Data.currentPrice = '当前价格: ' + heroFix(price) + ' eth';
+                Hero.ui2Data.currentPrice = '当前价格: ' + heroFix(price).toString() + ' eth';
 
                 localStorage.rate = rate;
                 trade.coefficient().catch(function(error){
@@ -59,7 +59,7 @@
                     var coefficient = data[0].toNumber();
                     var nextRate = rate + coefficient;
                     var nextPrice = 1.0 / nextRate;
-                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + heroFix(nextPrice) + ' eth'
+                    Hero.ui2Data.nextRoundPrice = '下回合价格: ' + heroFix(nextPrice).toString() + ' eth'
 
                     eth.getBalance(window.tradeAddress).then(function(data){
                         var ethBalance = Eth.fromWei(data, 'ether');
@@ -73,7 +73,7 @@
                             var rounds = ethBalance / limit;
                             _rate = _rate + (coefficient * rounds);
                             var maxPrice = 1.0 / _rate;
-                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + heroFix(maxPrice) + ' eth'
+                            Hero.ui2Data.ensuredPrice = '已保证的目标价: ' + heroFix(maxPrice).toString() + ' eth'
 
                             trade.volumn().catch(function(error){
                                 alert(error);
@@ -301,27 +301,27 @@
                 var ethAmount = parseFloat(this.ui2Data.joinSaveETH);
                 if (!isNaN(ethAmount)) {
                     var herAmount = ethAmount * localStorage.rate;
-                    this.datas({name:'joinGetHER', text:heroFix(herAmount)});
+                    this.datas({name:'joinGetHER', text:heroFix(herAmount).toString()});
                 }
             } else if (data.textfield === 'joinGetHER') {
                 var herAmount = parseFloat(this.ui2Data.joinGetHER);
                 if (!isNaN(herAmount)) {
                     var ethAmount = herAmount / localStorage.rate;
-                    this.datas({name:'joinSaveETH', text:heroFix(ethAmount)});
+                    this.datas({name:'joinSaveETH', text:heroFix(ethAmount).toString()});
                 }
                 
             } else if (data.textfield === 'leaveSaveHER') {
                 var herAmount = parseFloat(this.ui2Data.leaveSaveHER);
                 if (!isNaN(herAmount)) {
                     var ethAmount = herAmount / localStorage.rate;
-                    this.datas({name:'leaveGetETH', text:heroFix(ethAmount)});
+                    this.datas({name:'leaveGetETH', text:heroFix(ethAmount).toString()});
                 }
 
             } else if (data.textfield === 'leaveGetETH') {
                 var ethAmount = parseFloat(this.ui2Data.leaveGetETH);
                 if (!isNaN(ethAmount)) {
                     var herAmount = ethAmount * localStorage.rate;
-                    this.datas({name:'leaveSaveHER', text:heroFixed(herAmount)});
+                    this.datas({name:'leaveSaveHER', text:heroFixed(herAmount).toString()});
                 }
             }
             

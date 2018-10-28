@@ -2,7 +2,22 @@
 <html>
 <head>
     <script src="../../hero.js"></script>
+    <script src="./app/autoRefresh.js"></script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="./app/config.js"></script>
+    <script src="./app/shareViews.js"></script>
+    <script src="./app/herohelper.js"></script>
+    <script src="./app/ethjs.min.js"></script>
+    <script src="./app/her.js"></script>
+    <script src="./app/trade.js"></script>
+    <script src="./app/otc.js"></script>
     <script>
+
+    if (typeof web3 !== 'undefined') {
+        window.eth = new Eth(web3.currentProvider);
+    } else {
+        window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
 
     var contract = window.eth.contract(window.otcABI).at(window.otcAddress);
     const cellHeight = '40'
@@ -60,7 +75,7 @@
                 subViews: [
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'18'},
+                        frame: {x:'15', y:'18', w:'40', h:'30'},
                         text: '下单',
                         size: 16,
                         textColor: 'ffffff'
@@ -77,7 +92,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'50'},
+                        frame: {x:'15', y:'50', w:'40', h:'25'},
                         text: '币种',
                         size: 12,
                         textColor: '898989'
@@ -91,7 +106,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'150', y:'50'},
+                        frame: {x:'150', y:'50', w:'40', h:'25'},
                         text: '数量',
                         textColor: '898989',
                         size: 12
@@ -108,7 +123,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'15', y:'100'},
+                        frame: {x:'15', y:'100', w:'40', h:'25'},
                         text: '单价',
                         textColor: '898989',
                         size: 12
@@ -125,7 +140,7 @@
                     },
                     {
                         class: 'HeroLabel',
-                        frame: {x:'150', y:'100'},
+                        frame: {x:'150', y:'100', w:'40', h:'25'},
                         text: '总价',
                         textColor: '898989',
                         size: 12
@@ -153,17 +168,18 @@
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'28', y:'156', w:'50', h:'20'},
+                        frame: {x:'30', y:'158', w:'50', h:'20'},
                         click: {click: 'wantBuy'},
                         title: '我想买',
+                        size: '14',
                         titleColor: 'ffffff'
                     },
                     {
                         class: 'HeroLabel',
                         text: '(锁定ETH)',
-                        size: 7,
+                        size: 12,
                         textColor: '999999',
-                        frame: {x:'72', y:'161'}
+                        frame: {x:'78', y:'154', w:'80', h:'30'}
                     },
                     {
                         class: 'HeroImageView',
@@ -178,17 +194,18 @@
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'153', y:'156', w:'50', h:'20'},
+                        frame: {x:'155', y:'158', w:'50', h:'20'},
                         click: {click: 'wantSell'},
                         title: '我想卖',
+                        size: 14,
                         titleColor: 'ffffff'
                     },
                     {
                         class: 'HeroLabel',
                         text: '(锁定HER)',
-                        size: 7,
+                        size: 12,
                         textColor: '999999',
-                        frame: {x:'197', y:'161'},
+                        frame: {x:'202', y:'154', w:'80', h:'30'},
                         name: 'lockTokenLabel'
                     },
                     {
@@ -246,35 +263,35 @@
                             subViews: [
                                 {
                                     class: 'HeroLabel',
-                                    frame: {x:'10', h:'1x'},
+                                    frame: {x:'10', h:'1x', w:'40'},
                                     text: '类型',
                                     textColor: '999999',
                                     size: 14
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    frame: {x:'60', h:'1x'},
+                                    frame: {x:'60', h:'1x', w:'40'},
                                     text: '币种',
                                     textColor: '999999',
                                     size: 14
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    frame: {x:'120', h:'1x'},
+                                    frame: {x:'120', h:'1x', w:'40'},
                                     text: '数量',
                                     textColor: '999999',
                                     size: 14
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    frame: {x:'180', h:'1x'},
+                                    frame: {x:'180', h:'1x', w:'40'},
                                     text: '总价',
                                     textColor: '999999',
                                     size: 14
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    frame: {x:'240', h:'1x'},
+                                    frame: {x:'240', h:'1x', w:'40'},
                                     text: '操作',
                                     textColor: '999999',
                                     size: 14
@@ -308,7 +325,7 @@
                             {
                                 class: 'HeroLabel',
                                 text: orderInList.type == 0 ? '买单' : '卖单',
-                                frame: {x:'20', h:'1x'},
+                                frame: {x:'20', h:'1x', w:'40'},
                                 textColor: 'ffffff',
                                 size: 12
                             },
@@ -322,14 +339,14 @@
                             {
                                 class: 'HeroLabel',
                                 text: orderInList.amountToken + ' ' + orderInList.symbol,
-                                frame: {x:'115', h:'1x'},
+                                frame: {x:'115', h:'1x', w:'120'},
                                 textColor: 'ffffff',
                                 size: 12
                             },
                             {
                                 class: 'HeroLabel',
-                                text: heroFix(orderInList.amountETH / 1, 6) + 'eth',
-                                frame: {x:'180', h:'1x'},
+                                text: heroFix(orderInList.amountETH / 1, 6).toString() + 'eth',
+                                frame: {x:'180', h:'1x', w:'120'},
                                 textColor: 'ffffff',
                                 size: 12
                             },
@@ -418,14 +435,14 @@
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    text: heroFix(orderInList.amountETH / orderInList.amountToken, 6) + 'eth',
+                                    text: heroFix(orderInList.amountETH / orderInList.amountToken, 6).toString() + 'eth',
                                     frame: {x:'140', h:'1x'},
                                     textColor: 'ffffff',
                                     size: 12
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    text: heroFix(orderInList.amountETH / 1, 6) + 'eth',
+                                    text: heroFix(orderInList.amountETH / 1, 6).toString().toString() + 'eth',
                                     frame: {x:'210', h:'1x'},
                                     textColor: 'ffffff',
                                     size: 12
@@ -471,14 +488,14 @@
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    text: heroFix(orderInList.amountETH / orderInList.amountToken, 6) + 'eth',
+                                    text: heroFix(orderInList.amountETH / orderInList.amountToken, 6).toString() + 'eth',
                                     frame: {x:'140', h:'1x'},
                                     textColor: 'ffffff',
                                     size: 12
                                 },
                                 {
                                     class: 'HeroLabel',
-                                    text: heroFix(orderInList.amountETH / 1, 6) + 'eth',
+                                    text: heroFix(orderInList.amountETH / 1, 6).toString() + 'eth',
                                     frame: {x:'210', h:'1x'},
                                     textColor: 'ffffff',
                                     size: 12
@@ -691,7 +708,7 @@
             price = parseFloat(priceText);
             if (!isNaN(price) && !isNaN(amount)) {
                 total = amount * price;
-                this.datas({name:'totalTextField', text: heroFix(total, 6)});
+                this.datas({name:'totalTextField', text: heroFix(total, 6).toString()});
             }
         } else if (data.textfield === 'priceTextField') {
             var amountText = this.ui2Data.amountTextField;
@@ -700,7 +717,7 @@
             price = parseFloat(priceText);
             if (!isNaN(price) && !isNaN(amount)) {
                 total = amount * price;
-                this.datas({name:'totalTextField', text: heroFix(total, 6)});
+                this.datas({name:'totalTextField', text: heroFix(total, 6).toString()});
             }
         } else if (data.textfield === 'totalTextField') {
             var priceText = this.ui2Data.priceTextField;
@@ -709,12 +726,12 @@
             total = parseFloat(totalText);
             if (!isNaN(price) && !isNaN(total)) {
                 amount = total / price;
-                this.datas({name:'amountTextField', text: heroFix(amount, 6)});
+                this.datas({name:'amountTextField', text: heroFix(amount, 6).toString()});
             }
         }
     };
     Hero.viewWillAppear = function() {
-        refresh();
+        // refresh();
     };
     Hero.viewWillDisAppear = function() {
 
@@ -729,8 +746,6 @@
         tintColor:'4b5764',
         backgroundColor: '272e35',
         nav:{
-            title:"去中心化交易",
-            titleColor: 'ffffff',
             navigationBarHidden:true
         },
         views:
@@ -738,7 +753,7 @@
             {
                 // navigationbar
                 class:'HeroView',
-                frame: {w:'1x', h:'44'},
+                frame: {w:'1x', y:'44', x:'0', h:'44'},
                 backgroundColor: '000000',
                 subViews:[
                     {
@@ -751,20 +766,17 @@
                     },
                     {
                         class: 'HeroImageView',
-                        frame: {r:'8', w:'20', h:'20'},
-                        center: {y:'0.5x'},
+                        frame: {r:'8', w:'20', h:'20', y:'0.5x-10'},
                         image: path+'images/add.png'
                     },
                     {
                         class: 'HeroButton',
-                        frame: {r:'8', w:'20', h:'20'},
-                        center: {y:'0.5x'},
+                        frame: {r:'8', w:'20', h:'20', y:'0.5x-10'},
                         click: {click:'addOrder'}
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'0.5x-80', w:'80', h:'40'},
-                        center: {y:'0.5x'},
+                        frame: {x:'0.5x-80', w:'80', h:'40', y:'0.5x-20'},
                         title: '购买',
                         name: 'switchBuy',
                         click: {click:'switchBuy'},
@@ -772,8 +784,7 @@
                     },
                     {
                         class: 'HeroButton',
-                        frame: {x:'0.5x',w:'80', h:'40'},
-                        center: {y:'0.5x'},
+                        frame: {x:'0.5x',w:'80', h:'40', y:'0.5x-20'},
                         name: 'switchSell',
                         title: '出售',
                         click: {click:'switchSell'},
@@ -785,42 +796,42 @@
                 class: 'HeroTableView',
                 name: 'buylist',
                 backgroundColor: '272e35',
-                frame: {y:'40', w:'1x', h:'1x-40'},
+                frame: {y:'84', w:'1x', h:'1x-84'},
                 header: {
                     class: 'HeroView',
                     frame: {w:'1x', h:cellHeight},
                     subViews: [
                         {
                             class: 'HeroLabel',
-                            frame: {x:'30', h:'1x'},
+                            frame: {x:'30', h:'1x', w:'40'},
                             text: '币种',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'90', h:'1x'},
+                            frame: {x:'90', h:'1x', w:'40'},
                             text: '数量',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'150', h:'1x'},
+                            frame: {x:'150', h:'1x', w:'40'},
                             text: '单价',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'210', h:'1x'},
+                            frame: {x:'210', h:'1x', w:'40'},
                             text: '总价',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'270', h:'1x'},
+                            frame: {x:'270', h:'1x', w:'40'},
                             text: '交易',
                             textColor: '999999',
                             size: 14
@@ -833,42 +844,42 @@
                 name: 'selllist',
                 hidden: 'true',
                 backgroundColor: '272e35',
-                frame: {y:'40', w:'1x', h:'1x-40'},
+                frame: {y:'84', w:'1x', h:'1x-84'},
                 header: {
                     class: 'HeroView',
                     frame: {w:'1x', h:cellHeight},
                     subViews: [
                         {
                             class: 'HeroLabel',
-                            frame: {x:'30', h:'1x'},
+                            frame: {x:'30', h:'1x', w:'40'},
                             text: '币种',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'90', h:'1x'},
+                            frame: {x:'90', h:'1x', w:'40'},
                             text: '数量',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'150', h:'1x'},
+                            frame: {x:'150', h:'1x', w:'40'},
                             text: '单价',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'210', h:'1x'},
+                            frame: {x:'210', h:'1x', w:'40'},
                             text: '总价',
                             textColor: '999999',
                             size: 14
                         },
                         {
                             class: 'HeroLabel',
-                            frame: {x:'270', h:'1x'},
+                            frame: {x:'270', h:'1x', w:'40'},
                             text: '交易',
                             textColor: '999999',
                             size: 14
