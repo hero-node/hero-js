@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+      if (data.click === "delSeller") {
+        switch(data.index) {
+          case 0:
+            console.log(`执行删除的卖家地址应是第${data.index+1}个`)
+            break;
+          case 1:
+            console.log(`执行删除的卖家地址应是第${data.index+1}个`)
+            break;
+        }
+      }
+    };
+    Hero.viewWillAppear = function() {
+      var views = [];
+
+      this.datas([{name:'contentViews',subViews:views}]);
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      nav:{
+        navigationBarHidden: false
+      },
+      views:[
+          {
+            class: 'HeroView',
+            frame:{w:'1x',y:'0',h:'89'},
+            subViews:[
+                  // header
+            ]
+          },
+          {
+            class: 'HeroLabel',
+            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
+            text: '删除卖家',
+            size: 36
+          },
+          {
+            class: 'HeroView',
+            frame: {x: '0.12x', y: '50+0.1x', w: '144', h: '2'},
+            backgroundColor: 'bbbbbb'
+          },
+          {
+            class:'HeroView',
+            name:'contentViews',
+            frame:{w:'1x',y:'50+0.15x',b:'0'},
+            subViews:[
+
+            ]
+          },
+          {
+            class: 'HeroView',
+            frame: {x: '0.12x', y: '50+0.15x', r: '0.12x', h: '100'},
+            subViews: [
+              {
+                class: 'HeroLabel',
+                frame: {x: '0', y: '0', r: '120', h: '50'},
+                text: '添加卖家地址：0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD',
+                size: 24
+              },
+              {
+                class: 'HeroButton',
+                frame: {x: '', r: '0', y: '0', w: '100', h: '35'},
+                title: '删除',
+                size: 20,
+                backgroundColor: '25B0B8',
+                cornerRadius: 8,
+                click: {click: 'delSeller', index: 0}
+              }
+            ]
+          },
+          {
+            class: 'HeroView',
+            frame: {x: '0.12x', y: '150+0.15x', r: '0.12x', h: '100'},
+            subViews: [
+              {
+                class: 'HeroLabel',
+                numberOfLines:1,
+                frame: {x: '0', y: '0', r: '120', h: '50'},
+                text: '添加卖家地址：0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD',
+                size: 24
+              },
+              {
+                class: 'HeroButton',
+                frame: {x: '', r: '0', y: '0', w: '100', h: '35'},
+                title: '删除',
+                size: 20,
+                backgroundColor: '25B0B8',
+                cornerRadius: 8,
+                click: {click: 'delSeller', index: 1}
+              }
+            ]
+          },
+          ]
+        };
+
+      </script>
+    </body>
+    </html>

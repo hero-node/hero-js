@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+  Hero.on = function(data){
+    if (data.click === "delrights") {
+      switch(data.index) {
+          case 0:
+            console.log(`删除的广告位应是第${data.index+1}个`)
+            break;
+          case 1:
+            console.log(`删除的广告位应是第${data.index+1}个`)
+            break;
+        }
+    }
+  };
+  Hero.viewWillAppear = function() {
+    var views = [];
+
+    this.datas([{name:'contentViews',subViews:views}]);
+  };
+  Hero.viewWillDisAppear = function() {
+
+  };
+  Hero.viewDidload = function() {
+
+  };
+  Hero.ui = {
+    nav:{
+      navigationBarHidden: false
+    },
+    views:[
+    {
+      class: 'HeroView',
+      frame:{w:'1x',y:'0',h:'89'},
+      subViews:[
+                  // header
+                  ]
+                },
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
+                  text: '维权列表',
+                  size: 36
+                },
+                {
+                  class: 'HeroView',
+                  frame: {x: '0.12x', y: '50+0.1x', w: '144', h: '2'},
+                  backgroundColor: 'bbbbbb'
+                },
+                //  main content wrap
+                {
+                  class: "HeroView",
+                  frame: {x: '0.12x', r: '0.12x',y: '0.1x+100', b: '0'},
+                  subViews: [
+                    // title
+                    {
+                    class: 'HeroView',
+                    frame: {x: '0', y: '0', r: '0', h: '50'},
+                    // backgroundColor: '333333',
+                    subViews: [
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0', y: '0', w: '0.15x', h: '50'},
+                      text: '编号',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 32
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.15x', y: '0', w: '0.15x', h: '50'},
+                      text: '卖家',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 32
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.30x', y: '0', w: '0.15x', h: '50'},
+                      text: '买家',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 32
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.45x', y: '0', w: '0.15x+64', h: '50'},
+                      text: '交易时间',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 32
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '64+0.6x', y: '0', w: '0.15x', h: '50'},
+                      text: '状态',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 32
+                    },
+                    ]
+                  },
+                  // contents
+                    {
+                    class: 'HeroView',
+                    frame: {x: '0', y: '80', r: '0', h: '60'},
+                    subViews: [
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0', y: '0', w: '0.15x', h: '50'},
+                      text: '20181018',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.15x', y: '0', w: '0.15x', h: '50'},
+                      text: 'Hero Node',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.3x', y: '0', w: '0.15x', h: '50'},
+                      text: 'Hero Node',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.45x', y: '0',w: '0.15x+64', h: '50'},
+                      text: '2018/10/17',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '64+0.6x', y: '0', w: '0.15x', h: '50'},
+                      text: '未处理',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroButton',
+                      frame: {x: '', r: '0', y: '7.5', w: '100', h: '35'},
+                      title: '删除',
+                      size: 20,
+                      backgroundColor: '25B0B8',
+                      cornerRadius: 8,
+                      click: {click: 'delrights', index: 0}
+                    },
+                    ]
+                  },
+                  {
+                    class: 'HeroView',
+                    frame: {x: '0', y: '140', r: '0', h: '60'},
+                    subViews: [
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0', y: '0', w: '0.15x', h: '50'},
+                      text: '20181017',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.15x', y: '0', w: '0.15x', h: '50'},
+                      text: 'Hero Node',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.3x', y: '0', w: '0.15x', h: '50'},
+                      text: 'Hero Node',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '0.45x', y: '0',w: '0.15x+64', h: '50'},
+                      text: '2018/10/17',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroLabel',
+                      frame: {x: '64+0.6x', y: '0', w: '0.15x', h: '50'},
+                      text: '已处理',
+                      alignment:'center',
+                      autoFit: true,
+                      size: 24
+                    },
+                    {
+                      class: 'HeroButton',
+                      frame: {x: '', r: '0', y: '7.5', w: '100', h: '35'},
+                      title: '删除',
+                      size: 20,
+                      backgroundColor: '25B0B8',
+                      cornerRadius: 8,
+                      click: {click: 'delrights', index: 1}
+                    },
+                    ]
+                  },
+                  ]
+                },
+                ]
+              };
+
+              </script>
+            </body>
+            </html>
