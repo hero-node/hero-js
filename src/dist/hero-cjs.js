@@ -3970,7 +3970,7 @@ class HeroApp extends HeroElement {
           overflow:hidden;
           width: 100%;
           height: 100%;
-          color: #fff;
+          color: #000;
           font-size: 20px;
           text-align: center;
           top:-10px;
@@ -4176,8 +4176,8 @@ class HeroApp extends HeroElement {
           height: 100%;
           line-height:88px;
           margin:0px;
-          color: #fff;
-          font-size: 20px;
+          color: #000;
+          font-size: 30px;
           text-align: center;
           pointer-events:none;
         }

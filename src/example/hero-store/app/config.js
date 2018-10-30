@@ -10,4 +10,4 @@ if (!/\/$/.test(window.path)) {
 }
 window.backgroundColor = 'ffffff';
 window.color = '333333';
-window.tintColor = '778899';
+window.tintColor = 'ff0000';

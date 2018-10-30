@@ -16,23 +16,9 @@
 
     };
     Hero.viewWillAppear = function() {
-      var datas = [
-        {height:60,title:'Vtalik',image:path+'./images/menu_merchant_icon1@2x.png',detail:'Nerver give up eth'},
-        {height:60,title:'sotoshi',image:path+'./images/menu_merchant_icon1@2x.png',detail:'bitcoin is best'},
-        {height:60,title:'Patrick Dai',image:path+'./images/menu_merchant_icon1@2x.png',detail:'POS is future'},
-        {height:60,title:'Neo',image:path+'./images/menu_merchant_icon1@2x.png',detail:'to the moon'},
-        {height:60,title:'Hero Node',image:path+'./images/menu_merchant_icon1@2x.png',detail:'Dapp is the next decade'},
-      ]
-      var rows = [{rows:[]}];
-      for (var i = 0; i < datas.length; i++) {
-        var item = datas[i];
-        rows[0].rows.push(item);
-      };
-      var that = this;
       setTimeout(function(){
-        that.datas({name:'msgTableView',data:rows});
-      },100);
-
+        Hero.datas({name:'sign',message:'a'});
+      },1000)
     };
     Hero.viewWillDisAppear = function() {
 
@@ -55,10 +41,33 @@
           class:'HeroTableView',
           frame:{w:'1x',h:'1x'},
           name:'msgTableView',
+          data:[
+            {
+              sectionTitle:'new',
+              rows:[
+                {height:60,title:'Vtalik',image:path+'./images/fu.png',detail:'Nerver give up eth'}
+              ]
+            },
+            {
+              sectionTitle:'history',
+              rows:[
+                {height:60,title:'Vtalik',image:path+'./images/fu1.png',detail:'Nerver give up eth'},
+                {height:60,title:'sotoshi',image:path+'./images/menu_merchant_icon1@2x.png',detail:'bitcoin is best'},
+                {height:60,title:'Patrick Dai',image:path+'./images/menu_merchant_icon1@2x.png',detail:'POS is future'},
+                {height:60,title:'Neo',image:path+'./images/menu_merchant_icon1@2x.png',detail:'to the moon'},
+                {height:60,title:'Hero Node',image:path+'./images/menu_merchant_icon1@2x.png',detail:'Dapp is the next decade'},
+              ]
+
+            }
+          ]
         },
         {
           class:'HeroToast',
           name:'toast'
+        },
+        {
+          class:'HeroSignature',
+          name:'sign'
         }
       ]
     };

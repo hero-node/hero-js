@@ -40,134 +40,92 @@
     };
     Hero.ui = {
       nav:{
-        navigationBarHidden: false
+        navigationBarHidden: false,
+        title:'创建商户'
       },
       views:[
-          {
-            class: 'HeroView',
-            frame:{w:'1x',y:'0',h:'89'},
-            subViews:[
-                  // header
-            ]
-          },
-          {
-            class: 'HeroLabel',
-            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
-            text: '创建商户',
-            size: 36
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.1x', w: '144', h: '2'},
-            backgroundColor: 'bbbbbb'
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.15x', w: '0.88x', h: '50'},
-            subViews: [
             {
               class: 'HeroLabel',
-              frame: {x: '0', y: '0', w: '144', h: '50'},
-              text: '设置手续费：',
+              frame: {x: '25', y: '50', r: '25', h: '30'},
+              text: '设置手续费：(%)',
+              textColor:'333333',
               size: 24
             },
             {
               class: 'HeroTextField',
-              frame: {x: '150', y: '5', w: '0.2x', h: '40'},
+              frame: {x: '25', y: '100', r: '25', h: '50'},
               borderWidth: 1,
               borderColor: 'BFBFBF',
               cornerRadius: 8
             },
             {
               class: 'HeroLabel',
-              frame: {x: '150+0.21x', y: '0', w: '', h: '50'},
-              text: '%',
-              size: 24
-            },
-            {
-              class: 'HeroLabel',
-              frame: {x: '200+0.21x', y: '0', w: '', h: '50'},
+              frame: {x: '25', y: '150', r: '25', h: '30'},
               text: '(卖家所成交的单笔交易价格百分比)',
-              size: 20,
-              textColor: '333333'
+              size: 12,
+              alignment:'right',
+              textColor: '999999'
             },
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.25x', w: '0.88x', h: '100'},
-            // backgroundColor: '444444',
-            subViews: [
             {
               class: 'HeroLabel',
-              frame: {x: '0', y: '0', w: '', h: ''  },
-              text: '设置代币支付种类：',
+              frame: {x: '25', y: '190', r: '25', h: '30'},
+              text: '设置代币支付种类：(合约地址)',
+              textColor:'333333',
               size: 24
             },
-            // {
-            //   class: 'HeroSwitch',
-            //   frame: {w: '10', h: '10', x: '10', y: '130'}
-            // },
-            {
-              class: 'HeroLabel',
-              frame: {x: '0.05x', y: '45', w: '', h: ''},
-              text: 'ETH(以太坊)',
-              size: 24
-            },
-            // {
-            //   class: 'HeroSwitch',
-            //   frame: {w: '10', h: '10', x: '250', y: '130'}
-            // },
             {
               class: 'HeroTextField',
-              frame: {x: '190+0.05x', y: '45', w: '0.3x', h: '40'},
+              name:'tokenAddress',
+              frame: {x: '25', y: '250', r: '25', h: '50'},
               borderWidth: 1,
               borderColor: 'BFBFBF',
+              size:14,
               cornerRadius: 8
             },
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.4x', w: '0.88x', h: '150'},
-            // backgroundColor: '333333',
-            subViews: [
+            {
+              class:'HeroButton',
+              frame:{r:'25',w:'68',y:'310',h:'34'},
+              title:'使用ETH',
+              titleColor:window.tintColor,
+              ripple:true,
+              click:{datas:{name:'tokenAddress',text:'0x0000000000000000000000000000000000000000'}}
+            },
             {
               class: 'HeroLabel',
-              frame: {x: '0', y: '0', w: '', h: ''},
+              frame: {x: '25', y: '350', r: '25', h: '30'},
               text: '设置联系方式：',
+              textColor:'333333',
               size: 24
             },
             {
               class: 'HeroTextField',
-              frame: {x: '0', y: '50',w: '0.5x', h: '40'},
+              frame: {x: '25', y: '400', r: '25', h: '50'},
               borderWidth: 1,
               borderColor: 'BFBFBF',
-              text: 'tg/QQ/微信/邮箱',
+              placeHolder: 'tg/QQ/微信/邮箱',
               cornerRadius: 8
             },
             {
               class: 'HeroTextField',
-              frame: {x: '0', y: '100',w: '0.5x', h: '40'},
+              frame: {x: '25', y: '460', r: '25', h: '50'},
               borderWidth: 1,
               borderColor: 'BFBFBF',
-              text: 'tg/QQ/微信/邮箱',
+              placeHolder: 'tg/QQ/微信/邮箱',
               cornerRadius: 8
             },
             {
               class: 'HeroImageView',
-              frame: {x: '0.5x+20', y: '107.5', w: '30', h: '30'},
+              frame: {r: '25', y: '520', w: '30', h: '30'},
               image:path+'./images/Merchant_increase_icon@2x.png'
             },
-            ]
-          },
           {
               class: 'HeroButton',
-              frame: {x: '0.31x', y: '50+0.7x', w: '0.15x', h: '50'},
+              frame: {x: '25', y: '570', r: '25', h: '50'},
               title: '提交',
               size: 20,
               backgroundColor: '25B0B8',
               cornerRadius: 8,
+              ripple:true,
               click: {click: 'submitCreate'}
             }
 
