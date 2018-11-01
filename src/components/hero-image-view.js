@@ -2,7 +2,7 @@ import HeroElement from './hero-element';
 
 export default class HeroImageView extends HeroElement {
   init() {
-    this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
+    this.shadowDom.querySelector('#heroContent').style.pointerEvents = 'none';
     this.$ = {
       img: this.shadowDom.querySelector('img'),
     };
@@ -24,6 +24,13 @@ export default class HeroImageView extends HeroElement {
   on(json) {
     if (json.base64image || json.image) {
       this.$.img.src = json.base64image || json.image;
+    }
+    if (json.uploadUrls) {
+      this.$.img.style.border = ' 1px dash #333';
+      var input = document.createElement('input');
+      input.type = 'image';
+      input.id = 'file_input';
+      this.$.heroContent.appendChild(input);
     }
   }
 }

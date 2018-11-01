@@ -2639,6 +2639,13 @@ class HeroImageView extends HeroElement {
     if (json.base64image || json.image) {
       this.$.img.src = json.base64image || json.image;
     }
+    if (json.uploadUrls) {
+      this.$.img.style.border = ' 1px dash #333';
+      var input = document.createElement('input');
+      input.type = 'image';
+      input.id = 'file_input';
+      this.$.heroContent.appendChild(input);
+    }
   }
 }
 

@@ -40,6 +40,50 @@
       }
     };
     Hero.viewWillAppear = function() {
+      var history = localStorage.hero_home_history?JSON.parse(localStorage.hero_home_history):[
+        {title:'Hero Node',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'开眼',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'糗事百科',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'大象公会',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'百度',icon:path+'/images/saibiwo_icon.png',url:'https://news.baidu.com/index.html'},
+        {title:'36Kr',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'喜马拉雅',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'One',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+      ];
+      var historyViews = [];
+      for (var i = 0; i < history.length; i++) {
+        var item = history[i];
+        var itemView = {
+          class:'HeroView',
+          frame:{x:i%5/5+'x',y:parseInt(i/5)*68+'',w:'0.2x',h:'68'},
+          subViews:[
+            {
+              class:'HeroButton',
+              frame:{w:'1x',h:'1x'},
+              ripple:true,
+              backgroundColor:'ffffff',
+              click:{command:'goto:'+item.url}
+            },
+            {
+              class:'HeroImageView',
+              frame:{w:'33',h:'33',x:'0.5x-16.5',y:'10'},
+              image:item.icon
+            },
+            {
+              class:'HeroLabel',
+              frame:{w:'1x',h:'22',b:'0'},
+              text:item.title,
+              size:10,
+              alignment:'center',
+              textColor:'666666'
+            }
+          ]
+        }
+        historyViews.push(itemView);
+      };
+      setTimeout(function(){
+        Hero.datas({name:'historyContent',subViews:historyViews});
+      },500)
     };
     Hero.viewWillDisAppear = function() {
     };
@@ -52,220 +96,111 @@
       views:
       [
         {
-          class:'HeroView',
-          frame:{w:'1x',h:'1x'}
-        },
-        {
-          class:'HeroButton',
-          frame:{x:'0.5x+70',t:'60',w:'48',h:'32'},
-          // backgroundColor:'876887',
-          image:path+'/images/tools.png',
-          click:{datas:[{name:'menu',
-                        hidden:false,
-                        alpha:0.4},
-                      {name:'list',
-                        hidden:false}]}
-        },
-        {
-          class:'HeroView',
-          frame:{w:'1x',h:'1x'},
-          backgroundColor:'333333',
-          zIndex:99,
-          hidden:true,
-          name:'menu',
-        },
-        {
-          class:'HeroView',
-          frame:{w:'1x',h:'1x'},
-          zIndex:100,
-          hidden:true,
-          name:'list',
-          subViews:[
-            {
-              class:'HeroButton',
-              frame:{w:'1x',h:'1x'},
-              click:{datas:[{name:'menu',hidden:true},
-                      {name:'list',hidden:true}]}
-            },
-            {
-              class:'HeroImageView',
-              frame:{x:'0.5x-25',t:'85',w:'140',h:'90'},
-              image:path+'/images/menu_background.png'
-            },
-            {
-              class:'HeroImageView',
-              frame:{x:'0.5x',t:'110',w:'26',h:'18'},
-              image:path+'/images/wallet_icon.png',
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'0.5x+35',t:'110'},
-              text:'我的钱包',
-              size:14,
-            },
-            {
-              class:'HeroButton',
-              frame:{x:'0.5x-18',t:'100',w:'125',h:'35'},
-              // backgroundColor:'33333333',
-              click:{click:'wallet'}
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'0.5x-5',t:'135',w:'100',h:'1'},
-              backgroundColor:'60333333'
-            },
-            {
-              class:'HeroImageView',
-              frame:{x:'0.5x',t:'140',w:'26',h:'18'},
-              image:path+'/images/node_icon.png',
-              click:{click:'node1'}
-            },
-            {
-              class:'HeroLabel',
-              frame:{x:'0.5x+35',t:'140'},
-              text:'节点信息',
-              size:14,
-              click:{click:'node2'}
-            },
-            {
-              class:'HeroButton',
-              frame:{x:'0.5x-18',t:'135',w:'125',h:'35'},
-              // backgroundColor:'33333333',
-              click:{click:'node'}
-            },
-          ]
-        },
-        {
           class:'HeroImageView',
           frame:{x:'0.5x-100',y:'0.5x-110',w:'200',h:'40'},
           image:path+'/images/logo.png'
-          // backgroundColor:'778989'
         },
-
         {
           class:'HeroView',
-          frame:{x:'0.12x',y:'0.5x-50',r:'0.1x',h:'50'},
+          frame:{x:'0.1x',y:'0.5x-50',r:'0.1x',h:'50'},
           borderColor:'666666',
           cornerRadius:10,
           borderWidth:0.5,
         },
         {
-          class:'HeroImageView',
-          frame:{x:'0.06x',y:'0.55x',w:'33',h:'33'},
-          image:path+'/images/heronode_icon.png',
+          class:'HeroView',
+          name:'historyContent',
+          frame:{x:'25',r:'25',y:'0.5x+50',b:'44'},
         },
         {
-          class:'HeroLabel',
-          frame:{x:'0.03x',y:'0.58x+5',w:'40',h:'40'},
-          text:'HeroNode',
-          size:10
+          class:'HeroView',
+          frame:{r:'40',t:'88',w:'50',h:'50'},
+          backgroundColor:'ff0000',
+          subViews:[
+            {
+              class:'HeroButton',
+              ripple:true,
+              backgroundColor:'ffffff',
+              frame:{w:'1x',h:'1x'},
+              click:{datas:[{name:'menu',hidden:false}]}
+            },
+            {
+              class:'HeroImageView',
+              frame:{x:'0.5x-20',y:'0.5x-15',w:'40',h:'30'},
+              image:path+'/images/tools.png',
+            }
+          ]
         },
         {
-          class:'HeroImageView',
-          frame:{x:'0.26x',y:'0.55x',w:'33',h:'33'},
-          image:path+'/images/yunbi_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.25x',y:'0.58x+5',w:'40',h:'40'},
-          text:'云币网',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.46x',y:'0.55x',w:'33',h:'33'},
-          image:path+'/images/kaiyankan_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.45x',y:'0.58x+5',w:'40',h:'40'},
-          text:'开眼看',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.66x',y:'0.55x',w:'33',h:'33'},
-          // frame:{x:'0.5x-140',y:'0.5x+30',w:'33',h:'33'},
-          image:path+'/images/saibiwo_icon.png',
-          // backgroundColor:'778989'
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.65x',y:'0.58x+5',w:'40',h:'40'},
-          text:'塞比我',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.86x',y:'0.55x',w:'33',h:'33'},
-          image:path+'/images/saibiwo2_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.85x',y:'0.58x+5',w:'40',h:'40'},
-          text:'塞比我',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.06x',y:'0.65x',w:'33',h:'33'},
-          // frame:{x:'0.5x-140',y:'0.5x+30',w:'33',h:'33'},
-          image:path+'/images/heronode_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.03x',y:'0.68x+5',w:'40',h:'40'},
-          text:'Ehtereum',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.26x',y:'0.65x',w:'33',h:'33'},
-          image:path+'/images/yunbi2_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.25x',y:'0.68x+5',w:'40',h:'40'},
-          text:'云币网',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.46x',y:'0.65x',w:'33',h:'33'},
-          image:path+'/images/kaiyankan1_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.45x',y:'0.68x+5',w:'40',h:'40'},
-          text:'开眼看',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.66x',y:'0.65x',w:'33',h:'33'},
-          image:path+'/images/saibiwo2_icon.png',
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.65x',y:'0.68x+5',w:'40',h:'40'},
-          text:'塞比我',
-          size:10
-        },
-        {
-          class:'HeroImageView',
-          frame:{x:'0.86x',y:'0.65x',w:'33',h:'33'},
-          image:path+'/images/saibiwo3_icon.png'
-        },
-        {
-          class:'HeroLabel',
-          frame:{x:'0.85x',y:'0.68x+5',w:'40',h:'40'},
-          text:'塞比我',
-          size:10
+          class:'HeroView',
+          frame:{w:'1x',h:'1x'},
+          backgroundColor:'aaaaaaaa',
+          hidden:true,
+          name:'menu',
+          subViews:[
+            {
+              class:'HeroButton',
+              frame:{w:'1x',h:'1x'},
+              click:{datas:[{name:'menu',hidden:true}]}
+            },
+            {
+              class:'HeroView',
+              frame:{r:'44',t:'128',w:'140',h:'90'},
+              subViews:[
+                {
+                  class:'HeroImageView',
+                  frame:{w:'1x',h:'1x'},
+                  image:path+'/images/menu_background.png'
+                },
+                {
+                  class:'HeroButton',
+                  frame:{x:'5',t:'12',r:'6',h:'40'},
+                  ripple:true,
+                  backgroundColor:'ffffff',
+                  click:{click:'wallet'}
+                },
+                {
+                  class:'HeroImageView',
+                  frame:{x:'10',t:'22',w:'26',h:'18'},
+                  image:path+'/images/wallet_icon.png',
+                },
+                {
+                  class:'HeroLabel',
+                  frame:{x:'46',t:'22',r:'10',h:'20'},
+                  text:'我的钱包',
+                  size:14,
+                },
+                {
+                  class:'HeroButton',
+                  frame:{x:'5',t:'50',r:'6',h:'32'},
+                  ripple:true,
+                  backgroundColor:'ffffff',
+                  click:{click:'node'}
+                },
+                {
+                  class:'HeroImageView',
+                  frame:{x:'10',t:'60',w:'26',h:'18'},
+                  image:path+'/images/node_icon.png',
+                },
+                {
+                  class:'HeroLabel',
+                  frame:{x:'46',t:'60',r:'10',h:'20'},
+                  text:'节点信息',
+                  size:14,
+                  click:{click:'node2'}
+                },
+                {
+                  class:'HeroView',
+                  frame:{x:'5',t:'50',r:'6',h:'0.5'},
+                  backgroundColor:'eeeeee'
+                }
+              ]
+            }
+          ]
         },
         {
           class:'HeroToast',
           name:'toast',
-          zIndex:120
         },
         {
   				class:'HeroSignature',
