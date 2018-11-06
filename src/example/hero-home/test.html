@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+    };
+    Hero.viewWillDisAppear = function() {
+    };
+    Hero.viewDidload = function() {
+    };
+    Hero.ui = {
+      nav:{
+        title:'404',
+        navigationBarHidden:false,
+      },
+      backgroundColor:'000000',
+      views:
+      [
+        {
+          class:'HeroLabel',
+          text:'This is probably a land of nowhere',
+          frame:{w:'1x',y:'0',h:'40'},
+          alignment:'center',
+          backgroundColor:'ff0000',
+          textColor:'666666'
+        },
+        {
+          class:'HeroButton',
+          frame:{w:'120',x:'0.5x-50',b:'0',h:'50'},
+          title:'Go Apps',
+          titleColor:'778899',
+          backgroundColor:'eeeeeeee',
+          ripple:true,
+          click:{global:{key:'newApp',tabs:[
+            {title:'message',url:host+'/example/hero-chat/info.html',image:path+'/images/tools.png'},
+            {title:'contacts',url:host+'/example/hero-chat/contacts.html',image:path+'/images/tools.png'},
+            {title:'me',url:host+'/example/hero-chat/me.html',image:path+'/images/tools.png'},
+          ]}},
+          cornerRadius:5,
+        }
+      ]
+    };
+
+  </script>
+</body>
+</html>

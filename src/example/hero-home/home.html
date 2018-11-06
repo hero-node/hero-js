@@ -41,14 +41,21 @@
     };
     Hero.viewWillAppear = function() {
       var history = localStorage.hero_home_history?JSON.parse(localStorage.hero_home_history):[
-        {title:'Hero Node',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
-        {title:'开眼',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
-        {title:'糗事百科',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
-        {title:'大象公会',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'Hero test',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-home/test.html'},
+        {title:'Hero Chat',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-chat/message.html'},
+        {title:'Hero Contacts',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-chat/Contacts.html'},
+        {title:'Hero Me',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-chat/me.html'},
+        {title:'Hero Store',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-store/home.html'},
+        {title:'Hero OTC',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-apollo/otc.html'},
+        {title:'Hero trade',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-apollo/trade.html'},
+        {title:'Hero game',icon:path+'/images/saibiwo_icon.png',url:host+'/example/gather-blessing/home.html'},
+        {title:'糗事百科',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io'},
+        {title:'大象公会',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io'},
         {title:'百度',icon:path+'/images/saibiwo_icon.png',url:'https://news.baidu.com/index.html'},
         {title:'36Kr',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
-        {title:'喜马拉雅',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
-        {title:'One',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'incentives',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/incentives'},
+        {title:'incentives test',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-home/test1.html'},
+        {title:'One',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.iio'},
       ];
       var historyViews = [];
       for (var i = 0; i < history.length; i++) {
@@ -62,7 +69,7 @@
               frame:{w:'1x',h:'1x'},
               ripple:true,
               backgroundColor:'ffffff',
-              click:{command:'goto:'+item.url}
+              click:{command:'gotoWithLoading:'+item.url}
             },
             {
               class:'HeroImageView',
@@ -145,7 +152,7 @@
             },
             {
               class:'HeroView',
-              frame:{r:'44',t:'128',w:'140',h:'90'},
+              frame:{r:'44',t:'128',w:'140',h:'100'},
               subViews:[
                 {
                   class:'HeroImageView',
@@ -154,44 +161,44 @@
                 },
                 {
                   class:'HeroButton',
-                  frame:{x:'5',t:'12',r:'6',h:'40'},
+                  frame:{x:'5',t:'14',r:'6',h:'40'},
                   ripple:true,
                   backgroundColor:'ffffff',
                   click:{click:'wallet'}
                 },
                 {
                   class:'HeroImageView',
-                  frame:{x:'10',t:'22',w:'26',h:'18'},
+                  frame:{x:'12',t:'24',w:'26',h:'18'},
                   image:path+'/images/wallet_icon.png',
                 },
                 {
                   class:'HeroLabel',
-                  frame:{x:'46',t:'22',r:'10',h:'20'},
+                  frame:{x:'50',t:'24',r:'10',h:'20'},
                   text:'我的钱包',
                   size:14,
                 },
                 {
                   class:'HeroButton',
-                  frame:{x:'5',t:'50',r:'6',h:'32'},
+                  frame:{x:'5',t:'55',r:'6',h:'40'},
                   ripple:true,
                   backgroundColor:'ffffff',
                   click:{click:'node'}
                 },
                 {
                   class:'HeroImageView',
-                  frame:{x:'10',t:'60',w:'26',h:'18'},
+                  frame:{x:'12',t:'65',w:'26',h:'18'},
                   image:path+'/images/node_icon.png',
                 },
                 {
                   class:'HeroLabel',
-                  frame:{x:'46',t:'60',r:'10',h:'20'},
+                  frame:{x:'50',t:'65',r:'10',h:'20'},
                   text:'节点信息',
                   size:14,
                   click:{click:'node2'}
                 },
                 {
                   class:'HeroView',
-                  frame:{x:'5',t:'50',r:'6',h:'0.5'},
+                  frame:{x:'5',t:'54',r:'6',h:'0.5'},
                   backgroundColor:'eeeeee'
                 }
               ]

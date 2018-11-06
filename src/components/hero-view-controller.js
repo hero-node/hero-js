@@ -270,6 +270,8 @@ export default class HeroViewController extends HeroElement {
           }
         } else if (command.substring(0, 5) === 'load:') {
           window.APP.gotoPage(command.substring(5, command.length), 'load');
+        } else if (command.substring(0, 16) === 'gotoWithLoading:') {
+          window.APP.gotoPage(command.substring(16, command.length));
         } else if (command.substring(0, 4) === 'back') {
           window.history.back();
         } else if (command.substring(0, 8) === 'rootBack') {
@@ -337,10 +339,10 @@ export default class HeroViewController extends HeroElement {
     } else {
       if (window.APP.mobile) {
         this.controller.in(json);
-      }else{
+      } else {
         for (var i = 0; i < window.Heros.length; i++) {
           window.Heros[i].in(json);
-        };
+        }
       }
     }
   }

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.tangguo360.com/dapps/lib/web3.min-1.0es6.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+      if (typeof web3 !== 'undefined') {
+        web3js = new Web3(web3.currentProvider);
+      }
+
+    })
+    web3.eth.acounts = new Promise(resolve,reject){
+      ajax().get('/acount',function(json){
+        resolve()
+      },function(){
+        reject()
+      });
+    }
+
+
+    web3.eth.acounts = function(){
+      ajax().get('/acount',function(json){
+
+      },function(){
+
+      });
+    }
+    var acount = new Promise(web3.eth.acounts);
+    acount.then(function(json){
+      console.log('sucess')
+    });
+    acount.catch(function(){
+      console.log('fail')
+    });
+
+    })
+  </script>
+</body>
+</html>

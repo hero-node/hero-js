@@ -12,7 +12,9 @@
   <script>
 
     Hero.on = function(data){
-
+      if (data.click === 'info') {
+        this.command('goto:'+path+'info.html')
+      }
     };
     Hero.viewWillAppear = function() {
       var rows = [{sectionTitle:'base info',rows:[
@@ -31,6 +33,7 @@
         {title:"H5"},
         {title:"iOS"},
         {title:"android"},
+        {title:"Windows phone"},
       ]}];
       var that = this;
       setTimeout(function(){
@@ -49,7 +52,8 @@
       tintColor:'bd3a53',
       nav:{
         title:"Info",
-        navigationBarHidden:false
+        navigationBarHidden:false,
+        rightItems: [{title:'Info',click:{click:'info'}},{title:'Info',click:{click:'info'}}],
       },
       views:
       [
