@@ -49,6 +49,11 @@ export default class HeroTextView extends HeroElement {
 
     if (json.text) {
       this.$.textarea.value = json.text;
+      if (this._json.textFieldDidEditing) {
+        this._json.textFieldDidEditing.value = json.text;
+        this._json.textFieldDidEditing.name = this._json.name;
+        this.controller.on(this._json.textFieldDidEditing);
+      }
     }
   }
 
