@@ -22,6 +22,9 @@ export default class HeroTextView extends HeroElement {
         vertical-align: center;
         border-color: #fff;
         background-color: transparent;
+        border:none;
+        outline:none;
+        padding: 10px;
       }
       </style>
       <textarea id='text'></textarea>
@@ -49,9 +52,11 @@ export default class HeroTextView extends HeroElement {
     }
   }
 
-  textChange(text) {
+  textChange(e) {
+    var text = e.target.value;
     if (this._json.textFieldDidEditing) {
       this._json.textFieldDidEditing.value = text;
+      this._json.textFieldDidEditing.name = this._json.name;
       this.controller.on(this._json.textFieldDidEditing);
     }
   }
