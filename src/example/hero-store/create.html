@@ -21,12 +21,45 @@
 
     Hero.on = function(data){
       if (data.click === "submitCreate") {
-        console.log("submitCreate")
-        var ethWei = Eth.toWei(12, 'ether');
-        eth.accounts().then(function(accounts){
-          store.forbiddenSeller({from:accounts[0], value:ethWei}).then(function(txhash){
-          });
-        });
+        let tokenAddress = this.ui2Data.tokenAddress;
+        if (this.ui2Data.payment && this.ui2Data.payment.length > 0) {
+          let payment = Number(this.ui2Data.payment);
+            if (!isNaN(payment) && payment >= 0 && payment <= 100) {
+              if (tokenAddress && tokenAddress.length === 42) {
+                if (tokenAddress.substr(0,2) === "0x") {
+                  console.log(tokenAddress);
+                  console.log(payment);
+
+                  // read mallInfo
+                  eth.accounts().then((accounts) => {
+                    console.log(accounts[0]);
+                    store.mall(accounts[0]).then((res) => {
+                      console.log(res);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                    // write createRetailer   0x00: ETH
+                    store.createRetailer(payment, tokenAddress, {from: accounts[0]}).then((res) => {
+                      console.log(res);
+                      // res = "hash"
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                  });
+                } else {
+                  alert('地址格式有误');
+                }
+              } else {
+                alert ('地址长度应为42字节');
+              }
+            } else {
+              alert ('手续费格式有误');
+            }
+        } else {
+          alert ('输入不能为空');
+        }
       }
     };
     Hero.viewWillAppear = function() {
@@ -56,7 +89,9 @@
               frame: {x: '25', y: '100', r: '25', h: '50'},
               borderWidth: 1,
               borderColor: 'BFBFBF',
-              cornerRadius: 8
+              cornerRadius: 8,
+              name: 'payment',
+              textFieldDidEditing:{change:'payment'}
             },
             {
               class: 'HeroLabel',
@@ -80,7 +115,8 @@
               borderWidth: 1,
               borderColor: 'BFBFBF',
               size:14,
-              cornerRadius: 8
+              cornerRadius: 8,
+              textFieldDidEditing:{change:'tokenAddress'}
             },
             {
               class:'HeroButton',
