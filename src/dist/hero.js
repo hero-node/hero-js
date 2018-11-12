@@ -582,7 +582,7 @@
               this.parent.json.frame.h = yInt + hInt + '';
               this.parent.json.frame.w = xInt + wInt + '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
           }
           if (this.json.contentSizeElementY) {
@@ -592,13 +592,13 @@
                 parseFloat(this.$.heroContent.style.height) +
                 '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
           }
           if (this.heroLayoutListenners) {
             for (var i = 0; i < this.heroLayoutListenners.length; i++) {
               var o = this.heroLayoutListenners[i];
-              o.oon({ frame: o.json.frame, yOffset: o.json.yOffset });
+              o.in({ frame: o.json.frame, yOffset: o.json.yOffset });
             }
           }
         }
@@ -645,7 +645,7 @@
               this.parent.json.frame.h =
                 parseFloat(this.$.heroContent.style.top) + '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
             this.$.heroContent.style.display = 'none';
           } else {
@@ -655,7 +655,7 @@
                 parseFloat(this.$.heroContent.style.height) +
                 '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
             this.$.heroContent.style.display = 'block';
           }
@@ -721,22 +721,22 @@
             ')';
         }
         // if (json.gesture) {
-        // 	var gesture = json.gesture;
-        // 	var i, event;
-        // 	for (i = 0; i < gesture.length; i++) {
-        // 		var ges = gesture[i];
-        // 		if (ges.name === 'swip') {
-        // 			this.$.heroContent.addEventListener('touchmove',function(event){
-        // 				event = event || window.event;
-        // 				switch(event.type){
-        // 				case 'touchmove':
-        // 					event.touches[0].clientX;
-        // 				}
+        //  var gesture = json.gesture;
+        //  var i, event;
+        //  for (i = 0; i < gesture.length; i++) {
+        //    var ges = gesture[i];
+        //    if (ges.name === 'swip') {
+        //      this.$.heroContent.addEventListener('touchmove',function(event){
+        //        event = event || window.event;
+        //        switch(event.type){
+        //        case 'touchmove':
+        //          event.touches[0].clientX;
+        //        }
 
-        // 			}, false);
+        //      }, false);
 
-        // 		}
-        // 	}
+        //    }
+        //  }
         // }
         if (json.subViews) {
           while (this.$.heroContent.lastChild) {
