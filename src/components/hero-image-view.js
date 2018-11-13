@@ -114,15 +114,18 @@ export default class HeroImageView extends HeroElement {
       this._bigImg.style.width = '80%';
       this._bigImg.src = json.base64image || json.image;
       this._wrapper.appendChild(this._bigImg);
-      document.body.appendChild(this._wrapper);
     }
     if (json.uploadUrl) {
+      let _script = document.createElement('script');
+      _script.src = './app/pickerviewbase/jquery-3.3.1.min.js';
+      document.body.appendChild(_script);
       this.$.input.addEventListener('change', this.onChange.bind(this));
       this.$.img.style.display = 'none';
       this._uploadUrl = json.uploadUrl;
     }
   }
   showBig() {
+    document.body.appendChild(this._wrapper);
     this._wrapper.style.visibility = 'visible';
     this._wrapper.style.opacity = 1;
   }
