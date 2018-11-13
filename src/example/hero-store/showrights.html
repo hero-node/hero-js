@@ -8,23 +8,186 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="../../hero.js"></script>
   <script>
+  if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+
+    var ajax = window.HeroHelper;
+    var host = window.Host;
+    var url = "";
+    var opts = {};
+    var hashJson = [];
+    // const list
+    var rightList = [];
+    var sellerIdList = [];
+    var orderList = [];
 
   Hero.on = function(data){
     if (data.click === "delrights") {
+      let idx = data.index;
       switch(data.index) {
-          case 0:
-            console.log(`删除的广告位应是第${data.index+1}个`)
-            break;
-          case 1:
-            console.log(`删除的广告位应是第${data.index+1}个`)
+          case idx:
+            console.log(`删除的广告位应是第${idx+1}个`)
             break;
         }
     }
   };
+  Hero.updateRightView = function(list){
+    var subViews = [];
+    for (let i = 0; i < list.length; i++) {
+      var item = list[i];
+      var itemView = {
+          class: 'HeroView',
+          frame: {x: '0', y: `${i*100}`, r: '0', h: '200'},
+          contentSizeElement: true,
+          subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '0', y: '0', w: '0.2x', h: '50'},
+              text: item.oderId,
+              alignment:'center',
+              size: 12
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '0.2x', y: '0', w: '0.2x', h: '50'},
+              text: item.sellerId,
+              alignment:'center',
+              size: 12
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '0.40x', y: '0', w: '0.2x', h: '50'},
+              text: item.buyerId,
+              alignment:'center',
+              size: 12
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '0.6x', y: '0',w: '0.2x', h: '50'},
+              text: item.tradeTime,
+              alignment:'center',
+              size: 12
+            },
+            {
+              class: 'HeroLabel',
+              frame: {r: '0', y: '0', w: '0.2x', h: '50'},
+              text: item.state,
+              alignment:'center',
+              size: 12
+            },
+            {
+              class: 'HeroButton',
+              frame: {r: '0', y: '60', w: '1x', h: '30'},
+              title: '删除',
+              size: 12,
+              backgroundColor: '25B0B8',
+              cornerRadius: 8,
+              click: {click: 'delrights', index: i}
+            },
+          ]
+        };
+      subViews.push(itemView);
+    }
+    var that = this;
+    setTimeout(function(){
+      that.datas({name:'rightwrapViews',subViews:subViews});
+    },100);
+  };
   Hero.viewWillAppear = function() {
-    var views = [];
+    // 1. get sellerId type: address need: retailer index
+    // function getSellerList(account) {
+    //   let isNull = false;
+    //   for (let i = 0; isNull ;i++) {
+    //     console.log(i)
+    //     store.sellersList(accounts, i).then((res) => {
+    //       let itemId = res;
+    //       if (res !== null && res !== null && res !== "") {
+    //         sellerIdList.push(itemId);
+    //       } else {
+    //         return sellerIdList
+    //       }
+    //     }).catch((err) => {
+    //       console.log(err);
+    //     })
+    //   }
+    // };
+    // // 2.get orderId type: address need: retailer seller index
+    // function getOrderList(account) {
+    //   let isNull = false;
+    //   let len = sellerIdList.length;
+    //   for (let i = 0; i < len; i++) {
+    //     let item = sellerIdList[i];
+    //     for (let j = 0; isNull; j++) {
+    //       console.log(j);
+    //       store.ordersList(account, item, j).then((res) => {
+    //         let orderId = res
+    //         if (res !== null && res !== null && res !== "") {
+    //           orderList.push(orderId);
+    //         } else {
+    //           return orderList
+    //         }
+    //       })
+    //     }
+    //   }
+    // };
+    // // 3.get orderOfSeller type: args need: retailer seller orderId
+    // function getOrderOfSeller(account) {
+    //   let sellerLen = sellerIdList.length;
+    //   let orderLen = orderList.length;
+    //   for (let i = 0; i < sellerLen; i++) {
+    //     let sellerId = sellerIdList[i];
+    //     for (let j = 0; j < orderLen; j++) {
+    //       let orderId = orderList[j];
+    //       store.orderOfSeller(account, sellerId, orderId).then((res) => {
+    //         // state === 0x01 => Safeguard
+    //         let state = res.state;
+    //         if (state == "0x01") {
+    //           rightList.push(res);
+    //         }
+    //       })
+    //     }
+    //   }
+    // };
+    // get safeguardingOrder
+    // eth.accounts().then((accounts) => {
+    //   console.log(accounts[0]);
+    //     getSellerList(accounts[0]);
+    //     getOrderList(accounts[0]);
+    //     getOrderOfSeller(accounts[0]);
+    // }).catch((err) => {
+    //   console.log(err);
+    // });
 
-    this.datas([{name:'contentViews',subViews:views}]);
+    rightList = [
+      {
+        oderId:'20180399',
+        sellerId:'hero',
+        buyerId: 'jasd',
+        tradeTime: '2018/03/99',
+        state: '未处理'
+      },
+      {
+        oderId:'20180499',
+        sellerId:'hero',
+        buyerId: 'kkkk',
+        tradeTime: '2018/04/99',
+        state: '已处理'
+      },
+      {
+        oderId:'20180599',
+        sellerId:'hero',
+        buyerId: 'wqqew',
+        tradeTime: '2018/05/99',
+        state: '未处理'
+      }
+    ];
+    this.updateRightView(rightList);
   };
   Hero.viewWillDisAppear = function() {
 
@@ -38,116 +201,68 @@
       title: '维权列表',
     },
     views:[
-    {
-      class: 'HeroView',
-      frame:{w:'1x',y:'0',h:'89'},
-      subViews:[
+      {
+        class: 'HeroView',
+        frame:{w:'1x',y:'0',h:'89'},
+        subViews:[
                   // header
                   ]
-                },
-                //  main content wrap
-                {
-                  class: "HeroView",
-                  frame: {x: '10', r: '10',y: '30', b: '0'},
-                  subViews: [
-                    // title
-                    {
-                    class: 'HeroView',
-                    frame: {x: '0', y: '0', r: '0', h: '50'},
-                    // backgroundColor: '333333',
-                    subViews: [
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0', y: '0', w: '0.2x', h: '50'},
-                      text: '编号',
-                      alignment:'center',
-                      size: 14
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0.2x', y: '0', w: '0.2x', h: '50'},
-                      text: '卖家',
-                      alignment:'center',
-                      size: 14
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0.40x', y: '0', w: '0.2x', h: '50'},
-                      text: '买家',
-                      alignment:'center',
-                      size: 14
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0.6x', y: '0', w: '0.2x', h: '50'},
-                      text: '交易时间',
-                      alignment:'center',
-                      size: 14
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {r: '0', y: '0', w: '0.2x', h: '50'},
-                      text: '状态',
-                      alignment:'center',
-                      size: 14
-                    },
-                    ]
-                  },
-                  // contents
-                    {
-                    class: 'HeroView',
-                    frame: {x: '0', y: '50', r: '0', h: '200'},
-                    subViews: [
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0', y: '0', w: '0.2x', h: '50'},
-                      text: '20181018',
-                      alignment:'center',
-                      size: 12
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0.2x', y: '0', w: '0.2x', h: '50'},
-                      text: 'Hero Node',
-                      alignment:'center',
-                      size: 12
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0.40x', y: '0', w: '0.2x', h: '50'},
-                      text: 'Hero Node',
-                      alignment:'center',
-                      size: 12
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {x: '0.6x', y: '0',w: '0.2x', h: '50'},
-                      text: '2018/10/17',
-                      alignment:'center',
-                      size: 12
-                    },
-                    {
-                      class: 'HeroLabel',
-                      frame: {r: '0', y: '0', w: '0.2x', h: '50'},
-                      text: '未处理',
-                      alignment:'center',
-                      size: 12
-                    },
-                    {
-                      class: 'HeroButton',
-                      frame: {r: '0.05x', y: '60', w: '0.9x', h: '30'},
-                      title: '删除',
-                      size: 12,
-                      backgroundColor: '25B0B8',
-                      cornerRadius: 8,
-                      click: {click: 'delrights', index: 0}
-                    },
-                    ]
-                  }
-                ]
-              },
-              ]
-            };
+      },
+      //  main content wrap
+      {
+        class: "HeroView",
+        frame: {x: '10', r: '10',y: '30', b: '0'},
+        subViews: [
+          {
+          class: 'HeroView',
+          frame: {x: '0', y: '0', r: '0', h: '50'},
+          subViews: [
+          {
+            class: 'HeroLabel',
+            frame: {x: '0', y: '0', w: '0.2x', h: '50'},
+            text: '编号',
+            alignment:'center',
+            size: 14
+          },
+          {
+            class: 'HeroLabel',
+            frame: {x: '0.2x', y: '0', w: '0.2x', h: '50'},
+            text: '卖家',
+            alignment:'center',
+            size: 14
+          },
+          {
+            class: 'HeroLabel',
+            frame: {x: '0.40x', y: '0', w: '0.2x', h: '50'},
+            text: '买家',
+            alignment:'center',
+            size: 14
+          },
+          {
+            class: 'HeroLabel',
+            frame: {x: '0.6x', y: '0', w: '0.2x', h: '50'},
+            text: '交易时间',
+            alignment:'center',
+            size: 14
+          },
+          {
+            class: 'HeroLabel',
+            frame: {r: '0', y: '0', w: '0.2x', h: '50'},
+            text: '状态',
+            alignment:'center',
+            size: 14
+          },
+          ]
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0', y: '50', r: '0', h: ''},
+          name: 'rightwrapViews'
+        }
+      ]
+    },
+    ]
+  };
   </script>
 </body>
 </html>
