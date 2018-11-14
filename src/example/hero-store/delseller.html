@@ -8,23 +8,96 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="../../hero.js"></script>
   <script>
+    if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+    // const seller list
+    var sellerList = [];
 
     Hero.on = function(data){
       if (data.click === "delSeller") {
-        switch(data.index) {
-          case 0:
-            console.log(`执行删除的卖家地址应是第${data.index+1}个`)
-            break;
-          case 1:
-            console.log(`执行删除的卖家地址应是第${data.index+1}个`)
-            break;
-        }
+        // forbidden seller contract
+        // eth.accounts().then((accounts) => {
+        //   store.forbiddenSeller(data.adress, {from: accounts[0]}).then((res) => {
+        //     console.log(res);
+        //     // res=hash
+        //   }).catch((err) => {
+        //     console.log(err);
+        //   })
+        // }).catch((err) => {
+        //   console.log(err);
+        // })
+
+        // del seller
+        alert("请求已发出，请等待结果");
+        sellerList.splice(data.index, 1);
+        this.updateListView(sellerList);
       }
     };
+    Hero.updateListView = function(list){
+      var subViews = [];
+      for (let i = 0; i < list.length; i++) {
+        var item = list[i];
+        var itemView = {
+          class: 'HeroView',
+          frame: {x: '0', y: `${i*200}`, w: '1x', h: '200'},
+          name: `seller${i}`,
+          subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '0', y: '0', h: '50'},
+              text: '卖家地址：',
+              textColor:'333333',
+              size: 24
+            },
+            {
+              class: 'HeroLabel',
+              size: 12,
+              frame: {x: '0', y: '50', r: '0', h: '50'},
+              text: item.address
+            },
+            {
+              class: 'HeroButton',
+              frame: {x: '0', y: '120', w: '1x', h: '50'},
+              title: '删除',
+              size: 20,
+              backgroundColor: '25B0B8',
+              cornerRadius: 8,
+              click: {click: 'delSeller', index: i, address: item.address}
+            }
+          ]
+        };
+        subViews.push(itemView);
+      }
+      var that = this;
+      setTimeout(function(){
+        that.datas({name:'contentViews',subViews:subViews});
+      },100);
+    }
     Hero.viewWillAppear = function() {
-      var views = [];
+      // get sellerInfo
+      // eth.accounts().then((accounts) => {
+      //   store.sellerList(accounts[0], 100).then((res) => {
+      //     console.log(res);
+      //     // res = hash
+      //     // push subViews
+      //   }).catch((err) => {
+      //     console.log(err);
+      //   })
+      // }).catch((err) => {
+      //     console.log(err);
+      //   });
 
-      this.datas([{name:'contentViews',subViews:views}]);
+      sellerList = [
+        {address:'0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD'},
+        {address:'0x0000000000000000000000000000000000000000'}
+      ];
+      this.updateListView(sellerList);
     };
     Hero.viewWillDisAppear = function() {
 
@@ -34,7 +107,8 @@
     };
     Hero.ui = {
       nav:{
-        navigationBarHidden: false
+        navigationBarHidden: false,
+        title: '删除卖家'
       },
       views:[
           {
@@ -45,70 +119,12 @@
             ]
           },
           {
-            class: 'HeroLabel',
-            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
-            text: '删除卖家',
-            size: 36
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.1x', w: '144', h: '2'},
-            backgroundColor: 'bbbbbb'
-          },
-          {
             class:'HeroView',
             name:'contentViews',
-            frame:{w:'1x',y:'50+0.15x',b:'0'},
-            subViews:[
-
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.15x', r: '0.12x', h: '100'},
-            subViews: [
-              {
-                class: 'HeroLabel',
-                frame: {x: '0', y: '0', r: '120', h: '50'},
-                text: '添加卖家地址：0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD',
-                size: 24
-              },
-              {
-                class: 'HeroButton',
-                frame: {x: '', r: '0', y: '0', w: '100', h: '35'},
-                title: '删除',
-                size: 20,
-                backgroundColor: '25B0B8',
-                cornerRadius: 8,
-                click: {click: 'delSeller', index: 0}
-              }
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '150+0.15x', r: '0.12x', h: '100'},
-            subViews: [
-              {
-                class: 'HeroLabel',
-                numberOfLines:1,
-                frame: {x: '0', y: '0', r: '120', h: '50'},
-                text: '添加卖家地址：0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD',
-                size: 24
-              },
-              {
-                class: 'HeroButton',
-                frame: {x: '', r: '0', y: '0', w: '100', h: '35'},
-                title: '删除',
-                size: 20,
-                backgroundColor: '25B0B8',
-                cornerRadius: 8,
-                click: {click: 'delSeller', index: 1}
-              }
-            ]
-          },
-          ]
-        };
-
-      </script>
-    </body>
-    </html>
+            frame:{x: '25',r:'25', y:'50', b: '0'}
+          }
+        ]
+    };
+  </script>
+</body>
+</html>

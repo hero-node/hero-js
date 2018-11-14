@@ -346,17 +346,6 @@ window.storeABI = [
     type: 'function',
   },
   {
-    payable: true,
-    stateMutability: 'payable',
-    type: 'fallback',
-  },
-  {
-    inputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
     constant: false,
     inputs: [
       {
@@ -385,6 +374,17 @@ window.storeABI = [
     payable: false,
     stateMutability: 'nonpayable',
     type: 'function',
+  },
+  {
+    inputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
+    payable: true,
+    stateMutability: 'payable',
+    type: 'fallback',
   },
   {
     constant: true,
@@ -584,30 +584,4 @@ window.storeABI = [
 
 window.storeAddress = '0xFbfC8D722CaAc377A58794fD78d77Dbe2ed356B5';
 window.ethProvider = 'http://127.0.0.1:7545';
-
-// window.copyTextToClipboard = function(text){
-//     var textArea = document.createElement("textarea")
-//     textArea.style.position = 'fixed'
-//     textArea.style.top = 0
-//     textArea.style.left = 0
-//     textArea.style.width = '2em'
-//     textArea.style.height = '2em'
-//     textArea.style.padding = 0
-//     textArea.style.border = 'none'
-//     textArea.style.outline = 'none'
-//     textArea.style.boxShadow = 'none'
-//     textArea.style.background = 'transparent'
-//     textArea.value = text
-
-//     document.body.appendChild(textArea)
-
-//     textArea.select()
-
-//     try {
-//       var msg = document.execCommand('copy') ? '成功' : '失败'
-//       Hero.datas({name:'toast',text:'已复制'});
-//     } catch (err) {
-//       Hero.datas({name:'toast',text:'复制失败'});
-//     }
-//     document.body.removeChild(textArea)
-// }
+window.Host = 'http://47.52.172.254:9198';

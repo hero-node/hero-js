@@ -9,9 +9,45 @@
   <script src="../../hero.js"></script>
   <script>
 
+    if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+
     Hero.on = function(data){
       if (data.click === "addSeller") {
-        console.log("addSeller")
+        if (this.ui2Data.sellerAddress && this.ui2Data.maximum && this.ui2Data.sellerAddress.length > 0 && this.ui2Data.maximum.length > 0) {
+          let sellerAddress = this.ui2Data.sellerAddress;
+          let maximum = Number(this.ui2Data.maximum);
+            if (!isNaN(maximum) && maximum > 0) {
+            if (sellerAddress && sellerAddress.length === 42) {
+              if (sellerAddress.substr(0,2) === "0x") {
+                // write creatSeller
+                eth.accounts().then((accounts) => {
+                  store.createSeller(accounts[0], 100, {from: accounts[0]}).then((res) => {
+                    console.log(res);
+                    // res = "hash"
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+                });
+              } else {
+                alert("卖家地址格式有误")
+              }
+            } else {
+              alert("地址长度应为42字节");
+            }
+          } else {
+            alert ('最大上架数量格式有误');
+          }
+        } else {
+          alert("输入不能为空");
+        }
       }
     };
     Hero.viewWillAppear = function() {
@@ -25,7 +61,8 @@
     };
     Hero.ui = {
       nav:{
-        navigationBarHidden: false
+        navigationBarHidden: false,
+        title:'添加卖家'
       },
       views:[
           {
@@ -36,63 +73,58 @@
             ]
           },
           {
-            class: 'HeroLabel',
-            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
-            text: '添加卖家',
-            size: 36
-          },
-          {
             class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.1x', w: '144', h: '2'},
-            backgroundColor: 'bbbbbb'
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.15x', w: '0.88x', h: '100'},
+            frame: {x: '25', y: '50', r: '25', h: '100'},
             subViews: [
               {
                 class: 'HeroLabel',
                 frame: {x: '0', y: '0', w: '168', h: '50'},
                 text: '添加卖家地址：',
-                size: 24
+                textColor:'333333',
+                size: 22
               },
               {
                 class: 'HeroTextField',
-                frame: {x: '0', y: '50', w: '0.7x', h: '40'}
+                frame: {x: '0', y: '50', w: '1x', h: '40'},
+                name: 'sellerAddress',
+                textFieldDidEditing:{change:'sellerAddress'}
               },
               {
                 class: 'HeroView',
-                frame: {x: '0', y: '90', w: '0.7x', h: '1.5'},
+                frame: {x: '0', y: '90', w: '1x', h: '1'},
                 backgroundColor: 'C6C6C6'
               },
             ]
           },
           {
             class: 'HeroView',
-            frame: {x: '0.12x', y: '170+0.15x', w: '0.88x', h: '100'},
+            frame: {x: '25', y: '170', r: '25', h: '100'},
             subViews: [
               {
                 class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
-                text: '添加卖家地址：',
-                size: 24
+                frame: {x: '0', y: '0', w: '', h: '50'},
+                text: '商品最大上架数量：',
+                textColor:'333333',
+                size: 22
               },
               {
                 class: 'HeroTextField',
-                frame: {x: '0', y: '50', w: '0.7x', h: '40'}
+                frame: {x: '0', y: '50', w: '1x', h: '40'},
+                name: 'maximum',
+                textFieldDidEditing:{change:'maximum'}
               },
               {
                 class: 'HeroView',
-                frame: {x: '0', y: '90', w: '0.7x', h: '1.5'},
+                frame: {x: '0', y: '90', w: '1x', h: '1'},
                 backgroundColor: 'C6C6C6'
               },
             ]
           },
           {
               class: 'HeroButton',
-              frame: {x: '0.41x', y: '50+0.7x', w: '0.15x', h: '50'},
+              frame: {x: '25', y: '320', r: '25', h: '50'},
               title: '提交',
-              size: 20,
+              size: 18,
               backgroundColor: '25B0B8',
               cornerRadius: 8,
               click: {click: 'addSeller'}

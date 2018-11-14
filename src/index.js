@@ -18,6 +18,7 @@ import HeroAlert from './components/hero-alert.js';
 import HeroConfirm from './components/hero-confirm.js';
 import HeroDialog from './components/hero-dialog.js';
 import HeroScrollView from './components/hero-scroll-view.js';
+import HeroLoading from './components/hero-loading.js';
 var components = [
   HeroElement,
   HeroButton,
@@ -38,6 +39,7 @@ var components = [
   HeroConfirm,
   HeroDialog,
   HeroScrollView,
+  HeroLoading,
 ];
 
 for (var i = 0, len = components.length; i < len; i++) {

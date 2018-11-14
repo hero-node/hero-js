@@ -65,9 +65,6 @@ var xhr = (function() {
         }
         req.timeout = root.timeout;
         req.open(method, root.url, async);
-        if (localStorage.uticket) {
-          req.setRequestHeader('uticket', localStorage.uticket);
-        }
         if (!get) {
           if (root.contentType) {
             req.setRequestHeader('Content-type', root.contentType);
@@ -113,7 +110,6 @@ var xhr = (function() {
       var httpOption = { url: url, method: 'GET' };
       data = objKeySort(data);
       var dataString = formatData(data);
-      data.sign = md5(dataString);
       if (data) {
         httpOption['data'] = data;
       }
@@ -121,16 +117,7 @@ var xhr = (function() {
         if (showLoading) {
           Hero.command('stopLoading');
         }
-        if (json.response_code === 'SUCCESS') {
-          success(json);
-        } else if (json.response_code === 'MEMBER_NOT_LOGIN_ERROR') {
-          Hero.command('present:' + path + 'login.html');
-        } else {
-          Hero.datas({
-            name: 'toast',
-            text: json.memo || json.response_message,
-          });
-        }
+        success(json);
       };
       httpOption['fail'] = function(json) {
         if (showLoading) {
@@ -147,7 +134,6 @@ var xhr = (function() {
       var httpOption = { url: url, method: 'POST' };
       data = objKeySort(data);
       var dataString = formatData(data);
-      data.sign = md5(dataString);
       if (data) {
         httpOption['data'] = data;
       }
@@ -155,16 +141,7 @@ var xhr = (function() {
         if (showLoading) {
           Hero.command('stopLoading');
         }
-        if (json.response_code === 'SUCCESS') {
-          success(json);
-        } else if (json.response_code === 'MEMBER_NOT_LOGIN_ERROR') {
-          Hero.command('present:' + path + 'login.html');
-        } else {
-          Hero.datas({
-            name: 'toast',
-            text: json.memo || json.response_message,
-          });
-        }
+        success(json);
       };
       httpOption['fail'] = function(json) {
         if (showLoading) {

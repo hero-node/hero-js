@@ -9,12 +9,59 @@
   <script src="../../hero.js"></script>
   <script>
 
+    if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+
+    var ajax = window.HeroHelper;
+    var host = window.Host;
+    var url = "";
+    var opts = {};
+    var hashJson = [];
+
     Hero.on = function(data){
-      if (data.click === "addAdsPic") {
-        console.log("上传广告图片")
-      } else if (data.click ===  "setAds") {
-        console.log("提交广告位")
+      // add ads   contain{ set title and description, upload image }
+      if (data.click === "setAds") {
+        console.log(this.ui2Data.adsTitle);
+        console.log(this.ui2Data.adsContent);
+        // post
+        // url = host + '/ipfs/add';
+        // var opts = {
+        //   content: {
+        //     adsTitle: "test",
+        //     adsContent: "teetetetetette"
+        //   }
+        // };
+        // opts.content = JSON.stringify(opts.content);
+        // console.log(opts.content);
+        // ajax.post(url, opts, (res) => {
+        //   console.log(res);
+        // }, true)
+
+        // get
+        // url = host + '/ipfs/cat/'+'QmfBrLLnrgdRe6BP7oCQsKaDHwFp5PyTMHJKKmpyJgRXQF';
+        // ajax.get(url, opts, (res) => {
+        //   let dt = JSON.parse(res.content)
+        //   console.log(dt);
+        // }, true)
       }
+
+
+
+      eth.accounts().then((accounts) => {
+        // console.log(accounts[0]);
+      })
+      // if (data.click === "addAdsPic") {
+      //   console.log("上传广告图片");
+      //   console.log("url:"+url);
+      // } else if (data.click ===  "setAds") {
+      //   console.log("提交广告位")
+      // }
     };
     Hero.viewWillAppear = function() {
 
@@ -27,7 +74,8 @@
     };
     Hero.ui = {
       nav:{
-        navigationBarHidden: false
+        navigationBarHidden: false,
+        title: '设置广告位'
       },
       views:[
           {
@@ -38,102 +86,101 @@
             ]
           },
           {
-            class: 'HeroLabel',
-            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
-            text: '设置广告位',
-            size: 36
-          },
-          {
             class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.1x', w: '180', h: '2'},
-            backgroundColor: 'bbbbbb'
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.15x', w: '0.88x', h: '50'},
+            frame: {x: '0', y: '50', r: '0', w: '1x', h: '100'},
             subViews: [
               {
                 class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
+                frame: {x: '25', y: '0', r: '25', h: '50'},
                 text: '广告标题：',
-                size: 24
+                textColor:'333333',
+                size: 22
+              },
+              {
+                class: 'HeroLabel',
+                frame: {x: '140', y: '0', h: '50'},
+                text: '(0/50)',
+                textColor:'999999',
+                size: 12
               },
               {
                 class: 'HeroTextField',
-                frame: {x: '170', y: '5', w: '0.5x', h: '40'},
-                borderWidth: 1,
-                borderColor: 'BFBFBF',
-                cornerRadius: 5
+                frame: {x: '25', y: '50', r: '25', h: '40'},
+                name: 'adsTitle',
+                textFieldDidEditing:{change:'adsTitle'},
               },
               {
-                class: 'HeroLabel',
-                frame: {x: '200+0.5x', y: '20', w: '168', h: '30'},
-                text: '0/50',
-                size: 20
+                class: 'HeroView',
+                frame: {x: '25', y: '90', r: '25', h: '1'},
+                backgroundColor: 'C6C6C6'
               }
             ]
           },
           {
             class: 'HeroView',
-            frame: {x: '0.12x', y: '130+0.15x', w: '0.88x', h: '200'},
-            // backgroundColor: '333',
+            frame: {x: '0', y: '170', r: '0', h: '200'},
             subViews: [
               {
                 class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
+                frame: {x: '25', y: '0', r: '25', h: '50'},
                 text: '广告内容：',
-                size: 24
+                textColor:'333333',
+                size: 22
+              },
+              {
+                class: 'HeroLabel',
+                frame: {x: '140', y: '0', h: '50'},
+                text: '(0/200)',
+                textColor:'999999',
+                size: 12
               },
               {
                 class: 'HeroTextView',
-                frame: {x: '170', y: '5', w: '0.5x', h: '180'},
+                frame: {x: '25', y: '70', r: '25', h: '100'},
                 borderWidth: 1,
                 borderColor: 'BFBFBF',
                 cornerRadius: 5,
-                backgroundColor: 'FAFAFA'
-              },
-              {
-                class: 'HeroLabel',
-                frame: {x: '200+0.5x', y: '150', w: '168', h: '50'},
-                text: '0/200',
-                size: 20
+                backgroundColor: 'FAFAFA',
+                name: 'adsContent',
+                textFieldDidEditing:{adsContent:'change'},
               }
             ]
           },
           {
             class: 'HeroView',
-            frame: {x: '0.12x', y: '350+0.15x', w: '0.88x', h: '490'},
-            // backgroundColor: '333',
+            frame: {x: '0', y: '370', r: '0', h: '320'},
             subViews: [
               {
                 class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
+                frame: {x: '25', y: '0', w: '1x', h: '50'},
                 text: '广告图片：',
-                size: 24
+                size: 22
               },
               {
                 class: 'HeroLabel',
-                frame: {x: '170',r: '', y: '5', w: '0.5x'},
-                text: '要求上传图片宽高比为7:3，大小<1M，支持jpg/jpeg/png/gif等格式图片的本地上传，若不上传横图，广告位无法展示广告。',
-                size: 20
+                frame: {x: '25', r: '25', y: '50'},
+                text: '(要求上传图片宽高比为7:3，大小<1M，支持jpg/jpeg/png/gif等格式图片的本地上传，若不上传横图，广告位无法展示广告。)',
+                size: 12,
+                alignment:'left',
+                textColor: '999999'
               },
               {
                 class: 'HeroButton',
-                frame: {x: '170', y: '100', w: '0.5x', h: '180'},
+                frame: {x: '25', y: '120', r: '25', h: '100'},
                 borderWidth: 1,
                 borderColor: 'BFBFBF',
                 cornerRadius: 5,
                 backgroundColor: 'FAFAFA',
                 titleColor: 'AFAFAF',
                 title: '+',
-                size: 100,
+                size: 50,
                 click: {click: 'addAdsPic'}
               },
               {
                 class: 'HeroButton',
-                frame: {x: '170+0.175x', y: '320', w: '0.15x', h: '50'},
+                frame: {x: '25', y: '250', r: '25', h: '50'},
                 title: '提交',
-                size: 20,
+                size: 18,
                 backgroundColor: '25B0B8',
                 cornerRadius: 8,
                 click: {click: 'setAds'}

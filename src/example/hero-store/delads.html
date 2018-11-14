@@ -8,24 +8,73 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="../../hero.js"></script>
   <script>
-
+    // const adsList
+    var adsList = [];
     Hero.on = function(data){
       if (data.click === "delAds") {
-        switch(data.index) {
-          case 0:
-            console.log(`删除的广告位应是第${data.index+1}个`)
-            break;
-          case 1:
-            console.log(`删除的广告位应是第${data.index+1}个`)
+        let idx = data.index;
+        console.log(data.index);
+        switch(idx) {
+          case idx:
+            console.log(`删除的广告位应是第${idx+1}个`)
+            // del seller
+            alert("请求已发出，请等待结果");
+            adsList.splice(data.index, 1);
+            this.updateAdsView(adsList);
             break;
         }
         // console.log("delAds")
       }
     };
+    Hero.updateAdsView = function(list){
+      var subViews = [];
+      for (let i = 0; i < list.length; i++) {
+        var item = list[i];
+        var itemView = {
+          class: 'HeroView',
+          frame: {x: '0', y: `${i*90}`, r: '0', h: '50'},
+          subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '0', y: '0', r: '0', h: '30'},
+              text: item.adsTitle,
+              size: 22
+            },
+            {
+              class: 'HeroButton',
+              frame: {r: '0', y: '0', w: '45', h: '30'},
+              title: '删除',
+              size: 14,
+              backgroundColor: '25B0B8',
+              cornerRadius: 8,
+              click: {click: 'delAds', index: i}
+            },
+            {
+              class: 'HeroView',
+              frame: {x: '0', y: '48', r: '0', h: '1'},
+              backgroundColor: 'E2E2E2'
+            }
+          ]
+        };
+        subViews.push(itemView);
+      }
+      var that = this;
+      setTimeout(function(){
+        that.datas({name:'deladsViews',subViews:subViews});
+      },100);
+    };
     Hero.viewWillAppear = function() {
-      var views = [];
-
-      this.datas([{name:'contentViews',subViews:views}]);
+      adsList = [
+        {
+          address:'0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD',
+          adsTitle: 'hero store'
+        },
+        {
+          address:'0x0000000000000000000000000000000000000000',
+          adsTitle: 'rirskjkldk'
+        }
+      ];
+      this.updateAdsView(adsList);
     };
     Hero.viewWillDisAppear = function() {
 
@@ -35,7 +84,8 @@
     };
     Hero.ui = {
       nav:{
-        navigationBarHidden: false
+        navigationBarHidden: false,
+        title: '删除广告位'
       },
       views:[
           {
@@ -46,80 +96,13 @@
             ]
           },
           {
-            class: 'HeroLabel',
-            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
-            text: '删除广告位',
-            size: 36
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.1x', w: '180', h: '2'},
-            backgroundColor: 'bbbbbb'
-          },
-          {
             class:'HeroView',
-            name:'contentViews',
-            frame:{w:'1x',y:'50+0.15x',b:'0'},
-            subViews:[
+            name:'deladsViews',
+            frame:{x: '25',r:'25', y:'30', b: '0'}
+          }
+        ]
+      };
 
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.15x', r: '0.12x', h: '100'},
-            subViews: [
-              {
-                class: 'HeroLabel',
-                frame: {x: '0', y: '0', r: '120', h: '50'},
-                text: 'Hero Store 商城广告位',
-                size: 32
-              },
-              {
-                class: 'HeroButton',
-                frame: {x: '', r: '0', y: '7.5', w: '100', h: '35'},
-                title: '删除',
-                size: 20,
-                backgroundColor: '25B0B8',
-                cornerRadius: 8,
-                click: {click: 'delAds', index: 0}
-              },
-              {
-                class: 'HeroView',
-                frame: {x: '0', y: '70', r: '0', h: '2'},
-                backgroundColor: 'E2E2E2'
-              }
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '150+0.15x', r: '0.12x', h: '100'},
-            subViews: [
-              {
-                class: 'HeroLabel',
-                numberOfLines:1,
-                frame: {x: '0', y: '0', r: '120', h: '50'},
-                text: 'Hero Store 商城广告位',
-                size: 32
-              },
-              {
-                class: 'HeroButton',
-                frame: {x: '', r: '0', y: '7.5', w: '100', h: '35'},
-                title: '删除',
-                size: 20,
-                backgroundColor: '25B0B8',
-                cornerRadius: 8,
-                click: {click: 'delAds', index: 1}
-              },
-              {
-                class: 'HeroView',
-                frame: {x: '0', y: '70', r: '0', h: '2'},
-                backgroundColor: 'E2E2E2'
-              }
-            ]
-          },
-          ]
-        };
-
-      </script>
-    </body>
-    </html>
+  </script>
+</body>
+</html>

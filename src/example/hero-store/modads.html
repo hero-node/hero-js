@@ -1,46 +1,241 @@
 <!doctype html>
 <html>
 
-  <head>
-    <script src="./app/config.js"></script>
-    <script src="./app/shareViews.js"></script>
-    <script src="./app/herohelper.js"></script>
-    <script src="./app/autoRefresh.js"></script>
-    <script src='/socket.io/socket.io.js'></script>
+<head>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
   <script src="../../hero.js"></script>
-    <script>
-      Hero.on = function(data) {
-        if(data.click === "modAds") {
-          console.log("modAds")
-          // this.datas({name:'section1',frame:{ }})
-        } else if (data.click === "modAdsPic") {
-          console.log("modAdsPic")
-        } else if(data.click === "isshow1") {
+  <script>
+    if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+
+    var ajax = window.HeroHelper;
+    var host = window.Host;
+    var url = "";
+    var opts = {};
+    var hashJson = [];
+    // const adsList
+    var adsList = [];
+    Hero.on = function(data) {
+      let idx = data.index;
+        opts.content = JSON.stringify(opts.content);
+        if(data.click === `isshow${idx}`) {
           console.log(data);
-          if(data.name === "show1") {
+          if(data.name === `show${idx}`) {
             this.datas([{
-              name: "showicon1",
+              name: `showicon${idx}`,
               image: path + './images/Merchant_pull up_icon@2x.png'
+            },
+            {
+              name: `adswrap${idx}`,
+              frame: {x: '25', y: '30', r: '25',w:'1x', h: '700'},
             }]);
+            data.name = `hide${idx}`;
+          } else if(data.name === `hide${idx}`) {
             this.datas([{
-              name: "adswrap1",
-              frame: {x: '0.12x', y: '50+0.15x', w: '0.88x', h: '850'}
-            }]);
-            data.name = "hide1";
-          } else if(data.name === "hide1") {
-            this.datas([{
-              name: "showicon1",
+              name: `showicon${idx}`,
               image: path + './images/Merchant_drop down_icon@2x.png'
+            },
+            {
+              name: `adswrap${idx}`,
+              frame: {x: '25', y: '30', r: '25',w:'1x', h: '50'},
             }]);
-            this.datas([{
-              name: "adswrap1",
-              frame: {x: '0.12x', y: '50+0.15x', w: '0.88x', h: '50'}
-            }]);
-            data.name = "show1";
+            data.name = `show${idx}`;
           }
+        } else if (data.click === "modAdsPic") {
+          // upload pics
+          console.log(idx);
+        } else if (data.click === "modAds") {
+          let title = this.ui2Data[`_adsTitle${idx}`];
+          let content = this.ui2Data[`_adsContent${idx}`];
+          let opts = {
+            content: {
+              adsTitle: title,
+              adsContent: content
+            }
+        };
+          // submit content events
+          console.log(`提交的修改是第${idx}个`);
+          console.log(opts.content);
+          // post
+          // url = host + '/ipfs/add';
+          // ajax.post(url, opts, (res) => {
+          //   console.log(res);
+          // }, true)
         }
       };
+
+      Hero.updateAdsView = function(list){
+        var subViews = [];
+        for (let i = 0; i < list.length; i++) {
+          var item = list[i];
+          var itemView = {
+            class: 'HeroView',
+            frame: {x: '25', r: '25',y: '30', w:'1x', h: '50'},
+            name: `adswrap${i+1}`,
+            yOffset: `adswrap${i}+10`,
+            contentSizeElement: true,
+            subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '0', y: '0', h: ''},
+              text: 'Hero Store商城广告位',
+              size: '22'
+            },
+            {
+              class: 'HeroImageView',
+              frame: {r: '0', y: '0', w: '45', h: '30'},
+              image: path + './images/Merchant_drop down_icon@2x.png',
+              name: `showicon${i+1}`
+            },
+            {
+              class: 'HeroButton',
+              frame: {r: '0', y: '0', w: '45', h: '30'},
+              click: {click: `isshow${i+1}`, index: `${i+1}`, name: `show${i+1}`}
+            },
+              // content wrap
+
+              {
+                class: 'HeroView',
+                frame: {x: '0', y: '50', r: '0', w: '1x', h: '100'},
+                subViews: [
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '25', y: '0', r: '25', h: '50'},
+                  text: '广告标题：',
+                  textColor:'333333',
+                  size: 22
+                },
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '140', y: '0', h: '50'},
+                  text: '(0/50)',
+                  textColor:'999999',
+                  size: 12
+                },
+                {
+                  class: 'HeroTextField',
+                  frame: {x: '25', y: '50', r: '25', h: '40'},
+                  name: `adsTitle${i+1}`,
+                  text: item.adsTitle,
+                  textFieldDidEditing:{change:'adsTitle'},
+                },
+                {
+                  class: 'HeroView',
+                  frame: {x: '25', y: '90', r: '25', h: '1'},
+                  backgroundColor: 'C6C6C6'
+                }
+                ]
+              },
+              {
+                class: 'HeroView',
+                frame: {x: '0', y: '170', r: '0', h: '200'},
+                subViews: [
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '25', y: '0', r: '25', h: '50'},
+                  text: '广告内容：',
+                  textColor:'333333',
+                  size: 22
+                },
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '140', y: '0', h: '50'},
+                  text: '(0/200)',
+                  textColor:'999999',
+                  size: 12
+                },
+                {
+                  class: 'HeroTextView',
+                  frame: {x: '25', y: '70', r: '25', h: '100'},
+                  borderWidth: 1,
+                  borderColor: 'BFBFBF',
+                  cornerRadius: 5,
+                  backgroundColor: 'FAFAFA',
+                  name: `adsContent${i+1}`,
+                  text: item.adsContent,
+                  textFieldDidEditing:{adsContent:'change'},
+                }
+                ]
+              },
+              {
+                class: 'HeroView',
+                frame: {x: '0', y: '370', r: '0', h: '320'},
+                subViews: [
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '25', y: '0', w: '1x', h: '50'},
+                  text: '广告图片：',
+                  size: 22
+                },
+                {
+                  class: 'HeroLabel',
+                  frame: {x: '25', r: '25', y: '50'},
+                  text: '(要求上传图片宽高比为7:3，大小<1M，支持jpg/jpeg/png/gif等格式图片的本地上传，若不上传横图，广告位无法展示广告。)',
+                  size: 12,
+                  alignment:'left',
+                  textColor: '999999'
+                },
+                {
+                  class: 'HeroButton',
+                  frame: {x: '25', y: '120', r: '25', h: '100'},
+                  borderWidth: 1,
+                  borderColor: 'BFBFBF',
+                  cornerRadius: 5,
+                  backgroundColor: 'FAFAFA',
+                  titleColor: 'AFAFAF',
+                  title: '+',
+                  size: 50,
+                  click: {click: 'modAdsPic', index: `${i+1}`}
+                },
+                {
+                  class: 'HeroButton',
+                  frame: {x: '25', y: '250', r: '25', h: '50'},
+                  title: '提交',
+                  size: 18,
+                  backgroundColor: '25B0B8',
+                  cornerRadius: 8,
+                  click: {click: 'modAds', index: `${i+1}`}
+                }
+                ]
+              }
+            ]
+          };
+          subViews.push(itemView);
+        }
+        var that = this;
+        setTimeout(function(){
+          that.datas({name:'adswrapViews',subViews:subViews});
+        },100);
+      };
+
       Hero.viewWillAppear = function() {
+        // get
+        // url = host + '/ipfs/cat/'+'QmfBrLLnrgdRe6BP7oCQsKaDHwFp5PyTMHJKKmpyJgRXQF';
+        // ajax.get(url, opts, (res) => {
+        //   let dt = JSON.parse(res.content)
+        //   console.log(dt);
+        adsList = [
+        {
+          adsTitle:'aaaaaaaaa',
+          adsContent:'dkjanhdjkadkjnadamldklamdklawmdklawm'
+        },
+        {
+          adsTitle:'storeTEST',
+          adsContent:'testeeeeeeeeeeeeelkdemakndlkmdkmklmkmklmklm'
+        }
+        ];
+        this.updateAdsView(adsList);
+        // }, true)
 
       };
       Hero.viewWillDisAppear = function() {
@@ -51,159 +246,26 @@
       };
       Hero.ui = {
         nav: {
-          navigationBarHidden: false
+          navigationBarHidden: false,
+          title: '修改广告位'
         },
-        views: [{
+        views: [
+          {
             class: 'HeroView',
             frame: {w: '1x', y: '0', h: '89'},
             subViews: [
               // header
             ]
           },
-          {
-            class: 'HeroLabel',
-            frame: {x: '0.12x', y: '0.1x', w: '0.88x', h: '50'},
-            text: '修改广告位',
-            size: 36
-          },
+          // wrap
           {
             class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.1x', w: '180', h: '2'},
-            backgroundColor: 'bbbbbb'
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0.12x', y: '50+0.15x', w: '0.88x', h: '50'},
-            name: 'adswrap1',
-            subViews: [{
-                class: 'HeroLabel',
-                frame: {x: '0', r: '200', y: '0', w: '', h: ''},
-                text: 'Hero Store商城广告位',
-                size: '32'
-              },
-              {
-                class: 'HeroImageView',
-                frame: {r: '100', y: '5', w: '60', h: '40'},
-                image: path + './images/Merchant_drop down_icon@2x.png',
-                name: 'showicon1'
-              },
-              {
-                class: 'HeroButton',
-                frame: {r: '100', y: '5', w: '60', h: '40'},
-                click: {click: 'isshow1', name: 'show1'}
-              },
-              // content wrap
-
-              {
-            class: 'HeroView',
-            frame: {x: '0', y: '50+0.15x', w: '1x', h: '50'},
-            subViews: [
-              {
-                class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
-                text: '广告标题：',
-                size: 24
-              },
-              {
-                class: 'HeroTextField',
-                frame: {x: '170', y: '5', w: '0.5x', h: '40'},
-                borderWidth: 1,
-                borderColor: 'BFBFBF',
-                cornerRadius: 5
-              },
-              {
-                class: 'HeroLabel',
-                frame: {x: '200+0.5x', y: '20', w: '168', h: '30'},
-                text: '0/50',
-                size: 20
-              }
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0', y: '130+0.15x', w: '1x', h: '200'},
-            // backgroundColor: '333',
-            subViews: [
-              {
-                class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
-                text: '广告内容：',
-                size: 24
-              },
-              {
-                class: 'HeroTextView',
-                frame: {x: '170', y: '5', w: '0.5x', h: '180'},
-                borderWidth: 1,
-                borderColor: 'BFBFBF',
-                cornerRadius: 5,
-                backgroundColor: 'FAFAFA'
-              },
-              {
-                class: 'HeroLabel',
-                frame: {x: '200+0.5x', y: '150', w: '168', h: '50'},
-                text: '0/200',
-                size: 20
-              }
-            ]
-          },
-          {
-            class: 'HeroView',
-            frame: {x: '0', y: '350+0.15x', w: '1x', h: '450'},
-            subViews: [
-              {
-                class: 'HeroLabel',
-                frame: {x: '0', y: '0', w: '168', h: '50'},
-                text: '广告图片：',
-                size: 24
-              },
-              {
-                class: 'HeroLabel',
-                frame: {x: '170',r: '', y: '5', w: '0.5x'},
-                text: '要求上传图片宽高比为7:3，大小<1M，支持jpg/jpeg/png/gif等格式图片的本地上传，若不上传横图，广告位无法展示广告。',
-                size: 20
-              },
-              {
-                class: 'HeroButton',
-                frame: {x: '170', y: '100', w: '0.5x', h: '180'},
-                borderWidth: 1,
-                borderColor: 'BFBFBF',
-                cornerRadius: 5,
-                backgroundColor: 'FAFAFA',
-                titleColor: 'AFAFAF',
-                title: '+',
-                size: 100,
-                click: {click: 'modAdsPic'}
-              },
-            ]
-          },
-              {
-                class: 'HeroButton',
-                frame: {x: '170+0.175x', y: '670+0.15x', w: '0.15x', h: '50'},
-                title: '修改',
-                size: 20,
-                backgroundColor: '25B0B8',
-                cornerRadius: 8,
-                click: {
-                  click: 'modAds'
-                }
-              }
-            ]
-          },
-          // {
-          //   class: 'HeroView',
-          //   frame: {x: '0.12x', w: '1x',h: '50'},
-          //   name:'section2',
-          //   yOffset:'section1+20',
-          //   subViews: {
-          //     {
-          //       class: ''
-          //     },
-          //   },
-          // }
-
+            frame: {x: '0', y: '0', r: '0', w:'1x'},
+            name: 'adswrapViews'
+          }
         ]
       };
-    </script>
+      </script>
     </body>
 
-</html>
+    </html>
