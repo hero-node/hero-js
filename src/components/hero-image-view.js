@@ -23,6 +23,7 @@ export default class HeroImageView extends HeroElement {
     this.$ = {
       img: this.shadowDom.querySelector('img'),
       input: this.shadowDom.querySelector('input'),
+      upload: this.shadowDom.querySelector('#upload'),
     };
   }
 
@@ -77,8 +78,8 @@ export default class HeroImageView extends HeroElement {
       </style>  
       <img />
       <div id='upload'>
-      <label for="file" id='upload-label'></label>
-<input type="file" id="file" name="" style="display: none"/>
+        <label for="file" id='upload-label'></label>
+        <input type="file" id="file" name="" style="display: none"/>
       </div>
     `;
   }
@@ -122,6 +123,9 @@ export default class HeroImageView extends HeroElement {
       this.$.input.addEventListener('change', this.onChange.bind(this));
       this.$.img.style.display = 'none';
       this._uploadUrl = json.uploadUrl;
+    } else {
+      //fixd
+      this.$.upload.style.display = 'none';
     }
   }
   showBig() {
