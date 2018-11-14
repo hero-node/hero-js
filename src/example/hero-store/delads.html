@@ -8,19 +8,25 @@
   <script src='/socket.io/socket.io.js'></script>
   <script src="../../hero.js"></script>
   <script>
-
+    // const adsList
+    var adsList = [];
     Hero.on = function(data){
       if (data.click === "delAds") {
+        let idx = data.index;
         console.log(data.index);
-        switch(data.index) {
-          case `${data.index}`:
-            console.log(`删除的广告位应是第${data.index}个`)
+        switch(idx) {
+          case idx:
+            console.log(`删除的广告位应是第${idx+1}个`)
+            // del seller
+            alert("请求已发出，请等待结果");
+            adsList.splice(data.index, 1);
+            this.updateAdsView(adsList);
             break;
         }
         // console.log("delAds")
       }
     };
-    Hero.updateListView = function(list){
+    Hero.updateAdsView = function(list){
       var subViews = [];
       for (let i = 0; i < list.length; i++) {
         var item = list[i];
@@ -31,7 +37,7 @@
             {
               class: 'HeroLabel',
               frame: {x: '0', y: '0', r: '0', h: '30'},
-              text: 'Hero Store商城广告位',
+              text: item.adsTitle,
               size: 22
             },
             {
@@ -41,7 +47,7 @@
               size: 14,
               backgroundColor: '25B0B8',
               cornerRadius: 8,
-              click: {click: 'delAds', index: `${i+1}`}
+              click: {click: 'delAds', index: i}
             },
             {
               class: 'HeroView',
@@ -58,11 +64,17 @@
       },100);
     };
     Hero.viewWillAppear = function() {
-      sellerList = [
-        {address:'0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD'},
-        {address:'0x0000000000000000000000000000000000000000'}
+      adsList = [
+        {
+          address:'0xd2986B72D0379c2860DE233bc456Ba2C2a983CdD',
+          adsTitle: 'hero store'
+        },
+        {
+          address:'0x0000000000000000000000000000000000000000',
+          adsTitle: 'rirskjkldk'
+        }
       ];
-      this.updateListView(sellerList);
+      this.updateAdsView(adsList);
     };
     Hero.viewWillDisAppear = function() {
 
