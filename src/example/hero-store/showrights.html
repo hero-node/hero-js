@@ -33,6 +33,10 @@
       switch(data.index) {
           case idx:
             console.log(`删除的广告位应是第${idx+1}个`)
+            // del rights
+            alert("请求已发出，请等待结果");
+            rightList.splice(data.index, 1);
+            this.updateRightView(rightList);
             break;
         }
     }
