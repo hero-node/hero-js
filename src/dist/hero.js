@@ -5094,6 +5094,12 @@
     }
   }
 
+  class HeroScrollView extends HeroElement {
+    init() {
+      this.shadowDom.querySelector('#heroContent').style.overflow = 'scroll';
+    }
+  }
+
   var components = [
     HeroElement,
     HeroButton,
@@ -5113,6 +5119,7 @@
     HeroAlert,
     HeroConfirm,
     HeroDialog,
+    HeroScrollView,
   ];
 
   for (var i = 0, len = components.length; i < len; i++) {

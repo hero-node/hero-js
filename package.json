@@ -6,7 +6,7 @@
   "module": "src/index.js",
   "scripts": {
     "start": "npm run lib && cd ./src/example/ && node heronode.js",
-    "lib": "npm run dist-iife && npm run dist-cjs",
+    "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent",
     "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
     "precommit": "lint-staged"
@@ -34,6 +34,12 @@
     "rollup": "^0.65.0",
     "serve-index": "^1.9.1",
     "socket.io": "",
-    "socketio-file-upload": "^0.6.4"
+    "socketio-file-upload": "^0.6.4",
+    "web3": "^1.0.0-beta.36",
+    "web3-provider-engine": "^14.1.0",
+    "webpack": "^4.25.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.1.2"
   }
 }

@@ -2,39 +2,30 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://cdn.tangguo360.com/dapps/lib/web3.min-1.0es6.js"></script>
   <script>
-    window.addEventListener('load', function() {
-      if (typeof web3 !== 'undefined') {
-        web3js = new Web3(web3.currentProvider);
-      }
+  setTimeout(function(){
+    var web3js = new Web3(web3.currentProvider);
+    async function getA (){
+      var a = await web3js.eth.getAccounts();
+      alert(a);
+    }  
+    getA()
+    // web3js.eth.getAccounts().then(function(acount){alert('a'+acount)}).catch(function(acount){alert('b'+acount)});
 
-    })
-    web3.eth.acounts = new Promise(resolve,reject){
-      ajax().get('/acount',function(json){
-        resolve()
-      },function(){
-        reject()
-      });
-    }
+      // web3js.eth.signTransaction(function(err,hash){
+      //   alert(err+hash)
+      // },{from:'0x1111111111111111111111111111111111111111', to:'0xac4a5e4d788f2e3e6823466d834bb1d3f00b8b61', value: 1000}).catch(function(acount){
+      //   alert('b'+acount)
+      // }); 
+      // web3js.eth.sendTransaction(function(err,hash){
+      //   alert(err+hash)
+      // },{from:'0x1111111111111111111111111111111111111111', to:'0xac4a5e4d788f2e3e6823466d834bb1d3f00b8b61', value: 1000}).catch(function(acount){
+      //   alert('b'+acount)
+      // }); 
+  },3000);
 
-
-    web3.eth.acounts = function(){
-      ajax().get('/acount',function(json){
-
-      },function(){
-
-      });
-    }
-    var acount = new Promise(web3.eth.acounts);
-    acount.then(function(json){
-      console.log('sucess')
-    });
-    acount.catch(function(){
-      console.log('fail')
-    });
-
-    })
   </script>
+</head>
+<body>
 </body>
 </html>

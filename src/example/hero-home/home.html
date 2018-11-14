@@ -49,27 +49,34 @@
         {title:'Hero OTC',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-apollo/otc.html'},
         {title:'Hero trade',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-apollo/trade.html'},
         {title:'Hero game',icon:path+'/images/saibiwo_icon.png',url:host+'/example/gather-blessing/home.html'},
-        {title:'糗事百科',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io'},
-        {title:'大象公会',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io'},
-        {title:'百度',icon:path+'/images/saibiwo_icon.png',url:'https://news.baidu.com/index.html'},
-        {title:'36Kr',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/index.html'},
+        {title:'Maker',icon:'https://www.gnosis.pm/assets/img/gnosis-x/header.svg',url:'https://oasisdex.com'},
+        {title:'FCK',icon:'https://media.dappreview.cn/dappLogo/931/fckteamwork/A3wz26JKJNbPiEMY3shBCfxk6GPCYdHi.jpg',url:'https://fck.com/'},
+        {title:'以太小精灵',icon:'https://dapp.review/media/WeChat_Screenshot_20180825005953.png',url:'https://www.etheremon.com/'},
+        {title:'加密少女',icon:'https://dapp.review/media/%E5%8A%A0%E5%AF%86%E5%B0%91%E5%A5%B3Icon.jpg',url:'http://cryptogirl.game'},
+        {title:'Cubego',icon:'https://dapp.review/media/Cubego.jpg',url:'https://www.cubego.io'},
+        {title:'iBank',icon:'https://media.dappreview.cn/dappLogo/undefined/DR-Jason/bYZZQmMDDeEeDx2JHrxaDQbcfWkHHZSd.png',url:'http://ibankeos.io'},
+        {title:'僵尸战场',icon:'https://dapp.review/media/Zombie_Battleground.jpg',url:'https://loom.games/'},
         {title:'incentives',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/incentives'},
         {title:'incentives test',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-home/test1.html'},
-        {title:'One',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.iio'},
+        {title:'fomo3D',icon:path+'/images/saibiwo_icon.png',url:'https://exitscam.me/play'},
+        {title:'idex',icon:path+'/images/saibiwo_icon.png',url:'https://idex.market/eth/her'},
+        {title:'Gods',icon:'https://dapp.review/media/WeChat_Screenshot_20180825010157.png',url:'https://godsunchained.com/'},
+        {title:'error',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.iio'},
       ];
       var historyViews = [];
       for (var i = 0; i < history.length; i++) {
         var item = history[i];
         var itemView = {
           class:'HeroView',
+          // enable:false,
           frame:{x:i%5/5+'x',y:parseInt(i/5)*68+'',w:'0.2x',h:'68'},
           subViews:[
             {
               class:'HeroButton',
               frame:{w:'1x',h:'1x'},
-              ripple:true,
+              // ripple:true,
               backgroundColor:'ffffff',
-              click:{command:'gotoWithLoading:'+item.url}
+              click:{command:'goto:'+item.url}
             },
             {
               class:'HeroImageView',
@@ -103,6 +110,13 @@
       views:
       [
         {
+          class:'HeroWebView',
+          // enable:false,
+          frame:{w:'1x',h:'1x'},
+          url:path+'/p2pview.html',
+          alpha:0.5
+        },
+        {
           class:'HeroImageView',
           frame:{x:'0.5x-100',y:'0.5x-110',w:'200',h:'40'},
           image:path+'/images/logo.png'
@@ -115,7 +129,7 @@
           borderWidth:0.5,
         },
         {
-          class:'HeroView',
+          class:'HeroScrollView',
           name:'historyContent',
           frame:{x:'25',r:'25',y:'0.5x+50',b:'44'},
         },
