@@ -23,6 +23,7 @@ export default class HeroImageView extends HeroElement {
     this.$ = {
       img: this.shadowDom.querySelector('img'),
       input: this.shadowDom.querySelector('input'),
+      upload: this.shadowDom.querySelector('#upload'),
     };
   }
 
@@ -122,6 +123,8 @@ export default class HeroImageView extends HeroElement {
       this.$.input.addEventListener('change', this.onChange.bind(this));
       this.$.img.style.display = 'none';
       this._uploadUrl = json.uploadUrl;
+    } else {
+      this.$.upload.style.display = 'none';
     }
   }
   showBig() {
