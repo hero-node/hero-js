@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/store.js"></script>
+  <script src="../../hero.js"></script>
+  <script>
+    if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+
+    Hero.on = function(data){
+
+    };
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      nav:{
+        navigationBarHidden: false,
+        title: '首页'
+      },
+      views:[
+
+      ]
+    };
+  </script>
+</body>
+</html>

@@ -18,7 +18,15 @@
     };
     Hero.viewWillAppear = function() {
       var datas = [
-        {title:'首页', height: 60, image:path+'./images/menu_merchant_icon@2x.png',size: '24',accessoryType: 'DisclosureIndicator', click:{click:'homepage'}},
+        {title:'创建商户', height: 60, image:path+'./images/menu_merchant_icon@2x.png',size: '24',accessoryType: 'DisclosureIndicator', click:{click:'create'}},
+        {title:'卖家', size: '24', height: 60, image:path+'./images/menu_seller_icon@2x.png'},
+        {title:'添加卖家', size: '18', height: 60, accessoryType: 'DisclosureIndicator',indentationWidth: 80, click:{click:'addseller'}},
+        {title:'删除卖家', size: '18', height: 60, accessoryType:'DisclosureIndicator',indentationWidth: 80, click:{click:'delseller'}},
+        {title:'广告位',size: '24', height: 60, image:path+'./images/menu_advertising_icon@2x.png'},
+        {title:'设置广告位',size: '18', height: 60, accessoryType:'DisclosureIndicator',indentationWidth: 80, click:{click:'setads'}},
+        {title:'修改广告位', size: '18', height: 60, accessoryType:'DisclosureIndicator',indentationWidth: 80, click:{click:'modads'}},
+        {title:'删除广告位', size: '18', height: 60, accessoryType:'DisclosureIndicator',indentationWidth: 80, click:{click:'delads'}},
+        {title:'维权列表', size: '24', height: 60, image:path+'./images/menu_Rights protection_icon@2x.png', accessoryType:'DisclosureIndicator', click:{click:'showrights'}},
       ]
       var rows = [{rows:[]}];
       for (var i = 0; i < datas.length; i++) {

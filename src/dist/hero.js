@@ -1,24 +1,14 @@
-(function() {
+(function () {
   'use strict';
 
   String.prototype.endWith = function(str) {
-    if (
-      str == null ||
-      str == '' ||
-      this.length == 0 ||
-      str.length > this.length
-    )
+    if (str == null || str == '' || this.length == 0 || str.length > this.length)
       return false;
     if (this.substring(this.length - str.length) == str) return true;
     else return false;
   };
   String.prototype.startWith = function(str) {
-    if (
-      str == null ||
-      str == '' ||
-      this.length == 0 ||
-      str.length > this.length
-    )
+    if (str == null || str == '' || this.length == 0 || str.length > this.length)
       return false;
     if (this.substr(0, str.length) == str) return true;
     else return false;
@@ -231,13 +221,11 @@
         //   }
         // }
 
-        this.shadowDom
-          .querySelectorAll('#heroContent *')
-          .forEach(function(ele) {
-            if (ele.setController) {
-              ele.controller = controller;
-            }
-          });
+        this.shadowDom.querySelectorAll('#heroContent *').forEach(function(ele) {
+          if (ele.setController) {
+            ele.controller = controller;
+          }
+        });
       }
     }
 
@@ -292,8 +280,7 @@
             ? parseFloat(x2) * p
             : parseFloat(x2));
       } else {
-        xInt =
-          x.charAt(x.length - 1) === 'x' ? parseFloat(x) * p : parseFloat(x);
+        xInt = x.charAt(x.length - 1) === 'x' ? parseFloat(x) * p : parseFloat(x);
       }
       return xInt;
     }
@@ -525,8 +512,7 @@
               this.controller.heroContent
             );
             top =
-              top ||
-              this.controller.findViewByname(refName, this.parentElement);
+              top || this.controller.findViewByname(refName, this.parentElement);
             if (top) {
               heroContent = top.$.heroContent;
               if (heroContent.style.top && heroContent.style.top !== 'auto') {
@@ -555,8 +541,7 @@
               this.controller.heroContent
             );
             top =
-              top ||
-              this.controller.findViewByname(refName, this.parentElement);
+              top || this.controller.findViewByname(refName, this.parentElement);
             if (top) {
               heroContent = top.$.heroContent;
               if (heroContent.style.left && heroContent.style.left !== 'auto') {
@@ -582,7 +567,7 @@
               this.parent.json.frame.h = yInt + hInt + '';
               this.parent.json.frame.w = xInt + wInt + '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
           }
           if (this.json.contentSizeElementY) {
@@ -592,13 +577,13 @@
                 parseFloat(this.$.heroContent.style.height) +
                 '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
           }
           if (this.heroLayoutListenners) {
             for (var i = 0; i < this.heroLayoutListenners.length; i++) {
               var o = this.heroLayoutListenners[i];
-              o.oon({ frame: o.json.frame, yOffset: o.json.yOffset });
+              o.in({ frame: o.json.frame, yOffset: o.json.yOffset });
             }
           }
         }
@@ -645,7 +630,7 @@
               this.parent.json.frame.h =
                 parseFloat(this.$.heroContent.style.top) + '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
             this.$.heroContent.style.display = 'none';
           } else {
@@ -655,7 +640,7 @@
                 parseFloat(this.$.heroContent.style.height) +
                 '';
               frame = this.parent.json.frame;
-              this.parent.oon({ frame: frame });
+              this.parent.in({ frame: frame });
             }
             this.$.heroContent.style.display = 'block';
           }
@@ -714,29 +699,25 @@
         if (json.gradientBackgroundColor) {
           var colors = json.gradientBackgroundColor;
           this.$.heroContent.style.background =
-            '-webkit-linear-gradient(top,#' +
-            colors[0] +
-            ',#' +
-            colors[1] +
-            ')';
+            '-webkit-linear-gradient(top,#' + colors[0] + ',#' + colors[1] + ')';
         }
         // if (json.gesture) {
-        // 	var gesture = json.gesture;
-        // 	var i, event;
-        // 	for (i = 0; i < gesture.length; i++) {
-        // 		var ges = gesture[i];
-        // 		if (ges.name === 'swip') {
-        // 			this.$.heroContent.addEventListener('touchmove',function(event){
-        // 				event = event || window.event;
-        // 				switch(event.type){
-        // 				case 'touchmove':
-        // 					event.touches[0].clientX;
-        // 				}
+        //  var gesture = json.gesture;
+        //  var i, event;
+        //  for (i = 0; i < gesture.length; i++) {
+        //    var ges = gesture[i];
+        //    if (ges.name === 'swip') {
+        //      this.$.heroContent.addEventListener('touchmove',function(event){
+        //        event = event || window.event;
+        //        switch(event.type){
+        //        case 'touchmove':
+        //          event.touches[0].clientX;
+        //        }
 
-        // 			}, false);
+        //      }, false);
 
-        // 		}
-        // 	}
+        //    }
+        //  }
         // }
         if (json.subViews) {
           while (this.$.heroContent.lastChild) {
@@ -2595,7 +2576,7 @@
 
   class HeroLabel extends HeroElement {
     init() {
-      this.shadowDom.querySelector('#heroContent').style.pointerEvents = 'none';
+      this.shadowDom.querySelector('#heroContent').style.pointerEvents='none';
       this.$ = {
         span: this.shadowDom.querySelector('span'),
       };
@@ -2605,10 +2586,9 @@
       if (json.text !== undefined) {
         this.updateContent(this.$.span, json.text);
       }
-      if (!json.hasOwnProperty('numberOfLines')) {
+      if (!json.hasOwnProperty("numberOfLines") ) {
         this.$.span.style.lineHeight = this.$.heroContent.style.height;
-      }
-      if (json.size) {
+      }    if (json.size) {
         this.$.span.style.fontSize = json.size + 'px';
       }
       if (json.alignment) {
@@ -2635,10 +2615,29 @@
   }
 
   class HeroImageView extends HeroElement {
+    constructor() {
+      super();
+
+      var _uploadUrl = '';
+      var _uploadName = '';
+      var _headers = '';
+      var _wrapper;
+      var _bigImg;
+      var _types = ['image/jpg', 'image/jpeg', 'image/png'];
+
+      this._uploadUrl = _uploadUrl;
+      this._uploadName = _uploadName;
+      this._headers = _headers;
+      this._wrapper = _wrapper;
+      this._bigImg = _bigImg;
+      this._types = _types;
+    }
     init() {
       this.shadowDom.querySelector('#heroContent').style.pointerEvents = 'none';
       this.$ = {
         img: this.shadowDom.querySelector('img'),
+        input: this.shadowDom.querySelector('input'),
+        upload: this.shadowDom.querySelector('#upload'),
       };
     }
 
@@ -2648,10 +2647,54 @@
         img {
           margin: 0px;padding: 0px;
           width: 100%;height: 100%;border: 0px;
-          pointer-events:none;
+          pointer-events:auto;
         }
-      </style>    
+        input {
+          display:none;
+        }
+        #upload{
+          margin: 0px;padding: 0px;
+          width: 100%;height: 100%;border: 0px;
+          pointer-events:auto;
+        }
+        label{
+          display:block;
+          height:100%;
+          width:100%;
+          background:#6f787b;
+          position:relative;
+        }
+        #upload-label::after {
+         content:'';
+         position:absolute;
+         top:0;
+         left:0;
+         bottom:0;
+         right:0;
+         margin:auto;
+         background: #000000;
+         height:75px;
+         width:10px;
+      }
+      #upload-label::before {
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+        margin:auto;
+        background: #000000;
+        height:10px;
+        width:75px;
+     }
+                  
+      </style>  
       <img />
+      <div id='upload'>
+        <label for="file" id='upload-label'></label>
+        <input type="file" id="file" name="" style="display: none"/>
+      </div>
     `;
     }
 
@@ -2659,12 +2702,107 @@
       if (json.base64image || json.image) {
         this.$.img.src = json.base64image || json.image;
       }
-      if (json.uploadUrls) {
-        this.$.img.style.border = ' 1px dash #333';
-        var input = document.createElement('input');
-        input.type = 'image';
-        input.id = 'file_input';
-        this.$.heroContent.appendChild(input);
+      if (json.headers) {
+        this._headers = json.headers;
+      }
+      if (json.uploadName) {
+        this._uploadName = json.uploadName;
+      }
+      if (json.showBig) {
+        this.$.img.addEventListener('click', this.showBig.bind(this));
+        this._wrapper = document.createElement('div');
+        this._wrapper.style.height = '100%';
+        this._wrapper.style.width = '100%';
+        this._wrapper.style.background = 'rgba(0,0,0,0.8)';
+        this._wrapper.style.position = 'absolute';
+        this._wrapper.style.zIndex = '99998';
+        this._wrapper.style.transition = `all 0.5s`;
+        this._wrapper.style.opacity = 0;
+        this._wrapper.style.visibility = 'hidden';
+        this._wrapper.style.display = 'flex';
+        this._wrapper.style.justifyContent = 'center';
+        this._wrapper.style.alignItems = 'center';
+        this._wrapper.addEventListener('click', this.showSmall.bind(this));
+
+        this._bigImg = document.createElement('img');
+        this._bigImg.style.height = 'auto';
+        this._bigImg.style.width = '80%';
+        this._bigImg.src = json.base64image || json.image;
+        this._wrapper.appendChild(this._bigImg);
+      }
+      if (json.uploadUrl) {
+        let _script = document.createElement('script');
+        _script.src = './app/pickerviewbase/jquery-3.3.1.min.js';
+        document.body.appendChild(_script);
+        this.$.input.addEventListener('change', this.onChange.bind(this));
+        this.$.img.style.display = 'none';
+        this._uploadUrl = json.uploadUrl;
+      } else {
+        //fixd
+        this.$.upload.style.display = 'none';
+      }
+    }
+    showBig() {
+      document.body.appendChild(this._wrapper);
+      this._wrapper.style.visibility = 'visible';
+      this._wrapper.style.opacity = 1;
+    }
+    showSmall() {
+      this._wrapper.style.opacity = 0;
+      this._wrapper.style.visibility = 'hidden';
+    }
+    onChange() {
+      console.log(this._uploadUrl);
+      var formFile = new FormData();
+      var file = this.$.input.files[0];
+      if (file.size > 1 * 1024 * 1024) {
+        alert(`图片小于1mb${file.size}`);
+        return;
+      } else {
+        let _filetype = file.type;
+        for (let x in this._types) {
+          //判断格式是否匹配
+          if (_filetype == this._types[x]) {
+            //匹配
+            if (!formFile.get('upload')) {
+              formFile.append('upload', file);
+            } else {
+              formFile.set('upload', file);
+            }
+            $.ajax({
+              url: this._uploadUrl,
+              type: 'POST',
+              data: formFile,
+              async: true,
+              cache: false,
+              processData: false,
+              contentType: false,
+              success: res => {
+                console.log(res);
+                alert('上传成功');
+              },
+              error: res => {
+                console.log(res);
+                alert('上传失败');
+              },
+            });
+            var r = new FileReader();
+            let that = this;
+            r.onload = function() {
+              that.$.img.src = r.result;
+              that._bigImg.src = r.result;
+              that.$.img.style.display = 'block';
+            };
+            r.readAsDataURL(file);
+            break;
+          } else {
+            if (x == this._types.length - 1) {
+              //匹配失败
+              alert(`格式不对${file.type}`);
+              return;
+            }
+          }
+        }
       }
     }
   }
@@ -2699,6 +2837,11 @@
       }
       if (json.text) {
         this.$.input.value = json.text;
+        if (this._json.textFieldDidEditing) {
+          this._json.textFieldDidEditing.value = json.text;
+          this._json.textFieldDidEditing.name = this._json.name;
+          this.controller.on(this._json.textFieldDidEditing);
+        }
       }
 
       this.controller && this.controller.on(json.textFieldDidEditing);
@@ -2862,9 +3005,7 @@
         other: this.shadowDom.querySelector('#other'),
         bottomLine: this.shadowDom.querySelector('#bottomLine'),
         rightIconWrap: this.shadowDom.querySelector('#rightIconWrap'),
-        DisclosureIndicator: this.shadowDom.querySelector(
-          '.DisclosureIndicator'
-        ),
+        DisclosureIndicator: this.shadowDom.querySelector('.DisclosureIndicator'),
         Checkmark: this.shadowDom.querySelector('.Checkmark'),
         DetailButton: this.shadowDom.querySelector('.DetailButton'),
         rightIcon: this.shadowDom.querySelector('.rightIcon'),
@@ -2975,12 +3116,8 @@
       if (json.textValue) {
         this.$.title.innerHTML = json.title;
         this.$.other.innerHTML = json.textValue;
-        this.$.title.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
-        this.$.other.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
+        this.$.title.style.lineHeight = json.height ? json.height + 'px' : '44px';
+        this.$.other.style.lineHeight = json.height ? json.height + 'px' : '44px';
         this.$.title.style.width = '50%';
         this.$.other.style.width = '50%';
         this.$.other.style.right = '15px';
@@ -3004,9 +3141,7 @@
         this.$.other.style.color = '#aaa';
       } else if (json.title) {
         this.$.title.innerHTML = json.title;
-        this.$.title.style.lineHeight = json.height
-          ? json.height + 'px'
-          : '44px';
+        this.$.title.style.lineHeight = json.height ? json.height + 'px' : '44px';
         this.$.title.style.left = json.height ? json.height / 2 + 'px' : '30px';
       }
       if (json.bottomLine) {
@@ -3230,6 +3365,9 @@
         vertical-align: center;
         border-color: #fff;
         background-color: transparent;
+        border:none;
+        outline:none;
+        padding: 10px;
       }
       </style>
       <textarea id='text'></textarea>
@@ -3254,12 +3392,19 @@
 
       if (json.text) {
         this.$.textarea.value = json.text;
+        if (this._json.textFieldDidEditing) {
+          this._json.textFieldDidEditing.value = json.text;
+          this._json.textFieldDidEditing.name = this._json.name;
+          this.controller.on(this._json.textFieldDidEditing);
+        }
       }
     }
 
-    textChange(text) {
+    textChange(e) {
+      var text = e.target.value;
       if (this._json.textFieldDidEditing) {
         this._json.textFieldDidEditing.value = text;
+        this._json.textFieldDidEditing.name = this._json.name;
         this.controller.on(this._json.textFieldDidEditing);
       }
     }
@@ -3269,10 +3414,10 @@
     init() {
       this.$ = {
         div: this.shadowDom.querySelector('#hero-toast-wrap'),
-      };
-    }
+    };
+  }
 
-    template() {
+  template() {
       return `
     <style type="text/css">
     * {
@@ -3350,65 +3495,65 @@
     </style>
     <div id="hero-toast-wrap"></div>
     `;
-    }
+  }
 
-    on(json) {
+  on(json) {
       // json.position : leftTop (default) || rightTop || leftBottom || rightBottom
-      var position = json.position ? json.position : 'leftTop';
+      var position = json.position ? json.position : "leftTop";
       if (json.text && json.text.length > 0) {
-        let heroToastItem = document.createElement('div');
-        this.$.div.appendChild(heroToastItem);
-        var style = {};
-        var toastPos = '';
-        switch (position) {
-          case 'leftTop':
-            toastPos = 'fit-left-top';
-            style = {
-              left: '10px',
-              top: 0,
-            };
-            break;
-          case 'rightTop':
-            toastPos = 'fit-right-top';
-            style = {
-              right: '10px',
-              top: 0,
-            };
-            break;
-          case 'leftBottom':
-            toastPos = 'fit-left-bottom';
-            style = {
-              left: '10px',
-              bottom: '10px',
-            };
-            break;
-          case 'rightBottom':
-            toastPos = 'fit-right-bottom';
-            style = {
-              right: '10px',
-              bottom: '10px',
-            };
-            break;
-        }
-        // add className
-        heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
-        // change style
-        for (var i in style) {
-          this.$.div.style[i] = style[i];
-        } // get childNodes Array
-        this.$.p = this.$.div.childNodes;
-        let len = this.$.p.length;
-        // show and hidden item
-        for (let i = len - 1; i >= 0; i--) {
-          this.updateContent(this.$.p[len - 1], json.text);
-          this.$.p[len - 1].classList.remove('hidden');
-          var that = this;
-          setTimeout(function() {
-            that.$.p[len - i - 1].classList.add('hidden');
-          }, 3000);
-        }
+          let heroToastItem = document.createElement("div");
+          this.$.div.appendChild(heroToastItem);
+          var style = {};
+          var toastPos = "";
+          switch (position) {
+              case "leftTop":
+              toastPos = "fit-left-top";
+              style = {
+                  left: "10px",
+                  top: 0
+              };
+              break;
+              case "rightTop":
+              toastPos = "fit-right-top";
+              style = {
+                  right: "10px",
+                  top: 0
+              };
+              break;
+              case "leftBottom":
+              toastPos = "fit-left-bottom";
+              style = {
+                  left: "10px",
+                  bottom: "10px"
+              };
+              break;
+              case "rightBottom":
+              toastPos = "fit-right-bottom";
+              style = {
+                  right: "10px",
+                  bottom: "10px"
+              };
+              break;
+          }
+          // add className
+          heroToastItem.className += `hero-toast-box ${toastPos} hidden`;
+          // change style
+          for( var i in style) {
+              this.$.div.style[i] = style[i];
+          }        // get childNodes Array
+          this.$.p = this.$.div.childNodes;
+          let len = this.$.p.length;
+          // show and hidden item 
+          for (let i = len-1; i >= 0; i--) {
+              this.updateContent(this.$.p[len-1], json.text);
+              this.$.p[len-1].classList.remove('hidden');
+              var that = this;
+              setTimeout(function () {
+                  that.$.p[len-i-1].classList.add('hidden'); 
+              }, 3000);
+          }
+          }
       }
-    }
   }
 
   class HeroToolbarItem extends HeroElement {
@@ -3504,21 +3649,21 @@
         this.$.span.style.height = '50%';
       }
       var that = this;
-      setTimeout(function() {
+      setTimeout(function(){
         if (json.image) {
-          that.$.span.style.lineHeight =
-            that.$.span.getBoundingClientRect().height + 'px';
-        } else {
-          that.$.span.style.lineHeight =
-            that.$.span.getBoundingClientRect().height + 'px';
+          that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
+        }else{
+          that.$.span.style.lineHeight = that.$.span.getBoundingClientRect().height+'px';
         }
-      }, 100);
+      },100);
       this.selected = this._json.selected;
       this.addSelectedClz();
     }
   }
 
-  class HeroView extends HeroElement {}
+  class HeroView extends HeroElement {
+    
+  }
 
   class HeroViewController extends HeroElement {
     findViewByname(name, root) {
@@ -3707,7 +3852,7 @@
           if (view.in) {
             this.heroContent.appendChild(view);
             view.controller = this;
-            if (viewObject.frame);
+            if (viewObject.frame) ;
             view.in(viewObject);
           }
         }
@@ -3796,9 +3941,7 @@
             window.history.back();
           } else if (command.substring(0, 8) === 'present:') {
             var _data = {};
-            var params = (window.location.search.split('?')[1] || '').split(
-              '&'
-            );
+            var params = (window.location.search.split('?')[1] || '').split('&');
             for (var param in params) {
               if (params.hasOwnProperty(param)) {
                 var paramParts = params[param].split('=');
@@ -3808,10 +3951,7 @@
             if (_data.heropage) {
               window.presentedPage = _data.heropage;
             }
-            window.APP.gotoPage(
-              command.substring(8, command.length),
-              'present'
-            );
+            window.APP.gotoPage(command.substring(8, command.length), 'present');
           } else if (command.substring(0, 7) === 'dismiss') {
             if (window.presentedPage) {
               window.APP.gotoPage(window.presentedPage);
@@ -3819,7 +3959,7 @@
             } else {
               window.history.back();
             }
-          } else if (command.substring(0, 6) === 'submit');
+          } else if (command.substring(0, 6) === 'submit') ;
         } else if (command.hasOwnProperty('showMenu')) {
           var showMenu = command.showMenu;
           window.APP.showLeftmenu(showMenu);
@@ -5100,6 +5240,142 @@
     }
   }
 
+  class HeroLoading extends HeroElement {
+    init() {
+      this.$ = {
+        layer: this.shadowDom.querySelector('#layer'),
+        loading: this.shadowDom.querySelector('#loading'),
+    };
+  };
+
+  template() {
+      return `
+    <style type="text/css">
+    * {
+        width: 100%;
+        height: 100%;
+    }
+    #loading{
+        width: 100px;
+        height: 100px;
+        position: absolute;
+        left:50%;
+        top:50%;
+        -webkit-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+        z-index: 99999;
+    }
+    #layer{
+        position: absolute;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 99998;
+        background-color:#000; 
+        filter: alpha(opacity=40); 
+        -moz-opacity: 0.4; 
+        opacity: 0.4; 
+    }
+    .loadEffect {
+        width: 100px;
+        height: 100px;
+        position: relative;
+    }
+    .loadEffect span{
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+        position: absolute;
+        -webkit-animation: load 1.04s ease infinite;
+    }
+    @-webkit-keyframes load{
+        0%{
+            opacity: 1;
+        }
+        100%{
+            opacity: 0.2;
+        }
+    }
+    .loadEffect span:nth-child(1) {
+        left: 0;
+        top: 50%;
+        margin-top:-8px;
+        -webkit-animation-delay:0.13s;
+    } 
+    .loadEffect span:nth-child(2) {
+        left: 14px;
+        top: 14px;
+        -webkit-animation-delay:0.26s;
+    }
+    .loadEffect span:nth-child(3) {
+        left: 50%;
+        top: 0;
+        margin-left: -8px;
+        -webkit-animation-delay:0.39s;
+    }
+    .loadEffect span:nth-child(4) {
+        top: 14px;
+        right:14px;
+        -webkit-animation-delay:0.52s;
+    }
+    .loadEffect span:nth-child(5) {
+        right: 0;
+        top: 50%;
+        margin-top:-8px;
+        -webkit-animation-delay:0.65s;
+    }
+    .loadEffect span:nth-child(6) {
+        right: 14px;
+        bottom:14px;
+        -webkit-animation-delay:0.78s;
+    }
+    .loadEffect span:nth-child(7) {
+        bottom: 0;
+        left: 50%;
+        margin-left: -8px;
+        -webkit-animation-delay:0.91s;
+    }
+    .loadEffect span:nth-child(8) {
+        bottom: 14px;
+        left: 14px;
+        -webkit-animation-delay:1.04s;
+    }
+    .loadText {
+        position: relative;
+        left: 15px;
+        top: 10px;
+        font-size: 15px;
+        color: #fff;
+    }
+
+    </style>
+    <div id='layer'>
+    <div id='loading'>
+    <div class="loadEffect">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    </div>
+    </div>
+    </div>
+    `;
+  };
+
+  on(json) {
+      if (typeof json.show === 'boolean') {
+        this.$.loading.active = json.show;
+        this.$.layer.style.visibility = json.show ? 'visible' : 'hidden';
+    }
+  }
+  }
+
   var components = [
     HeroElement,
     HeroButton,
@@ -5120,9 +5396,11 @@
     HeroConfirm,
     HeroDialog,
     HeroScrollView,
+    HeroLoading,
   ];
 
   for (var i = 0, len = components.length; i < len; i++) {
     window.customElements.define(components[i].customName, components[i]);
   }
-})();
+
+}());
