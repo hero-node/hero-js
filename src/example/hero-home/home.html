@@ -76,7 +76,7 @@
               frame:{w:'1x',h:'1x'},
               // ripple:true,
               backgroundColor:'ffffff',
-              click:{command:'goto:'+item.url}
+              click:{command:'gotoWithLoading:'+item.url}
             },
             {
               class:'HeroImageView',
@@ -224,9 +224,13 @@
           name:'toast',
         },
         {
-  				class:'HeroSignature',
-  				name:'signature'
-  			}
+          class:'HeroSignature',
+          name:'signature'
+        },
+        {
+          class:'HeroPickerView',
+          name:'picker'
+        }
       ]
     };
 

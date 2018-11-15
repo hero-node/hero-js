@@ -16,10 +16,6 @@
       if (data.click === 'info') {
         this.command('goto:'+path+'info.html')
       }
-      if (data.click === 'privacy') {
-        this.command('goto:'+path+'privacy.html')
-      }
-
     };
     Hero.viewWillAppear = function() {
 
@@ -34,8 +30,7 @@
       version:-1,
       tintColor:'bd3a53',
       nav:{
-        title:"Me",
-        rightItems: [{title:'Info',click:{click:'info'}},{title:'Info',click:{click:'info'}}],
+        title:"Security and Privacy",
         navigationBarHidden:false
       },
       views:
@@ -44,37 +39,28 @@
           class:'HeroTableView',
           frame:{w:'1x',h:'1x'},
           name:'meTableView',
-          data:[{rows:[
+          data:[{sectionTitle:'Security',sectionFootTitle:'The domain name system is a centralized system.Ens is a decentralized name system but can change it by owner',rows:[
             {
-              height:60,
-              title:'gp',
-              accessoryType:'DisclosureIndicator',
-              image:path+'./images/menu_merchant_icon1@2x.png',detail:'slllll'
+              title:'DNS',
+              boolValue:true
+            },
+            {
+              title:'ENS',
+              boolValue:true
+            },
+            {
+              title:'HNS',
+              boolValue:true
             }
-          ]},{rows:[
+          ]},{sectionTitle:'Privacy',rows:[
             {
-              title:'My Hero Chat ID',
-              accessoryType:'DisclosureIndicator'
+              title:'Finger print',
+              boolValue:true
             },
             {
-              title:'Status : On line',
-              accessoryType:'DisclosureIndicator'
+              title:'Face ID',
+              boolValue:true
             },
-          ]},{rows:[
-            {
-              title:'Security and Privacy',
-              accessoryType:'DisclosureIndicator',
-              click:'privacy'
-            },
-            {
-              title:'About Hero Chat',
-              accessoryType:'DisclosureIndicator'
-            },
-          ]},{rows:[
-            {
-              title:'Setting',
-              accessoryType:'DisclosureIndicator'
-            }
           ]}]
         },
         {
