@@ -13,12 +13,14 @@
   <script>
 
     Hero.on = function(data){
-
+      if (data.title) {
+        this.command('goto:'+path+'chat.html?title='+encodeURIComponent(data.title));
+      }
     };
     Hero.viewWillAppear = function() {
-      setTimeout(function(){
-        Hero.datas({name:'sign',message:'a'});
-      },1000)
+      // setTimeout(function(){
+      //   Hero.datas({name:'sign',message:'a'});
+      // },1000)
     };
     Hero.viewWillDisAppear = function() {
 
@@ -45,17 +47,17 @@
             {
               sectionTitle:'new',
               rows:[
-                {height:60,title:'Vtalik',image:path+'./images/fu.png',detail:'Nerver give up eth'}
+                {height:60,title:'Vtalik',image:'https://pbs.twimg.com/profile_images/977496875887558661/L86xyLF4_bigger.jpg',detail:'Nerver give up eth'}
               ]
             },
             {
               sectionTitle:'history',
               rows:[
-                {height:60,title:'Vtalik',image:path+'./images/fu1.png',detail:'Nerver give up eth'},
-                {height:60,title:'sotoshi',image:path+'./images/menu_merchant_icon1@2x.png',detail:'bitcoin is best'},
-                {height:60,title:'Patrick Dai',image:path+'./images/menu_merchant_icon1@2x.png',detail:'POS is future'},
-                {height:60,title:'Neo',image:path+'./images/menu_merchant_icon1@2x.png',detail:'to the moon'},
-                {height:60,title:'Hero Node',image:path+'./images/menu_merchant_icon1@2x.png',detail:'Dapp is the next decade'},
+                {height:60,title:'Vtalik',image:'https://pbs.twimg.com/profile_images/977496875887558661/L86xyLF4_bigger.jpg',detail:'Nerver give up eth'},
+                {height:60,title:'sotoshi',image:'https://pbs.twimg.com/profile_images/449635574610026496/06yRvPZ-_bigger.jpeg',detail:'bitcoin is best'},
+                {height:60,title:'Patrick Dai',image:'https://pbs.twimg.com/profile_images/963340424982089728/-6IqmEpP_200x200.jpg',detail:'POS is future'},
+                {height:60,title:'Da Hongfei',image:'https://pbs.twimg.com/profile_images/455993174133968896/6o8zhqb2_400x400.jpeg',detail:'to the moon'},
+                {height:60,title:'Hero Node',image:'https://pbs.twimg.com/profile_images/998044215589261313/6xDltVHv_400x400.jpg',detail:'Dapp is the next decade'},
               ]
 
             }

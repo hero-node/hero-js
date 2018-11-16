@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/fu.js"></script>
+  <script src="../../hero.js"></script>
+  <script>
+  var msgs = [
+
+    {
+      text:'Hi, What \'s are you doing?',
+      self:false,
+      nickname:'Vitalik',
+      avatar:'https://pbs.twimg.com/profile_images/977496875887558661/L86xyLF4_bigger.jpg' 
+    },
+    {
+      text:'Buy more eth !!',
+      self:true,
+      nickname:'Me',
+      avatar:'https://pbs.twimg.com/profile_images/964257848917151745/aCEtmQ-k_bigger.jpg' 
+    },
+
+  ];
+
+
+    Hero.on = function(data){
+      // if (data.msg) {
+      //   io.emit('message',{text:data.msg});
+      // };
+      if (data.msg) {
+        Hero.addMsg(data.msg);
+      };
+    };
+    var i = 0;
+    Hero.job = function(){
+      var msg = msgs[i];
+      Hero.out({datas:{name:'chat',newMsg:msg}});
+      if (i < msgs.length) {
+        i++
+      }else{
+        return;
+      }
+      setTimeout(function(){
+        Hero.job();
+      },2000)
+    }
+    Hero.addMsg = function(text){
+      var msg = {self:true,nickname:'Me',text:text};
+      Hero.datas({name:'chat',newMsg:msg,avatar:''});
+    };
+    Hero.viewWillAppear = function() {
+      Hero.job();
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      version:-1,
+      tintColor:'ff0000',
+      backgroundColor:'ffffff',
+      nav:{
+        title:Hero.getInitData().title,
+        titleColor:'333333',
+        navigationBarHidden:false
+      },
+      views:
+      [
+        {
+          class:'HeroChatView',
+          frame:{w:'1x',h:'1x'},
+          name:'chat'
+        }
+      ]
+    };
+
+  </script>
+
+</body>
+</html>

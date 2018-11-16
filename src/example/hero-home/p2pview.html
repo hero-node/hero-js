@@ -24,15 +24,44 @@
     graph.add({
       id: 'Thing1',
       me: false,
-      name: '192.168.1.20'
+      name: 'Hero Node(10.12.222.10)'
     })
     graph.add({
       id: 'Thing2',
       me: false,
-      name: '192.168.1.44'
+      name: 'IPFS(10.12.222.10)'
     })
+    graph.add({
+      id: 'Thing3',
+      me: false,
+      name: 'Eth(10.12.222.10)'
+    })
+    graph.add({
+      id: 'Thing4',
+      me: false,
+      name: 'Hero Node(10.12.222.14)'
+    })
+    graph.add({
+      id: 'Thing5',
+      me: false,
+      name: 'Qtum(10.12.222.10)'
+    })
+    graph.add({
+      id: 'Thing6',
+      me: false,
+      name: 'Hero Node(10.12.222.10)'
+    })
+    function mock(){
     setTimeout(() => {
       graph.connect('You', 'Thing1')
+      graph.connect('You', 'Thing2')
+      graph.connect('You', 'Thing3')
+      graph.connect('You', 'Thing4')
+      graph.connect('You', 'Thing5')
+      graph.connect('You', 'Thing6')
+      graph.connect('Thing2', 'Thing3')
+      graph.connect('Thing4', 'Thing3')
+      graph.connect('Thing1', 'Thing5')
     }, 1000)
     setTimeout(() => {
       graph.rate('You', 'Thing1', 150 * 1000) // 150 KB/s
@@ -45,9 +74,11 @@
     }, 4000)
     setTimeout(() => {
       graph.rate('You', 'Thing1', 5000 * 1000) // 5 MB/s
+      graph.rate('You', 'Thing3', 5000 * 1000) // 5 MB/s
     }, 5000)
     setTimeout(() => {
       graph.rate('You', 'Thing1', 2500 * 1000) // 2.5 MB/s
+      graph.rate('You', 'Thing5', 2500 * 1000) // 2.5 MB/s
     }, 6000)
     setTimeout(() => {
       graph.rate('You', 'Thing1', 1000 * 1000) // 1 MB/s
@@ -62,16 +93,21 @@
     }, 9000)
     setTimeout(() => {
       graph.disconnect('You', 'Thing1')
+      graph.disconnect('You', 'Thing3')
     }, 10000)
     setTimeout(() => {
       graph.remove('Thing1')
     }, 11000)
     setTimeout(() => {
       graph.seed('Thing2', true)
+      graph.seed('Thing5', true)
     }, 12000)
     setTimeout(() => {
-      graph.seed('Thing2', false)
+      mock();
     }, 13000)
+    }
+    mock();
+
   </script>
 </body>
 </html>

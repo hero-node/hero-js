@@ -74,8 +74,8 @@
             {
               class:'HeroButton',
               frame:{w:'1x',h:'1x'},
-              // ripple:true,
-              backgroundColor:'ffffff',
+              ripple:true,
+              // backgroundColor:'ffffff',
               click:{command:'gotoWithLoading:'+item.url}
             },
             {
@@ -114,7 +114,7 @@
           // enable:false,
           frame:{w:'1x',h:'1x'},
           url:path+'/p2pview.html',
-          alpha:0.5
+          alpha:0.2
         },
         {
           class:'HeroImageView',
@@ -129,19 +129,19 @@
           borderWidth:0.5,
         },
         {
-          class:'HeroScrollView',
+          class:'HeroView',
           name:'historyContent',
+          // backgroundColor:'ff0000',
           frame:{x:'25',r:'25',y:'0.5x+50',b:'44'},
         },
         {
           class:'HeroView',
           frame:{r:'40',t:'88',w:'50',h:'50'},
-          backgroundColor:'ff0000',
           subViews:[
             {
               class:'HeroButton',
               ripple:true,
-              backgroundColor:'ffffff',
+              // backgroundColor:'ffffff',
               frame:{w:'1x',h:'1x'},
               click:{datas:[{name:'menu',hidden:false}]}
             },
@@ -177,7 +177,7 @@
                   class:'HeroButton',
                   frame:{x:'5',t:'14',r:'6',h:'40'},
                   ripple:true,
-                  backgroundColor:'ffffff',
+                  // backgroundColor:'ffffff',
                   click:{click:'wallet'}
                 },
                 {
@@ -195,7 +195,7 @@
                   class:'HeroButton',
                   frame:{x:'5',t:'55',r:'6',h:'40'},
                   ripple:true,
-                  backgroundColor:'ffffff',
+                  // backgroundColor:'ffffff',
                   click:{click:'node'}
                 },
                 {
@@ -223,14 +223,14 @@
           class:'HeroToast',
           name:'toast',
         },
-        {
-          class:'HeroSignature',
-          name:'signature'
-        },
-        {
-          class:'HeroPickerView',
-          name:'picker'
-        }
+        // {
+        //   class:'HeroSignature',
+        //   name:'signature'
+        // },
+        // {
+        //   class:'HeroPickerView',
+        //   name:'picker'
+        // }
       ]
     };
 
