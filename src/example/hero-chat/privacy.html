@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/ethjs.min.js"></script>
+  <script src="./app/fu.js"></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+      if (data.click === 'info') {
+        this.command('goto:'+path+'info.html')
+      }
+    };
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      version:-1,
+      tintColor:'bd3a53',
+      nav:{
+        title:"Security and Privacy",
+        navigationBarHidden:false
+      },
+      views:
+      [
+        {
+          class:'HeroTableView',
+          frame:{w:'1x',h:'1x'},
+          name:'meTableView',
+          data:[{sectionTitle:'Security',sectionFootTitle:'The domain name system is a centralized system.Ens is a decentralized name system but can change it by owner',rows:[
+            {
+              title:'DNS',
+              boolValue:true
+            },
+            {
+              title:'ENS',
+              boolValue:true
+            },
+            {
+              title:'HNS',
+              boolValue:true
+            }
+          ]},{sectionTitle:'Privacy',rows:[
+            {
+              title:'Finger print',
+              boolValue:true
+            },
+            {
+              title:'Face ID',
+              boolValue:true
+            },
+          ]}]
+        },
+        {
+          class:'HeroToast',
+          name:'toast'
+        }
+
+      ]
+    };
+
+  </script>
+</body>
+</html>

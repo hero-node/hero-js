@@ -6,6 +6,21 @@ import Web3 from '../node_modules/Web3/src/index.js';
 var engine = new We3ProviderEngine();
 window.Web3 = Web3;
 window.web3 = new Web3(engine);
+var npc = function(module, json, callback) {
+  window[module + 'callback'] = callback;
+  json.isNpc = true;
+  var npcStr = 'heronpc://' + module + '?' + JSON.stringify(json);
+  if (window.native) {
+    window.native.npc(npcStr);
+  } else {
+    var iframe = document.createElement('iframe');
+    iframe.setAttribute('src', npcStr);
+    document.documentElement.appendChild(iframe);
+    iframe.parentNode.removeChild(iframe);
+    iframe = null;
+  }
+};
+
 // if (window.location.href.search('hasMetamask')>=0) {
 web3.currentProvider.isMetaMask = true; //we will delete this value in the future;
 web3.currentProvider.isHeroNode = true;
@@ -13,12 +28,11 @@ web3.currentProvider.isHeroNode = true;
 engine.addProvider(
   new HookedWalletSubprovider({
     getAccounts: function(cb) {
-      window.heroSignature.npc('HeroSignature', { accounts: 'get' }, function(
-        json
-      ) {
+      npc('HeroSignature', { accounts: 'get' }, function(json) {
         if (typeof json === 'string') {
           json = JSON.parse(json);
         }
+        web3.currentProvider.defaultAcount = json[0];
         cb(json.npc === 'fail' ? { npc: 'fail' } : null, json);
       });
     },
@@ -32,16 +46,12 @@ engine.addProvider(
     //   cb(null,signTx);
     // },
     signTransaction: function(tx, cb) {
-      window.heroSignature.npc('HeroSignature', { message: tx }, function(
-        signTx
-      ) {
+      npc('HeroSignature', { message: tx }, function(signTx) {
         cb(json.npc === 'fail' ? { npc: 'fail' } : null, signTx);
       });
     },
     sign: function(data, cb) {
-      window.heroSignature.npc('HeroSignature', { message: tx }, function(
-        signTx
-      ) {
+      npc('HeroSignature', { message: tx }, function(signTx) {
         cb(json.npc === 'fail' ? { npc: 'fail' } : null, signTx);
       });
     },

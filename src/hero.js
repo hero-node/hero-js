@@ -11,7 +11,6 @@
   var hero = (window.Hero = {});
   hero.ui = {};
   hero.ui2Data = {};
-  hero.initData;
   hero.name = window.location.href.match(/[^(/index)][A-Za-z0-9_-]+.html/)[0];
   hero.deviceType =
     navigator.userAgent.toLowerCase().indexOf('hero-ios') > 0
@@ -41,12 +40,6 @@
     hero.out({ ui: hero.ui });
     hero.viewDidLoad();
   };
-  document.onreadystatechange = function() {
-    var state = document.readyState;
-    if (state == 'complete') {
-    }
-  };
-
   //Hero utils function
   hero.connect = function(card) {
     window._io = io.connect();
@@ -72,34 +65,34 @@
     }
     return _initData;
   };
-  (hero.getCookie = function(name) {
+  hero.getCookie = function(name) {
     var arr,
       reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
     if ((arr = document.cookie.match(reg))) return unescape(arr[2]);
     else return null;
-  }),
-    (hero.contain = function(objs, obj) {
-      var i = objs.length;
-      while (i--) {
-        if (objs[i] === obj) {
-          return true;
-        }
+  };
+  hero.contain = function(objs, obj) {
+    var i = objs.length;
+    while (i--) {
+      if (objs[i] === obj) {
+        return true;
       }
-      return false;
-    }),
-    (hero.merge = function(o1, o2) {
-      for (var key in o2) {
-        o1[key] = o2[key];
-      }
-      return o1;
-    }),
-    (hero.remove = function(arr, value) {
-      if (!arr) return;
-      var a = arr.indexOf(value);
-      if (a >= 0) {
-        arr.splice(a, 1);
-      }
-    });
+    }
+    return false;
+  };
+  hero.merge = function(o1, o2) {
+    for (var key in o2) {
+      o1[key] = o2[key];
+    }
+    return o1;
+  };
+  hero.remove = function(arr, value) {
+    if (!arr) return;
+    var a = arr.indexOf(value);
+    if (a >= 0) {
+      arr.splice(a, 1);
+    }
+  };
   hero.async = function(fun, second) {
     setTimeout(function() {
       fun();

@@ -16,6 +16,10 @@
       if (data.click === 'info') {
         this.command('goto:'+path+'info.html')
       }
+      if (data.click === 'privacy') {
+        this.command('goto:'+path+'privacy.html')
+      }
+
     };
     Hero.viewWillAppear = function() {
 
@@ -28,7 +32,6 @@
     };
     Hero.ui = {
       version:-1,
-      tintColor:'bd3a53',
       nav:{
         title:"Me",
         rightItems: [{title:'Info',click:{click:'info'}},{title:'Info',click:{click:'info'}}],
@@ -59,7 +62,8 @@
           ]},{rows:[
             {
               title:'Security and Privacy',
-              accessoryType:'DisclosureIndicator'
+              accessoryType:'DisclosureIndicator',
+              click:'privacy'
             },
             {
               title:'About Hero Chat',
