@@ -26,17 +26,12 @@
                     }])
       }
       if (data.click === 'node') {
-        this.datas([{
-                      name:'toast',
-                      text:'节点信息暂未开放'
-                  },
+        this.datas([
                   {
                     name:'menu',
                     hidden:true},
-                  {
-                    name:'list',
-                    hidden:true
-                  }])
+                  ])
+        this.command('goto:'+path+'nodes.html')
       }
     };
     Hero.viewWillAppear = function() {
@@ -73,7 +68,7 @@
           subViews:[
             {
               class:'HeroButton',
-              frame:{w:'1x',h:'1x'},
+              frame:{x:'5',r:'5',h:'1x'},
               ripple:true,
               // backgroundColor:'ffffff',
               click:{command:'gotoWithLoading:'+item.url}
@@ -104,18 +99,13 @@
     Hero.viewDidload = function() {
     };
     Hero.ui = {
+      tintColor:'333333',
+      backgroundColor:'f2f2f2',
       nav:{
         navigationBarHidden:true
       },
       views:
       [
-        {
-          class:'HeroWebView',
-          // enable:false,
-          frame:{w:'1x',h:'1x'},
-          url:path+'/p2pview.html',
-          alpha:0.2
-        },
         {
           class:'HeroImageView',
           frame:{x:'0.5x-100',y:'0.5x-110',w:'200',h:'40'},
@@ -129,9 +119,8 @@
           borderWidth:0.5,
         },
         {
-          class:'HeroView',
+          class:'HeroScrollView',
           name:'historyContent',
-          // backgroundColor:'ff0000',
           frame:{x:'25',r:'25',y:'0.5x+50',b:'44'},
         },
         {
@@ -141,7 +130,6 @@
             {
               class:'HeroButton',
               ripple:true,
-              // backgroundColor:'ffffff',
               frame:{w:'1x',h:'1x'},
               click:{datas:[{name:'menu',hidden:false}]}
             },

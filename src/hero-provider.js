@@ -32,6 +32,7 @@ engine.addProvider(
         if (typeof json === 'string') {
           json = JSON.parse(json);
         }
+        web3.currentProvider.defaultAcount = json[0];
         cb(json.npc === 'fail' ? { npc: 'fail' } : null, json);
       });
     },
