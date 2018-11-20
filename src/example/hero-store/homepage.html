@@ -18,12 +18,172 @@
 
     var eth = window.eth;
     var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+    var goodsList = [];
 
     Hero.on = function(data){
-
+      if(data.click === 'switchBanner') {
+        console.log(data.index);
+        let idx = data.index;
+        switch(idx) {
+          case idx:
+          this.datas([
+            {
+              name: `banner0`,
+              frame: {x: '1x',w: '1x', y: '0', h: '300'}
+            },
+            {
+              name: `banner1`,
+              frame: {x: '2x',w: '1x', y: '0', h: '300'}
+            },
+            {
+              name: `banner2`,
+              frame: {x: '3x',w: '1x', y: '0', h: '300'}
+            },
+            {
+              name: `banner${idx}`,
+              frame: {x: '0',w: '1x', y: '0', h: '300'}
+            }
+          ])
+        }
+      }
+    };
+    Hero.updateGoodsView = function(list, num, windowWidth){
+      var subViews = [];
+      let showAuction = true;
+      // let xOffset = (windowWidth-(num*140+(num-1)*20))/2;
+      for (let i = 0; i < list.length; i++) {
+        var item = list[i];
+        if (item.isAuction === true) {
+          showAuction = false;
+        } else {
+          showAuction = true;
+        }
+        var itemView = {
+          class: 'HeroView',
+          borderColor:'ECECEC ',
+          frame: {x: (i%num/num)+'x', w: '140', y: parseInt(i/num)*230+'', h: '200'},
+          cornerRadius:10,
+          borderWidth:1,
+          name: `goods${i+1}`,
+          contentSizeElement: true,
+          subViews: [
+          {
+            class: 'HeroImageView',
+            frame: {x: '30', r: '30',y: '30',b: '60'},
+            name: 'goodsPic',
+            image: item.goodsPic
+          },
+          {
+            class: "HeroLabel",
+            frame: {x: '0.5x-25',y: '0', w: '50', h: '20'},
+            text: '拍卖',
+            alignment: 'center',
+            tinyColor: 'ffffff',
+            backgroundColor: '25B0B8',
+            size: 14,
+            hidden: showAuction
+          },
+          {
+            class: 'HeroLabel',
+            frame: {x: '0', r: '0',y: '150'},
+            alignment: 'center',
+            name: 'goodsTitle',
+            size: 18,
+            text: item.goodsTitle,
+            tinyColor: '333333'
+          },
+          {
+            class: 'HeroLabel',
+            frame: {x: '0', r: '0', y: '170'},
+            alignment: 'center',
+            name: 'goodsPrice',
+            size: 16,
+            text: '价格：'+item.price,
+            tinyColor: '333333'
+          }
+          ]
+        };
+        subViews.push(itemView);
+        console.log(item.isAuction);
+      }
+      var that = this;
+      let whiteBlock = {
+        class: 'HeroView',
+        frame: {x: '0',w: '0', h: '10'},
+        contentSizeElement: true,
+        yOffset: 'goods'+list.length+100,
+        backgroundColor: '111111'
+      };
+      subViews.push(whiteBlock);
+      setTimeout(function(){
+        that.datas({name:'goodswrapViews',subViews:subViews});
+      },100);
     };
     Hero.viewWillAppear = function() {
-
+      var clientWidth = document.body.clientWidth;
+      var showNum = 1;
+      var windowWidth = 0;
+      console.log(clientWidth/140);
+      if (clientWidth>440) {
+        showNum = Math.floor((clientWidth-440)/140);
+        windowWidth = clientWidth-440;
+      } else {
+        showNum = Math.floor(clientWidth/140);
+        windowWidth = clientWidth;
+      }
+      console.log(showNum);
+      var that = this;
+      goodsList = [
+        {
+          goodsTitle:'aaaaaaaaa',
+          goodsPic: path+ `./images/banner1.jpg`,
+          price: '200btc',
+          isAuction: false
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: true
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: false
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: true
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: false
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: true
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: false
+        },
+        {
+          goodsTitle: 'hahahhah',
+          goodsPic: path+ `./images/banner2.jpg`,
+          price: '10eth',
+          isAuction: true
+        }
+      ];
+      this.updateGoodsView(goodsList,showNum,windowWidth);
     };
     Hero.viewWillDisAppear = function() {
 
@@ -37,7 +197,123 @@
         title: '首页'
       },
       views:[
-
+        {
+          class: 'HeroView',
+          frame: {w: '1x', y: '0', h: '89'},
+          subViews: [
+            // header
+          ]
+        },
+        {
+          class: 'HeroScrollView',
+          frame: {x: '0', r: '0', y: '20', h: '300'},
+          // contentSizeElement: true,
+          subViews: [
+            {
+              class: 'HeroImageView',
+              name: 'banner0',
+              frame: {x: '0',w: '1x', y: '0', h: '300'},
+              image: path + './images/banner1.jpg'
+            },
+            {
+              class: 'HeroImageView',
+              name: 'banner1',
+              frame: {x: '1x',w: '1x', y: '0', h: '300'},
+              image: path + './images/banner2.jpg'
+            },
+            {
+              class: 'HeroImageView',
+              name: 'banner2',
+              frame: {x: '2x',w: '1x', y: '0', h: '300'},
+              image: path + './images/banner3.jpg'
+            }
+          ]
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0.4x',r: '0.2x',y: '260',h:'20'},
+          // contentSizeElement: true,
+          // backgroundColor:'333333',
+          subViews: [
+            {
+              class: 'HeroImageView',
+              frame: {x: '0',y: '0', w:'20', h: '20'},
+              image: path + './images/circle.png'
+            },
+            {
+              class: 'HeroButton',
+              frame: {x: '0',y: '0', w:'20', h: '20'},
+              click: {click: 'switchBanner', index: 0}
+            },
+            {
+              class: 'HeroImageView',
+              frame: {x: '0.15x',y: '0', w:'20', h: '20'},
+              image: path + './images/circle.png'
+            },
+            {
+              class: 'HeroButton',
+              frame: {x: '0.15x',y: '0', w:'20', h: '20'},
+              click: {click: 'switchBanner', index: 1}
+            },
+            {
+              class: 'HeroImageView',
+              frame: {x: '0.3x',y: '0', w:'20', h: '20'},
+              image: path + './images/circle.png'
+            },
+            {
+              class: 'HeroButton',
+              frame: {x: '0.3x',y: '0', w:'20', h: '20'},
+              click: {click: 'switchBanner',index: 2}
+            }
+          ]
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '40', r: '40', y: '350', h: '100'},
+          // contentSizeElement: true,
+          subViews: [
+            {
+              class: 'HeroImageView',
+              frame: {x: '0', w: '0.45x', y: '0', h: '100'},
+              image: path + './images/banner3.jpg'
+            },
+            {
+              class: 'HeroImageView',
+              frame: {r: '0', w: '0.45x', y: '0', h: '100'},
+              image: path + './images/banner2.jpg'
+            }
+          ]
+        },
+        // goods items
+        {
+          class: 'HeroView',
+          frame: {x: '40', r: '40', y: '480', h: '50'},
+          // contentSizeElement: true,
+          subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '0', w: '200', y: '0', h: '30'},
+              tinyColor: '333333',
+              text: '最新到货'
+            },
+            {
+              class: 'HeroView',
+              frame: {x: '0', y: '40', r: '0', h: '1'},
+              backgroundColor: 'C6C6C6'
+            },
+            {
+              class: 'HeroLabel',
+              frame: {r: '0',w: '50', y: '0', h: '30'},
+              tinyColor: '666666',
+              text: '···'
+            }
+          ]
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '10',r: '10', y: '550'},
+          name: 'goodswrapViews'
+        }
       ]
     };
   </script>
