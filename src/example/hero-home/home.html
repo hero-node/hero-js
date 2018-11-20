@@ -37,14 +37,7 @@
     Hero.viewWillAppear = function() {
       var history = localStorage.hero_home_history?JSON.parse(localStorage.hero_home_history):[
         {title:'Hero test',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-home/test.html'},
-        {title:'Hero Chat',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-chat/message.html'},
-        {title:'Hero Contacts',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-chat/Contacts.html'},
-        {title:'Hero Me',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-chat/me.html'},
-        {title:'Hero Store',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-store/home.html'},
-        {title:'Hero OTC',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-apollo/otc.html'},
-        {title:'Hero trade',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-apollo/trade.html'},
         {title:'Hero game',icon:path+'/images/saibiwo_icon.png',url:host+'/example/gather-blessing/home.html'},
-        {title:'Maker',icon:'https://www.gnosis.pm/assets/img/gnosis-x/header.svg',url:'https://oasisdex.com'},
         {title:'FCK',icon:'https://media.dappreview.cn/dappLogo/931/fckteamwork/A3wz26JKJNbPiEMY3shBCfxk6GPCYdHi.jpg',url:'https://fck.com/'},
         {title:'以太小精灵',icon:'https://dapp.review/media/WeChat_Screenshot_20180825005953.png',url:'https://www.etheremon.com/'},
         {title:'加密少女',icon:'https://dapp.review/media/%E5%8A%A0%E5%AF%86%E5%B0%91%E5%A5%B3Icon.jpg',url:'http://cryptogirl.game'},
@@ -70,12 +63,12 @@
               class:'HeroButton',
               frame:{x:'5',r:'5',h:'1x'},
               ripple:true,
-              // backgroundColor:'ffffff',
               click:{command:'gotoWithLoading:'+item.url}
             },
             {
               class:'HeroImageView',
               frame:{w:'33',h:'33',x:'0.5x-16.5',y:'10'},
+              cornerRadius:4,
               image:item.icon
             },
             {
@@ -92,7 +85,7 @@
       };
       setTimeout(function(){
         Hero.datas({name:'historyContent',subViews:historyViews});
-      },500)
+      },2000)
     };
     Hero.viewWillDisAppear = function() {
     };
@@ -117,6 +110,14 @@
           borderColor:'666666',
           cornerRadius:10,
           borderWidth:0.5,
+        },
+        {
+          class:'HeroButton',
+          frame:{r:'0.1x+10',y:'0.5x-50',w:'50',h:'50'},
+          borderColor:'666666',
+          ripple:true,
+          cornerRadius:10,
+          click:{datas:{name:'sheet',show:true}}
         },
         {
           class:'HeroScrollView',
@@ -154,6 +155,7 @@
             },
             {
               class:'HeroView',
+              zIndex:1000,
               frame:{r:'44',t:'128',w:'140',h:'100'},
               subViews:[
                 {
@@ -165,7 +167,6 @@
                   class:'HeroButton',
                   frame:{x:'5',t:'14',r:'6',h:'40'},
                   ripple:true,
-                  // backgroundColor:'ffffff',
                   click:{click:'wallet'}
                 },
                 {
@@ -183,7 +184,6 @@
                   class:'HeroButton',
                   frame:{x:'5',t:'55',r:'6',h:'40'},
                   ripple:true,
-                  // backgroundColor:'ffffff',
                   click:{click:'node'}
                 },
                 {
@@ -211,13 +211,16 @@
           class:'HeroToast',
           name:'toast',
         },
+        {
+          class:'HeroSignature',
+          name:'signature'
+        },
         // {
-        //   class:'HeroSignature',
-        //   name:'signature'
-        // },
-        // {
-        //   class:'HeroPickerView',
-        //   name:'picker'
+        //   class:'HeroActionSheetView',
+        //   name:'sheet',
+        //   data:[{title:'Camera',action:{click:'Camera'}},{title:'Photo',action:{click:'Photo'}}],
+        //   hidden:true,
+        //   cancelTitle:'Cancel'
         // }
       ]
     };

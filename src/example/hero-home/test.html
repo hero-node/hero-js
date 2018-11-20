@@ -33,8 +33,8 @@
         },
         {
           class:'HeroButton',
-          frame:{w:'120',x:'0.5x-50',b:'0',h:'50'},
-          title:'Go Apps',
+          frame:{w:'120',x:'0.5x-60',y:'0.5x',h:'50'},
+          title:'Go Chat',
           titleColor:'778899',
           backgroundColor:'eeeeeeee',
           ripple:true,
@@ -42,6 +42,31 @@
             {title:'message',url:host+'/example/hero-chat/message.html',image:path+'/images/tools.png'},
             {title:'contacts',url:host+'/example/hero-chat/contacts.html',image:path+'/images/tools.png'},
             {title:'me',url:host+'/example/hero-chat/me.html',image:path+'/images/tools.png'},
+          ]}},
+          cornerRadius:5,
+        },
+        {
+          class:'HeroButton',
+          frame:{w:'120',x:'0.5x-60',y:'0.5x+60',h:'50'},
+          title:'Go Trade',
+          titleColor:'778899',
+          backgroundColor:'eeeeeeee',
+          ripple:true,
+          click:{global:{key:'newApp',tabs:[
+            {title:'message',url:host+'/example/hero-apollo/trade.html',image:path+'/images/tools.png'},
+            {title:'contacts',url:host+'/example/hero-apollo/otc.html',image:path+'/images/tools.png'},
+          ]}},
+          cornerRadius:5,
+        },
+        {
+          class:'HeroButton',
+          frame:{w:'120',x:'0.5x-60',y:'0.5x+120',h:'50'},
+          title:'Go Store',
+          titleColor:'778899',
+          backgroundColor:'eeeeeeee',
+          ripple:true,
+          click:{global:{key:'newApp',tabs:[
+            {title:'message',url:host+'/example/hero-store/home.html',image:path+'/images/tools.png'},
           ]}},
           cornerRadius:5,
         }
