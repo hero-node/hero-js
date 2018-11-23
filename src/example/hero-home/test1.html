@@ -173,18 +173,10 @@ async function test(){
     var option = { gas: 250000, gasPrice: web3.utils.toWei("41", "gwei"), from: accounts[0] };
     try {
         await planContract.methods.withdraw().send(option).on('transactionHash', function(txid) {
-            $('.loading-view').show();
-            startCheckTx(txid, function(success) {
-                $('.loading-view').hide();
-                if (success) {
-                    alert('Congratulations! Withdraw success!');
-                } else {
-                    alert('Error encountered during contract execution, please try again or check your token balance');
-                }
-            });
+          alert(txid);
         });
     } catch(err) {
-        alert('Error:' + err);
+        alert('Error:' + JSON.stringify(err));
     }
 }
 test();

@@ -12,42 +12,33 @@
 
     Hero.on = function(data){
       if (data.click === 'wallet') {
-        this.datas([{
-                    name:'signature',
-                    transactionType:3
-                    },
-                    {
-                      name:'menu',
-                      hidden:true
-                    },
-                    {
-                      name:'list',
-                      hidden:true
-                    }])
+        this.datas([{name:'signature',wallet:true},
+          {name:'menu',hidden:true},
+          {name:'list',hidden:true}])
       }
       if (data.click === 'node') {
-        this.datas([
-                  {
-                    name:'menu',
-                    hidden:true},
-                  ])
+        this.datas([{name:'menu',hidden:true}])
         this.command('goto:'+path+'nodes.html')
       }
+      if (data.textfield === 'end') {
+        this.datas([{name:'address',clear:true}]);
+        this.command('goto:'+data.value);
+      };
     };
     Hero.viewWillAppear = function() {
       var history = localStorage.hero_home_history?JSON.parse(localStorage.hero_home_history):[
         {title:'Hero test',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-home/test.html'},
-        {title:'Hero game',icon:path+'/images/saibiwo_icon.png',url:host+'/example/gather-blessing/home.html'},
+        {title:'Collect Fu',icon:'https://heronode.io/public/theme/asset/engine/fu.jpg',url:host+'/example/gather-blessing/home.html'},
         {title:'FCK',icon:'https://media.dappreview.cn/dappLogo/931/fckteamwork/A3wz26JKJNbPiEMY3shBCfxk6GPCYdHi.jpg',url:'https://fck.com/'},
         {title:'以太小精灵',icon:'https://dapp.review/media/WeChat_Screenshot_20180825005953.png',url:'https://www.etheremon.com/'},
         {title:'加密少女',icon:'https://dapp.review/media/%E5%8A%A0%E5%AF%86%E5%B0%91%E5%A5%B3Icon.jpg',url:'http://cryptogirl.game'},
         {title:'Cubego',icon:'https://dapp.review/media/Cubego.jpg',url:'https://www.cubego.io'},
         {title:'iBank',icon:'https://media.dappreview.cn/dappLogo/undefined/DR-Jason/bYZZQmMDDeEeDx2JHrxaDQbcfWkHHZSd.png',url:'http://ibankeos.io'},
         {title:'僵尸战场',icon:'https://dapp.review/media/Zombie_Battleground.jpg',url:'https://loom.games/'},
-        {title:'incentives',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.io/incentives'},
+        {title:'incentives',icon:'https://heronode.io/public/theme/asset/engine/dapp.jpg',url:'https://heronode.io/incentives'},
         {title:'incentives test',icon:path+'/images/saibiwo_icon.png',url:host+'/example/hero-home/test1.html'},
-        {title:'fomo3D',icon:path+'/images/saibiwo_icon.png',url:'https://exitscam.me/play'},
-        {title:'idex',icon:path+'/images/saibiwo_icon.png',url:'https://idex.market/eth/her'},
+        {title:'fomo3D',icon:'https://exitscam.me/img/powh3rglass.png',url:'https://exitscam.me/play'},
+        {title:'idex',icon:'https://idex.market/static/images/favicon-logo-wt-trans.png',url:'https://idex.market/eth/her'},
         {title:'Gods',icon:'https://dapp.review/media/WeChat_Screenshot_20180825010157.png',url:'https://godsunchained.com/'},
         {title:'error',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.iio'},
       ];
@@ -56,7 +47,6 @@
         var item = history[i];
         var itemView = {
           class:'HeroView',
-          // enable:false,
           frame:{x:i%5/5+'x',y:parseInt(i/5)*68+'',w:'0.2x',h:'68'},
           subViews:[
             {
@@ -101,23 +91,35 @@
       [
         {
           class:'HeroImageView',
-          frame:{x:'0.5x-100',y:'0.5x-110',w:'200',h:'40'},
+          frame:{x:'0.5x-100',y:'0.5x-160',w:'200',h:'40'},
           image:path+'/images/logo.png'
         },
         {
+          class:'HeroTextField',
+          name:'address',
+          type:'url',
+          frame:{x:'20',y:'0.5x-50',r:'20',h:'50'},
+          placeHolder:'HASH/URL 地址',
+          color:'ffffff',
+          textColor:'000000',
+          tintColor:'ffffff',
+          textFieldDidEndEditing:{textfield:'end'},
+        },
+        {
           class:'HeroView',
-          frame:{x:'0.1x',y:'0.5x-50',r:'0.1x',h:'50'},
-          borderColor:'666666',
-          cornerRadius:10,
-          borderWidth:0.5,
+          frame:{x:'20',y:'0.5x',r:'20',h:'1'},
+          backgroundColor:'999999',
         },
         {
           class:'HeroButton',
-          frame:{r:'0.1x+10',y:'0.5x-50',w:'50',h:'50'},
-          borderColor:'666666',
+          frame:{r:'10',y:'0.5x-60',w:'60',h:'60'},
           ripple:true,
-          cornerRadius:10,
-          click:{datas:{name:'sheet',show:true}}
+          click:{command:'goto:'+path+'scan.html'}
+        },
+        {
+          class:'HeroImageView',
+          frame:{r:'23',y:'0.5x-40',w:'25',h:'25'},
+          image:path+'/images/login_scanning_icon.png',
         },
         {
           class:'HeroScrollView',

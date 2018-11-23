@@ -1,6 +1,12 @@
 import We3ProviderEngine from '../node_modules/web3-provider-engine/index.js';
 import HookedWalletSubprovider from '../node_modules/web3-provider-engine/subproviders/hooked-wallet.js';
 import RpcSubprovider from '../node_modules/web3-provider-engine/subproviders/rpc.js';
+import FixtureSubprovider from '../node_modules/web3-provider-engine/subproviders/fixture.js';
+// import FilterSubprovider from '../node_modules/web3-provider-engine/subproviders/filters.js';
+import NonceSubprovider from '../node_modules/web3-provider-engine/subproviders/nonce-tracker.js';
+import SubscriptionSubprovider from '../node_modules/web3-provider-engine/subproviders/subscriptions.js';
+import CacheSubprovider from '../node_modules/web3-provider-engine/subproviders/cache.js';
+
 import Web3 from '../node_modules/Web3/src/index.js';
 
 var engine = new We3ProviderEngine();
@@ -26,33 +32,49 @@ web3.currentProvider.isMetaMask = true; //we will delete this value in the futur
 web3.currentProvider.isHeroNode = true;
 // };
 engine.addProvider(
+  new FixtureSubprovider({
+    web3_clientVersion: 'ProviderEngine/v0.0.0/javascript',
+    net_listening: true,
+    eth_hashrate: '0x00',
+    eth_mining: false,
+    eth_syncing: true,
+  })
+);
+
+var filterAndSubsSubprovider = new SubscriptionSubprovider();
+filterAndSubsSubprovider.on('data', function(err, notification) {
+  engine.emit('data', err, notification);
+});
+engine.addProvider(filterAndSubsSubprovider);
+
+engine.addProvider(new CacheSubprovider());
+// engine.addProvider(new FilterSubprovider())
+engine.addProvider(new NonceSubprovider());
+
+engine.addProvider(
   new HookedWalletSubprovider({
     getAccounts: function(cb) {
       npc('HeroSignature', { accounts: 'get' }, function(json) {
         if (typeof json === 'string') {
           json = JSON.parse(json);
         }
-        web3.currentProvider.defaultAcount = json[0];
         cb(json.npc === 'fail' ? { npc: 'fail' } : null, json);
       });
     },
-    // approveTransaction: function(cb){
-    //   cb(null,true);
-    // },
     // sendTransaction: function(tx, cb){
-    //   alert('sendTransaction');
-    //   var signTx = tx;
-    //   signTx.sign = true;
-    //   cb(null,signTx);
+    //   cb(null,tx);
+    // },
+    // sendSignedTransaction: function(tx, cb){
+    //   cb(null,tx);
     // },
     signTransaction: function(tx, cb) {
-      npc('HeroSignature', { message: tx }, function(signTx) {
-        cb(json.npc === 'fail' ? { npc: 'fail' } : null, signTx);
+      npc('HeroSignature', { transaction: tx }, function(signTx) {
+        cb(signTx.npc === 'fail' ? signTx : null, signTx);
       });
     },
     sign: function(data, cb) {
       npc('HeroSignature', { message: tx }, function(signTx) {
-        cb(json.npc === 'fail' ? { npc: 'fail' } : null, signTx);
+        cb(signTx.npc === 'fail' ? signTx : null, signTx);
       });
     },
   })
@@ -62,11 +84,7 @@ engine.addProvider(
     rpcUrl: 'https://localhost:3001',
   })
 );
-// engine.on('block', function(block){
-//   console.log('================================')
-//   console.log('BLOCK CHANGED:', '#'+block.number.toString('hex'), '0x'+block.hash.toString('hex'))
-//   console.log('================================')
-// })
+engine.on('block', function(block) {});
 
 // // network connectivity error
 // engine.on('error', function(err){
@@ -75,4 +93,10 @@ engine.addProvider(
 // })
 
 // // start polling for blocks
+npc('HeroSignature', { accounts: 'get' }, function(json) {
+  if (typeof json === 'string') {
+    json = JSON.parse(json);
+  }
+  web3.eth.defaultAccount = json[0];
+});
 engine.start();
