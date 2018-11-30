@@ -9,7 +9,8 @@
     "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent",
     "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "deploy": "node ./deploy.js"
   },
   "lint-staged": {
     "*.js": [
