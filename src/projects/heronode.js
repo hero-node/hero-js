@@ -46,4 +46,4 @@ var socketProcess = function(socket) {
 var io = require('socket.io')(server);
 io.on('connection', socketProcess);
 server.listen(3000);
-console.log('service at http://127.0.0.1:3000/example/');
+console.log('service at http://127.0.0.1:3000/projects/');
