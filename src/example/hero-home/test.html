@@ -66,10 +66,25 @@
           backgroundColor:'eeeeeeee',
           ripple:true,
           click:{global:{key:'newApp',tabs:[
-            {title:'message',url:host+'/example/hero-store/home.html',image:path+'/images/tools.png'},
+            {title:'Home',url:host+'/projects/hero-store/home.html',image:path+'/images/tools.png'},
+            {title:'Retailer',url:host+'/projects/hero-store/retailer.html',image:path+'/images/tools.png'},
+            {title:'Seller',url:host+'/projects/hero-store/seller.html',image:path+'/images/tools.png'},
           ]}},
           cornerRadius:5,
-        }
+        },
+        {
+          class:'HeroBackgroundTask',
+          times:60,
+          url:'https://www.baidu.com'
+        },
+        // {
+        //   class:'HeroSimpleStorage',
+        //   isPublic:true,
+        //   providers:['ipfs', 'swarm', 'ethereum'],
+        //   key:'0x837972399a9b9797a97898797979',
+        //   catorgy:'homeList'
+
+        // }
       ]
     };
 
