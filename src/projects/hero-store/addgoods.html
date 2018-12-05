@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+      // add items
+      if (data.click === 'additems') {
+        for(let i = 0; i < 3; i++) {
+          this.datas([
+            {name: 'item'+i,tinyColor: '666666'},
+            {name: 'seletedItem'+i,hidden: true}
+          ]);
+        };
+        this.datas([
+          {name: 'item'+data.index,tinyColor: '25b0b8'},
+          {name: 'seletedItem'+data.index,hidden: false}
+        ]);
+        switch (data.index) {
+          case data.index:
+          alert('item'+data.index);
+          break;
+        }
+      } else if (data.click === 'addPics') {
+        // add pics
+        alert('addPics');
+      } else if (data.click === 'addCover') {
+        // add cover
+        alert('addCover');
+      } else if (data.click === 'releaseNormal') {
+        alert('上架普通商品');
+      }
+    };
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      nav:{
+        navigationBarHidden: false,
+        title: '上架商品'
+      },
+      views:[
+        {
+          class: 'HeroView',
+          frame:{w:'1x',y:'0',h:'89'},
+          subViews:[
+                // header
+          ]
+        },
+        {
+          class:'HeroView',
+          frame:{w:'1x',y:'0',h: '40'},
+          name:'addCategory',
+          subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '0.1x', w: '0.2x', h: '40'},
+              text: '普通商品',
+              tinyColor: '25b0b8',
+              name: 'item0'
+            },
+            {
+              class: 'HeroButton',
+              frame: {x: '0.1x', w: '0.2x', h: '40'},
+              click: {click: 'additems', index: 0}
+            },
+            {
+              class: 'HeroView',
+              frame: {x: '0.05x', w: '0.2x', y: '38', h: '2'},
+              backgroundColor: '25b0b8',
+              name: 'seletedItem0',
+              hidden: false
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '0.4x', w: '0.2x', h: '40'},
+              text: '第二密封拍卖',
+              tinyColor: '666666',
+              name: 'item1'
+            },
+            {
+              class: 'HeroButton',
+              frame: {x: '0.4x', w: '0.2x', h: '40'},
+              click: {click: 'additems', index: 1}
+            },
+            {
+              class: 'HeroView',
+              frame: {x: '0.38x', w: '0.2x', y: '38', h: '2'},
+              backgroundColor: '25b0b8',
+              name: 'seletedItem1',
+              hidden: true
+            },
+            {
+              class: 'HeroLabel',
+              frame: {r: '0.1x', w: '0.2x', h: '40'},
+              text: '竞价拍卖',
+              tinyColor: '666666',
+              name: 'item2'
+            },
+            {
+              class: 'HeroButton',
+              frame: {r: '0.1x', w: '0.2x', h: '40'},
+              click: {click: 'additems', index: 2}
+            },
+            {
+              class: 'HeroView',
+              frame: {r: '0.14x', w: '0.2x', y: '38', h: '2'},
+              backgroundColor: '25b0b8',
+              name: 'seletedItem2',
+              hidden: true
+            }
+          ]
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0', y: '40', w: '1x', h: '1'},
+          backgroundColor: 'dddddd'
+        },
+
+        // contents
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '40', r: '0', h: '20'},
+          backgroundColor: 'F7F7F7'
+        },
+        {
+          class: 'HeroLabel',
+          frame: {x: '25', y: '60', r: '25', h: '50'},
+          text: '商品价格',
+          textColor:'333333',
+          size: 22
+        },
+        {
+          class: 'HeroTextField',
+          frame: {y: '60', r: '25',w: '0.5x', h: '50'},
+          name: 'price',
+          placeHolder: '请填写商品金额',
+          textFieldDidEditing:{change:'price'}
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '110', r: '0', h: '1'},
+          backgroundColor: 'dddddd'
+        },
+        {
+          class: 'HeroLabel',
+          frame: {x: '25', y: '110', r: '25', h: '50'},
+          text: '支付代币',
+          textColor:'333333',
+          size: 22
+        },
+        {
+          class: 'HeroTextField',
+          name:'tokenAddress',
+          frame: {y: '110', r: '25',w: '0.5x', h: '50'},
+          placeHolder: '合约地址',
+          text:'0x0000000000000000000000000000000000000000',
+          textFieldDidEditing:{change:'tokenAddress'}
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '160', r: '0', h: '1'},
+          backgroundColor: 'dddddd'
+        },
+        // {
+        //   class:'HeroButton',
+        //   frame:{x:'170',w:'68',y:'120',h:'34'},
+        //   title:'使用ETH',
+        //   titleColor:window.tintColor,
+        //   ripple:true,
+        //   click:{datas:{name:'tokenAddress',text:'0x0000000000000000000000000000000000000000'}}
+        // },
+        // goods num
+        {
+          class: 'HeroLabel',
+          frame: {x: '25', y: '160', r: '25', h: '50'},
+          text: '商品数量',
+          textColor:'333333',
+          size: 22
+        },
+        {
+          class: 'HeroTextField',
+          frame: {y: '160', r: '25',w: '0.5x', h: '50'},
+          cornerRadius: 8,
+          name: 'num',
+          placeHolder: '请填写商品数量',
+          textFieldDidEditing:{change:'num'}
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '210', r: '0', h: '15'},
+          backgroundColor: 'F7F7F7'
+        },
+        // goods title
+        {
+          class: 'HeroTextField',
+          frame: {x: '0', y: '220', r: '0', h: '50'},
+          cornerRadius: 8,
+          name: 'title',
+          placeHolder: '请填写商品标题',
+          textFieldDidEditing:{change:'title'}
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '270', r: '0', h: '1'},
+          backgroundColor: 'dddddd'
+        },
+        // goods desc
+        {
+          class: 'HeroTextView',
+          frame: {x: '0', y: '271', r: '0', h: '150'},
+          cornerRadius: 5,
+          name: 'goodsdesc',
+          placeHolder: '请输入商品详情内容与图片',
+          textFieldDidEditing:{adsContent:'goodsdesc'},
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '420', r: '0', h: '1'},
+          backgroundColor: 'dddddd'
+        },
+        {
+          class: 'HeroImageView',
+          frame: {r: '30', y: '370', w: '30', h: '30'},
+          image:path+'./images/addpic.png'
+        },
+        {
+          class: 'HeroButton',
+          frame: {r: '30', y: '370', w: '30', h: '30'},
+          click: {click: 'addPics'}
+        },
+        // add cover
+        {
+          class: 'HeroImageView',
+          frame: {x: '30', y: '450', w: '50', h: '50'},
+          image:path+'./images/add.png'
+        },
+        {
+          class: 'HeroButton',
+          frame: {x: '30', y: '450', w: '50', h: '50'},
+          click: {click: 'addCover'}
+        },
+        {
+          class: 'HeroLabel',
+          frame: {x: '100', y: '450', h: '50'},
+          text: '仅以此添加图片用于封面',
+          tinyColor: '333333'
+        },
+        // btn
+        {
+          class: 'HeroButton',
+          frame: {x: '25', y: '550', r: '25', h: '50'},
+          title: '发布',
+          size: 18,
+          backgroundColor: '25B0B8',
+          cornerRadius: 8,
+          ripple:true,
+          click: {click: 'releaseNormal'}
+        }
+      ]
+    };
+  </script>
+</body>
+</html>

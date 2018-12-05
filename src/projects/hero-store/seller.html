@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <script src="./app/autoRefresh.js"></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="../../hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+      if (data.click) {
+        if (data.click.click) {
+          this.command('goto:'+path+data.click.click+'.html');
+        }
+      }
+    };
+    Hero.viewWillAppear = function() {
+      var datas = [
+        {title:'上架商品', height: 60, image:path+'./images/menu_merchant_icon@2x.png',size: '24',accessoryType: 'DisclosureIndicator', click:{click:'addgoods'}}
+      ]
+      var rows = [{rows:[]}];
+      for (var i = 0; i < datas.length; i++) {
+        var item = datas[i];
+        rows[0].rows.push(item);
+      };
+      var that = this;
+      setTimeout(function(){
+        that.datas({name:'rootTable',data:rows});
+      },100);
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+    };
+
+    Hero.ui = {
+      nav:{
+        navigationBarHidden:true
+      },
+      views:[
+        {
+          class: 'HeroView',
+          frame:{w:'1x',y:'0',h:'89'},
+          subViews:[
+            {
+              class:'HeroImageView',
+              frame:{x:'87',y:'34',w:'167',h:'36'},
+              image:path+'./images/menu_logo@2x.png'
+            },
+          ]
+        },
+        {
+          class:'HeroTableView',
+          frame:{w:'1x',y:'89',b:'0'},
+          backgroundColor:'F7F7F7',
+          name:'rootTable'
+        }
+      ]
+    };
+
+  </script>
+</body>
+</html>

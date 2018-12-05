@@ -9,7 +9,13 @@ var chokidar = require('chokidar');
 var siofu = require('socketio-file-upload');
 
 app.use(siofu.router);
-app.use('/', express.static('./'), serveIndex('./', { icons: true }));
+app.use(
+  '/',
+  express.static('../../', {
+    maxAge: 0,
+  })
+);
+app.use('/', express.static('../'), serveIndex('../', { icons: true }));
 
 var sockets = [];
 var paths = ['./'];
@@ -40,4 +46,4 @@ var socketProcess = function(socket) {
 var io = require('socket.io')(server);
 io.on('connection', socketProcess);
 server.listen(3000);
-console.log('service at http://127.0.0.1:3000/');
+console.log('service at http://127.0.0.1:3000/projects/');
