@@ -6,11 +6,13 @@
   "module": "src/index.js",
   "scripts": {
     "start": "npm run lib && cd ./src/projects/ && node heronode.js",
-    "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent",
+    "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent && npm run cp",
     "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
     "precommit": "lint-staged",
-    "deploy": "node ./deploy.js"
+    "deploy": "cd ./src/ && node deploy.js",
+    "publish": "cd ./tools/ && node publish.js",
+    "cp": "cd ./tools/ && node cp.js"
   },
   "lint-staged": {
     "*.js": [
@@ -28,12 +30,14 @@
     "eslint": "4.19.1",
     "express": "^4.15.4",
     "express-http-proxy": "^1.0.7",
+    "http-proxy-middleware": "^0.19.1",
     "http-server": "^0.11.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.5",
     "prettier": "1.12.1",
     "rollup": "^0.65.0",
     "serve-index": "^1.9.1",
+    "shelljs": "^0.8.3",
     "socket.io": "",
     "socketio-file-upload": "^0.6.4",
     "web3": "^1.0.0-beta.36",

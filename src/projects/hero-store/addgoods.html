@@ -6,8 +6,23 @@
   <script src="./app/herohelper.js"></script>
   <script src="./app/autoRefresh.js"></script>
   <script src='/socket.io/socket.io.js'></script>
-  <script src="../../hero.js"></script>
+  <script src="./app/hero.js"></script>
   <script>
+
+    if(typeof web3 !== 'undefined') {
+      window.eth = new Eth(web3.currentProvider);
+    } else {
+      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    }
+
+    var eth = window.eth;
+    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+
+    var ajax = window.HeroHelper;
+    var host - window.Host;
+    var url = '';
+    var opts = {};
+    var hashJson = [];
 
     Hero.on = function(data){
       // add items
@@ -22,11 +37,51 @@
           {name: 'item'+data.index,tinyColor: '25b0b8'},
           {name: 'seletedItem'+data.index,hidden: false}
         ]);
+        let ruleHeight = '0'
+            ,ruleText = ''
+            ,goodspriceText = ''
+            ,goodspricePlaceHolder = ''
+            ,goodsItem3Text = ''
+            ,goodsItem3PlaceHolder = ''
+            ,timeWrapHeight = '0';
         switch (data.index) {
-          case data.index:
-          alert('item'+data.index);
+          case 0:
+          ruleText = '';
+          ruleHeight = '0';
+          goodspriceText = '商品价格';
+          goodspricePlaceHolder = '请输入商品金额';
+          goodsItem3Text = '商品数量';
+          goodsItem3PlaceHolder = '请填写商品数量';
+          timeWrapHeight = '0';
+          break;
+          case 1:
+          ruleText = '第二价格密封拍卖，竞买者同样以密封的形式独立出价，商品也出售给出价最高的投标者。但是获胜者支付的是所有投标价格中的第二高价，所以它被称为第二价格密封拍卖。';
+          ruleHeight = '70';
+          goodspriceText = '商品底价';
+          goodspricePlaceHolder = '请输入商品最低金额';
+          goodsItem3Text = '最低加价价格';
+          goodsItem3PlaceHolder = '请填写最低加价价格';
+          timeWrapHeight = '100';
+          break;
+          case 2:
+          ruleText = '竞价拍卖是指卖方交易商向交易市场提出申请，将拟出卖商品的详细资料提交给交易市场，确定商品拍卖的具体时间，通过交易市场预先公告后挂牌报价，买方自主加价，在约定的交易时间内，无人继续加价后，商品拍卖结束，以最高买价成交。';
+          ruleHeight = '90';
+          goodspriceText = '商品底价';
+          goodspricePlaceHolder = '请输入商品最低金额';
+          goodsItem3Text = '最低加价价格';
+          goodsItem3PlaceHolder = '请填写最低加价价格';
+          timeWrapHeight = '100';
           break;
         }
+        this.datas([
+          {name: 'auctionrules', frame: {h:ruleHeight}, text: ruleText},
+          {name: 'ruleText',text: ruleText},
+          {name: 'goodsprice', text: goodspriceText},
+          {name: 'goodsPricePlaceHolder', placeHolder: goodspricePlaceHolder},
+          {name: 'goodsItem3', text: goodsItem3Text},
+          {name: 'num', placeHolder: goodsItem3PlaceHolder},
+          {name: 'timeWrap', frame: {h: timeWrapHeight}}
+        ]);
       } else if (data.click === 'addPics') {
         // add pics
         alert('addPics');
@@ -125,53 +180,85 @@
         },
         {
           class: 'HeroView',
-          frame: {x: '0', y: '40', w: '1x', h: '1'},
+          frame: {x: '0', r: '0', y: '40', h: '1'},
           backgroundColor: 'dddddd'
+        },
+
+        // header
+        {
+          class: 'HeroView',
+          frame: {x: '0',y: '40', r: '0', h: '0'},
+          name: 'auctionrules',
+          subViews: [
+            {
+              class: 'HeroLabel',
+              frame: {x: '5', y: '5'},
+              text: '拍卖规则：',
+              tinyColor: '000000',
+              size: 12
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '65', y: '5'},
+              name: 'ruleText',
+              tinyColor: '3F3F3F',
+              size: 10
+            },
+          ]
         },
 
         // contents
         {
           class: 'HeroView',
-          frame: {x: '0',y: '40', r: '0', h: '20'},
-          backgroundColor: 'F7F7F7'
+          frame: {x: '0', r: '0', h: '15'},
+          backgroundColor: 'F7F7F7',
+          yOffset: 'auctionrules+0'
         },
         {
           class: 'HeroLabel',
-          frame: {x: '25', y: '60', r: '25', h: '50'},
+          frame: {x: '25', r: '25', h: '50'},
           text: '商品价格',
           textColor:'333333',
+          name: 'goodsprice',
+          yOffset: 'auctionrules+20',
           size: 22
         },
         {
           class: 'HeroTextField',
-          frame: {y: '60', r: '25',w: '0.5x', h: '50'},
+          frame: {r: '25',w: '0.5x', h: '50'},
           name: 'price',
           placeHolder: '请填写商品金额',
+          name: 'goodsPricePlaceHolder',
+          yOffset: 'auctionrules+20',
           textFieldDidEditing:{change:'price'}
         },
         {
           class: 'HeroView',
-          frame: {x: '0',y: '110', r: '0', h: '1'},
+          frame: {x: '0', r: '0', h: '1'},
+          yOffset: 'auctionrules+70',
           backgroundColor: 'dddddd'
         },
         {
           class: 'HeroLabel',
-          frame: {x: '25', y: '110', r: '25', h: '50'},
+          frame: {x: '25', r: '25', h: '50'},
           text: '支付代币',
+          yOffset: 'auctionrules+70',
           textColor:'333333',
           size: 22
         },
         {
           class: 'HeroTextField',
           name:'tokenAddress',
-          frame: {y: '110', r: '25',w: '0.5x', h: '50'},
+          frame: {r: '25',w: '0.5x', h: '50'},
+          yOffset: 'auctionrules+70',
           placeHolder: '合约地址',
           text:'0x0000000000000000000000000000000000000000',
           textFieldDidEditing:{change:'tokenAddress'}
         },
         {
           class: 'HeroView',
-          frame: {x: '0',y: '160', r: '0', h: '1'},
+          frame: {x: '0', r: '0', h: '1'},
+          yOffset: 'auctionrules+120',
           backgroundColor: 'dddddd'
         },
         // {
@@ -185,28 +272,93 @@
         // goods num
         {
           class: 'HeroLabel',
-          frame: {x: '25', y: '160', r: '25', h: '50'},
+          frame: {x: '25', r: '25', h: '50'},
+          yOffset: 'auctionrules+120',
           text: '商品数量',
+          name: 'goodsItem3',
           textColor:'333333',
           size: 22
         },
         {
           class: 'HeroTextField',
-          frame: {y: '160', r: '25',w: '0.5x', h: '50'},
+          frame: {r: '25',w: '0.5x', h: '50'},
+          yOffset: 'auctionrules+120',
           cornerRadius: 8,
           name: 'num',
           placeHolder: '请填写商品数量',
           textFieldDidEditing:{change:'num'}
         },
+        // start time and close time
         {
           class: 'HeroView',
-          frame: {x: '0',y: '210', r: '0', h: '15'},
+          frame: {x: '0',r: '0', y: '0', h: '0'},
+          yOffset: 'auctionrules+170',
+          name: 'timeWrap',
+          subViews: [
+            {
+              class: 'HeroView',
+              frame: {x: '0', r: '0', h: '1'},
+              backgroundColor: 'dddddd'
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '25', r: '25', h: '50'},
+              text: '开始时间',
+              name: 'goodsItem3',
+              textColor:'333333',
+              size: 22
+            },
+            {
+              class: 'HeroTextField',
+              frame: {r: '25',w: '0.5x', h: '50'},
+              cornerRadius: 8,
+              name: 'num',
+              placeHolder: '请填写开始时间',
+              textFieldDidEditing:{change:'num'}
+            },
+
+            // close time
+            {
+              class: 'HeroView',
+              frame: {x: '0', r: '0', h: '1', y: '50'},
+              backgroundColor: 'dddddd'
+            },
+            {
+              class: 'HeroLabel',
+              frame: {x: '25', r: '25', h: '50', y: '50'},
+              text: '结束时间',
+              name: 'goodsItem3',
+              textColor:'333333',
+              size: 22
+            },
+            {
+              class: 'HeroTextField',
+              frame: {r: '25',w: '0.5x', h: '50', y: '50'},
+              cornerRadius: 8,
+              name: 'num',
+              placeHolder: '请填写结束时间',
+              textFieldDidEditing:{change:'num'}
+            }
+          ]
+        },
+        {
+          class: 'HeroView',
+          frame: {x: '0',r: '0', h: '15'},
+          yOffset: 'timeWrap+0',
           backgroundColor: 'F7F7F7'
         },
+        // {
+        //   class: 'HeroView',
+        //   frame: {x: '0',r: '0', h: '15'},
+        //   yOffset: 'auctionrules+170',
+        //   backgroundColor: 'F7F7F7'
+        // },
+
         // goods title
         {
           class: 'HeroTextField',
-          frame: {x: '0', y: '220', r: '0', h: '50'},
+          frame: {x: '0', r: '0', h: '50'},
+          yOffset: 'timeWrap+15',
           cornerRadius: 8,
           name: 'title',
           placeHolder: '请填写商品标题',
@@ -214,13 +366,15 @@
         },
         {
           class: 'HeroView',
-          frame: {x: '0',y: '270', r: '0', h: '1'},
+          frame: {x: '0', r: '0', h: '1'},
+          yOffset: 'timeWrap+65',
           backgroundColor: 'dddddd'
         },
         // goods desc
         {
           class: 'HeroTextView',
-          frame: {x: '0', y: '271', r: '0', h: '150'},
+          frame: {x: '0', r: '0', h: '150'},
+          yOffset: 'timeWrap+66',
           cornerRadius: 5,
           name: 'goodsdesc',
           placeHolder: '请输入商品详情内容与图片',
@@ -228,45 +382,52 @@
         },
         {
           class: 'HeroView',
-          frame: {x: '0',y: '420', r: '0', h: '1'},
+          frame: {x: '0', r: '0', h: '1'},
+          yOffset: 'timeWrap+230',
           backgroundColor: 'dddddd'
         },
         {
           class: 'HeroImageView',
-          frame: {r: '30', y: '370', w: '30', h: '30'},
+          frame: {r: '30', w: '30', h: '30'},
+          yOffset: 'timeWrap+180',
           image:path+'./images/addpic.png'
         },
         {
           class: 'HeroButton',
-          frame: {r: '30', y: '370', w: '30', h: '30'},
+          frame: {r: '30', w: '30', h: '30'},
+          yOffset: 'timeWrap+180',
           click: {click: 'addPics'}
         },
         // add cover
         {
           class: 'HeroImageView',
-          frame: {x: '30', y: '450', w: '50', h: '50'},
+          frame: {x: '30', w: '50', h: '50'},
+          yOffset: 'timeWrap+250',
           image:path+'./images/add.png'
         },
         {
           class: 'HeroButton',
-          frame: {x: '30', y: '450', w: '50', h: '50'},
+          frame: {x: '30', w: '50', h: '50'},
+          yOffset: 'timeWrap+250',
           click: {click: 'addCover'}
         },
         {
           class: 'HeroLabel',
-          frame: {x: '100', y: '450', h: '50'},
+          frame: {x: '100', h: '50'},
+          yOffset: 'timeWrap+250',
           text: '仅以此添加图片用于封面',
           tinyColor: '333333'
         },
         // btn
         {
           class: 'HeroButton',
-          frame: {x: '25', y: '550', r: '25', h: '50'},
+          frame: {x: '25', r: '25', h: '50'},
+          yOffset: 'timeWrap+350',
           title: '发布',
           size: 18,
           backgroundColor: '25B0B8',
           cornerRadius: 8,
-          ripple:true,
+          ripple: true,
           click: {click: 'releaseNormal'}
         }
       ]
