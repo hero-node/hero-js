@@ -9,20 +9,20 @@
   <script src="./app/hero.js"></script>
   <script>
 
-    if(typeof web3 !== 'undefined') {
-      window.eth = new Eth(web3.currentProvider);
-    } else {
-      window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
-    }
+    // if(typeof web3 !== 'undefined') {
+    //   window.eth = new Eth(web3.currentProvider);
+    // } else {
+    //   window.eth = new Eth(new Eth.HttpProvider(window.ethProvider));
+    // }
 
-    var eth = window.eth;
-    var store = window.eth.contract(window.storeABI).at(window.storeAddress);
+    // var eth = window.eth;
+    // var store = window.eth.contract(window.storeABI).at(window.storeAddress);
 
-    var ajax = window.HeroHelper;
-    var host - window.Host;
-    var url = '';
-    var opts = {};
-    var hashJson = [];
+    // var ajax = window.HeroHelper;
+    // var host - window.Host;
+    // var url = '';
+    // var opts = {};
+    // var hashJson = [];
 
     Hero.on = function(data){
       // add items

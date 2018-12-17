@@ -10,7 +10,7 @@
     "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
     "precommit": "lint-staged",
-    "deploy": "cd ./src/ && node deploy.js",
+    "compile": "cd ./src/ && node compiler.js",
     "publish": "cd ./tools/ && node publish.js",
     "cp": "cd ./tools/ && node cp.js"
   },
