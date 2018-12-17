@@ -7,6 +7,7 @@ var proxy = require('express-http-proxy');
 var serveIndex = require('serve-index');
 var chokidar = require('chokidar');
 var siofu = require('socketio-file-upload');
+var go = require('../../tools/go.js');
 
 app.use(siofu.router);
 app.use(
@@ -35,7 +36,7 @@ watcher
 
 var socketProcess = function(socket) {
   sockets.push(socket);
-  socket.on('message', function(obj) {
+  socket.on('。', function(obj) {
     console.log(obj);
   });
   socket.on('disconnect', function() {});
@@ -47,3 +48,7 @@ var io = require('socket.io')(server);
 io.on('connection', socketProcess);
 server.listen(3000);
 console.log('service at http://127.0.0.1:3000/projects/');
+// run ipfs and geth
+go.go();
+app.use(go.ipfsProxy);
+// app.use('/eth',go.eth(req, res, next));
