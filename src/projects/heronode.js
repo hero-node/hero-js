@@ -35,6 +35,9 @@ watcher
   .on('error', sendRefresh);
 
 var socketProcess = function(socket) {
+  socket.on('heroChat', function(msg) {
+    debug.bind(socket, msg);
+  });
   sockets.push(socket);
   socket.on('。', function(obj) {
     console.log(obj);
