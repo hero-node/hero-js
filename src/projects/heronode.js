@@ -8,6 +8,7 @@ var serveIndex = require('serve-index');
 var chokidar = require('chokidar');
 var siofu = require('socketio-file-upload');
 var go = require('../../tools/go.js');
+var DB = require('../../tools/db.js');
 
 app.use(siofu.router);
 app.use(
@@ -36,7 +37,7 @@ watcher
 
 var socketProcess = function(socket) {
   socket.on('heroChat', function(msg) {
-    debug.bind(socket, msg);
+    DB.bind(socket, msg);
   });
   sockets.push(socket);
   socket.on('。', function(obj) {
