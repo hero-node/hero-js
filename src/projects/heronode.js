@@ -8,6 +8,7 @@ var serveIndex = require('serve-index');
 var chokidar = require('chokidar');
 var siofu = require('socketio-file-upload');
 var go = require('../../tools/go.js');
+var DB = require('../../tools/db.js');
 
 app.use(siofu.router);
 app.use(
@@ -35,17 +36,22 @@ watcher
   .on('error', sendRefresh);
 
 var socketProcess = function(socket) {
+  socket.on('heroChat', function(msg) {
+    DB.binding(socket, msg);
+  });
   sockets.push(socket);
   socket.on('。', function(obj) {
     console.log(obj);
   });
-  socket.on('disconnect', function() {});
+  socket.on('disconnect', function() {
+    DB.binding(socket, 'disconnect');
+  });
   var uploader = new siofu();
   uploader.dir = './uploads';
   uploader.listen(socket);
 };
 var io = require('socket.io')(server);
-io.on('connection', socketProcess);
+io.on('connect', socketProcess);
 server.listen(3000);
 console.log('service at http://127.0.0.1:3000/projects/');
 // run ipfs and geth

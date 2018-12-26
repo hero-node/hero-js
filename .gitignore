@@ -5,3 +5,5 @@ package-lock.json
 out/
 raw/
 src/dist/*.js
+node/
+orbitdb/
