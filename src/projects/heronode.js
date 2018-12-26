@@ -37,19 +37,21 @@ watcher
 
 var socketProcess = function(socket) {
   socket.on('heroChat', function(msg) {
-    DB.bind(socket, msg);
+    DB.binding(socket, msg);
   });
   sockets.push(socket);
   socket.on('。', function(obj) {
     console.log(obj);
   });
-  socket.on('disconnect', function() {});
+  socket.on('disconnect', function() {
+    DB.binding(socket, 'disconnect');
+  });
   var uploader = new siofu();
   uploader.dir = './uploads';
   uploader.listen(socket);
 };
 var io = require('socket.io')(server);
-io.on('connection', socketProcess);
+io.on('connect', socketProcess);
 server.listen(3000);
 console.log('service at http://127.0.0.1:3000/projects/');
 // run ipfs and geth

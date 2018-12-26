@@ -1,42 +1,92 @@
 const OrbitDB = require('orbit-db');
+const IpfsApi = require('ipfs-api');
 const crypto = require('crypto');
 const path = require('path');
+const util = require('util');
 
 var ipfs = IpfsApi('127.0.0.1', '5001');
 var orbitdb = new OrbitDB(ipfs);
 
 var dbconnections = [];
 
-async function bind(socket, msg) {
-  var from = msg.from;
-  var to = msg.to;
-  var db = new DB(ipfs, orbitdb, from, to);
-  await db.load();
+async function binding(socket, msg) {
+  if (msg === 'disconnect') {
+    console.log('连接中断', socket.db._from);
+    var index = dbconnections.indexOf(socket.db.db);
+    if (index > 1) {
+      dbconnections.splice(index, 1);
+    }
+    socket.db.db.events.removeListener('write', socket.writeListener);
+    socket.db.db.events.removeListener('replicated', socket.replicatedListener);
+    socket.db = null;
+    return;
+  }
 
-  if (msg.req === 'subscribe') {
-    db.subscribe(payload => {
-      socket.emit('heroChatSubscribeResponse', payload);
-    });
+  socket.on('error', function(error) {
+    console.log(error);
+  });
+
+  if (msg.req === 'chatConnect') {
+    console.log('有连接进入', msg.from);
+    var from = msg.from;
+    var to = msg.to;
+    var db = new DB(ipfs, orbitdb, from, to);
+    await db.load();
+    socket.emit('chatConnected');
+    socket.db = db;
+  } else if (msg.req === 'subscribe') {
+    console.log('subscribe');
+
+    socket.writeListener = (dbname, hash, entry) => {
+      if (entry[0].payload.op === 'DEL') {
+        // 删除历史数据时不发送
+        return;
+      }
+      console.log('订阅回调');
+      var output = socket.db.getMessage();
+      if (output && output.length > 0) {
+        console.log('\n');
+        console.log(output);
+        socket.emit('newMessage', output);
+        console.log('sended');
+        socket.db.deleteMessage();
+      }
+    };
+    socket.replicatedListener = () => {
+      console.log('订阅回调');
+      var output = socket.db.getMessage();
+      if (output && output.length > 0) {
+        console.log('\n');
+        console.log(output);
+        socket.emit('newMessage', output);
+        console.log('sended');
+        socket.db.deleteMessage();
+      }
+    };
+    socket.db.db.events.on('write', socket.writeListener);
+    socket.db.db.events.on('replicated', socket.replicatedListener);
+
+    socket.emit('subscribeResponse', 'success');
   } else if (msg.req === 'post') {
     var payload = msg.payload;
     var pub = msg.pub;
     var encrypted = msg.encrypted;
-    var hash = await db.add({
-      from: from,
-      to: to,
+    var hash = await socket.db.add({
+      from: socket.db._from,
+      to: socket.db._to,
       payload: payload,
       pub: pub,
       encrypted: encrypted,
     });
-    socket.emit('heroChatPostResponse', hash);
-  }
-
-  socket.on('disconnection', () => {
-    var index = dbconnections.indexOf(db.db);
-    if (index > 1) {
-      dbconnections.splice(index, 1);
+    socket.emit('postResponse', hash);
+  } else if (msg.req === 'fetch') {
+    console.log(socket.db._from, 'fetch');
+    var output = socket.db.getMessage();
+    if (output && output.length > 0) {
+      socket.emit('newMessage', output);
+      socket.db.deleteMessage();
     }
-  });
+  }
 }
 
 class DB {
@@ -53,6 +103,7 @@ class DB {
     for (var i = 0; i < dbconnections.length; i++) {
       var conn = dbconnections[i];
       if (conn.address.toString() === addr) {
+        console.log('发现已有连接');
         this.db = conn;
         isExist = true;
         break;
@@ -60,6 +111,7 @@ class DB {
     }
 
     if (!isExist) {
+      console.log('创建新的数据库连接', addr);
       this.db = await this._orbitdb.feed(addr, {
         write: ['*'],
       });
@@ -89,19 +141,7 @@ class DB {
     return dag.toJSON().multihash.toString();
   }
 
-  subscribe(cb) {
-    this.db.events.on('write', async (dbname, hash, entry) => {
-      var payload = this.getMessage(this._to);
-      cb(payload);
-    });
-
-    this.db.events.on('replicated', async address => {
-      var payload = this.getMessage(this._to);
-      cb(payload);
-    });
-  }
-
-  async getMessage(to) {
+  getMessage() {
     var result = this.db
       .iterator({
         limit: -1,
@@ -109,16 +149,32 @@ class DB {
       })
       .collect();
     let output;
-    if (result.length > 0) {
+    if (result && result.length > 0) {
       output = result
-        .filter(e => e.payload.value.to === to)
+        .filter(e => e.payload.value.to === this._from)
         .map(e => e.payload.value);
       this.lastHash = result.slice(-1).pop().hash;
     }
     return output;
   }
 
-  async deleteMessage(to, lastHash) {}
+  async deleteMessage() {
+    console.log('delete message');
+    var result = this.db
+      .iterator({
+        limit: -1,
+        lte: this.lastHash,
+      })
+      .collect();
+
+    if (result) {
+      for (var i = 0; i < result.length; i++) {
+        var hash = result[i].hash;
+        await this.db.remove(hash);
+      }
+    }
+    this.lastHash = undefined;
+  }
 
   async add(value) {
     return await this.db.add(value);
@@ -132,4 +188,4 @@ class DB {
   }
 }
 
-module.exports = bind;
+exports.binding = binding;

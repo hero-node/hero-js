@@ -6,3 +6,4 @@ out/
 raw/
 src/dist/*.js
 node/
+orbitdb/
