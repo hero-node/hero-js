@@ -8,6 +8,11 @@ var fs = require('fs');
 var isRunIpfs = exec('ps -ef | grep ipfs | grep -v grep');
 var isRunGeth = exec('ps -ef | grep geth | grep -v grep');
 
+var standalone = shell.env['HERO_STANDALONE'];
+var rootNodeEth =
+  'enode://e3dd0392a2971c4b0c4c43a01cd682e19f31aaa573c43a9b227685af7ffed5070217392ae5ada278968d5c4bfddd9c93547bcf4592852196a8facbcdad64d257@172.16.1.99:30301?discport=0';
+var rootNodeIpfs =
+  '/ip4/47.52.172.254/tcp/4001/ipfs/QmcsiaJpPjHbaxDLT8gbJQKdmhzygm8fhfvCYLHt325CAt';
 function go() {
   cd('../../tools');
   var nodeDir = '../node';
@@ -31,6 +36,12 @@ function go() {
     exec(
       './ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin \'["*"]\''
     );
+
+    exec('./ipfs config --json Bootstrap []');
+
+    if (!standalone) {
+      exec('./ipfs bootstrap add ' + rootNodeIpfs);
+    }
     exec('./ipfs daemon --enable-namesys-pubsub', (err, stdout, stderr) => {
       console.log(stdout);
       if (err) {
@@ -44,17 +55,24 @@ function go() {
   // 启动geth
   if (isRunGeth.toString().indexOf('geth') === -1) {
     console.log('start geth');
-    exec(
+    var ethExec =
       './geth --datadir ' +
+      nodeDir +
+      '/eth ' +
+      '--rpc --rpcaddr 0.0.0.0 --ws --wsaddr 0.0.0.0 --wsorigins="*"  --rpccorsdomain "*" --bootnodes=' +
+      rootNodeEth;
+    if (standalone) {
+      ethExec =
+        './geth --datadir ' +
         nodeDir +
         '/eth ' +
-        '--rpc --rpcaddr 0.0.0.0 --ws --wsaddr 0.0.0.0 --wsorigins="*"  --rpccorsdomain "*"',
-      function(err, stdout, stderr) {
-        if (err) {
-          console.log(err);
-        }
+        '--rpc --rpcaddr 0.0.0.0 --ws --wsaddr 0.0.0.0 --wsorigins="*"  --rpccorsdomain "*" --nodiscover';
+    }
+    exec(ethExec, function(err, stdout, stderr) {
+      if (err) {
+        console.log(err);
       }
-    );
+    });
   } else {
     console.log('geth is started');
   }
