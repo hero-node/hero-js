@@ -53,7 +53,9 @@
   hero.getInitData = function() {
     var _initData;
     if (localStorage.boot) {
-      _initData = JSON.parse(localStorage.boot);
+      try {
+        _initData = JSON.parse(localStorage.boot);
+      } catch (e) {}
     }
     _initData = _initData || {};
     var params = (window.location.search.split('?')[1] || '').split('&');

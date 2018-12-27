@@ -7,7 +7,6 @@
   <script src="./app/config.js"></script>
   <script src="./app/shareViews.js"></script>
   <script src="./app/herohelper.js"></script>
-  <script src="./app/ethjs.min.js"></script>
   <script src="./app/fu.js"></script>
   <script src="./app/hero.js"></script>
   <script>
@@ -18,6 +17,9 @@
       }
       if (data.click === 'privacy') {
         this.command('goto:'+path+'privacy.html')
+      }
+      if (data.click === 'channel') {
+        this.command('goto:'+path+'channel.html')
       }
 
     };
@@ -34,7 +36,7 @@
       version:-1,
       nav:{
         title:"Me",
-        rightItems: [{title:'Info',click:{click:'info'}},{title:'Info',click:{click:'info'}}],
+        rightItems: [{title:'Info',click:{click:'info'}}],
         navigationBarHidden:false
       },
       views:
@@ -53,6 +55,7 @@
           ]},{rows:[
             {
               title:'My Hero Chat ID',
+              textValue:'0xF87897',
               accessoryType:'DisclosureIndicator'
             },
             {
@@ -66,8 +69,9 @@
               click:'privacy'
             },
             {
-              title:'About Hero Chat',
-              accessoryType:'DisclosureIndicator'
+              title:'Message Channel',
+              accessoryType:'DisclosureIndicator',
+              click:'channel'
             },
           ]},{rows:[
             {

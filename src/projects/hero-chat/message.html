@@ -13,8 +13,15 @@
 
     Hero.on = function(data){
       if (data.title) {
-        this.command('goto:'+path+'chat.html?title='+encodeURIComponent(data.title));
+        this.command('goto:'+path+'chat.html?title='+encodeURIComponent(data.title)+'&address='+data.address);
       }
+      if (data.value) {
+        if (data.value.length === 0) {
+          setTimeout(function(){alert('No accounts')},1000);
+        }else{
+          localStorage.chatAcount = data.value[0];
+        }
+      };
     };
     Hero.viewWillAppear = function() {
       // setTimeout(function(){
@@ -25,13 +32,19 @@
 
     };
     Hero.viewDidload = function() {
+// c4dad16acef296683d0ba1e88011973785a011ee98b23705075889bdceab444c 0xf057896042b386323dd3eed5f5C119c4116cDEE6
+// 24ba34c164996d969a32b70f91c037fcdb0b821fa93ead9ea7e54ba8cf7dcbfb 0xD71c1BB3eC153f9C0a366aD20d434Dc320ae700e
+// ed6057688fc9e6566b060d2a485a0f24e28731e06a0a093553052bb159bbb538 0x55BFb94633785133Dfc63589bc3dd5A15935075c
+// dc832c7c45f9bc7c59fe8229cd8c6f9da4fc73fd163daa145090f69fada8ab77 0xaedCe9EdB8d3a73b5Db5c3A847107e8cF3544d3B
+// 4d02211278d3151973785fd3a7062ed25e81734e8c0bae60a8f86a7507393c38 0x161404477bD52E01C01FaBfC0E71Fc7b8e18c9f0
 
     };
     Hero.ui = {
-      version:-1,
+      backgroundColor:'f2f2f2',
+      tintColor:'000099',
       nav:{
         title:"Message",
-        titleColor:'333333',
+        rightItems: [{image:'ic_plus.png',click:{click:'add'}}],
         navigationBarHidden:false
       },
       views:
@@ -39,6 +52,7 @@
         {
           class:'HeroTableView',
           frame:{w:'1x',h:'1x'},
+          backgroundColor:'ffffff',
           name:'msgTableView',
           data:[
             {
@@ -50,11 +64,11 @@
             {
               sectionTitle:'history',
               rows:[
-                {height:60,title:'Vtalik',image:'https://img2.woyaogexing.com/2018/11/27/70eb761af1d25ff8!400x400_big.jpg',detail:'Nerver give up eth'},
-                {height:60,title:'sotoshi',image:'https://img2.woyaogexing.com/2018/11/25/3fcc71bd6b9e4c5095f435a9b86a3a0c!400x400.jpeg',detail:'bitcoin is best'},
-                {height:60,title:'Patrick Dai',image:'https://img2.woyaogexing.com/2018/11/22/5425b5033eb27e2a!400x400_big.jpg',detail:'POS is future'},
-                {height:60,title:'Da Hongfei',image:'https://img2.woyaogexing.com/2018/11/17/818b42bb663c485a890694df16e1324d!400x400.jpeg',detail:'to the moon'},
-                {height:60,title:'Hero Node',image:'https://img2.woyaogexing.com/2018/11/09/2ab8e98a388a5251!400x400_big.jpg',detail:'Dapp is the next decade'},
+                {height:60,title:'Vtalik',image:'https://img2.woyaogexing.com/2018/11/27/70eb761af1d25ff8!400x400_big.jpg',detail:'Nerver give up eth',address:'0xf057896042b386323dd3eed5f5C119c4116cDEE6'},
+                {height:60,title:'sotoshi',image:'https://img2.woyaogexing.com/2018/11/25/3fcc71bd6b9e4c5095f435a9b86a3a0c!400x400.jpeg',detail:'bitcoin is best',address:'0xD71c1BB3eC153f9C0a366aD20d434Dc320ae700e'},
+                {height:60,title:'Patrick Dai',image:'https://img2.woyaogexing.com/2018/11/22/5425b5033eb27e2a!400x400_big.jpg',detail:'POS is future',address:'0x55BFb94633785133Dfc63589bc3dd5A15935075c'},
+                {height:60,title:'Da Hongfei',image:'https://img2.woyaogexing.com/2018/11/17/818b42bb663c485a890694df16e1324d!400x400.jpeg',detail:'to the moon',address:'0xaedCe9EdB8d3a73b5Db5c3A847107e8cF3544d3B'},
+                {height:60,title:'Hero Node',image:'https://img2.woyaogexing.com/2018/11/09/2ab8e98a388a5251!400x400_big.jpg',detail:'Dapp is the next decade',address:'0x161404477bD52E01C01FaBfC0E71Fc7b8e18c9f0'},
               ]
 
             }
@@ -66,7 +80,9 @@
         },
         {
           class:'HeroSignature',
-          name:'sign'
+          name:'wallet',
+          accounts:'get',
+          hidden:true
         }
       ]
     };

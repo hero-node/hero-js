@@ -7,7 +7,6 @@
   <script src="./app/config.js"></script>
   <script src="./app/shareViews.js"></script>
   <script src="./app/herohelper.js"></script>
-  <script src="./app/ethjs.min.js"></script>
   <script src="./app/fu.js"></script>
   <script src="./app/hero.js"></script>
   <script>
@@ -27,7 +26,7 @@
     Hero.ui = {
       version:-1,
       nav:{
-        title:"Contacts",
+        title:"Blockchain Contacts",
         navigationBarHidden:false
       },
       views:
@@ -37,14 +36,13 @@
           frame:{w:'1x',h:'1x'},
           name:'contactTableView',
           data:[{sectionTitle:'Add friends',rows:[
-            {title:'New friends request',accessoryType:'DisclosureIndicator'},
-            {title:'Add friends in HeroChat ID',accessoryType:'DisclosureIndicator'},
-            {title:'Invite friends',accessoryType:'DisclosureIndicator'},
-          ]},{sectionTitle:'一度人脉',rows:[
+            {title:'New friends request',accessoryType:'DisclosureIndicator',click:'addFriend'},
+            {title:'Add me',accessoryType:'DisclosureIndicator',click:'addMe'},
+          ]},{sectionTitle:'First Dimensional Networking',rows:[
             {title:'vitalik',accessoryType:'DisclosureIndicator'},
             {title:'FBXLLL',accessoryType:'DisclosureIndicator'},
             {title:'0Xlsd',accessoryType:'DisclosureIndicator'},
-          ]},{sectionTitle:'二度人脉',rows:[
+          ]},{sectionTitle:'Second Dimensional Networking',rows:[
             {title:'vitalik',accessoryType:'DisclosureIndicator'},
             {title:'FBXLLL',accessoryType:'DisclosureIndicator'},
             {title:'0Xlsd',accessoryType:'DisclosureIndicator'},

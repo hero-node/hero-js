@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+    };
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      nav:{
+        title:"Channel",
+        navigationBarHidden:false
+      },
+      views:
+      [
+        {
+          class:'HeroTableView',
+          frame:{w:'1x',h:'1x'},
+          name:'meTableView',
+          data:[{sectionTitle:'Msg Channel',sectionFootTitle:'The ipfs pub/sub system is in testing',rows:[
+            {
+              title:'PUB/SUB (ipfs)',
+              boolValue:true
+            },
+            {
+              title:'Whisper (ethereum)',
+              boolValue:true
+            },
+          ]}]
+        }
+      ]
+    };
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>

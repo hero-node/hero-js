@@ -6,7 +6,10 @@
   <script>
 
     Hero.on = function(data){
-      alert(JSON.stringify(data));
+      if (data.value) {
+        localStorage.boot = JSON.stringify({url:data.value});
+        this.command('back');
+      };
     };
     Hero.viewWillAppear = function() {
     };
@@ -15,21 +18,17 @@
     Hero.viewDidload = function() {
     };
     Hero.ui = {
+      backgroundColor:'f3f3f3',
       nav:{
         navigationBarHidden:false
       },
       views:
       [
         {
-          class:'HeroView',
-          frame:{x:'0.5x-150',w:'300',y:'0.5x-200',h:'400'},
-          borderColor:'999999',
-          cornerRadius:10
-        },
-        {
           class:'HeroScanBarCodeView',
-          frame:{x:'0.5x-150',w:'300',y:'0.5x-200',h:'400'},
+          frame:{w:'1x',h:'1x+48'},
           qrcode:true,
+          getBarCode:{code:true}
         }
 
       ]

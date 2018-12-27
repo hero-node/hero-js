@@ -10,22 +10,22 @@
   <script src="./app/fu.js"></script>
   <script src="./app/hero.js"></script>
   <script>
-  var msgs = [
+  // var msgs = [
 
-    {
-      text:'Hi, What \'s are you doing?',
-      self:false,
-      nickname:'Vitalik',
-      avatar:'https://img2.woyaogexing.com/2018/11/05/e37eafb8923f4f62!400x400_big.jpg' 
-    },
-    {
-      text:'Buy more eth !!',
-      self:true,
-      nickname:'Me',
-      avatar:'https://img2.woyaogexing.com/2018/11/09/2ab8e98a388a5251!400x400_big.jpg' 
-    },
+  //   {
+  //     text:'Hi, What \'s are you doing?',
+  //     self:false,
+  //     nickname:'Vitalik',
+  //     avatar:'https://img2.woyaogexing.com/2018/11/05/e37eafb8923f4f62!400x400_big.jpg' 
+  //   },
+  //   {
+  //     text:'Buy more eth !!',
+  //     self:true,
+  //     nickname:'Me',
+  //     avatar:'https://img2.woyaogexing.com/2018/11/09/2ab8e98a388a5251!400x400_big.jpg' 
+  //   },
 
-  ];
+  // ];
 
 
     Hero.on = function(data){
@@ -48,10 +48,13 @@
     }
     Hero.addMsg = function(text){
       var msg = {self:true,nickname:'Me',text:text};
+      window._io.send('heroChat', {req:'post',payload:msg});
       Hero.datas({name:'chat',newMsg:msg,avatar:''});
     };
     Hero.viewWillAppear = function() {
-      Hero.job();
+      var address = Hero.getInitData().address;
+      window._io.send('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
+      window._io.send('heroChat', {req:'fetch'});
     };
     Hero.viewWillDisAppear = function() {
 
@@ -60,8 +63,6 @@
 
     };
     Hero.ui = {
-      version:-1,
-      backgroundColor:'eeeeee',
       nav:{
         title:Hero.getInitData().title,
         navigationBarHidden:false
@@ -70,9 +71,9 @@
       [
         {
           class:'HeroChatView',
-          frame:{w:'1x',y:'0',b:'20'},
+          frame:{w:'1x',h:'1x'},
           name:'chat'
-        }
+        },
       ]
     };
 
