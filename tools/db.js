@@ -10,14 +10,20 @@ var orbitdb = new OrbitDB(ipfs);
 var dbconnections = [];
 
 async function binding(socket, msg) {
-  if (msg === 'disconnect') {
+  if (socket.db && msg === 'disconnect') {
     console.log('连接中断', socket.db._from);
     var index = dbconnections.indexOf(socket.db.db);
     if (index > 1) {
       dbconnections.splice(index, 1);
     }
-    socket.db.db.events.removeListener('write', socket.writeListener);
-    socket.db.db.events.removeListener('replicated', socket.replicatedListener);
+    if (socket.writeListener && socket.replicatedListener) {
+      socket.db.db.events.removeListener('write', socket.writeListener);
+      socket.db.db.events.removeListener(
+        'replicated',
+        socket.replicatedListener
+      );
+    }
+
     socket.db = null;
     return;
   }
@@ -29,10 +35,9 @@ async function binding(socket, msg) {
   if (msg.req === 'chatConnect') {
     console.log('有连接进入', msg.from);
     var from = msg.from;
-    var to = msg.to;
     var db = new DB(ipfs, orbitdb, from, to);
     await db.load();
-    socket.emit('chatConnected');
+    socket.emit('heroChat', { req: msg.req, res: 'success' });
     socket.db = db;
   } else if (msg.req === 'subscribe') {
     console.log('subscribe');
@@ -47,7 +52,7 @@ async function binding(socket, msg) {
       if (output && output.length > 0) {
         console.log('\n');
         console.log(output);
-        socket.emit('newMessage', output);
+        socket.emit('heroChat', { req: msg.req, res: output });
         console.log('sended');
         socket.db.deleteMessage();
       }
@@ -58,7 +63,7 @@ async function binding(socket, msg) {
       if (output && output.length > 0) {
         console.log('\n');
         console.log(output);
-        socket.emit('newMessage', output);
+        socket.emit('heroChat', { req: msg.req, res: output });
         console.log('sended');
         socket.db.deleteMessage();
       }
@@ -66,7 +71,7 @@ async function binding(socket, msg) {
     socket.db.db.events.on('write', socket.writeListener);
     socket.db.db.events.on('replicated', socket.replicatedListener);
 
-    socket.emit('subscribeResponse', 'success');
+    socket.emit('heroChat', { req: msg.req, res: 'success' });
   } else if (msg.req === 'post') {
     var payload = msg.payload;
     var pub = msg.pub;
@@ -78,12 +83,12 @@ async function binding(socket, msg) {
       pub: pub,
       encrypted: encrypted,
     });
-    socket.emit('postResponse', hash);
+    socket.emit('heroChat', { req: msg.req, res: hash });
   } else if (msg.req === 'fetch') {
     console.log(socket.db._from, 'fetch');
     var output = socket.db.getMessage();
     if (output && output.length > 0) {
-      socket.emit('newMessage', output);
+      socket.emit('heroChat', { req: msg.req, res: output });
       socket.db.deleteMessage();
     }
   }

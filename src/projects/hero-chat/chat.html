@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="./app/autoRefresh.js"></script>
   <script src='/socket.io/socket.io.js'></script>
+  <!-- <script src="./app/autoRefresh.js"></script> -->
   <script src="./app/config.js"></script>
   <script src="./app/shareViews.js"></script>
   <script src="./app/herohelper.js"></script>
@@ -48,13 +48,24 @@
     }
     Hero.addMsg = function(text){
       var msg = {self:true,nickname:'Me',text:text};
-      window._io.send('heroChat', {req:'post',payload:msg});
+      window._io.emit('heroChat', {req:'post',payload:msg});
       Hero.datas({name:'chat',newMsg:msg,avatar:''});
     };
     Hero.viewWillAppear = function() {
+      if (!window._io) {
+        window._io = io.connect();
+        window._io.on('heroChat', function(data) {
+          // hero.out(data);
+          alert(JSON.stringify(data));
+          if (data.req === 'chatConnect' && data.res === 'success') {
+            window._io.emit('heroChat', {req:'fetch'});
+            window._io.emit('subscribe')
+          }
+        });
+      };
       var address = Hero.getInitData().address;
-      window._io.send('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
-      window._io.send('heroChat', {req:'fetch'});
+      window._io.emit('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
+      
     };
     Hero.viewWillDisAppear = function() {
 
