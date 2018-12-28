@@ -27,11 +27,29 @@
 
   // ];
 
-
+    var mypub;
+    var yourpub = '0xf2e0c123f725cc00d38f46786bea9efc2e07f26af555b843015fdbf265ad7326f3cdab33bc7eb0c2948d08f1fa37921dec6fb4c5cc56ac6b502cfc05dc6003f6';
     Hero.on = function(data){
       if (data.msg) {
         Hero.addMsg(data.msg);
-      };
+      }
+
+      if (data.pub) {
+        alert('pub' + data.pub)
+        mypub = data.pub;
+      }
+
+      if (data.encrypt) {
+        var msg = {self:true, nickname:'Me', text:data.encrypt.result};
+        alert('encrypt origin: ' + data.encrypt.original + '    encrypted: ' + data.encrypt.result)
+        window._io.emit('heroChat', {req:'post',payload:msg, encrypt:true, pub:mypub});
+        Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:data.encrypt.original},avatar:''});
+      }
+
+      if (data.decrypt) {
+        var message = {self:false, nickname:payload.nickname, text: payload.result}
+        Hero.datas({name:'chat', newMsg:message, avatar:''})
+      }
     };
     var i = 0;
     Hero.job = function(){
@@ -47,24 +65,39 @@
       },2000)
     }
     Hero.addMsg = function(text){
-      var msg = {self:true,nickname:'Me',text:text};
-      window._io.emit('heroChat', {req:'post',payload:msg});
-      Hero.datas({name:'chat',newMsg:msg,avatar:''});
+      if (yourpub) {
+        Hero.datas({name:'sig', encrypt:{data: text, pub: yourpub}})
+      } else {
+        var msg = {self:true,nickname:'Me',text:text};
+        window._io.emit('heroChat', {req:'post', payload:msg, encrypt:false, pub:mypub});
+        Hero.datas({name:'chat',newMsg:msg,avatar:''});
+      }
     };
     Hero.viewWillAppear = function() {
       if (!window._io) {
         window._io = io.connect();
         window._io.on('heroChat', function(data) {
-          // hero.out(data);
-          alert(JSON.stringify(data));
+          if (data.req === 'newMessage') {
+            var payloads = data.res;
+            for (var i = 0; i < payloads.length; i++) {
+              var payload = payloads[i];
+              if (payload.encrypt) {
+                Hero.datas({name:'sig', decrypt: payload})
+              } else {
+                var message = {self:false, nickname:payload.nickname, text: payload.text}
+                Hero.datas({name:'chat', newMsg:message, avatar:''})
+              }
+            }
+          }
           if (data.req === 'chatConnect' && data.res === 'success') {
             window._io.emit('heroChat', {req:'fetch'});
-            window._io.emit('subscribe')
+            window._io.emit('heroChat', {req:'subscribe'})
           }
         });
       };
       var address = Hero.getInitData().address;
       window._io.emit('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
+      Hero.datas({name:'sig', pub:true})
       
     };
     Hero.viewWillDisAppear = function() {
@@ -85,7 +118,12 @@
           frame:{w:'1x',h:'1x'},
           name:'chat'
         },
-      ]
+        {
+          class:'HeroSignature',
+          name:'sig',
+          hidden:true,
+        }
+      ],
     };
 
   </script>

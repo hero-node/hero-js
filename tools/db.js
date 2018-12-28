@@ -35,6 +35,7 @@ async function binding(socket, msg) {
   if (msg.req === 'chatConnect') {
     console.log('有连接进入', msg.from);
     var from = msg.from;
+    var to = msg.to;
     var db = new DB(ipfs, orbitdb, from, to);
     await db.load();
     socket.emit('heroChat', { req: msg.req, res: 'success' });
@@ -52,7 +53,7 @@ async function binding(socket, msg) {
       if (output && output.length > 0) {
         console.log('\n');
         console.log(output);
-        socket.emit('heroChat', { req: msg.req, res: output });
+        socket.emit('heroChat', { req: 'newMessage', res: output });
         console.log('sended');
         socket.db.deleteMessage();
       }
@@ -63,7 +64,7 @@ async function binding(socket, msg) {
       if (output && output.length > 0) {
         console.log('\n');
         console.log(output);
-        socket.emit('heroChat', { req: msg.req, res: output });
+        socket.emit('heroChat', { req: 'newMessage', res: output });
         console.log('sended');
         socket.db.deleteMessage();
       }
@@ -88,7 +89,7 @@ async function binding(socket, msg) {
     console.log(socket.db._from, 'fetch');
     var output = socket.db.getMessage();
     if (output && output.length > 0) {
-      socket.emit('heroChat', { req: msg.req, res: output });
+      socket.emit('heroChat', { req: 'newMessage', res: output });
       socket.db.deleteMessage();
     }
   }

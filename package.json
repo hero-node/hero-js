@@ -6,7 +6,7 @@
   "module": "src/index.js",
   "scripts": {
     "start": "npm run lib && cd ./src/projects/ && node heronode.js",
-    "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent && npm run cp",
+    "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent && webpack src/hero-encrypt.js --output ./src/dist/hero-encrypt.js  --mode development --silent && npm run cp",
     "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
     "precommit": "lint-staged",
@@ -28,6 +28,9 @@
   "dependencies": {
     "chokidar": "^2.0.4",
     "eslint": "4.19.1",
+    "eth-ecies": "^1.0.3",
+    "ethereumjs-util": "^6.0.0",
+    "ethereumjs-wallet": "^0.6.3",
     "express": "^4.15.4",
     "express-http-proxy": "^1.0.7",
     "http-proxy-middleware": "^0.19.1",
