@@ -28,26 +28,26 @@
   // ];
 
     var mypub;
-    var yourpub = '0xf2e0c123f725cc00d38f46786bea9efc2e07f26af555b843015fdbf265ad7326f3cdab33bc7eb0c2948d08f1fa37921dec6fb4c5cc56ac6b502cfc05dc6003f6';
+    var yourpub;
     Hero.on = function(data){
       if (data.msg) {
         Hero.addMsg(data.msg);
       }
 
       if (data.pub) {
-        alert('pub' + data.pub)
+        // alert('pub' + data.pub)
         mypub = data.pub;
       }
 
       if (data.encrypt) {
         var msg = {self:true, nickname:'Me', text:data.encrypt.result};
-        alert('encrypt origin: ' + data.encrypt.original + '    encrypted: ' + data.encrypt.result)
-        window._io.emit('heroChat', {req:'post',payload:msg, encrypt:true, pub:mypub});
+        // alert('encrypt origin: ' + data.encrypt.original + '    encrypted: ' + data.encrypt.result)
+        window._io.emit('heroChat', {req:'post',payload:msg, encrypted:true, pub:mypub});
         Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:data.encrypt.original},avatar:''});
       }
 
       if (data.decrypt) {
-        var message = {self:false, nickname:payload.nickname, text: payload.result}
+        var message = {self:false, nickname:data.decrypt.payload.nickname, text: data.decrypt.result}
         Hero.datas({name:'chat', newMsg:message, avatar:''})
       }
     };
@@ -69,7 +69,7 @@
         Hero.datas({name:'sig', encrypt:{data: text, pub: yourpub}})
       } else {
         var msg = {self:true,nickname:'Me',text:text};
-        window._io.emit('heroChat', {req:'post', payload:msg, encrypt:false, pub:mypub});
+        window._io.emit('heroChat', {req:'post', payload:msg, encrypted:false, pub:mypub});
         Hero.datas({name:'chat',newMsg:msg,avatar:''});
       }
     };
@@ -81,10 +81,11 @@
             var payloads = data.res;
             for (var i = 0; i < payloads.length; i++) {
               var payload = payloads[i];
-              if (payload.encrypt) {
+              yourpub = payload.pub;
+              if (payload.encrypted) {
                 Hero.datas({name:'sig', decrypt: payload})
               } else {
-                var message = {self:false, nickname:payload.nickname, text: payload.text}
+                var message = {self:false, nickname:payload.payload.nickname, text: payload.payload.text}
                 Hero.datas({name:'chat', newMsg:message, avatar:''})
               }
             }
