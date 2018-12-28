@@ -159,7 +159,9 @@ class DB {
       output = result
         .filter(e => e.payload.value.to === this._from)
         .map(e => e.payload.value);
-      this.lastHash = result.slice(-1).pop().hash;
+      if (output && output.length > 0) {
+        this.lastHash = output.slice(-1).pop().hash;
+      }
     }
     return output;
   }
