@@ -76,8 +76,6 @@ function catAbi(name, folder) {
               }
             } else {
               // 不存在 直接生成
-              fp = './projects/' + folder[j] + '/app/';
-              console.log(fp);
               // return compiler(`./projects/${folder[j]+'/'+name}.sol`, ':' + name, './projects/' + folder[j] + '/app/');
               return compiler(
                 `./projects/${folder[j] + '/' + name}.sol`,
@@ -109,6 +107,16 @@ function compiler(file, contractName, filePath) {
       }
     }
   ); // Save the compiled generated interface locally
+  fs.writeFile(
+    filePath + fileName + '.json',
+    contract.contracts[contractName].interface,
+    {},
+    function(err, result) {
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
   fs.writeFile(
     filePath + fileName + '.js',
     'window.' +
