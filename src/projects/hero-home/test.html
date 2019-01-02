@@ -20,23 +20,36 @@
       backgroundColor:'f1f1f1',
       nav:{
         title:'test',
-        navigationBarHidden:false,
+        navigationBarHidden:true,
       },
       views:
       [
-        // {
-        //   class:'HeroLabel',
-        //   text:'This is probably a land of nowhere',
-        //   frame:{w:'1x',y:'0',h:'40'},
-        //   alignment:'center',
-        //   backgroundColor:'ff0000',
-        //   textColor:'666666'
-        // },
         {
           class:'HeroView',
           frame:{w:'1x',h:'1x'},
           backgroundColor:'eeee00'
         },
+        {
+          class:'HeroView',
+          frame:{w:'1x',y:'0',h:'40'},
+          backgroundColor:'ff0000',
+        },
+        {
+          class:'HeroView',
+          frame:{w:'1x',b:'0',h:'40'},
+          backgroundColor:'ff0000',
+        },
+        {
+          class:'HeroView',
+          frame:{h:'1x',x:'0',w:'40'},
+          backgroundColor:'ff0000',
+        },
+        {
+          class:'HeroView',
+          frame:{h:'1x',r:'0',w:'40'},
+          backgroundColor:'ff0000',
+        },
+
         {
           class:'HeroButton',
           frame:{w:'120',x:'0.5x-60',y:'0.2x',h:'50'},

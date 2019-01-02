@@ -113,7 +113,6 @@ var xhr = (function() {
       var httpOption = { url: url, method: 'GET' };
       data = objKeySort(data);
       var dataString = formatData(data);
-      data.sign = md5(dataString);
       if (data) {
         httpOption['data'] = data;
       }

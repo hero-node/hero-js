@@ -9,7 +9,7 @@
   <script src="./app/herohelper.js"></script>
   <script src="./app/hero.js"></script>
   <script>
-
+    var history = JSON.parse(localStorage.hero_home_history||'[]');
     Hero.on = function(data){
       if (data.click === 'wallet') {
         this.datas([
@@ -25,7 +25,16 @@
       if (data.textfield === 'end') {
         if (data.value && data.value.length > 3) {
           this.datas([{name:'address',clear:true}]);
-          this.command('goto:'+data.value);
+          var url = '';
+          if (data.value.length === 'QmY7hWisP6N5vPV4gJV22bFq88FeBhkv3hq7kKJyMDb1Gd'.length) {
+            url = host+'/ipfs/'+data.value;
+          }else{
+            url = data.value;
+          }
+          if (!url.startsWith('http')) {
+            url='http://'+url;
+          };
+          this.command('goto:'+url);
         };
       };
     };
@@ -35,7 +44,9 @@
         localStorage.boot = '';
         this.command('goto:'+_initData.url);
       };
-      var history = localStorage.hero_home_history?JSON.parse(localStorage.hero_home_history):[
+    };
+    Hero.viewDidLoad = function() {
+      history.concat([
         {title:'Hero test',icon:path+'/images/saibiwo_icon.png',url:host+'/projects/hero-home/test.html'},
         {title:'Collect Fu',icon:'https://heronode.io/public/theme/asset/engine/fu.jpg',url:host+'/projects/gather-blessing/home.html'},
         {title:'FCK',icon:'https://media.dappreview.cn/dappLogo/931/fckteamwork/A3wz26JKJNbPiEMY3shBCfxk6GPCYdHi.jpg',url:'https://fck.com/'},
@@ -50,7 +61,7 @@
         {title:'idex',icon:'https://idex.market/static/images/favicon-logo-wt-trans.png',url:'https://idex.market/eth/her'},
         {title:'Gods',icon:'https://dapp.review/media/WeChat_Screenshot_20180825010157.png',url:'https://godsunchained.com/'},
         {title:'error',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.iio'},
-      ];
+      ]);
       var historyViews = [];
       for (var i = 0; i < history.length; i++) {
         var item = history[i];
@@ -84,11 +95,7 @@
       };
       setTimeout(function(){
         Hero.datas({name:'historyContent',subViews:historyViews});
-      },2000)
-    };
-    Hero.viewWillDisAppear = function() {
-    };
-    Hero.viewDidload = function() {
+      },100)
     };
     Hero.ui = {
       tintColor:'333333',
@@ -137,7 +144,7 @@
         },
         {
           class:'HeroView',
-          frame:{r:'15',t:'40',w:'50',h:'50'},
+          frame:{r:'15',t:'60',w:'50',h:'50'},
           subViews:[
             {
               class:'HeroButton',
@@ -167,7 +174,7 @@
             {
               class:'HeroView',
               zIndex:1000,
-              frame:{r:'20',t:'78',w:'140',h:'100'},
+              frame:{r:'20',t:'98',w:'140',h:'100'},
               subViews:[
                 {
                   class:'HeroImageView',
@@ -225,14 +232,7 @@
         {
           class:'HeroSignature',
           name:'signature'
-        },
-        // {
-        //   class:'HeroActionSheetView',
-        //   name:'sheet',
-        //   data:[{title:'Camera',action:{click:'Camera'}},{title:'Photo',action:{click:'Photo'}}],
-        //   hidden:true,
-        //   cancelTitle:'Cancel'
-        // }
+        }
       ]
     };
 
