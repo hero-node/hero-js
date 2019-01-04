@@ -10,22 +10,6 @@
   <script src="./app/fu.js"></script>
   <script src="./app/hero.js"></script>
   <script>
-  // var msgs = [
-
-  //   {
-  //     text:'Hi, What \'s are you doing?',
-  //     self:false,
-  //     nickname:'Vitalik',
-  //     avatar:'https://img2.woyaogexing.com/2018/11/05/e37eafb8923f4f62!400x400_big.jpg' 
-  //   },
-  //   {
-  //     text:'Buy more eth !!',
-  //     self:true,
-  //     nickname:'Me',
-  //     avatar:'https://img2.woyaogexing.com/2018/11/09/2ab8e98a388a5251!400x400_big.jpg' 
-  //   },
-
-  // ];
 
     var mypub;
     var yourpub;
@@ -76,26 +60,26 @@
     Hero.viewWillAppear = function() {
       if (!window._io) {
         window._io = io.connect();
-        window._io.on('heroChat', function(data) {
-          if (data.req === 'newMessage') {
-            var payloads = data.res;
-            for (var i = 0; i < payloads.length; i++) {
-              var payload = payloads[i];
-              yourpub = payload.pub;
-              if (payload.encrypted) {
-                Hero.datas({name:'sig', decrypt: payload})
-              } else {
-                var message = {self:false, nickname:payload.payload.nickname, text: payload.payload.text}
-                Hero.datas({name:'chat', newMsg:message, avatar:''})
-              }
+      };
+      window._io.on('heroChat', function(data) {
+        if (data.req === 'newMessage') {
+          var payloads = data.res;
+          for (var i = 0; i < payloads.length; i++) {
+            var payload = payloads[i];
+            yourpub = payload.pub;
+            if (payload.encrypted) {
+              Hero.datas({name:'sig', decrypt: payload})
+            } else {
+              var message = {self:false, nickname:payload.payload.nickname, text: payload.payload.text}
+              Hero.datas({name:'chat', newMsg:message, avatar:''})
             }
           }
-          if (data.req === 'chatConnect' && data.res === 'success') {
-            window._io.emit('heroChat', {req:'fetch'});
-            window._io.emit('heroChat', {req:'subscribe'})
-          }
-        });
-      };
+        }
+        if (data.req === 'chatConnect' && data.res === 'success') {
+          window._io.emit('heroChat', {req:'fetch'});
+          window._io.emit('heroChat', {req:'subscribe'})
+        }
+      });
       var address = Hero.getInitData().address;
       window._io.emit('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
       Hero.datas({name:'sig', pub:true})

@@ -97,6 +97,8 @@ async function binding(socket, msg) {
 
 class DB {
   constructor(ipfs, orbitdb, from, to) {
+    from = from.toLocaleLowerCase();
+    to = to.toLocaleLowerCase();
     this._from = from;
     this._to = to;
     this._orbitdb = orbitdb;
@@ -189,6 +191,8 @@ class DB {
   }
 
   ethAddressToHash(from, to) {
+    from = from.toLocaleLowerCase();
+    to = to.toLocaleLowerCase();
     const hash = crypto.createHash('sha256');
     const sorted = from > to ? from + to : to + from;
     hash.update(sorted);
