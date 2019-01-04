@@ -11,8 +11,9 @@ var isRunGeth = exec('ps -ef | grep geth | grep -v grep');
 var standalone = shell.env['HERO_STANDALONE'];
 var rootNodeEth =
   'enode://e3dd0392a2971c4b0c4c43a01cd682e19f31aaa573c43a9b227685af7ffed5070217392ae5ada278968d5c4bfddd9c93547bcf4592852196a8facbcdad64d257@172.16.1.99:30301?discport=0';
+// 'enode://d947393cce56b57c1735996185b89ec464c98fac1f8ec099fd2b33558bc36af951179a3f7026b0892e0193f6f7bab92f6a856bb120939630704c08b4a9ccb737@47.52.172.254:40303?discport=0';
 var rootNodeIpfs =
-  '/ip4/47.52.172.254/tcp/4001/ipfs/QmcsiaJpPjHbaxDLT8gbJQKdmhzygm8fhfvCYLHt325CAt';
+  '/ip4/47.52.172.254/tcp/14001/ipfs/QmV7sgbQeJfq2UAWKnCbAGLBg5cT6AFFkBN7KZ6BV2q8yJ';
 function go() {
   cd('../../tools');
   var nodeDir = '../node';
