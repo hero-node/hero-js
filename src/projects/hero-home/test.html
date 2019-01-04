@@ -19,55 +19,29 @@
     Hero.ui = {
       backgroundColor:'f1f1f1',
       nav:{
-        title:'test',
-        navigationBarHidden:true,
+        title:'Developing apps',
+        navigationBarHidden:false,
       },
       views:
       [
         {
-          class:'HeroView',
-          frame:{w:'1x',h:'1x'},
-          backgroundColor:'eeee00'
-        },
-        {
-          class:'HeroView',
-          frame:{w:'1x',y:'0',h:'40'},
-          backgroundColor:'ff0000',
-        },
-        {
-          class:'HeroView',
-          frame:{w:'1x',b:'0',h:'40'},
-          backgroundColor:'ff0000',
-        },
-        {
-          class:'HeroView',
-          frame:{h:'1x',x:'0',w:'40'},
-          backgroundColor:'ff0000',
-        },
-        {
-          class:'HeroView',
-          frame:{h:'1x',r:'0',w:'40'},
-          backgroundColor:'ff0000',
-        },
-
-        {
           class:'HeroButton',
           frame:{w:'120',x:'0.5x-60',y:'0.2x',h:'50'},
-          title:'Go Chat',
+          title:'Whisper',
           titleColor:'778899',
           backgroundColor:'eeeeeeee',
           ripple:true,
           click:{global:{key:'newApp',tabs:[
-            {title:'message',url:host+'/projects/hero-chat/message.html',image:host+'/projects/hero-chat/images/me.png'},
-            {title:'contacts',url:host+'/projects/hero-chat/contacts.html',image:host+'/projects/hero-chat/images/me.png'},
-            {title:'me',url:host+'/projects/hero-chat/me.html',image:host+'/projects/hero-chat/images/me.png'},
+            {title:'message',url:host+'/projects/hero-chat/message.html',image:host+'/projects/hero-chat/images/tabbar_chat.png'},
+            {title:'contacts',url:host+'/projects/hero-chat/contacts.html',image:host+'/projects/hero-chat/images/tabbar_contacts.png'},
+            {title:'me',url:host+'/projects/hero-chat/me.html',image:host+'/projects/hero-chat/images/tabbar_me.png'},
           ]}},
           cornerRadius:5,
         },
         {
           class:'HeroButton',
           frame:{w:'120',x:'0.5x-60',y:'0.2x+60',h:'50'},
-          title:'Go Trade',
+          title:'Trade',
           titleColor:'778899',
           backgroundColor:'eeeeeeee',
           ripple:true,
@@ -90,20 +64,7 @@
             {title:'Seller',url:host+'/projects/hero-store/seller.html',image:path+'/images/tools.png'},
           ]}},
           cornerRadius:5,
-        },
-        // {
-        //   class:'HeroBackgroundTask',
-        //   times:60,
-        //   url:'https://www.baidu.com'
-        // },
-        // {
-        //   class:'HeroSimpleStorage',
-        //   isPublic:true,
-        //   providers:['ipfs', 'swarm', 'ethereum'],
-        //   key:'0x837972399a9b9797a97898797979',
-        //   catorgy:'homeList'
-
-        // }
+        }
       ]
     };
 

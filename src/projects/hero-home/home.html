@@ -9,7 +9,7 @@
   <script src="./app/herohelper.js"></script>
   <script src="./app/hero.js"></script>
   <script>
-    var history = JSON.parse(localStorage.hero_home_history||'[]');
+    var historyApp = JSON.parse(localStorage.hero_home_history||'[]')||[];
     Hero.on = function(data){
       if (data.click === 'wallet') {
         this.datas([
@@ -46,7 +46,7 @@
       };
     };
     Hero.viewDidLoad = function() {
-      history.concat([
+      historyApp = historyApp.concat([
         {title:'Hero test',icon:path+'/images/saibiwo_icon.png',url:host+'/projects/hero-home/test.html'},
         {title:'Collect Fu',icon:'https://heronode.io/public/theme/asset/engine/fu.jpg',url:host+'/projects/gather-blessing/home.html'},
         {title:'FCK',icon:'https://media.dappreview.cn/dappLogo/931/fckteamwork/A3wz26JKJNbPiEMY3shBCfxk6GPCYdHi.jpg',url:'https://fck.com/'},
@@ -63,8 +63,8 @@
         {title:'error',icon:path+'/images/saibiwo_icon.png',url:'https://heronode.iio'},
       ]);
       var historyViews = [];
-      for (var i = 0; i < history.length; i++) {
-        var item = history[i];
+      for (var i = 0; i < historyApp.length; i++) {
+        var item = historyApp[i];
         var itemView = {
           class:'HeroView',
           frame:{x:i%5/5+'x',y:parseInt(i/5)*68+'',w:'0.2x',h:'68'},
