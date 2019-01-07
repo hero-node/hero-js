@@ -27,12 +27,13 @@
         var msg = {self:true, nickname:'Me', text:data.encrypt.result};
         // alert('encrypt origin: ' + data.encrypt.original + '    encrypted: ' + data.encrypt.result)
         window._io.emit('heroChat', {req:'post',payload:msg, encrypted:true, pub:mypub});
-        Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:data.encrypt.original},avatar:''});
+        Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:decodeURI(data.encrypt.original)},avatar:''});
       }
 
       if (data.decrypt) {
-        var message = {self:false, nickname:data.decrypt.payload.nickname, text: data.decrypt.result}
-        Hero.datas({name:'chat', newMsg:message, avatar:''})
+        var decodedText = decodeURI(data.decrypt.result);
+        var message = {self:false, nickname:data.decrypt.payload.nickname, text: decodedText};
+        Hero.datas({name:'chat', newMsg:message, avatar:''});
       }
     };
     var i = 0;
@@ -49,12 +50,13 @@
       },2000)
     }
     Hero.addMsg = function(text){
+      var encodedText = encodeURI(text);
       if (yourpub) {
-        Hero.datas({name:'sig', encrypt:{data: text, pub: yourpub}})
+        Hero.datas({name:'sig', encrypt:{data: encodedText, pub: yourpub}});
       } else {
-        var msg = {self:true,nickname:'Me',text:text};
+        var msg = {self:true,nickname:'Me',text:encodedText};
         window._io.emit('heroChat', {req:'post', payload:msg, encrypted:false, pub:mypub});
-        Hero.datas({name:'chat',newMsg:msg,avatar:''});
+        Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:text}, avatar:''});
       }
     };
     Hero.viewWillAppear = function() {
@@ -70,7 +72,8 @@
             if (payload.encrypted) {
               Hero.datas({name:'sig', decrypt: payload})
             } else {
-              var message = {self:false, nickname:payload.payload.nickname, text: payload.payload.text}
+              var decodedText = decodeURI(payload.payload.text)
+              var message = {self:false, nickname:payload.payload.nickname, text: decodedText}
               Hero.datas({name:'chat', newMsg:message, avatar:''})
             }
           }
