@@ -75,6 +75,7 @@ async function binding(socket, msg) {
     socket.emit('heroChat', { req: msg.req, res: 'success' });
   } else if (msg.req === 'post') {
     var payload = msg.payload;
+    console.log('消息' + JSON.stringify(msg.payload, undefined, 2));
     var pub = msg.pub;
     var encrypted = msg.encrypted;
     var hash = await socket.db.add({

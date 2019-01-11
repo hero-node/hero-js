@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 
-var isRunIpfs = exec('ps -ef | grep ipfs | grep -v grep');
+var isRunIpfs = exec("ps -ef |grep ipfs |awk '{print $2}'");
 var isRunGeth = exec('ps -ef | grep geth | grep -v grep');
 
 var standalone = shell.env['HERO_STANDALONE'];
@@ -31,7 +31,7 @@ function go() {
   }
 
   // 启动ipfs
-  if (isRunIpfs.toString().indexOf('ipfs daemon') === -1) {
+  if (true) {
     console.log('start ipfs');
 
     exec(
