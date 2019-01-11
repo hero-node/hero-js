@@ -17,14 +17,14 @@ var rootNodeIpfs =
 function go() {
   cd('../../tools');
   var nodeDir = '../node';
-
+  shell.env['IPFS_PATH'] = nodeDir + '/ipfs';
   // init env
   if (!fsExists(nodeDir)) {
     console.log('init env...');
     exec('mkdir ' + nodeDir);
     exec('mkdir ' + nodeDir + '/eth');
     exec('mkdir ' + nodeDir + '/ipfs');
-    shell.env['IPFS_PATH'] = nodeDir + '/ipfs';
+
     exec('./ipfs init');
 
     exec('./geth --datadir ' + nodeDir + '/eth init ./HeroEth.json');
