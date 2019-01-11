@@ -56,7 +56,7 @@
       }
 
       if (data.arrayKey) {
-        var value = data.value;
+        var value = data.result;
         for (var i=0; i<value.length; i++) {
           var payload = value[i];
           var message = {self: payload.self, nickname: payload.nickname, text:payload.text}
@@ -137,6 +137,8 @@
       Hero.datas({
           name:'db',
           arrayKey: address, 
+          start: '0',
+          count: '50',
       })
 
       window._io.emit('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
