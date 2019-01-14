@@ -19,7 +19,6 @@
       }
 
       if (data.pub) {
-        // alert('pub' + data.pub)
         mypub = data.pub;
       }
 
@@ -28,12 +27,41 @@
         // alert('encrypt origin: ' + data.encrypt.original + '    encrypted: ' + data.encrypt.result)
         window._io.emit('heroChat', {req:'post',payload:msg, encrypted:true, pub:mypub});
         Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:decodeURI(data.encrypt.original)},avatar:''});
+        Hero.datas({
+          name:'db', 
+          arrayKey: Hero.getInitData().address, 
+          value: {
+            timestamp: Math.floor(Date.now() / 1000), 
+            self: true, 
+            text: decodeURI(data.encrypt.original),
+            nickname: 'Me'
+          }
+        })
       }
 
       if (data.decrypt) {
         var decodedText = decodeURI(data.decrypt.result);
         var message = {self:false, nickname:data.decrypt.payload.nickname, text: decodedText};
         Hero.datas({name:'chat', newMsg:message, avatar:''});
+        Hero.datas({
+          name:'db', 
+          arrayKey: Hero.getInitData().address, 
+          value: {
+            timestamp: Math.floor(Date.now() / 1000), 
+            self: false, 
+            text: message,
+            nickname: data.decrypt.payload.nickname
+          }
+        })
+      }
+
+      if (data.arrayKey) {
+        var value = data.result;
+        for (var i=0; i<value.length; i++) {
+          var payload = value[i];
+          var message = {self: payload.self, nickname: payload.nickname, text:payload.text}
+          Hero.datas({name:'chat', newMsg:message, avatar:''})
+        }
       }
     };
     var i = 0;
@@ -57,6 +85,16 @@
         var msg = {self:true,nickname:'Me',text:encodedText};
         window._io.emit('heroChat', {req:'post', payload:msg, encrypted:false, pub:mypub});
         Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:text}, avatar:''});
+        Hero.datas({
+          name:'db', 
+          arrayKey: Hero.getInitData().address, 
+          value: {
+            timestamp: Math.floor(Date.now() / 1000), 
+            self: true, 
+            text: text,
+            nickname: 'Me'
+          }
+        })
       }
     };
     Hero.viewWillAppear = function() {
@@ -75,6 +113,16 @@
               var decodedText = decodeURI(payload.payload.text)
               var message = {self:false, nickname:payload.payload.nickname, text: decodedText}
               Hero.datas({name:'chat', newMsg:message, avatar:''})
+              Hero.datas({
+                name:'db', 
+                arrayKey: Hero.getInitData().address, 
+                value: {
+                  timestamp: Math.floor(Date.now() / 1000), 
+                  self: false, 
+                  text: message,
+                  nickname: data.decrypt.payload.nickname
+                }
+              })
             }
           }
         }
@@ -84,9 +132,17 @@
         }
       });
       var address = Hero.getInitData().address;
+
+      // load local messages
+      Hero.datas({
+          name:'db',
+          arrayKey: address, 
+          start: '0',
+          count: '50',
+      })
+
       window._io.emit('heroChat', {req:'chatConnect','from':localStorage.chatAcount,'to':address});
       Hero.datas({name:'sig', pub:true})
-      
     };
     Hero.viewWillDisAppear = function() {
 
@@ -109,6 +165,11 @@
         {
           class:'HeroSignature',
           name:'sig',
+          hidden:true,
+        },
+        {
+          class:'HeroDB',
+          name:'db',
           hidden:true,
         }
       ],
