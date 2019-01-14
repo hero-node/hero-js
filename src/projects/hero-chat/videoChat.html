@@ -5197,10 +5197,25 @@ p||(p=u?443:80),r=e.hostname!==location.hostname||p!==e.port,a=e.secure!==u}if(e
 
 
   <script type="text/javascript">
+  window.getInitData = function() {
+    var _initData;
+    if (localStorage&&localStorage.boot) {
+      try {
+        _initData = JSON.parse(localStorage.boot);
+      } catch (e) {}
+    }
+    _initData = _initData || {};
+    var params = (window.location.search.split('?')[1] || '').split('&');
+    for (var param in params) {
+      if (params.hasOwnProperty(param)) {
+        paramParts = params[param].split('=');
+        _initData[paramParts[0]] = decodeURIComponent(paramParts[1] || '');
+      }
+    }
+    return _initData;
+  };
+
   var cfg = {},con = {};
-  dc1 = null, tn1 = null
-  var activedc
-  var pc1icedone = false
   var sdpConstraints = {
     optional: [],
     mandatory: {
@@ -5208,67 +5223,206 @@ p||(p=u?443:80),r=e.hostname!==location.hostname||p!==e.port,a=e.secure!==u}if(e
       OfferToReceiveVideo: true
     }
   }
-  var pc1 = new RTCPeerConnection(cfg, con);
-  var pc2 = new RTCPeerConnection(cfg, con);
+
+  var id = getInitData().id;
+  var myName = getInitData().name;
+  if (!myName) {
+    myName = 'Hero'+Date.now();
+  };
+  var localDescription;
+  var sendLocalDescription = function(){
+    if (localDescription) {
+      window._io.emit('heroChat',{req:'post', payload:{name:myName,desc:localDescription}, encrypted:false});
+    }else{
+      setTimeout(function(){
+        sendLocalDescription();
+      },1000);
+    }
+  }
+
+  //set local PC
+  var me = new RTCPeerConnection(cfg, con);
   navigator.getUserMedia({video: true, audio: true}, function (stream) {
     var video = document.getElementById('local')
     video.srcObject = stream;
     video.play();
-    pc1.addStream(stream);
-    pc1.createOffer(function (desc) {
-      pc1.setLocalDescription(desc, function () {}, function () {})
+    me.addStream(stream);
+    me.createOffer(function (desc) {
+      me.setLocalDescription(desc, function () {}, function () {});
     },function () {},
     sdpConstraints);
   }, function (error) {
   });
-
-  var localDescription;
-  var sendLocalDescription = function(){
-    if (localDescription) {
-      window._io.emit('heroChat', {req:'post', payload:localDescription, encrypted:false, pub:''});
-    }else{
-      setTimeout(function(){
-        sendLocalDescription();
-      },600);
-    }
-  }
-  pc1.onicecandidate = function (e) {
+  me.onicecandidate = function (e) {
     if (e.candidate == null) {
-      localDescription = pc1.localDescription;
+      localDescription = me.localDescription;
     }
   }
-  pc1.onaddstream = function handleOnaddstream (e) {
-    var el = document.getElementById('remote')
-    el.autoplay = true
-    el.srcObject = e.stream;
-  }
-  window._io = io.connect('http://10.122.16.189:3000',{'force new connection': true, reconnect: false});
-  window._io.on('connect', function(socket){
-    window._io.emit('heroChat', {req:'chatConnect','from':'0xf057896042b386323dd3eed5f5C119c4116cDEE7','to':'0xf057896042b386323dd3eed5f5C119c4116cDEE8'});
-    window._io.on('heroChat', function(data) {
-      if (data.req === 'newMessage') {
-        var payloads = data.res;
-        for (var i = 0; i < payloads.length; i++) {
-          var payload = payloads[i];
-          alert(JSON.stringify(payload,undefined,2));
+
+  //set remore PC
+  var remoteOffers = {};
+  var addPeople = function(people){
+    var desc = people.desc;
+    var name = people.name;
+    if (me.localDescription && me.localDescription.sdp == desc.sdp) {
+      return;
+    };
+    if (desc.type == 'answer') {
+      if(name == myName){
+        var answerDesc = new RTCSessionDescription(desc)
+        me.setRemoteDescription(answerDesc);
+      }
+    }else{
+      var pc = new RTCPeerConnection(cfg, con);
+      var offerDesc = new RTCSessionDescription(desc)
+      pc.setRemoteDescription(offerDesc);
+      pc.createAnswer(function (answerDesc) {
+        pc.setLocalDescription(answerDesc);
+      },function () { 
+        console.warn("Couldn't create offer") 
+      },sdpConstraints);
+      pc.onicecandidate = function (e) {
+        if (e.candidate == null) {
+          window._io.emit('heroChat', {req:'post', payload:{name:name,desc:pc.localDescription}, encrypted:false});
         }
+      };
+      pc.onconnectionstatechange = function(event) {
+        console.log('onconnectionstatechange:'+pc.connectionState);
+        if (pc.connectionState === 'connected') {
+          remoteOffers[name] = pc;
+        }else{
+          if (remoteOffers[name]) {
+            delete remoteOffers[name];
+          };
+        }
+        updateUI();
       }
-      if (data.req === 'chatConnect' && data.res === 'success') {
-        sendLocalDescription();
-        window._io.emit('heroChat', {req:'fetch'});
-        window._io.emit('heroChat', {req:'subscribe'})
+      pc.onaddstream = function(e){
+        pc.stream = e.stream;
+      };
+    }
+  }
+  function updateUI(){
+    var counts = Object.keys(remoteOffers).length;
+    if (counts === 1) {
+      document.getElementById('local').style.right = '0px';
+      document.getElementById('local').style.bottom = '0px';
+      document.getElementById('local').style.width = '30%';
+      document.getElementById('local').style.height = '30%';
+      document.getElementById('remote1').style.display = 'inline-block';
+      document.getElementById('remote1').style.left = '0px';
+      document.getElementById('remote1').style.top = '0px';
+      document.getElementById('remote1').style.width = '100%';
+      document.getElementById('remote1').style.height = '100%';
+      document.getElementById('remote1').srcObject = remoteOffers[Object.keys(remoteOffers)[0]].stream;
+      document.getElementById('remote2').style.display = 'none';
+      document.getElementById('remote3').style.display = 'none';
+      document.getElementById('remote4').style.display = 'none';
+    }else if(counts === 2){
+      document.getElementById('local').style.right = '25%';
+      document.getElementById('local').style.bottom = '0px';
+      document.getElementById('local').style.width = '50%';
+      document.getElementById('local').style.height = '50%';
+      document.getElementById('remote1').style.display = 'inline-block';
+      document.getElementById('remote1').style.left = '0px';
+      document.getElementById('remote1').style.top = '0px';
+      document.getElementById('remote1').style.width = '50%';
+      document.getElementById('remote1').style.height = '50%';
+      document.getElementById('remote1').srcObject = remoteOffers[Object.keys(remoteOffers)[0]].stream;
+      document.getElementById('remote2').style.display = 'inline-block';
+      document.getElementById('remote2').style.left = '50%';
+      document.getElementById('remote2').style.top = '0px';
+      document.getElementById('remote2').style.width = '50%';
+      document.getElementById('remote2').style.height = '50%';
+      document.getElementById('remote2').srcObject = remoteOffers[Object.keys(remoteOffers)[1]].stream;
+      document.getElementById('remote3').style.display = 'none';
+      document.getElementById('remote4').style.display = 'none';
+    }else if(counts === 3){
+      document.getElementById('local').style.right = '0px';
+      document.getElementById('local').style.bottom = '0px';
+      document.getElementById('local').style.width = '50%';
+      document.getElementById('local').style.height = '50%';
+      document.getElementById('remote1').style.display = 'inline-block';
+      document.getElementById('remote1').style.left = '0px';
+      document.getElementById('remote1').style.top = '0px';
+      document.getElementById('remote1').style.width = '50%';
+      document.getElementById('remote1').style.height = '50%';
+      document.getElementById('remote1').srcObject = remoteOffers[Object.keys(remoteOffers)[0]].stream;
+      document.getElementById('remote2').style.display = 'inline-block';
+      document.getElementById('remote2').style.left = '50%';
+      document.getElementById('remote2').style.top = '0px';
+      document.getElementById('remote2').style.width = '50%';
+      document.getElementById('remote2').style.height = '50%';
+      document.getElementById('remote2').srcObject = remoteOffers[Object.keys(remoteOffers)[1]].stream;
+      document.getElementById('remote3').style.display = 'inline-block';
+      document.getElementById('remote3').style.left = '0px';
+      document.getElementById('remote3').style.top = '50%';
+      document.getElementById('remote3').style.width = '50%';
+      document.getElementById('remote3').style.height = '50%';
+      document.getElementById('remote3').srcObject = remoteOffers[Object.keys(remoteOffers)[2]].stream;
+    }else if(counts === 4){
+      document.getElementById('local').style.right = '25%';
+      document.getElementById('local').style.bottom = '25%';
+      document.getElementById('local').style.width = '50%';
+      document.getElementById('local').style.height = '50%';
+      document.getElementById('remote1').style.display = 'inline-block';
+      document.getElementById('remote1').style.left = '0px';
+      document.getElementById('remote1').style.top = '0px';
+      document.getElementById('remote1').style.width = '50%';
+      document.getElementById('remote1').style.height = '50%';
+      document.getElementById('remote1').srcObject = remoteOffers[Object.keys(remoteOffers)[0]].stream;
+      document.getElementById('remote2').style.display = 'inline-block';
+      document.getElementById('remote2').style.left = '50%';
+      document.getElementById('remote2').style.top = '0px';
+      document.getElementById('remote2').style.width = '50%';
+      document.getElementById('remote2').style.height = '50%';
+      document.getElementById('remote2').srcObject = remoteOffers[Object.keys(remoteOffers)[1]].stream;
+      document.getElementById('remote3').style.display = 'inline-block';
+      document.getElementById('remote3').style.left = '0px';
+      document.getElementById('remote3').style.top = '50%';
+      document.getElementById('remote3').style.width = '50%';
+      document.getElementById('remote3').style.height = '50%';
+      document.getElementById('remote3').srcObject = remoteOffers[Object.keys(remoteOffers)[2]].stream;
+      document.getElementById('remote4').style.display = 'inline-block';
+      document.getElementById('remote4').style.left = '50%';
+      document.getElementById('remote4').style.top = '50%';
+      document.getElementById('remote4').style.width = '50%';
+      document.getElementById('remote4').style.height = '50%';
+      document.getElementById('remote4').srcObject = remoteOffers[Object.keys(remoteOffers)[3]].stream;
+    }
+  }
+
+  window._io = io.connect('http://192.168.0.2:3000',{'force new connection': true, reconnect: false});
+  window._io.emit('heroChat', {req:'groupChatConnect','address':(id||'All-Heros')+parseInt(Date.now()/10000000)});
+  window._io.on('heroChat', function(data) {
+    if (data.req === 'newMessage') {
+      var payloads = data.res;
+      for (var i = 0; i < payloads.length; i++) {
+        var payload = payloads[i];
+        addPeople(payload.payload);
       }
-    });
+    }
+    if (data.req === 'groupChatConnect' && data.res === 'success') {
+      window._io.emit('heroChat', {req:'fetch'});
+      window._io.emit('heroChat', {req:'subscribe'});
+      sendLocalDescription();
+    }
   });
-
-
-
 
 
   </script>
 </head>
 <body style='margin: 0px;'>
-  <video id='remote' style='position:absolute;background:black;width:100%;height:100%;'></video>
-  <video id='local' style='position:absolute;right:0px;width:30%;height:30%;'></video>
+  <video id='local' autoplay="autoplay" style='position:absolute;bottom:0px;right:0px;width:30%;height:30%;z-index:100;object-fit:cover;'></video>
+  <video id='remote1' autoplay="autoplay" style='position:absolute;width:100%;height:100%;object-fit:cover;display:none'></video>
+  <video id='remote2' autoplay="autoplay" style='position:absolute;width:100%;height:100%;object-fit:cover;display:none'></video>
+  <video id='remote3' autoplay="autoplay" style='position:absolute;width:100%;height:100%;object-fit:cover;display:none'></video>
+  <video id='remote4' autoplay="autoplay" style='position:absolute;width:100%;height:100%;object-fit:cover;display:none'></video>
+  <div style='position:absolute;width:300px;height:100px;left:calc(50% - 150px);bottom:20px;z-index:101'>
+    <button style='position:absolute;width:80px;height:80px;border-radius:50px;background-size:cover;background-image:url(data:image/png;base64,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)'></button>
+    <button style='position:absolute;left:33.33%;width:80px;height:80px;border-radius:50px;background-size:cover;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIIAAACCCAMAAAC93eDPAAACYVBMVEXaSkoAAADaSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkraSkr////aS0vfYmLuqqr319fdWVneX1/mhob//v7so6P+/Pzql5f88fH21dXxubnvsLD99fXcU1P43t7mhYXjd3f65+f99/fxvLzvsbH76ur1zMz43Nz209P++PjpkpL439/ura3dV1f0yMj0x8f20tL10NDcVlbsoKDzw8Pvr6/66OjjeHjyvr7gZmbwt7f98/P65eXlgYH++fn77e3eXV3yv7/99vb88PDkfHzhamrbUFD43d30y8vjdXXkenrwtLT54+PkfX3mg4P21NTjdHTfZGTdWlrhbm71zs7xu7vpkZHokJDlf3/soqLgZWXrnZ3lgIDtqKjcVVXvsrLhbGz1zc3uq6vzxsb54uLplJT0ysr32Nj88vLplZX0ycn76+v++/v32dmPELIuAAAAaHRSTlMAAAT0WPMHIP7nAuLxXPLFmQv8TZz1cPdt4SQMbkjKyQMiZ0yuIeA11JaOXZc05tUdzGzurWYcy5VOwKu01783tVDwBTPTm81brF+NauNHI1NP/d9WHvZgBg5rCB9a5GlXmM5haF5xWVgSENUAAATTSURBVHjazdz1d9tIEAfwOWNsxyGHmZOGmobLkHKbMl6P8bthTpoyMzPjMTMz3191l9e8Jkodj6RIWn9+93vy7Ky02p0RPaWHd3VeesnMGYsqqqOAqOqKRTNmlqTnrfaSNTYubchyIihnVoN/I5krbW3ZejDWl61NI5PEOmo2QZVN+Y5YMl55TCQ0iIopJ0PZHNOg2TSHjYyypaoQuhRWuYyJQK0PuvlqDYhExlRMytQMmhz3PEzaPDfp5010wgD2RK/uEETDINE5pIs/EoaJLCXtXIthqHgXaVSZCYNlVpImCytgOM9C0iDPDhPY80i15XEwRZyfVHo+AiZZl0uqrIyAaSJWqhqFCJgoYjmxpsfBVHHTiTE3ASZLmEsh1T0H0zXVUQiuTFggcwtNLB6WiKcJ+WERP02gIBIWiXRTUNnRsEx0NgWTCAslUhBuJyzkDDYUs2CpWfSEVbDYKhrHNhsWm20jpVpYrpYUXCmwnM9FY1VBgipFJqRAghQbjXoBUmygUUsgxRJ6rAiSjO5HxUCSGBoRGwVJomLpkQ2QxkGP1ECa/JFd3SRIk5RGw+ZDovk0bAokKqNhhZCokP73DKRyE9GzkGqpvlRo7rjXe2zvgR27+67eEDeu9u3ecWDvsd57Hc3QbgoRZUGTW52Dv+8Rwe35d7DzFrTJIvLaoVrzrsFrgnNt3y4t0bB7KRVqtbTeFOrcbG2BaqmUB3V+ONcl1Os6dx8qBSgZanz0aZfQpuft76BKMq2ACu/9IbTr64QaK2gZWM3fdgldWpvBW0ZzwNon9PoevDm0CJwjQr8jYBWTB4yOO0+m2u7TA92/7tx1v6X9TDOGzhxv+fitnb0//bxfjHenAxwPLQDjtlA6fP6DB5jAh+f/EUq3wVlAUVwQeoTC35cRypuHxwWMDYOTwOgWSu8itD+FUjc4BMZBobCfm2cPxqXOQ3C4gWgXSj+C875QaucGgkvH65rT6y+hdJ1LR25SnhVKJ8B5QyidZSdlMUIaEEqnwOkXSgPsrWmOtrD+As47Quk37gbNPaYOCaW74NwVSocQWg33sN4hlC6Ac0Fom5Ul3JLlqOZ0PCGUjrJLlgATBWaK8dO4DaEFuOXraTHW9m7wureLsT7hlq/cIv7K2P/z2RDUGPq8TYy6wi3iuVeZL7pGlsQHv7wM9b76+lTPyA+/QUhZ/AvdxUtt/SdbO9uh1fGdrSf72y5dVPFCtxRS+YnIDanc0rc4UmhYGSR6MRy2u+Rv+oXL1ic5II1D+ja4M1b+YYD8I5EieuwliQdDchPSEV6HhJQMCZJpLJcPlmtykUIuLJdLSo3WFw800jgZsFiG/EKSMCinkV9UFK6lVZRjXYFZAU2gFBbxh3OxIbnqYYF6F4VQ54HpKurkl9+GQREya7O5pdgvkwpPm1yQLvca1r1CKm02qzmhlFQLmNOiESANFnpgOE85aVJZD4PVV5JG2+JhqPhtpF2pka1br5IuOaY3sPGyE+0wgP21bNKvwIhmxoKwb+nk2XJ90K0p10ZGcKXrvAhfuouM0qiryfn1RjJUUYwTGjhjikxpeM9PgipJbMO7flvXLPaB4Vu8ZiuZq8DfkGlHUAmZDf4csoY3NTD8CYhiT3UCkFDtKR7+BEQg1Ut6/AdQ7Q0dwrOLpwAAAABJRU5ErkJggg==)'>
+    </button>
+    <button style='position:absolute;left:66.66%;width:80px;height:80px;border-radius:50px;background-size:cover;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAQAAACSoYmJAAABXUlEQVR4Ae3UP0szQRRG8RPeQDQQEv90plXEBSuDKFkzLllIsUKwUNSAw+uy3/8jWA5Bw8BkmovP77bLcorhQUREREREREREJK6POYesMeaIN1pMOcPzxYpEY2o8XYbz1IyJg0taPDWOJJMQnCl8QswtHRsqXGp0jaehwmW4igZPHdmLJR2vPOLSoz8yBYfwDbsNWdPxHL4nSYPLfE1kL55w+0ZX2aMrfjfF858Vbv9ol/8ie2Ekuhf2wkp0nzrshYHo7b2wEn3MOy0Nzkx02As70Ve0fLLEmYkOe2EpuuMl7IWR6LAXRqJj/1W0ohcWo08p7UXDiHt70XDAzF40/OPaXjT0uLAUHUxZGIsOW2ItGkbc2YuGATMz0ZEtSVJmT35gtx7nOaKL7NEFWyJbkmTIPGvynCExJ5QhOjW7yPRISoqfyZEtMWXAjbXosCWGhC0REREREREREflzvgF1DeeTJR+DPwAAAABJRU5ErkJggg==)'></button>
+  </div>
 </body>
 </html>

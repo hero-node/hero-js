@@ -5,7 +5,7 @@
   "main": "src/dist/hero.js",
   "module": "src/index.js",
   "scripts": {
-    "start": "npm run lib && cd ./src/projects/ && node heronode.js && sudo node node ./node_modules/node-stun/bin/server.js",
+    "start": "npm run lib && cd ./src/projects/ && node heronode.js",
     "lib": "npm run dist-iife && npm run dist-cjs && webpack src/hero-provider.js --output ./src/dist/hero-provider.js  --mode development --silent && npm run cp",
     "dist-iife": "rollup src/index.js --file src/dist/hero.js --format iife",
     "dist-cjs": "rollup src/index.js --file src/dist/hero-cjs.js --format cjs",
