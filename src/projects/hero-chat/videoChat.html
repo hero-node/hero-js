@@ -5229,51 +5229,79 @@ p||(p=u?443:80),r=e.hostname!==location.hostname||p!==e.port,a=e.secure!==u}if(e
   if (!myName) {
     myName = 'Hero'+Date.now();
   };
-  var localDescription;
-  var sendLocalDescription = function(){
-    if (localDescription) {
-      window._io.emit('heroChat',{req:'post', payload:{name:myName,desc:localDescription}, encrypted:false});
-    }else{
-      setTimeout(function(){
-        sendLocalDescription();
-      },1000);
-    }
-  }
 
-  //set local PC
-  var me = new RTCPeerConnection(cfg, con);
+  //set local stream
+  var localStream;
   navigator.getUserMedia({video: true, audio: true}, function (stream) {
+    localStream = stream;
     var video = document.getElementById('local')
-    video.srcObject = stream;
+    video.srcObject = localStream;
     video.play();
-    me.addStream(stream);
-    me.createOffer(function (desc) {
-      me.setLocalDescription(desc, function () {}, function () {});
-    },function () {},
-    sdpConstraints);
-  }, function (error) {
-  });
-  me.onicecandidate = function (e) {
-    if (e.candidate == null) {
-      localDescription = me.localDescription;
-    }
-  }
+    window._io = io.connect('http://10.122.16.51:3000',{'force new connection': true, reconnect: false});
+    window._io.emit('heroChat', {req:'groupChatConnect','address':(id||'All-Heros')+parseInt(Date.now()/10000000)});
+    window._io.on('heroChat', function(data) {
+      if (data.req === 'newMessage') {
+        var payloads = data.res;
+        for (var i = 0; i < payloads.length; i++) {
+          var payload = payloads[i];
+          addPeople(payload.payload);
+        }
+      }
+      if (data.req === 'groupChatConnect' && data.res === 'success') {
+        // window._io.emit('heroChat', {req:'fetch'});
+        window._io.emit('heroChat', {req:'subscribe'});
+      }
+      if (data.req === 'subscribe') {
+        window._io.emit('heroChat',{req:'post', payload:{name:myName,desc:''}});
+      };
+    });
+  }, undefined);
 
   //set remore PC
   var remoteOffers = {};
+  var localOffers = {};
   var addPeople = function(people){
     var desc = people.desc;
     var name = people.name;
-    if (me.localDescription && me.localDescription.sdp == desc.sdp) {
+    var yourName = people.yourName;
+    if (!localStream || myName === name || (yourName && yourName != myName)) {
       return;
     };
-    if (desc.type == 'answer') {
-      if(name == myName){
-        var answerDesc = new RTCSessionDescription(desc)
-        me.setRemoteDescription(answerDesc);
+
+    if (name && (!desc)) {
+      var me = new RTCPeerConnection(cfg, con);
+      remoteOffers[name] = me;
+      me.addStream(localStream);
+      me.createOffer(function (desc) {
+        me.setLocalDescription(desc, function () {}, function () {});
+      },function () {},
+      sdpConstraints);
+      me.onicecandidate = function (e) {
+        if (e.candidate == null) {
+          window._io.emit('heroChat', {req:'post', payload:{yourName:name,name:myName,desc:me.localDescription}});
+        }
       }
-    }else{
+      me.onaddstream = function(e){
+        me.stream = e.stream;
+      };
+      me.onconnectionstatechange = function(event) {
+        console.log('onconnectionstatechange:'+me.connectionState);
+        if (me.connectionState === 'disconnected') {
+          if (remoteOffers[name]) {
+            delete remoteOffers[name];
+          };
+        }
+        updateUI();
+      }
+    }else if (desc.type == 'answer') {
+      if (remoteOffers[name]) {
+        var answerDesc = new RTCSessionDescription(desc);
+        remoteOffers[name].setRemoteDescription(answerDesc);
+      };
+    }else if(desc.type == 'offer'){
       var pc = new RTCPeerConnection(cfg, con);
+      pc.addStream(localStream);
+      remoteOffers[name] = pc;
       var offerDesc = new RTCSessionDescription(desc)
       pc.setRemoteDescription(offerDesc);
       pc.createAnswer(function (answerDesc) {
@@ -5283,14 +5311,12 @@ p||(p=u?443:80),r=e.hostname!==location.hostname||p!==e.port,a=e.secure!==u}if(e
       },sdpConstraints);
       pc.onicecandidate = function (e) {
         if (e.candidate == null) {
-          window._io.emit('heroChat', {req:'post', payload:{name:name,desc:pc.localDescription}, encrypted:false});
+          window._io.emit('heroChat', {req:'post', payload:{yourName:name,name:myName,desc:pc.localDescription}});
         }
-      };
+      }
       pc.onconnectionstatechange = function(event) {
         console.log('onconnectionstatechange:'+pc.connectionState);
-        if (pc.connectionState === 'connected') {
-          remoteOffers[name] = pc;
-        }else{
+        if (pc.connectionState === 'disconnected') {
           if (remoteOffers[name]) {
             delete remoteOffers[name];
           };
@@ -5391,25 +5417,6 @@ p||(p=u?443:80),r=e.hostname!==location.hostname||p!==e.port,a=e.secure!==u}if(e
       document.getElementById('remote4').srcObject = remoteOffers[Object.keys(remoteOffers)[3]].stream;
     }
   }
-
-  window._io = io.connect('http://192.168.0.2:3000',{'force new connection': true, reconnect: false});
-  window._io.emit('heroChat', {req:'groupChatConnect','address':(id||'All-Heros')+parseInt(Date.now()/10000000)});
-  window._io.on('heroChat', function(data) {
-    if (data.req === 'newMessage') {
-      var payloads = data.res;
-      for (var i = 0; i < payloads.length; i++) {
-        var payload = payloads[i];
-        addPeople(payload.payload);
-      }
-    }
-    if (data.req === 'groupChatConnect' && data.res === 'success') {
-      window._io.emit('heroChat', {req:'fetch'});
-      window._io.emit('heroChat', {req:'subscribe'});
-      sendLocalDescription();
-    }
-  });
-
-
   </script>
 </head>
 <body style='margin: 0px;'>
