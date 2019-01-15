@@ -49,7 +49,7 @@
           value: {
             timestamp: Math.floor(Date.now() / 1000), 
             self: false, 
-            text: message,
+            text: decodedText,
             nickname: data.decrypt.payload.nickname
           }
         })
@@ -119,8 +119,8 @@
                 value: {
                   timestamp: Math.floor(Date.now() / 1000), 
                   self: false, 
-                  text: message,
-                  nickname: data.decrypt.payload.nickname
+                  text: decodedText,
+                  nickname: payload.payload.nickname
                 }
               })
             }
