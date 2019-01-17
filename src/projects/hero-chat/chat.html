@@ -11,6 +11,15 @@
   <script src="./app/hero.js"></script>
   <script>
 
+    function IsJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     var mypub;
     var yourpub;
     var u = navigator.userAgent;
@@ -29,7 +38,7 @@
         var msg = {self:true, nickname:'Me', text:data.encrypt.result};
         window._io.emit('heroChat', {req:'post',payload:msg, encrypted:true, pub:mypub});
         var original = decodeURI(data.encrypt.original)
-        if (JSON.parse(original) != null) {
+        if (IsJsonString(original)) {
           var json = JSON.parse(original);
           if (json['webrtc']) {
             Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:'Video request sent'}, avatar:''});
@@ -52,7 +61,7 @@
 
       if (data.decrypt) {
         var decodedText = decodeURI(data.decrypt.result);
-        if (JSON.parse(decodedText) == null) {
+        if (!IsJsonString(decodedText)) {
           var message = {self:false, nickname:data.decrypt.payload.nickname, text: decodedText};
             Hero.datas({name:'chat', newMsg:message, avatar:''});
             Hero.datas({
@@ -122,7 +131,7 @@
       } else {
         var msg = {self:true,nickname:'Me',text:encodedText};
         window._io.emit('heroChat', {req:'post', payload:msg, encrypted:false, pub:mypub});
-        if (JSON.parse(text) != null) {
+        if (IsJsonString(text)) {
           var json = JSON.parse(text);
           if (json['webrtc']) {
             Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:'Video request sent'}, avatar:''});
@@ -157,7 +166,7 @@
               Hero.datas({name:'sig', decrypt: payload})
             } else {
               var decodedText = decodeURI(payload.payload.text)
-              if (JSON.parse(decodedText) == null) {
+              if (!IsJsonString(decodedText)) {
                 var message = {self:false, nickname:payload.payload.nickname, text: decodedText};
                 Hero.datas({name:'chat', newMsg:message, avatar:''});
                 Hero.datas({
