@@ -7,8 +7,8 @@
   <script src="./app/config.js"></script>
   <script src="./app/shareViews.js"></script>
   <script src="./app/herohelper.js"></script>
-  <script src="./app/fu.js"></script>
   <script src="./app/hero.js"></script>
+  <script src='https://localhost:3000/hero-home/hero-provider.js'></script>
   <script>
 
     Hero.on = function(data){
@@ -51,6 +51,20 @@
               accessoryType:'DisclosureIndicator',
               click:'channel'
             },
+          ]},{sectionTitle:'Value',rows:[
+              {
+                class:'HeroView',
+                backgroundColor:'ffffff',
+                frame:{x:'0',y:'0',r:'0',h:'50'},
+                subViews:[
+                  {
+                    class:'HeroTextField',
+                    backgroundColor:'ffffff',
+                    frame:{x:'20',y:'0',r:'0',h:'50'},
+                    title:'Send'
+                  }
+                ]
+              }
           ]}],
           footer:{
             class:'HeroView',
@@ -60,8 +74,8 @@
                 class:'HeroButton',
                 backgroundColor:window.tintColor,
                 titleColor:window.color,
-                cornerRadius:10,
-                frame:{x:'0.1x',y:'25',w:'0.8x',h:'50'},
+                cornerRadius:4,
+                frame:{x:'20',y:'25',r:'20',h:'50'},
                 title:'Send'
               }
             ]
