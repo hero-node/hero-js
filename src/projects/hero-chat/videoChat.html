@@ -5237,7 +5237,8 @@ p||(p=u?443:80),r=e.hostname!==location.hostname||p!==e.port,a=e.secure!==u}if(e
     var video = document.getElementById('local')
     video.srcObject = localStream;
     video.play();
-    window._io = io.connect('http://10.122.16.51:3000',{'force new connection': true, reconnect: false});
+    window._io = io.connect('http://localhost:3000',{'force new connection': true, reconnect: false, transports:['websocket']});
+
     window._io.emit('heroChat', {req:'groupChatConnect','address':(id||'All-Heros')+parseInt(Date.now()/10000000)});
     window._io.on('heroChat', function(data) {
       if (data.req === 'newMessage') {

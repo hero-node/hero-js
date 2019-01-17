@@ -13,6 +13,9 @@
 
     var mypub;
     var yourpub;
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     Hero.on = function(data){
       if (data.msg) {
         Hero.addMsg(data.msg);
@@ -24,9 +27,17 @@
 
       if (data.encrypt) {
         var msg = {self:true, nickname:'Me', text:data.encrypt.result};
-        // alert('encrypt origin: ' + data.encrypt.original + '    encrypted: ' + data.encrypt.result)
         window._io.emit('heroChat', {req:'post',payload:msg, encrypted:true, pub:mypub});
-        Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:decodeURI(data.encrypt.original)},avatar:''});
+        var original = decodeURI(data.encrypt.original)
+        if (JSON.parse(original) != null) {
+          var json = JSON.parse(original);
+          if (json['webrtc']) {
+            Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:'Video request sent'}, avatar:''});
+          }
+        } else {
+          Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:original},avatar:''});
+        }
+        
         Hero.datas({
           name:'db', 
           arrayKey: Hero.getInitData().address, 
@@ -41,18 +52,30 @@
 
       if (data.decrypt) {
         var decodedText = decodeURI(data.decrypt.result);
-        var message = {self:false, nickname:data.decrypt.payload.nickname, text: decodedText};
-        Hero.datas({name:'chat', newMsg:message, avatar:''});
-        Hero.datas({
-          name:'db', 
-          arrayKey: Hero.getInitData().address, 
-          value: {
-            timestamp: Math.floor(Date.now() / 1000), 
-            self: false, 
-            text: decodedText,
-            nickname: data.decrypt.payload.nickname
+        if (JSON.parse(decodedText) == null) {
+          var message = {self:false, nickname:data.decrypt.payload.nickname, text: decodedText};
+            Hero.datas({name:'chat', newMsg:message, avatar:''});
+            Hero.datas({
+              name:'db', 
+              arrayKey: Hero.getInitData().address, 
+              value: {
+                timestamp: Math.floor(Date.now() / 1000), 
+                self: false, 
+                text: decodedText,
+                nickname: data.decrypt.payload.nickname
+              }
+            })
+        } else {
+          var json = JSON.parse(decodedText);
+          if (json['webrtc']) {
+            var id = json['id'];
+            if (isAndroid) {
+              this.command('goto:'+'http://localhost:3000/hero-home/videoChat.html?id='+id);
+            } else if (isiOS) {
+              this.command('goto:'+'webrtc://room?id='+id);
+            }
           }
-        })
+        }
       }
 
       if (data.arrayKey) {
@@ -62,6 +85,21 @@
           var message = {self: payload.self, nickname: payload.nickname, text:payload.text}
           Hero.datas({name:'chat', newMsg:message, avatar:''})
         }
+      }
+
+      if (data.click === 'clickVideo') {
+        if (isAndroid) {
+          this.command('goto:'+'http://localhost:3000/hero-home/videoChat.html?id='+localStorage.chatAcount);
+        } else if (isiOS) {
+          this.command('goto:'+'webrtc://room?id='+localStorage.chatAcount);
+        }
+        
+        var obj = {'webrtc': 1, id: localStorage.chatAcount}
+        Hero.addMsg(JSON.stringify(obj));
+      }
+
+      if (data.click === 'clickTX') {
+        this.command('goto:'+path+'/sendTX.html');
       }
     };
     var i = 0;
@@ -84,7 +122,15 @@
       } else {
         var msg = {self:true,nickname:'Me',text:encodedText};
         window._io.emit('heroChat', {req:'post', payload:msg, encrypted:false, pub:mypub});
-        Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:text}, avatar:''});
+        if (JSON.parse(text) != null) {
+          var json = JSON.parse(text);
+          if (json['webrtc']) {
+            Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:'Video request sent'}, avatar:''});
+          }
+        } else {
+          Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:text}, avatar:''});
+        }
+        
         Hero.datas({
           name:'db', 
           arrayKey: Hero.getInitData().address, 
@@ -111,18 +157,30 @@
               Hero.datas({name:'sig', decrypt: payload})
             } else {
               var decodedText = decodeURI(payload.payload.text)
-              var message = {self:false, nickname:payload.payload.nickname, text: decodedText}
-              Hero.datas({name:'chat', newMsg:message, avatar:''})
-              Hero.datas({
-                name:'db', 
-                arrayKey: Hero.getInitData().address, 
-                value: {
-                  timestamp: Math.floor(Date.now() / 1000), 
-                  self: false, 
-                  text: decodedText,
-                  nickname: payload.payload.nickname
+              if (JSON.parse(decodedText) == null) {
+                var message = {self:false, nickname:payload.payload.nickname, text: decodedText};
+                Hero.datas({name:'chat', newMsg:message, avatar:''});
+                Hero.datas({
+                  name:'db', 
+                  arrayKey: Hero.getInitData().address, 
+                  value: {
+                    timestamp: Math.floor(Date.now() / 1000), 
+                    self: false, 
+                    text: decodedText,
+                    nickname: payload.payload.nickname
+                  }
+                });
+              } else {
+                var json = JSON.parse(decodedText);
+                if (json['webrtc']) {
+                  var id = json['id'];
+                  if (isAndroid) {
+                    this.command('goto:'+'http://localhost:3000/hero-home/videoChat.html?id='+id);
+                  } else if (isiOS) {
+                    this.command('goto:'+'webrtc://room?id='+id);
+                  }
                 }
-              })
+              }
             }
           }
         }
