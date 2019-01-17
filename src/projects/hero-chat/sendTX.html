@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/config.js"></script>
+  <script src="./app/shareViews.js"></script>
+  <script src="./app/herohelper.js"></script>
+  <script src="./app/fu.js"></script>
+  <script src="./app/hero.js"></script>
+  <script>
+
+    Hero.on = function(data){
+
+    };
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.viewWillDisAppear = function() {
+
+    };
+    Hero.viewDidload = function() {
+
+    };
+    Hero.ui = {
+      version:-1,
+      nav:{
+        title:"Send Transaction",
+        navigationBarHidden:false
+      },
+      views:
+      [
+        {
+          class:'HeroTableView',
+          frame:{w:'1x',h:'1x'},
+          name:'meTableView',
+          data:[{sectionTitle:'People',rows:[
+            {
+              title:'From',
+              textValue:'0xF87897',
+            },
+            {
+              title:'To',
+              textValue:'0xF87897',
+            },
+          ]},{sectionTitle:'Token',rows:[
+            {
+              title:'Token',
+              textValue:'ETH',
+              accessoryType:'DisclosureIndicator',
+              click:'channel'
+            },
+          ]}],
+          footer:{
+            class:'HeroView',
+            frame:{w:'1x',h:'100'},
+            subViews:[
+              {
+                class:'HeroButton',
+                backgroundColor:window.tintColor,
+                titleColor:window.color,
+                cornerRadius:10,
+                frame:{x:'0.1x',y:'25',w:'0.8x',h:'50'},
+                title:'Send'
+              }
+            ]
+          }
+        },
+        {
+          class:'HeroToast',
+          name:'toast'
+        }
+
+      ]
+    };
+
+  </script>
+</head>
+<body>
+
+</body>
+</html>
