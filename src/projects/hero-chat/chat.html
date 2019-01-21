@@ -115,12 +115,6 @@
         window._io.emit('heroChat', {req:'post', payload:msg, encrypted:false, pub:mypub});
         var json = JSON.parse(text);
           if (json['webrtc']) {
-            var id = json['id'];
-            if (isAndroid) {
-              this.command('goto:'+'http://localhost:3000/hero-home/videoChat.html?id='+id);
-            } else if (isiOS) {
-              this.command('goto:'+'webrtc://room?id='+id);
-            }
             Hero.datas({name:'chat',newMsg:{self:true,nickname:'Me',text:'Video request sent'}, avatar:''});
           }
       } else {
@@ -194,7 +188,7 @@
       // load local messages
       Hero.datas({
           name:'db',
-          arrayKey: address, 
+          arrayKey: address,
           start: '0',
           count: '50',
       })
