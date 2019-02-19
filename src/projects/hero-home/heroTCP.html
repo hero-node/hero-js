@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./app/autoRefresh.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
+  <script src="./app/hero.js"></script>
+  <script>
+    var tcpData = [{sectionTitle:'network proxy',sectionFootTitle:'for anti-track',rows:[
+            {
+              title:'HeroTCP',
+              boolValue:false
+            }
+          ]}];
+    Hero.on = function(data){
+      if (data.value) {
+        this.datas({name:'proxy',shadowsocks:{start:true}});
+      }else{
+        this.datas({name:'proxy',shadowsocks:{stop:true}});
+      }
+    };
+
+    Hero.viewWillAppear = function() {
+
+    };
+    Hero.ui = {
+      backgroundColor:'f1f1f1',
+      nav:{
+        title:'HeroTCP',
+        navigationBarHidden:false
+      },
+      views:
+      [
+        {
+          class:'HeroTableView',
+          frame:{w:'1x',h:'1x'},
+          name:'meTableView',
+          data:tcpData
+        },
+        {
+          class:'HeroTCP',
+          name:'proxy',
+          hidden:true,
+          shadowsocks: {      
+            config: true,
+            ip: '198.181.45.179',
+            port: 443,
+            password: '********',
+            method: 'AES256CFB'
+          }
+
+        }
+      ]
+    };
+
+
+  </script>
+</body>
+</html>

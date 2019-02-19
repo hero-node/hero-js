@@ -10,7 +10,10 @@
   <script src="./app/hero.js"></script>
   <script src='https://localhost:3000/hero-home/hero-provider.js'></script>
   <script>
-
+    var tokens = {
+      ETH:'0x000000000000000000000000000',
+      HER:'0x491c9a23db85623eed455a8efdd6aba9b911c5df'
+    }
     Hero.on = function(data){
 
     };
@@ -38,11 +41,11 @@
           data:[{sectionTitle:'People',rows:[
             {
               title:'From',
-              textValue:'0xF87897',
+              textValue:Hero.getInitData().from,
             },
             {
               title:'To',
-              textValue:'0xF87897',
+              textValue:Hero.getInitData().to,
             },
           ]},{sectionTitle:'Token',rows:[
             {

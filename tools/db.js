@@ -55,6 +55,7 @@ async function binding(socket, msg) {
         return;
       }
       if (!socket.db) {
+        console.log('db losed');
         return;
       }
       console.log('订阅回调');
@@ -69,6 +70,7 @@ async function binding(socket, msg) {
     };
     socket.replicatedListener = () => {
       if (!socket.db) {
+        console.log('db losed');
         return;
       }
       console.log('订阅回调');
