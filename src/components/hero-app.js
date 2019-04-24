@@ -28,11 +28,10 @@ export default class HeroApp extends HeroElement {
       };
     } else {
       this.$ = {
-        tab: this.shadowDom.querySelector('#pad_tab'),
-        bar: this.shadowDom.querySelector('#pad_bar'),
+        tab: this.shadowDom.querySelector('#tab'),
+        bar: this.shadowDom.querySelector('#bar'),
         title: this.shadowDom.querySelector('#title'),
-        rootPages: this.shadowDom.querySelector('#root_pages'),
-        contentPages: this.shadowDom.querySelector('#content_pages'),
+        pages: this.shadowDom.querySelector('#pages'),
         menu: this.shadowDom.querySelector('#menu'),
         cover: this.shadowDom.querySelector('#cover'),
         leftMenu: this.shadowDom.querySelector('#leftMenu'),
@@ -263,45 +262,36 @@ export default class HeroApp extends HeroElement {
           height: 100%;
           overflow: hidden;
         }
-        #pad_bar {
+        #contentZoon {
           display:block;
           position: absolute;
           overflow:hidden;
           top: 0px;
-          left: 440px;
-          right: 0px;
-          height: 88px;
+          width: 400px;
+          height: 100%;
+          left:calc(50%-200px);
           background-color: #ffffff;
           border-bottom:1px solid #ddd;
         }
-        #pad_tab {
+        #bar {
           display:block;
           position: absolute;
           overflow:hidden;
-          left:0px;
-          width:120px;
-          height: 100%;
+          top: 0px;
+          width: 100%;
+          height: 43px;
+          background-color: #ffffff;
+          border-bottom:1px solid #ddd;
+        }
+        #tab {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          bottom: 0px;
+          width: 100%;
+          height: 44px;
           background-color: #fff;
-          border-right:1px solid #ddd;
-        }
-        #root_pages{
-          display:block;
-          position: absolute;
-          overflow:hidden;
-          top: 0px;
-          left: 121px;
-          width: 320px;
-          height: 100%;
-          border-right:1px solid #ddd;
-        }
-        #content_pages{
-          display:block;
-          position: absolute;
-          overflow:hidden;
-          top: 0px;
-          left: 442px;
-          right: 0px;
-          height: 100%;
+          border-top:1px solid #ddd;
         }
         #cover {
           display:block;
@@ -312,7 +302,7 @@ export default class HeroApp extends HeroElement {
           background: url(../../../images/cover.jpeg);
           background-color: #fff;
           background-size:cover;
-          z-index:1;
+          z-index:1
         }
         #menu {
           display:block;
@@ -348,11 +338,10 @@ export default class HeroApp extends HeroElement {
           overflow:hidden;
           width: 100%;
           height: 100%;
-          line-height:88px;
-          margin:0px;
           color: #000;
-          font-size: 30px;
+          font-size: 20px;
           text-align: center;
+          top:-10px;
           pointer-events:none;
         }
         #leftBtn {
@@ -362,8 +351,8 @@ export default class HeroApp extends HeroElement {
           color: #fff;
           width: 40px;
           height: 30px;
-          left:20px;
-          top:29px;
+          left:10px;
+          top:7px;
         }
         #leftBtn2 {
           display:none;
@@ -372,8 +361,8 @@ export default class HeroApp extends HeroElement {
           color: #fff;
           width: 40px;
           height: 30px;
-          left:80px;
-          top:29px;
+          left:60px;
+          top:7px;
         }
         #backBtn {
           display:none;
@@ -382,7 +371,7 @@ export default class HeroApp extends HeroElement {
           width: 25px;
           height: 25px;
           left:10px;
-          top:32px;
+          top:9.5px;
         }
         #rightBtn {
           display:none;
@@ -390,8 +379,8 @@ export default class HeroApp extends HeroElement {
           overflow:hidden;
           width: 40px;
           height: 30px;
-          right:20px;
-          top:29px;
+          right:10px;
+          top:7px;
         }
         #rightBtn2 {
           display:none;
@@ -399,8 +388,16 @@ export default class HeroApp extends HeroElement {
           overflow:hidden;
           width: 40px;
           height: 30px;
-          right:80px;
-          top:29px;
+          right:60px;
+          top:7px;
+        }
+        hero-pages{
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          top: 44px;
+          bottom: 100%;
+          width: 100%;
         }
         @keyframes backBtnIn
         {
@@ -430,7 +427,8 @@ export default class HeroApp extends HeroElement {
           to {left: -66%;}
         }
       </style>
-      <div id='pad_bar'>
+      <div id='contentZoon'>
+      <div id='bar'>
         <hero-button class='btn' id ='backBtn'></hero-button>
         <hero-button class='btn' id ='leftBtn'></hero-button>
         <hero-button class='btn' id ='leftBtn2'></hero-button>
@@ -438,15 +436,15 @@ export default class HeroApp extends HeroElement {
         <hero-button class='btn' id ='rightBtn2'></hero-button>
         <p id='title'></p>
       </div>
-      <hero-pages id='root_pages'></hero-pages>
-      <hero-pages id='content_pages'></hero-pages>
-      <div id='pad_tab'></div>
-      <div id='pad_menu' on-tap='closeMenu'>
+      <hero-pages id='pages'></hero-pages>
+      <div id='tab'></div>
+      <div id='menu' on-tap='closeMenu'>
         <div id='leftMenu'></div>
         <div id='rightMenu'></div>
       </div>
       <div id='cover'></div>
-        `;
+      </div>
+      `;
     }
   }
 
@@ -463,40 +461,22 @@ export default class HeroApp extends HeroElement {
         this.$.tab.style.backgroundColor = '#' + tab.backgroundColor;
         this.$.tab.style.color = '#' + tab.color;
         item.setController(this);
-        if (this.mobile) {
-          item.in({
-            frame: {
-              x: i / json.tabs.length + 'x',
-              w: 1 / json.tabs.length + 'x',
-              y: '0',
-              h: '44',
-            },
-            image: tab.image,
-            title: tab.title,
-            selected: i == 0,
-            click: { select: i + 1 },
-          });
-        } else {
-          item.in({
-            frame: {
-              x: '0',
-              w: '120',
-              y: i * 120 + (i + 1) * 10 + '',
-              h: '120',
-            },
-            image: tab.image,
-            title: tab.title,
-            selected: i == 0,
-            click: { select: i + 1 },
-          });
-        }
+        item.in({
+          frame: {
+            x: i / json.tabs.length + 'x',
+            w: 1 / json.tabs.length + 'x',
+            y: '0',
+            h: '44',
+          },
+          image: tab.image,
+          title: tab.title,
+          selected: i == 0,
+          click: { select: i + 1 },
+        });
       }
       if (this.tabs.length == 1) {
         this.$.tab.style.display = 'none';
-        if (this.mobile) {
-          this.$.pages.style.bottom = '0px';
-        } else {
-        }
+        this.$.pages.style.bottom = '0px';
       }
       this.gotoPage(json.tabs[0].url);
       if (json.loadPage) {
@@ -658,19 +638,10 @@ export default class HeroApp extends HeroElement {
       }
       if (nav.navigationBarHidden || nav.navigationBarHiddenH5) {
         this.$.bar.style.height = '0px';
-        if (this.mobile) {
-          this.$.pages.style.top = '0px';
-        } else {
-          this.$.contentPages.style.top = '0px';
-        }
+        this.$.pages.style.top = '0px';
       } else {
-        if (this.mobile) {
-          this.$.bar.style.height = '43px';
-          this.$.pages.style.top = '44px';
-        } else {
-          this.$.bar.style.height = '88px';
-          this.$.contentPages.style.top = '89px';
-        }
+        this.$.bar.style.height = '43px';
+        this.$.pages.style.top = '44px';
       }
       if (nav.leftItems && nav.leftItems.length > 0) {
         this.$.backBtn.style.display = 'none';
@@ -745,80 +716,32 @@ export default class HeroApp extends HeroElement {
           page = page + '&test=true';
         }
       }
-      if (this.mobile) {
-        this.$.pages.on();
-      } else {
-        if (this.contain(this.rootPages, pageElement)) {
-          this.$.rootPages.on();
-        } else {
-          this.$.contentPages.on();
-        }
-      }
+      this.$.pages.on();
       window.importHref(
         page,
         function() {
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
-          if (that.mobile) {
-            that.$.pages.addPage(that.currentPage);
-          } else {
-            if (that.contain(that.rootPages, pageElement)) {
-              that.$.rootPages.addPage(that.currentPage);
-            } else {
-              that.$.contentPages.addPage(that.currentPage);
-            }
-          }
+          that.$.pages.addPage(that.currentPage);
         },
         function() {
           that.currentPage = document.createElement(pageElement);
           that.currentPage.name = pageElement;
           that.currentPage.url = page;
-          if (that.mobile) {
-            that.$.pages.addPage(that.currentPage);
-          } else {
-            if (that.contain(that.rootPages, page)) {
-              that.$.rootPages.addPage(that.currentPage);
-            } else {
-              that.$.contentPages.addPage(that.currentPage);
-            }
-          }
+          that.$.pages.addPage(that.currentPage);
         }
       );
     } else {
-      if (this.mobile) {
-        this.$.pages.on({
-          selected: pageElement,
-          callback: true,
-        });
-        const next = this.$.pages.selectedItem;
-        if (this.pageStack.indexOf(pageElement) === -1) {
-          next.viewDidLoad();
-        }
-        next.viewWillAppear();
-      } else {
-        if (this.contain(this.rootPages, pageElement)) {
-          this.$.rootPages.on({
-            selected: pageElement,
-            callback: true,
-          });
-          const next = this.$.rootPages.selectedItem;
-          if (this.pageStack.indexOf(pageElement) === -1) {
-            next.viewDidLoad();
-          }
-          next.viewWillAppear();
-        } else {
-          this.$.contentPages.on({
-            selected: pageElement,
-            callback: true,
-          });
-          const next = this.$.contentPages.selectedItem;
-          if (this.pageStack.indexOf(pageElement) === -1) {
-            next.viewDidLoad();
-          }
-          next.viewWillAppear();
-        }
+      this.$.pages.on({
+        selected: pageElement,
+        callback: true,
+      });
+      const next = this.$.pages.selectedItem;
+      if (this.pageStack.indexOf(pageElement) === -1) {
+        next.viewDidLoad();
       }
+      next.viewWillAppear();
     }
   }
   gotoPage(page, option) {
@@ -836,18 +759,12 @@ export default class HeroApp extends HeroElement {
     );
 
     if (isInRootStack && this.rootPages.length > 1) {
-      if (this.mobile) {
-        this.$.tab.style.display = 'block';
-        this.$.pages.style.bottom = '44px';
-        this.$.backBtn.style.display = 'none';
-      } else {
-      }
+      this.$.tab.style.display = 'block';
+      this.$.pages.style.bottom = '44px';
+      this.$.backBtn.style.display = 'none';
     } else {
-      if (this.mobile) {
-        this.$.tab.style.display = 'none';
-        this.$.pages.style.bottom = '0px';
-      } else {
-      }
+      this.$.tab.style.display = 'none';
+      this.$.pages.style.bottom = '0px';
     }
     var animationType = '';
 
@@ -865,12 +782,9 @@ export default class HeroApp extends HeroElement {
     } else if (option == 'load') {
       animationType = 9;
     }
-    if (this.mobile) {
-      this.$.pages.setEffect(animationType);
-      if (this.$.pages.selectedItem) {
-        this.$.pages.selectedItem.viewWillDisappear();
-      }
-    } else {
+    this.$.pages.setEffect(animationType);
+    if (this.$.pages.selectedItem) {
+      this.$.pages.selectedItem.viewWillDisappear();
     }
 
     if (
