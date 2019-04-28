@@ -5,8 +5,8 @@ var fs = require('fs');
 var app = express();
 var server = http.createServer(app);
 var options = {
-  key: fs.readFileSync('./cer/key'),
-  cert: fs.readFileSync('./cer/cert'),
+  key: fs.readFileSync('./cert/key'),
+  cert: fs.readFileSync('./cert/cert'),
 };
 var serverHTTPS = https.createServer(options, app);
 
