@@ -11,10 +11,6 @@ let options = {
   key: fs.readFileSync('./cert/private.key'),
 };
 
-var options = {
-  key: fs.readFileSync('./cert/key'),
-  cert: fs.readFileSync('./cert/cert'),
-};
 var serverHTTPS = https.createServer(options, app);
 
 app.use(
