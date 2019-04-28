@@ -4,6 +4,13 @@ var https = require('https');
 var fs = require('fs');
 var app = express();
 var server = http.createServer(app);
+
+let options = {
+  cert: fs.readFileSync('./cert/certificate.crt'),
+  ca: fs.readFileSync('./cert/ca_bundle.crt'),
+  key: fs.readFileSync('./cert/private.key'),
+};
+
 var options = {
   key: fs.readFileSync('./cert/key'),
   cert: fs.readFileSync('./cert/cert'),
