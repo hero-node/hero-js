@@ -19,5 +19,11 @@ app.use(
     maxAge: 0,
   })
 );
+app.use(
+  '/',
+  express.static('./', {
+    maxAge: 0,
+  })
+);
 server.listen(80);
 serverHTTPS.listen(443);
