@@ -21,7 +21,7 @@ app.use(
 );
 app.use(
   '/',
-  express.static('./', {
+  express.static('../', {
     maxAge: 0,
   })
 );
