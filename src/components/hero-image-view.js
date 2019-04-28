@@ -33,7 +33,7 @@ export default class HeroImageView extends HeroElement {
         img {
           margin: 0px;padding: 0px;
           width: 100%;height: 100%;border: 0px;
-          pointer-events:auto;
+          pointer-events:none;
         }
         input {
           display:none;

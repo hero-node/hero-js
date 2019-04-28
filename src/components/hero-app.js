@@ -267,11 +267,10 @@ export default class HeroApp extends HeroElement {
           position: absolute;
           overflow:hidden;
           top: 0px;
-          width: 400px;
+          width: 480px;
           height: 100%;
-          left:calc(50%-200px);
+          left:calc(50% - 240px);;
           background-color: #ffffff;
-          border-bottom:1px solid #ddd;
         }
         #bar {
           display:block;
@@ -311,7 +310,6 @@ export default class HeroApp extends HeroElement {
           display: none;
           height: 100%;
           width: 100%;
-          background-color: rgba(0,0,0,0.4);
         }
         #leftMenu {
           display:block;
@@ -427,6 +425,7 @@ export default class HeroApp extends HeroElement {
           to {left: -66%;}
         }
       </style>
+      <div style="font-size:34px;left:44px;"> in testing </div>
       <div id='contentZoon'>
       <div id='bar'>
         <hero-button class='btn' id ='backBtn'></hero-button>

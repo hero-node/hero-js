@@ -878,69 +878,69 @@ class HeroPages extends HeroElement {
 			/* fade */
 			
 			.pt-page-fade {
-				-webkit-animation: fade .7s ease both;
-				animation: fade .7s ease both;
+				-webkit-animation: fade .2s ease both;
+				animation: fade .2s ease both;
 			}
 			
 			/* move from / to and fade */
 			
 			.pt-page-moveToLeftFade {
-				-webkit-animation: moveToLeftFade .7s ease both;
-				animation: moveToLeftFade .7s ease both;
+				-webkit-animation: moveToLeftFade .2s ease both;
+				animation: moveToLeftFade .2s ease both;
 			}
 			
 			.pt-page-moveFromLeftFade {
-				-webkit-animation: moveFromLeftFade .7s ease both;
-				animation: moveFromLeftFade .7s ease both;
+				-webkit-animation: moveFromLeftFade .2s ease both;
+				animation: moveFromLeftFade .2s ease both;
 			}
 			
 			.pt-page-moveToRightFade {
-				-webkit-animation: moveToRightFade .7s ease both;
-				animation: moveToRightFade .7s ease both;
+				-webkit-animation: moveToRightFade .2s ease both;
+				animation: moveToRightFade .2s ease both;
 			}
 			
 			.pt-page-moveFromRightFade {
-				-webkit-animation: moveFromRightFade .7s ease both;
-				animation: moveFromRightFade .7s ease both;
+				-webkit-animation: moveFromRightFade .2s ease both;
+				animation: moveFromRightFade .2s ease both;
 			}
 			
 			.pt-page-moveToTopFade {
-				-webkit-animation: moveToTopFade .7s ease both;
-				animation: moveToTopFade .7s ease both;
+				-webkit-animation: moveToTopFade .2s ease both;
+				animation: moveToTopFade .2s ease both;
 			}
 			
 			.pt-page-moveFromTopFade {
-				-webkit-animation: moveFromTopFade .7s ease both;
-				animation: moveFromTopFade .7s ease both;
+				-webkit-animation: moveFromTopFade .2s ease both;
+				animation: moveFromTopFade .2s ease both;
 			}
 			
 			.pt-page-moveToBottomFade {
-				-webkit-animation: moveToBottomFade .7s ease both;
-				animation: moveToBottomFade .7s ease both;
+				-webkit-animation: moveToBottomFade .2s ease both;
+				animation: moveToBottomFade .2s ease both;
 			}
 			
 			.pt-page-moveFromBottomFade {
-				-webkit-animation: moveFromBottomFade .7s ease both;
-				animation: moveFromBottomFade .7s ease both;
+				-webkit-animation: moveFromBottomFade .2s ease both;
+				animation: moveFromBottomFade .2s ease both;
 			}
 			
 			/* move to with different easing */
 			
 			.pt-page-moveToLeftEasing {
-				-webkit-animation: moveToLeft .7s ease-in-out both;
-				animation: moveToLeft .7s ease-in-out both;
+				-webkit-animation: moveToLeft .2s ease-in-out both;
+				animation: moveToLeft .2s ease-in-out both;
 			}
 			.pt-page-moveToRightEasing {
-				-webkit-animation: moveToRight .7s ease-in-out both;
-				animation: moveToRight .7s ease-in-out both;
+				-webkit-animation: moveToRight .2s ease-in-out both;
+				animation: moveToRight .2s ease-in-out both;
 			}
 			.pt-page-moveToTopEasing {
-				-webkit-animation: moveToTop .7s ease-in-out both;
-				animation: moveToTop .7s ease-in-out both;
+				-webkit-animation: moveToTop .2s ease-in-out both;
+				animation: moveToTop .2s ease-in-out both;
 			}
 			.pt-page-moveToBottomEasing {
-				-webkit-animation: moveToBottom .7s ease-in-out both;
-				animation: moveToBottom .7s ease-in-out both;
+				-webkit-animation: moveToBottom .2s ease-in-out both;
+				animation: moveToBottom .2s ease-in-out both;
 			}
 			
 			/********************************* keyframes **************************************/
@@ -1091,13 +1091,13 @@ class HeroPages extends HeroElement {
 			/* scale and fade */
 			
 			.pt-page-scaleDown {
-				-webkit-animation: scaleDown .7s ease both;
-				animation: scaleDown .7s ease both;
+				-webkit-animation: scaleDown .2s ease both;
+				animation: scaleDown .2s ease both;
 			}
 			
 			.pt-page-scaleUp {
-				-webkit-animation: scaleUp .7s ease both;
-				animation: scaleUp .7s ease both;
+				-webkit-animation: scaleUp .2s ease both;
+				animation: scaleUp .2s ease both;
 			}
 			
 			.pt-page-scaleUpDown {
@@ -1329,52 +1329,52 @@ class HeroPages extends HeroElement {
 			.pt-page-rotateFoldRight {
 				-webkit-transform-origin: 0% 50%;
 				transform-origin: 0% 50%;
-				-webkit-animation: rotateFoldRight .7s both ease;
-				animation: rotateFoldRight .7s both ease;
+				-webkit-animation: rotateFoldRight .2s both ease;
+				animation: rotateFoldRight .2s both ease;
 			}
 			.pt-page-rotateFoldLeft {
 				-webkit-transform-origin: 100% 50%;
 				transform-origin: 100% 50%;
-				-webkit-animation: rotateFoldLeft .7s both ease;
-				animation: rotateFoldLeft .7s both ease;
+				-webkit-animation: rotateFoldLeft .2s both ease;
+				animation: rotateFoldLeft .2s both ease;
 			}
 			.pt-page-rotateFoldTop {
 				-webkit-transform-origin: 50% 100%;
 				transform-origin: 50% 100%;
-				-webkit-animation: rotateFoldTop .7s both ease;
-				animation: rotateFoldTop .7s both ease;
+				-webkit-animation: rotateFoldTop .2s both ease;
+				animation: rotateFoldTop .2s both ease;
 			}
 			.pt-page-rotateFoldBottom {
 				-webkit-transform-origin: 50% 0%;
 				transform-origin: 50% 0%;
-				-webkit-animation: rotateFoldBottom .7s both ease;
-				animation: rotateFoldBottom .7s both ease;
+				-webkit-animation: rotateFoldBottom .2s both ease;
+				animation: rotateFoldBottom .2s both ease;
 			}
 			
 			/* unfold */
 			.pt-page-rotateUnfoldLeft {
 				-webkit-transform-origin: 100% 50%;
 				transform-origin: 100% 50%;
-				-webkit-animation: rotateUnfoldLeft .7s both ease;
-				animation: rotateUnfoldLeft .7s both ease;
+				-webkit-animation: rotateUnfoldLeft .2s both ease;
+				animation: rotateUnfoldLeft .2s both ease;
 			}
 			.pt-page-rotateUnfoldRight {
 				-webkit-transform-origin: 0% 50%;
 				transform-origin: 0% 50%;
-				-webkit-animation: rotateUnfoldRight .7s both ease;
-				animation: rotateUnfoldRight .7s both ease;
+				-webkit-animation: rotateUnfoldRight .2s both ease;
+				animation: rotateUnfoldRight .2s both ease;
 			}
 			.pt-page-rotateUnfoldTop {
 				-webkit-transform-origin: 50% 100%;
 				transform-origin: 50% 100%;
-				-webkit-animation: rotateUnfoldTop .7s both ease;
-				animation: rotateUnfoldTop .7s both ease;
+				-webkit-animation: rotateUnfoldTop .2s both ease;
+				animation: rotateUnfoldTop .2s both ease;
 			}
 			.pt-page-rotateUnfoldBottom {
 				-webkit-transform-origin: 50% 0%;
 				transform-origin: 50% 0%;
-				-webkit-animation: rotateUnfoldBottom .7s both ease;
-				animation: rotateUnfoldBottom .7s both ease;
+				-webkit-animation: rotateUnfoldBottom .2s both ease;
+				animation: rotateUnfoldBottom .2s both ease;
 			}
 			
 			/* room walls */
@@ -2121,8 +2121,8 @@ class HeroPages extends HeroElement {
 				animation-delay: .5s;
 			}
 			.pt-page-delay700 {
-				-webkit-animation-delay: .7s;
-				animation-delay: .7s;
+				-webkit-animation-delay: .2s;
+				animation-delay: .2s;
 			}
 			.pt-page-delay1000 {
 				-webkit-animation-delay: 1s;
@@ -2647,7 +2647,7 @@ class HeroImageView extends HeroElement {
         img {
           margin: 0px;padding: 0px;
           width: 100%;height: 100%;border: 0px;
-          pointer-events:auto;
+          pointer-events:none;
         }
         input {
           display:none;
@@ -4275,11 +4275,10 @@ class HeroApp extends HeroElement {
           position: absolute;
           overflow:hidden;
           top: 0px;
-          width: 400px;
+          width: 480px;
           height: 100%;
-          left:calc(50%-200px);
+          left:calc(50% - 240px);;
           background-color: #ffffff;
-          border-bottom:1px solid #ddd;
         }
         #bar {
           display:block;
@@ -4319,7 +4318,6 @@ class HeroApp extends HeroElement {
           display: none;
           height: 100%;
           width: 100%;
-          background-color: rgba(0,0,0,0.4);
         }
         #leftMenu {
           display:block;
@@ -4435,6 +4433,7 @@ class HeroApp extends HeroElement {
           to {left: -66%;}
         }
       </style>
+      <div style="font-size:34px;left:44px;"> in testing </div>
       <div id='contentZoon'>
       <div id='bar'>
         <hero-button class='btn' id ='backBtn'></hero-button>
