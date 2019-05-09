@@ -4303,15 +4303,36 @@
           height: 100%;
           overflow: hidden;
         }
-        #contentZoon {
+        #middle {
           display:block;
           position: absolute;
           overflow:hidden;
           top: 0px;
-          width: 480px;
+          width: 490px;
           height: 100%;
-          left:calc(50% - 240px);;
+          left:calc(50% - 235px);;
+        }
+        #contentZoon {
+          display:block;
+          position: absolute;
+          overflow:hidden;
+          width: 480px;
+          top: 10px;
+          bottom: 10px;
+          left:5px;
+        }
+        #middleCover {
+          display: block;
+          position: absolute;
+          margin: 0px;
+          padding: 0px;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
           background-color: #ffffff;
+          background: url(/projects/hero-home/images/iphone-frame.png) no-repeat center center;
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
         }
         #bar {
           display:block;
@@ -4467,6 +4488,8 @@
         }
       </style>
       <div style="font-size:34px;left:44px;"> in testing </div>
+      <div id='middle'>
+      <div id='middleCover'></div>
       <div id='contentZoon'>
       <div id='bar'>
         <hero-button class='btn' id ='backBtn'></hero-button>
@@ -4483,6 +4506,7 @@
         <div id='rightMenu'></div>
       </div>
       <div id='cover'></div>
+      </div>
       </div>
       `;
       }
