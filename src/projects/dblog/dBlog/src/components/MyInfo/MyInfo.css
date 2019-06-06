@@ -1,0 +1,114 @@
+.myinfo-wrap{
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  z-index: 1000;
+  background: #fff;
+}
+.myinfo-menu{
+  position: absolute;
+  left: 0;
+  width: 80px;
+  top: 0;
+  bottom: 0;
+  background: #e5e5e5;
+}
+.myinfo-menu ul li{
+  list-style-type: none;
+  border-bottom: 1px solid #fff;
+  height: 70px;
+  line-height: 70px;
+  text-align: center;
+  font-size: 12px;
+  color:#666;
+  cursor: pointer;
+}
+.myinfo-menu ul li.on{
+  background: #75ACFF;
+  color: #fff;
+}
+.myinfo-menu ul li:hover{
+  background: #75ACFF;
+  color: #fff;
+}
+.myinfo-menu ul li.ico-ank{
+  position: relative;
+}
+.myinfo-menu ul li.ico-ank:before{
+  position: absolute;
+  content: '';
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid #333;
+  border-bottom: 1px solid #333;
+}
+.myinfo-menu ul li.ico-ank:hover{
+  background: #e5e5e5;
+}
+.myinfo-detail{
+  position: absolute;
+  left: 80px;
+  top:0;
+  bottom: 0;
+  z-index: inherit;
+  width: 220px;
+}
+.myinfo-detail .hd{
+  background: #fff;
+  border-bottom:1px solid #e4e4e4;
+  height: 50px;
+  margin-bottom: 20px;
+}
+.myinfo-detail ul li{
+  text-align: left;
+  padding: 10px 20px;
+  font-size: 13px;
+  color:#999;
+  word-break: break-all;
+}
+.myinfo-detail ul li p{
+  padding: 3px 0;
+ }
+.myinfo-detail ul li p:nth-child(2){
+  color:#333;
+ }
+.myinfo-detail .exit{
+  background: #75ACFF;
+  height: 30px;
+  line-height: 30px;
+  color:#fff;
+  text-align: center;
+  width: 80%;
+  position: absolute;
+  bottom: 20px;
+  left: 10%;
+  cursor: pointer;
+}
+.set-nickname{
+  cursor: pointer;
+  
+}
+.hd a{
+  width: 100%;
+    height: 50px;
+    display: block;
+    color: #75ACFF;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+.info-edit{
+  position: absolute;
+  top: 18px;
+  right: 40px;
+  font-size: 12px;
+  color: #75ACFF;
+  cursor: pointer;
+  text-decoration: underline;
+}

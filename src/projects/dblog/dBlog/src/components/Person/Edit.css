@@ -1,0 +1,48 @@
+.edit-row{
+  display: flex;
+  width: 400px;
+  justify-content: space-between;
+  padding: 10px 0px;;
+}
+.edit-row textarea {
+  width: 200px;
+  min-height: 60px;
+  max-width: 200px;
+  max-height: 600px;
+  border: 1px solid #e4e4e4;
+}
+.edit-upload {
+  position: relative;
+  width: 260px;
+  height: 30px;
+}
+.edit-upload a {
+  position: absolute;
+ 
+  display: inline-block;
+  font-size: 12px;
+  background: #77aefc;
+  width: 100px;
+  height: 30px;
+  display: block;
+  line-height: 30px;
+  left: 60px;
+  text-align: center;
+  color: #fff;
+}
+.edit-upload input{
+  z-index: 100;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.edit-upload img {
+  border-radius: 4px;
+  width: 35px;
+  height: 30px;
+  position: absolute;
+  right: 40px;
+}

@@ -1,0 +1,234 @@
+.person-header{
+  background: #FFFFFF;
+  height: 50px;
+  /* border: 1px solid #E4E4E4; */
+}
+.person-hd-logo{
+  float: left;
+  margin-right: 20px;
+  height: inherit;
+  width: 170px;
+  overflow: hidden;
+  position: relative;
+  margin-left: 10px;
+}
+
+.person-hd-logo-ico {
+  background: url('./images/logo-2.png');
+  width: 140px;
+  height: 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+.person-bd{
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  right: 2px;
+  min-width: 325px;
+  /* background: #f5f7f7; */
+  border-bottom: 1px solid #eaeaea;
+  overflow: auto;
+  border-top: 1px solid #e4e4e4;
+  bottom: 0;
+  padding: 20px;
+}
+.person-card{
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  /* padding: 30px; */
+  position: relative;
+  /* height: 140px; */
+}
+.avatar-wrap{
+  position: absolute;
+  left: 0;
+  border: 2px solid #f5f7f7;
+  border-radius: 5px;
+  padding: 5px;
+}
+.avatar-wrap img {
+  width: 120px;
+  height: 120px;;
+}
+.profile-content{
+  margin-left: 160px;
+}
+.profile-name{
+  font-size: 20px;
+  padding: 10px 0;
+  position: relative;
+  font-weight: 700;
+}
+.profile-intro{
+  display: flex;
+  padding-top: 10px;
+}
+.profile-intro a{
+  margin-left: 30px;
+  max-width: 550px;
+  color:#666;
+  font-size: 13px;
+}
+.tipping{
+  display: inline-block;
+  font-weight: normal;
+  font-size: 12px;
+  border: 1px solid #77aefc;
+  color:#fff;
+  background:  #77aefc;
+  text-align: center;
+  border-radius: 5px;
+  margin-left: 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+}
+.tipping-address{
+  top: 0;
+  z-index: 10;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+  display: none;
+  position: absolute;
+  background: rgba(256,256,256, 0.8);
+  width: 210px;
+  /* height: 220px; */
+  left: 65px;
+  word-break: break-all;
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+  padding: 15px 10px;
+}
+.tipping-address p{
+  padding: 5px 0;
+}
+.tipping:hover .tipping-address{
+  display: block;
+}
+.qr-address{
+  top: 0;
+  z-index: 10;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+  position: absolute;
+  background: rgba(256,256,256, 0.8);
+  width: 220px;
+  height: 220px;
+  left: 65px;
+  display: none;
+  word-break: break-all;
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+  padding-top: 15px;
+}
+.qr-address img{
+  width: 120px;
+  height: 120px;
+}
+.profile-qrcode{
+  z-index: 1;
+  background: rgba(162,229,99);
+  border: 1px solid #a2e563;
+}
+.profile-qrcode:hover .qr-address{
+  display: block;
+}
+.profile-social {
+  padding: 20px 0;
+  display: flex;
+}
+.profile-social a{
+  margin-left: 30px;
+}
+.profile-social a p{
+  padding-bottom: 10px;
+  color:#666;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.article-list-wrap{
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  /* padding: 30px; */
+  position: relative;
+  margin-top:30px;
+}
+.article-list-wrap .add{
+  top: 34px;
+  left: 930px;
+  border-radius: 5px;
+}
+.article-list-wrap h2{
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 400;
+  border-bottom: 1px solid #e4e4e4;
+  padding-bottom: 8px;
+}
+.article-list-wrap .article-title{
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.article-list-wrap .article-title:hover{
+  text-decoration: underline;
+}
+
+.article-list-wrap .article-intro{
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+}
+.article-list-wrap ul li{
+  padding: 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #e4e4e4;
+}
+.person-edit{
+  padding:10px;
+  background: #77aefc;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #fff;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.person-edit:hover{
+  background: #4a90e2;
+}
+.person-lg-btn{
+  position: absolute;
+  right: 100px;
+  top: 10px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 32px;
+  color: #77aefc;
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  border: 1px solid #77aefc;
+  border-radius: 3px;
+}
+.person-lg-btn:hover{
+  background: #77aefc;
+  color:#fff;
+}

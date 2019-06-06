@@ -1,0 +1,181 @@
+.App-header {
+  height: 50px;
+  color: #6a6f7b;
+  position: relative;
+}
+
+.hd-logo {
+  float: left;
+  margin-right: 20px;
+  height: inherit;
+  width: 170px;
+  background: #75ACFF 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.hd-logo-ico {
+  background: url('../../images/logo.png');
+  width: 140px;
+  height: 30px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+}
+
+.hd-wrap {
+  width: 400px;
+  box-shadow: 0 0 10px #e1e2e3;
+  position: relative;
+  float: left;
+}
+
+.hd-wrap input {
+  width: 100%;
+  height: 40px;
+  border: none;
+  text-indent: 20px;
+  font-size: 14px;
+}
+
+.hd-wrap button {
+  padding: 10px;
+  border: none;
+  color: #6a6f7b;
+  cursor: pointer;
+  font-size: 16px;
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+}
+
+.hd-wrap button:hover {
+  background: #f2f2f2;
+}
+
+.hd-wrap button:active {
+  background: #aeaeae;
+}
+
+.search-wrap {
+  width: 400px;
+  border: 1px solid #d6d6d6;
+  height: 25px;
+  position: absolute;
+  left: 200px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+.search-wrap input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-indent: 8px;
+  font-size: 14px;
+  background: #f5f5f5;
+}
+.search-wrap input:focus{
+  background: #fff;
+}
+
+.search-ico {
+  cursor: pointer;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  right: 15px;
+  top: 50%;
+  transform: translate(0, -50%);
+  background: url('../../images/search.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.add {
+  position: absolute;
+  left: 620px;
+  top: 50%;
+  transform: translate(0, -50%);
+  background: #75ACFF 100%;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 20px;
+  color:#fff;
+  width: 80px;
+  text-align: center;
+  cursor: pointer;
+}
+.add:hover{
+  background: #4a90e2;
+}
+.add:before{
+  display: block;
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translate(5px, -50%);
+  width: 10px;
+  height: 1px;
+  background: #fff;
+}
+.add:after{
+  display: block;
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translate(10px, -50%);
+  width: 1px;
+  height: 10px;
+  background: #fff;
+}
+
+.operator {
+  padding: 0 10px;
+  float: left;
+  margin-left: 40px;
+}
+
+.operator ul {
+  height: 38px;
+  box-shadow: 0 0 10px #e1e2e3;
+}
+
+.operator ul li {
+  float: left;
+  list-style: none;
+  padding: 10px;
+  padding-left: 1px solid #e4e4e4;
+  cursor: pointer;
+  text-align: center;
+}
+.operator ul li:hover {
+  background: #f2f2f2;
+}
+.operator ul li:active {
+  background: #aeaeae;
+}
+.expand {
+  position: absolute;
+  right: 0;
+  height: inherit;
+  width: 44px;
+  background: #75ACFF;
+  cursor: pointer;
+}
+.expand-ico {
+  width: 20px;
+  height: 15px;
+  background: url('../../images/expand.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

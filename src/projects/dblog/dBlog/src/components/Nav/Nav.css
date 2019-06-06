@@ -1,0 +1,80 @@
+.nav{
+  width: 160px;
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  padding: 20px 0;
+  text-align: center;
+  background: #FFF;
+  padding-right: 10px;
+  transition: left 0.3 ease-in-out;
+}
+.nav-app{
+  left: 0;
+}
+.nav-drag{
+  position: absolute;
+  right: 0;
+  width: 2px;
+  background: #eaeaea;
+  top:0;
+  bottom: 0;
+  cursor: col-resize;
+  z-index: 2;
+}
+.nav-drag:active{
+  width:4px;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+}
+.file-list{
+    overflow: auto;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    bottom: 40px;
+}
+.file-list ul li{
+  list-style: none;
+  text-align: left;
+  padding:15px 5px;
+  font-size: 12px;
+  padding-left: 20px;
+  cursor: pointer;
+  position: relative;
+  background: #e5e5e5;
+  color: #666;
+  border-bottom: 1px solid #d6d6d6;
+}
+.file-list ul li input{
+  width: 80%;
+  border: 1px solid #e4e4e4;
+  outline: none;
+}
+.li-selected{
+  background: #a1afb4;
+}
+.file-list ul li .file-del{
+  display: none;
+  position: absolute;
+  right: 12px;
+  top: 18px;
+  color: red;
+  font-size: 12px;
+}
+.file-list ul li:hover .file-del{
+  display: block;
+}
+.nav-logo{
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  cursor: pointer;
+}
+.nav-logo-ico{
+  background: url("../../images/logo.png");
+  background-size: contain;
+  width: 130px;
+  height: 50px;
+  background-repeat: no-repeat;
+}
