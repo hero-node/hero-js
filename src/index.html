@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="MobileOptimized" content="width">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="format-detection" content="telephone=no">
+  <meta data-n-head="true" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Hero Node</title>
+  <style type="text/css">
+    .loading-wr {
+      z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: #eee;
+    }
+
+    .ld-wrapp {
+      width: 100px;
+      height: 100px;
+      margin: 0 10px 10px 0;
+      padding: 20px 20px 20px;
+      border-radius: 5px;
+      text-align: center;
+      width: 700px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .k-line {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      border-radius: 15px;
+      background-color: #4079b9;
+    }
+
+    .k-line1-1 {
+      animation: k-loadingA 1.5s 0s infinite;
+    }
+
+    .k-line1-2 {
+      animation: k-loadingA 1.5s 0.5s infinite;
+    }
+
+    .k-line1-3 {
+      animation: k-loadingA 1.5s 1s infinite;
+    }
+    p{
+      color: #999;
+      padding: 20px;
+    } 
+    .load-3 {
+      height: 40px;
+    }
+
+    @keyframes k-loadingA {
+      0 {
+        height: 15px
+      }
+      50% {
+        height: 35px
+      }
+      100% {
+        height: 15px
+      }
+    }
+  </style>
+  <script type="text/javascript" src='./hero.js'></script>
+  <script type="text/javascript">
+    //set zeronode in 8s, if libp2p return nothing.
+    setTimeout(function(){
+      document.getElementById('looking').style.display='none';
+      document.getElementById('zero').style.display='block';
+    },3000);
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <div class="loading-wr" id="ld">
+    <div class="ld-wrapp">
+      <div class="load-3">
+        <div class="k-line k-line1-1"></div>
+        <div class="k-line k-line1-2"></div>
+        <div class="k-line k-line1-3"></div>
+      </div>
+      <p id='looking' style='display:block'>Looking for nodes ....</p>
+      <p id='zero' style='display:none'>Zero node was founded, pls try later.</p>
+    </div>
+  </div>
+</body>
+
+</html>
