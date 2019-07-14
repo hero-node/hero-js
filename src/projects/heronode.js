@@ -9,6 +9,7 @@ var chokidar = require('chokidar');
 var siofu = require('socketio-file-upload');
 var go = require('../../tools/go.js');
 var DB = require('../../tools/db.js');
+var httpProxy = require('../../tools/proxy.js');
 // var ss = require('../../tools/ss.js');
 
 app.use(siofu.router);
@@ -58,5 +59,6 @@ console.log('service at http://127.0.0.1:3000/projects/');
 // run ipfs and geth
 go.go();
 // ss.ss();
+httpProxy.proxy();
 app.use(go.ipfsProxy);
 // app.use('/eth',go.eth(req, res, next));
